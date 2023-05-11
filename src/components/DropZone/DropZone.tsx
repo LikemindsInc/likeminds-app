@@ -115,8 +115,8 @@ const DropZone: FC<IProps> = ({
       onPress={handleDocumentSelect}
       style={[
         styles.contaner,
-        style,
         image ? { borderWidth: 0 } : { borderWidth: 2 },
+        style,
       ]}
     >
       {renderSelectedFiles()}
@@ -127,7 +127,7 @@ const DropZone: FC<IProps> = ({
 const styles = StyleSheet.create({
   text: {},
   contaner: {
-    minHeight: 100,
+    height: 100,
     borderStyle: "dotted",
     borderWidth: 2,
     borderColor: "#88969D",

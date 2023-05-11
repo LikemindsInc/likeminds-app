@@ -141,4 +141,8 @@ export const GlobalStyles = StyleSheet.create({
     fontSize: font.size.font13,
     marginBottom: 20,
   },
+  primaryButtonOnline: {
+    borderColor: colors.primary,
+    borderWidth: 1,
+  },
 });

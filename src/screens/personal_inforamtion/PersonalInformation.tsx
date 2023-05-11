@@ -98,7 +98,7 @@ const PersonalInformation = () => {
             <Select.Item label="Backend Development" value="backend" />
           </Select>
         </View>
-        <DropZone emptyIcon={<FileUploadEmptyIcon />} />
+        <DropZone type="document" emptyIcon={<FileUploadEmptyIcon />} />
       </ScrollView>
       <Button
         title="Continue"

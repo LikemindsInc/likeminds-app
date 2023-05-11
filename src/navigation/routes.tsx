@@ -7,6 +7,11 @@ import Signup from "../screens/Signup/Signup";
 import OTPVerification from "../screens/otp_verification/OTPVerification";
 import PersonalInformation from "../screens/personal_inforamtion/PersonalInformation";
 import SignupProfilePicture from "../screens/SignupProfilePicture/SignupProfilePicture";
+import SignupExperience from "../screens/SignupExperience/SignupExperience";
+import SignupEducation from "../screens/SignupEducation/SignupEducation";
+import SignupSkills from "../screens/SignupSkills/SignupSkills";
+import SignupCertificate from "../screens/SignupCertificate/SignupCertiifcate";
+import SignupComplete from "../screens/SignupComplete/SignupComplete";
 
 const Stack = createNativeStackNavigator();
 
@@ -36,6 +41,31 @@ const AppRoutes = () => {
       <Stack.Screen
         name={APP_SCREEN_LIST.PERSONAL_INFORAMTION_SCREEN}
         component={PersonalInformation}
+      />
+
+      <Stack.Screen
+        name={APP_SCREEN_LIST.SIGNUP_EXPERIENCE_SCREEN}
+        component={SignupExperience}
+      />
+
+      <Stack.Screen
+        name={APP_SCREEN_LIST.SIGNUP_EDUCATION_SCREEN}
+        component={SignupEducation}
+      />
+
+      <Stack.Screen
+        name={APP_SCREEN_LIST.SIGNUP_SKILLS_SCREEN}
+        component={SignupSkills}
+      />
+
+      <Stack.Screen
+        name={APP_SCREEN_LIST.SIGNUP_CERTIFICATE_SCREEN}
+        component={SignupCertificate}
+      />
+
+      <Stack.Screen
+        name={APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN}
+        component={SignupComplete}
       />
 
       <Stack.Screen

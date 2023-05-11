@@ -1,9 +1,16 @@
 import { FC } from "react";
-import { StyleSheet, TextInput, TextInputProps, ViewStyle } from "react-native";
+import {
+  StyleSheet,
+  TextInput,
+  TextInputProps,
+  TouchableWithoutFeedback,
+  ViewStyle,
+} from "react-native";
 import { GlobalStyles } from "../../theme/GlobalStyles";
+import { TouchableOpacity } from "react-native";
 
-interface ITextInputProps extends TextInputProps {
-  inputRef?: React.Ref<TextInput> | undefined;
+export interface ITextInputProps extends TextInputProps {
+  inputRef?: React.RefObject<TextInput> | undefined;
   contentContainerStyle?: ViewStyle;
   showSearchIcon?: boolean;
   onClear?: () => void;
@@ -11,14 +18,18 @@ interface ITextInputProps extends TextInputProps {
   label?: string;
   showUpdateButton?: boolean;
   onUpdate?: () => void;
+  onPress?: () => void;
 }
 
 const Input: FC<ITextInputProps> = (props) => {
   return (
-    <TextInput
-      {...props}
-      style={[GlobalStyles.inputStyle, styles.input, props.style]}
-    />
+    <TouchableOpacity style={props.style} onPress={props.onPress}>
+      <TextInput
+        {...props}
+        ref={props.inputRef}
+        style={[GlobalStyles.inputStyle, styles.input]}
+      />
+    </TouchableOpacity>
   );
 };
 

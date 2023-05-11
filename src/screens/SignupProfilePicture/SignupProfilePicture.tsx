@@ -7,8 +7,11 @@ import Button from "../../components/Button/Button";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from "react";
+import { APP_SCREEN_LIST } from "../../constants";
+import { useNavigation } from "@react-navigation/native";
 
 const SignupProfilePicture = () => {
+  const navigation = useNavigation<any>();
   const [isDisabled, setDisabled] = useState(true);
   const [file, setFile] = useState<
     DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult | null
@@ -46,7 +49,13 @@ const SignupProfilePicture = () => {
       <View style={{ flex: 1 }}>
         <DropZone style={{ height: "60%" }} onSelect={handleOnFileSelect} />
       </View>
-      <Button disabled={isDisabled} title="Continue" />
+      <Button
+        disabled={isDisabled}
+        title="Continue"
+        onPress={() =>
+          navigation.navigate(APP_SCREEN_LIST.SIGNUP_EXPERIENCE_SCREEN)
+        }
+      />
     </View>
   );
 };
