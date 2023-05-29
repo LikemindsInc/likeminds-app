@@ -11,11 +11,10 @@ const useDimension = () => {
       setHeight(window.height);
     });
 
-    return () =>
-      Dimensions.removeEventListener("change", ({ window, screen }) => {
-        setWidth(window.width);
-        setHeight(window.height);
-      });
+    // Dimensions.removeEventListener("change", ({ window, screen }) => {
+    //   setWidth(window.width);
+    //   setHeight(window.height);
+    // });
   }, []);
 
   return { width, height };

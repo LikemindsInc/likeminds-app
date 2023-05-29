@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import Input from "../../components/Input/Input";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../../components/Button/Button";
 import TextLink from "../../components/TextLink/TextLink";
 import colors from "../../theme/colors";
@@ -9,9 +9,54 @@ import DatePicker from "../../components/DatePicker/DatePicker";
 import DropZone from "../../components/DropZone/DropZone";
 import { APP_SCREEN_LIST } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
+import * as DocumentPicker from "expo-document-picker";
+import * as ImagePicker from "expo-image-picker";
+import useAppDispatch from "../../hooks/useAppDispatch";
+import { ISessionState, updateCertificate } from "../../reducers/session";
+import useAppSelector from "../../hooks/useAppSelector";
+import { completeUserProfileAction } from "../../actions/auth";
+import { useToast } from "native-base";
 
 const SignupCertificate = () => {
   const navigation = useNavigation<any>();
+
+  const dispatch = useAppDispatch();
+
+  const toast = useToast();
+
+  const session = useAppSelector(
+    (state: any) => state.sessionReducer
+  ) as ISessionState;
+
+  const [file, setFile] = useState<
+    DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult | null
+  >(null);
+  const handleOnFileSelect = (
+    file: DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult
+  ) => {
+    setFile(file);
+    return null;
+  };
+  const handleOnNextPress = () => {
+    dispatch(updateCertificate(file as DocumentPicker.DocumentResult));
+    // navigation.navigate(APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN)
+    dispatch(completeUserProfileAction(session.profileData));
+  };
+
+  useEffect(() => {
+    if (session.completeProfileStatus === "completed") {
+      navigation.navigate(APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN);
+    } else if (session.completeProfileStatus === "failed") {
+      toast.show({
+        description:
+          session.completeProfileError?.trim() === ""
+            ? "Unable to complete request. Please try again later"
+            : session.completeProfileError,
+        variant: "contained",
+      });
+    }
+  }, [session.completeProfileStatus]);
+
   return (
     <View style={[GlobalStyles.container]}>
       <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
@@ -45,6 +90,7 @@ const SignupCertificate = () => {
           <DropZone
             type="document"
             style={{ height: 60 }}
+            onSelect={handleOnFileSelect}
             emptyIcon={
               <Text
                 style={[
@@ -65,13 +111,16 @@ const SignupCertificate = () => {
       </ScrollView>
       <View>
         <View style={[GlobalStyles.mb20, GlobalStyles.displayRowCenter]}>
-          <TextLink title="Skip For Now" color={colors.black} />
+          <TextLink
+            onPress={() => navigation.navigate(APP_SCREEN_LIST.MAIN_SCREEN)}
+            title="Skip For Now"
+            color={colors.black}
+          />
         </View>
         <Button
+          loading={session.completeProfileStatus === "loading"}
           title="Continue"
-          onPress={() =>
-            navigation.navigate(APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN)
-          }
+          onPress={handleOnNextPress}
         />
       </View>
     </View>

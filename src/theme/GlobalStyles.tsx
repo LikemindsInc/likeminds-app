@@ -63,6 +63,12 @@ export const GlobalStyles = StyleSheet.create({
   mb20: {
     marginBottom: 20,
   },
+  mt5: {
+    marginTop: 5,
+  },
+  mb5: {
+    marginBottom: 5,
+  },
   mt20: {
     marginTop: 20,
   },
@@ -79,6 +85,9 @@ export const GlobalStyles = StyleSheet.create({
   },
   mt40: {
     marginTop: 40,
+  },
+  fontSize10: {
+    fontSize: font.size.font10,
   },
   fontSize13: {
     fontSize: font.size.font13,
@@ -103,6 +112,8 @@ export const GlobalStyles = StyleSheet.create({
     paddingVertical: 16,
     alignItems: "center",
     borderRadius: 10,
+    flexDirection: "row",
+    justifyContent: "center",
   },
   buttonOval: {
     borderRadius: 20,
@@ -121,14 +132,30 @@ export const GlobalStyles = StyleSheet.create({
     gap: 20,
   },
 
+  flexOne: {
+    flex: 1,
+  },
+
   displayRow: {
     display: "flex",
     flexDirection: "row",
+    width: "100%",
   },
   displayRowCenter: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
+  },
+
+  header: {
+    paddingHorizontal: 25,
+    paddingTop: 8,
+    paddingBottom: 10,
+    backgroundColor: colors.white,
+    flexDirection: "row",
+    width: "100%",
+    height: 60,
+    alignItems: "center",
   },
 
   inputStyle: {
@@ -144,5 +171,13 @@ export const GlobalStyles = StyleSheet.create({
   primaryButtonOnline: {
     borderColor: colors.primary,
     borderWidth: 1,
+  },
+  menuContainer: {},
+  menuItemsCard: {},
+  circleContainer: {},
+  drawerContainer: {
+    paddingHorizontal: 25,
+    paddingTop: 60,
+    paddingBottom: 25,
   },
 });

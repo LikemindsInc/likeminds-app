@@ -1,77 +1,66 @@
-import thunk from "redux-thunk";
-import { NativeModules } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { persistStore, persistReducer } from "redux-persist";
 
-import {
-  compose,
-  Middleware,
-  createStore,
-  combineReducers,
-  applyMiddleware,
-} from "redux";
-
 import { CACHE_VERSION, __ROOT_REDUX_STATE_KEY__ } from "./constants";
-// import { session, __SESSION__REDUX__STATE_KEY__ } from "./session";
-import settings from "../reducers/settings";
-import { __SETTINGS__REDUX__STATE_KEY__ } from "../reducers/constants";
-// import itemReducer from "./items/reducers/items";
-// import jobReducer from "./job/reducers";
+import {
+  __SETTINGS__REDUX__STATE_KEY__,
+  __SESSION__REDUX__STATE_KEY__,
+} from "../reducers/constants";
+import autoMergeLevel2 from "redux-persist/es/stateReconciler/autoMergeLevel2";
+import {
+  configureStore,
+  combineReducers,
+  isRejectedWithValue,
+  createListenerMiddleware,
+  isRejected,
+} from "@reduxjs/toolkit";
+import { Reducer } from "redux";
+import sessionReducer from "../reducers/session";
+import errorReducer from "../reducers/errorHanlder";
+
+import settingReducer from "../reducers/settings";
 
 const rootPersistConfig = {
   storage: AsyncStorage,
   timeout: 10000,
   version: CACHE_VERSION,
-  key: __ROOT_REDUX_STATE_KEY__, // only settings and other state stores will be persisted
+  key: __ROOT_REDUX_STATE_KEY__,
+  stateReconciler: autoMergeLevel2,
+  blacklist: ["errorReducer", "sessionReducer"], // only settings and other state stores will be persisted
 };
 
-const sessionPersistConfig = {
-  storage: AsyncStorage,
-  // key: __SESSION__REDUX__STATE_KEY__,
-  blacklist: ["isLoading"],
-};
+type CombinedState = typeof rootReducer extends Reducer<infer U, any>
+  ? U
+  : never;
 
-const reducers = combineReducers({
-  [__SETTINGS__REDUX__STATE_KEY__]: settings,
-  //   [__SESSION__REDUX__STATE_KEY__]: persistReducer(
-  //     sessionPersistConfig,
-  //     session
-  //   ),
-  //   items: itemReducer,
-  //   job: jobReducer,
+const rootReducer = combineReducers({
+  session: sessionReducer,
 });
 
-const persistedReducer = persistReducer(rootPersistConfig, reducers);
+const persistedReducer = persistReducer(
+  rootPersistConfig,
+  combineReducers({
+    sessionReducer,
+    errorReducer,
+    settingReducer,
+  })
+);
+// create the saga middleware
 
-const middlewares: Middleware[] = [thunk]; // create the saga middleware
+// const store = createStore(persistedReducer, compose(applyMiddleware(thunk)));
 
-const composable = () => {
-  const state = [applyMiddleware(...middlewares)];
+const store = configureStore({
+  reducer: persistedReducer,
+  devTools: process.env.NODE_ENV === "development",
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
+});
 
-  // if (__DEV__) {
-  //   const { name } = require("../../package.json");
-
-  //   const { scriptURL } = NativeModules.SourceCode;
-  //   const scriptHostname = scriptURL.split("://")[1].split(":")[0];
-
-  //   const Reactotron = require("reactotron-react-native").default;
-
-  //   Reactotron.configure({ name, host: scriptHostname }) // controls connection & communication settings
-  //     .useReactNative() // add all built-in react native plugins
-  //     .connect(); // let's connect!
-
-  //   // <- Extend app console
-  //   console.tron = Reactotron.log;
-
-  //   if (Reactotron?.createEnhancer) {
-  //     state.push(Reactotron?.createEnhancer?.());
-  //   }
-  // }
-
-  return state;
-};
-
-const store = createStore(persistedReducer, compose(...composable()));
 const persistor = persistStore(store);
 
-export { store, persistor, reducers };
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+
+export { store, persistor, rootReducer };

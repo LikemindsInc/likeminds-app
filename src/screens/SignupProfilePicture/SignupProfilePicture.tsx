@@ -9,10 +9,13 @@ import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from "react";
 import { APP_SCREEN_LIST } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
+import useAppDispatch from "../../hooks/useAppDispatch";
+import { updateProfilePicture } from "../../reducers/session";
 
 const SignupProfilePicture = () => {
   const navigation = useNavigation<any>();
   const [isDisabled, setDisabled] = useState(true);
+  const dispatch = useAppDispatch();
   const [file, setFile] = useState<
     DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult | null
   >(null);
@@ -28,6 +31,11 @@ const SignupProfilePicture = () => {
       setDisabled(false);
     }
   }, [file]);
+
+  const handleOnNextPress = () => {
+    dispatch(updateProfilePicture(file));
+    navigation.navigate(APP_SCREEN_LIST.SIGNUP_EXPERIENCE_SCREEN);
+  };
   return (
     <View style={[GlobalStyles.container]}>
       <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
@@ -52,9 +60,7 @@ const SignupProfilePicture = () => {
       <Button
         disabled={isDisabled}
         title="Continue"
-        onPress={() =>
-          navigation.navigate(APP_SCREEN_LIST.SIGNUP_EXPERIENCE_SCREEN)
-        }
+        onPress={handleOnNextPress}
       />
     </View>
   );

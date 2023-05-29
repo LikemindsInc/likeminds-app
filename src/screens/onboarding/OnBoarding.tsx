@@ -6,8 +6,11 @@ import { GlobalStyles } from "../../theme/GlobalStyles";
 import { AntDesign } from "@expo/vector-icons";
 import colors from "../../theme/colors";
 import { StatusBar } from "expo-status-bar";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { APP_SCREEN_LIST, INavigationProps } from "../../constants";
+import useAppSelector from "../../hooks/useAppSelector";
+import { ISettingState } from "../../reducers/settings";
+import { useEffect } from "react";
 
 interface ISliderProps {
   key: number;
@@ -59,7 +62,15 @@ const slides = [
 ];
 
 const OnBoarding = () => {
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<NavigationProp<any>>();
+  const setting = useAppSelector(
+    (state: any) => state.settingReducer
+  ) as ISettingState;
+
+  useEffect(() => {
+    if (setting.userInfo)
+      return navigation.navigate(APP_SCREEN_LIST.MAIN_SCREEN);
+  }, [setting.userInfo]);
   const _renderItem = ({ item }: any) => {
     return (
       <View>

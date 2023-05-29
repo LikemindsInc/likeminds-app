@@ -8,9 +8,84 @@ import colors from "../../theme/colors";
 import DropZone from "../../components/DropZone/DropZone";
 import { APP_SCREEN_LIST } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
+import { useCallback, useEffect, useState } from "react";
+import useAppSelector from "../../hooks/useAppSelector";
+import { ISettingState } from "../../reducers/settings";
+import useAppDispatch from "../../hooks/useAppDispatch";
+import { getCountriesAction } from "../../actions/settings";
+import { PURGE } from "redux-persist";
+import {
+  ISessionState,
+  updatePersonalInformation,
+} from "../../reducers/session";
+import * as DocumentPicker from "expo-document-picker";
+import * as ImagePicker from "expo-image-picker";
+import { SelectList } from "react-native-dropdown-select-list";
 
 const PersonalInformation = () => {
+  const settings = useAppSelector(
+    (state: any) => state.settingReducer
+  ) as ISettingState;
+  const session = useAppSelector(
+    (state: any) => state.sessionReducer
+  ) as ISessionState;
+  const dispatch = useAppDispatch();
+  const getCountries = useCallback(() => {
+    if (settings.getCountriesStatus === "idle") {
+      dispatch(getCountriesAction("d"));
+    }
+  }, [settings.getCountriesStatus]);
+
+  const [firstName, setFirstName] = useState(
+    session.profileData?.personalInformation?.firstName
+  );
+  const [lastName, setLastName] = useState(
+    session.profileData?.personalInformation?.lastName
+  );
+  const [city, setCity] = useState(
+    session.profileData?.personalInformation?.city
+  );
+  const [bio, setBio] = useState(session.profileData?.personalInformation?.bio);
+  const [country, setCountry] = useState(
+    (session.profileData?.personalInformation?.country as string) || ""
+  );
+  const [countryOfOrigin, setCountryOfOrigin] = useState(
+    session.profileData?.personalInformation?.countryOfOrigin
+  );
+
+  const [resume, setResume] = useState<
+    DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult | null
+  >(session.profileData?.personalInformation?.resume);
+
+  useEffect(() => {
+    getCountries();
+  }, [getCountries]);
+
+  const handleFileSelect = (
+    file: DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult
+  ) => {
+    setResume(file);
+    return null;
+  };
+
+  // console.log("user>", settings.userInfo);
+
   const navigation = useNavigation<any>();
+
+  const handleOnNextPress = () => {
+    dispatch(
+      updatePersonalInformation({
+        firstName,
+        lastName,
+        city,
+        bio,
+        country,
+        countryOfOrigin,
+        resume,
+      })
+    );
+    navigation.navigate(APP_SCREEN_LIST.SIGNUP_PROFILE_PICTURE);
+  };
   return (
     <View style={[GlobalStyles.container]}>
       <View style={[GlobalStyles.mb20, GlobalStyles.mt10, GlobalStyles.mb30]}>
@@ -26,39 +101,56 @@ const PersonalInformation = () => {
       </View>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         <View style={[styles.inputDouble, GlobalStyles.mb10]}>
-          <Input style={styles.inputFlex} placeholder="First Name" />
-          <Input style={styles.inputFlex} placeholder="Last Name" />
+          <Input
+            onChangeText={(text) => setFirstName(text)}
+            style={styles.inputFlex}
+            placeholder="First Name"
+            value={firstName}
+            autoCorrect={false}
+          />
+          <Input
+            onChangeText={(text) => setLastName(text)}
+            style={styles.inputFlex}
+            placeholder="Last Name"
+            value={lastName}
+            autoCorrect={false}
+          />
         </View>
         <View style={[GlobalStyles.mb30]}>
-          <Select
-            minWidth="200"
-            accessibilityLabel="Country you live in"
-            placeholder="Country you live in"
-            _selectedItem={{
-              bg: "teal.600",
-              endIcon: <CheckIcon size="5" />,
+          <SelectList
+            boxStyles={{
+              borderWidth: 0,
+              backgroundColor: colors.white,
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 20,
             }}
-            width={"100%"}
-            mt={1}
-            fontFamily={"Inter-Regular"}
-            shadow={"1"}
-            height={60}
-            dropdownIcon={
-              <View style={{ paddingRight: 8 }}>
-                <AntDesign name="caretdown" size={20} color={colors.primary} />
-              </View>
+            save="key"
+            setSelected={(val: string) => setCountry(val)}
+            data={(settings.countries || []).map((item) => ({
+              key: item.name,
+              value: item.name,
+            }))}
+            placeholder="Country you live in"
+            fontFamily="Inter-Regular"
+            arrowicon={
+              <AntDesign name="caretdown" size={20} color={colors.primary} />
             }
-            borderRadius={10}
-          >
-            <Select.Item label="UX Research" value="ux" />
-            <Select.Item label="Web Development" value="web" />
-            <Select.Item label="Cross Platform Development" value="cross" />
-            <Select.Item label="UI Designing" value="ui" />
-            <Select.Item label="Backend Development" value="backend" />
-          </Select>
+          />
         </View>
         <View style={[styles.inputDouble, GlobalStyles.mb10]}>
-          <Input style={styles.inputFlex} placeholder="City" />
+          <Input
+            onChangeText={(text) => setCity(text)}
+            style={styles.inputFlex}
+            placeholder="City"
+            value={city}
+            autoCorrect={false}
+          />
         </View>
         <View style={[styles.inputDouble, GlobalStyles.mb10]}>
           <Input
@@ -67,45 +159,45 @@ const PersonalInformation = () => {
             placeholder="Bio"
             textAlignVertical="top"
             autoCorrect={false}
+            onChangeText={(text) => setBio(text)}
             autoCapitalize="none"
+            value={bio}
           />
         </View>
         <View style={[GlobalStyles.mb30]}>
-          <Select
-            minWidth="200"
-            accessibilityLabel="Country you are from"
-            placeholder="Country you are from"
-            _selectedItem={{
-              bg: "teal.600",
-              endIcon: <CheckIcon size="5" />,
+          <SelectList
+            boxStyles={{
+              borderWidth: 0,
+              backgroundColor: colors.white,
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 20,
             }}
-            width={"100%"}
-            mt={1}
-            fontFamily={"Inter-Regular"}
-            shadow={"1"}
-            height={60}
-            dropdownIcon={
-              <View style={{ paddingRight: 8 }}>
-                <AntDesign name="caretdown" size={20} color={colors.primary} />
-              </View>
+            save="key"
+            fontFamily="Inter-Regular"
+            setSelected={(val: string) => setCountry(val)}
+            data={(settings.countries || []).map((item) => ({
+              key: item.name,
+              value: item.name,
+            }))}
+            placeholder="Country you are from"
+            arrowicon={
+              <AntDesign name="caretdown" size={20} color={colors.primary} />
             }
-            borderRadius={10}
-          >
-            <Select.Item label="UX Research" value="ux" />
-            <Select.Item label="Web Development" value="web" />
-            <Select.Item label="Cross Platform Development" value="cross" />
-            <Select.Item label="UI Designing" value="ui" />
-            <Select.Item label="Backend Development" value="backend" />
-          </Select>
+          />
         </View>
-        <DropZone type="document" emptyIcon={<FileUploadEmptyIcon />} />
+        <DropZone
+          onSelect={handleFileSelect}
+          type="document"
+          emptyIcon={<FileUploadEmptyIcon />}
+        />
       </ScrollView>
-      <Button
-        title="Continue"
-        onPress={() =>
-          navigation.navigate(APP_SCREEN_LIST.SIGNUP_PROFILE_PICTURE)
-        }
-      />
+      <Button title="Continue" onPress={handleOnNextPress} />
     </View>
   );
 };

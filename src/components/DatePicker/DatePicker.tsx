@@ -15,7 +15,7 @@ interface IProps extends ITextInputProps {
 
 const DatePicker: FC<IProps> = (props) => {
   const ref = useRef<TextInput>(null);
-  const [date, setDate] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date>(new Date(props.value || new Date()));
 
   const [show, setShow] = useState(false);
 

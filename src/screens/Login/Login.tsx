@@ -2,9 +2,14 @@ import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import Button from "../../components/Button/Button";
 import Input from "../../components/Input/Input";
 import { GlobalStyles } from "../../theme/GlobalStyles";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import TextLink from "../../components/TextLink/TextLink";
 import { APP_SCREEN_LIST } from "../../constants";
+import useAppSelector from "../../hooks/useAppSelector";
+import { ISessionState } from "../../reducers/session";
+import useAppDispatch from "../../hooks/useAppDispatch";
+import { loginUserActionAction } from "../../actions/auth";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 
 const IconButton: FC<{ image: any }> = ({ image }) => {
   return (
@@ -20,6 +25,28 @@ const IconButton: FC<{ image: any }> = ({ image }) => {
 };
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+
+  const [password, setPassword] = useState("");
+
+  const navigation = useNavigation<NavigationProp<any>>();
+
+  const session = useAppSelector(
+    (state: any) => state.sessionReducer
+  ) as ISessionState;
+
+  const dispatch = useAppDispatch();
+
+  const handleOnLogin = () => {
+    dispatch(loginUserActionAction({ email, password }));
+  };
+
+  useEffect(() => {
+    if (session.signingInStatus === "completed") {
+      navigation.navigate(APP_SCREEN_LIST.MAIN_SCREEN);
+    }
+  }, [session.signingInStatus]);
+
   return (
     <View style={[GlobalStyles.container]}>
       <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
@@ -50,17 +77,25 @@ const Login = () => {
           placeholder="Email Address"
           autoCorrect={false}
           autoCapitalize={"none"}
+          value={email}
           keyboardType="email-address"
+          onChangeText={(text) => setEmail(text)}
         />
         <Input
           placeholder="Password"
           autoCorrect={false}
           autoCapitalize={"none"}
-          keyboardType="email-address"
           secureTextEntry
+          value={password}
+          onChangeText={(text) => setPassword(text)}
         />
       </View>
-      <TouchableOpacity style={[GlobalStyles.mb40]}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate(APP_SCREEN_LIST.FORGOT_PASSWORD_SCREEN)
+        }
+        style={[GlobalStyles.mb40]}
+      >
         <Text
           style={[
             GlobalStyles.fontInterMedium,
@@ -72,7 +107,11 @@ const Login = () => {
           Forgot Your Password?
         </Text>
       </TouchableOpacity>
-      <Button title="Login" />
+      <Button
+        loading={session.signingInStatus === "loading"}
+        onPress={handleOnLogin}
+        title="Login"
+      />
       <View style={[GlobalStyles.mt40]}>
         <Text
           style={[

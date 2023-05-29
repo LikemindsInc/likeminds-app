@@ -42,6 +42,8 @@ const DropZone: FC<IProps> = ({
         copyToCacheDirectory: true,
       });
 
+      // console.log("result > ", result);
+
       onSelect && onSelect(result);
     } catch (error) {}
   };

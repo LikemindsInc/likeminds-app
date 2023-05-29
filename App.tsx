@@ -1,12 +1,6 @@
-import { StatusBar } from "expo-status-bar";
-import {
-  Image,
-  LogBox,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import "react-native-gesture-handler";
+
+import { LogBox, SafeAreaView, StyleSheet } from "react-native";
 import Provider from "./src/store/StoreProvider";
 import { NavigationContainer } from "@react-navigation/native";
 import { ToastProvider } from "react-native-toast-notifications";
@@ -17,11 +11,19 @@ import { GlobalStyles } from "./src/theme/GlobalStyles";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AppRoutes from "./src/navigation/routes";
 import { NativeBaseProvider, extendTheme } from "native-base";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 
 SplashScreen.preventAutoHideAsync();
-LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+LogBox.ignoreLogs([
+  "VirtualizedLists should never be nested",
+  "Require cycle: src/store/store.ts",
+  "No native splash screen registered for given view controller",
+  `Key "cancelled" in the image picker result is deprecated`,
+]);
 
 const Stack = createNativeStackNavigator();
+
+const Drawer = createDrawerNavigator();
 
 export default function App() {
   const [fontsLoaded] = useFonts({

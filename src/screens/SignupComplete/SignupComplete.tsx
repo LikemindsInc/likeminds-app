@@ -4,8 +4,11 @@ import { Text } from "react-native";
 import TextLink from "../../components/TextLink/TextLink";
 import colors from "../../theme/colors";
 import Button from "../../components/Button/Button";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { APP_SCREEN_LIST } from "../../constants";
 
 const SignupComplete = () => {
+  const navigation = useNavigation<NavigationProp<any>>();
   return (
     <View style={[GlobalStyles.container]}>
       <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
@@ -73,7 +76,10 @@ const SignupComplete = () => {
         <Button title="Become A Space" type="outline-primary" />
       </View>
       <View style={[]}>
-        <Button title="Let’s Go!" />
+        <Button
+          onPress={() => navigation.navigate(APP_SCREEN_LIST.MAIN_SCREEN)}
+          title="Let’s Go!"
+        />
       </View>
     </View>
   );

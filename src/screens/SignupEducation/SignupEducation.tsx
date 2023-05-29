@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import Input from "../../components/Input/Input";
-import React from "react";
+import React, { useState } from "react";
 import Button from "../../components/Button/Button";
 import TextLink from "../../components/TextLink/TextLink";
 import colors from "../../theme/colors";
@@ -9,9 +9,26 @@ import DatePicker from "../../components/DatePicker/DatePicker";
 import { Checkbox } from "native-base";
 import { APP_SCREEN_LIST } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
+import DateFormatter from "../../utils/date-formatter";
+import useAppDispatch from "../../hooks/useAppDispatch";
+import { updateEducation } from "../../reducers/session";
 
 const SignupEducation = () => {
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [school, setSchool] = useState("");
+
+  const [degree, setDegree] = useState("");
+
   const navigation = useNavigation<any>();
+
+  const dispatch = useAppDispatch();
+
+  const handleOnNextPress = () => {
+    dispatch(updateEducation({ school, startDate, endDate, degree }));
+    navigation.navigate(APP_SCREEN_LIST.SIGNUP_CERTIFICATE_SCREEN);
+    //handleOnNextPress
+  };
   return (
     <View style={[GlobalStyles.container]}>
       <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
@@ -22,7 +39,7 @@ const SignupEducation = () => {
             GlobalStyles.fontWeight700,
           ]}
         >
-          Eduction
+          Education
         </Text>
       </View>
       <View style={[GlobalStyles.mb40]}>
@@ -39,27 +56,44 @@ const SignupEducation = () => {
       </View>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         <View style={[styles.inputDouble]}>
-          <DatePicker placeholder="Start Date" style={styles.inputFlex} />
-          <DatePicker placeholder="End Date" style={styles.inputFlex} />
+          <DatePicker
+            value={startDate}
+            onDateChange={(text) =>
+              setStartDate(DateFormatter.format(text, "YYYY-MM-DD"))
+            }
+            placeholder="Start Date"
+            style={styles.inputFlex}
+          />
+          <DatePicker
+            value={endDate}
+            onChangeText={(text) =>
+              setEndDate(DateFormatter.format(text, "YYYY-MM-DD"))
+            }
+            placeholder="End Date"
+            style={styles.inputFlex}
+          />
         </View>
 
         <View style={[GlobalStyles.mb10]}>
-          <Input placeholder="Degree/Graduation Title" />
+          <Input
+            onChangeText={(text) => setDegree(text)}
+            value={degree}
+            placeholder="Degree/Graduation Title"
+          />
         </View>
         <View style={[GlobalStyles.mb10]}>
-          <Input placeholder="School" />
+          <Input
+            onChangeText={(text) => setSchool(text)}
+            value={school}
+            placeholder="School"
+          />
         </View>
       </ScrollView>
       <View>
         <View style={[GlobalStyles.mb20, GlobalStyles.displayRowCenter]}>
           <TextLink title="Skip For Now" color={colors.black} />
         </View>
-        <Button
-          title="Continue"
-          onPress={() =>
-            navigation.navigate(APP_SCREEN_LIST.SIGNUP_SKILLS_SCREEN)
-          }
-        />
+        <Button title="Continue" onPress={handleOnNextPress} />
       </View>
     </View>
   );
