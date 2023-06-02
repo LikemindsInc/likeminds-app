@@ -168,6 +168,7 @@ export const completeUserProfileAction = asyncThunkWrapper<
       uploadFile(formData)
         .then((response) => {
           profileResponseUrl = response.data?.data?.url || "";
+          console.log("profile> ", profileResponseUrl);
         })
         .catch((error) => {
           console.log("error> ", error?.response || error);
@@ -265,10 +266,15 @@ export const completeUserProfileAction = asyncThunkWrapper<
   }
 });
 
-const uploadFile = async (payload: FormData) => {
+export const uploadFile = async (payload: FormData) => {
   const response = await axiosClient.post<AxiosResponse<any>>(
     "/api/file-upload",
-    payload
+    payload,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
   );
   return response;
 };

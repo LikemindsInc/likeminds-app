@@ -19,6 +19,8 @@ import sessionReducer from "../reducers/session";
 import errorReducer from "../reducers/errorHanlder";
 
 import settingReducer from "../reducers/settings";
+import spaceReducer from "../reducers/space_reducer";
+import postReducer from "../reducers/post_reducer";
 
 const rootPersistConfig = {
   storage: AsyncStorage,
@@ -43,6 +45,8 @@ const persistedReducer = persistReducer(
     sessionReducer,
     errorReducer,
     settingReducer,
+    spaceReducer,
+    postReducer,
   })
 );
 // create the saga middleware

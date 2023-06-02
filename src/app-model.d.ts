@@ -134,4 +134,15 @@ declare module "@app-model" {
     email?: string;
     code: string;
   }
+
+  interface ICreateSpaceRequestDTO {
+    title: string;
+    description: string;
+    photo?: any;
+  }
+
+  interface ICreatePostDTO {
+    content: string;
+    image?: string;
+  }
 }

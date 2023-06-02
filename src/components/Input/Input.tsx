@@ -19,6 +19,7 @@ export interface ITextInputProps extends TextInputProps {
   showUpdateButton?: boolean;
   onUpdate?: () => void;
   onPress?: () => void;
+  inputStyle?: ViewStyle;
 }
 
 const Input: FC<ITextInputProps> = (props) => {
@@ -27,7 +28,7 @@ const Input: FC<ITextInputProps> = (props) => {
       <TextInput
         {...props}
         ref={props.inputRef}
-        style={[GlobalStyles.inputStyle, styles.input]}
+        style={[GlobalStyles.inputStyle, styles.input, props.inputStyle]}
       />
     </TouchableOpacity>
   );

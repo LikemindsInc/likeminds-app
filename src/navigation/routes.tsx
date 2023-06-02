@@ -53,6 +53,9 @@ import RecoverWithPhone from "../screens/ForgotEmail/RecoverWithPhone";
 import OTPScreen from "../screens/ForgotEmail/OTPScreen";
 import OTPEmailScreen from "../screens/ForgotPassword/OTPScreen";
 import CreatePassword from "../screens/CreatePassword/CreatePassword";
+import CreateSpace from "../screens/CreateSpace/CreateSpace";
+import CreateSpaceAddPicture from "../screens/CreateSpace/CreateSpaceAddPicture";
+import CreatePost from "../screens/CreatePost/CreatePost";
 
 const Stack = createNativeStackNavigator();
 
@@ -109,7 +112,7 @@ const AppHome = () => {
     >
       <Tab.Screen name={APP_SCREEN_LIST.HOME_SCREEN} component={Home} />
       <Tab.Screen name={APP_SCREEN_LIST.SETTINGS_SCREEN} component={Home} />
-      <Tab.Screen name={APP_SCREEN_LIST.POST_ICON_TAB} component={Home} />
+      <Tab.Screen name={APP_SCREEN_LIST.POST_ICON_TAB} component={CreatePost} />
       <Tab.Screen name={APP_SCREEN_LIST.TOOLBOX_ICON_TAB} component={Home} />
       <Tab.Screen name={APP_SCREEN_LIST.CHAT_ICON_TAB} component={Home} />
     </Tab.Navigator>
@@ -378,6 +381,14 @@ const AppRoutes = () => {
       <Stack.Screen
         name={APP_SCREEN_LIST.CREATE_PASSWORD_SCREEN}
         component={CreatePassword}
+      />
+      <Stack.Screen
+        name={APP_SCREEN_LIST.CREATE_SPACE_SCREEN}
+        component={CreateSpace}
+      />
+      <Stack.Screen
+        name={APP_SCREEN_LIST.CREATE_SPACE_ADD_PICTURE}
+        component={CreateSpaceAddPicture}
       />
     </Stack.Navigator>
   );

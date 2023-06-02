@@ -73,7 +73,13 @@ const SignupComplete = () => {
         </View>
       </ScrollView>
       <View style={[GlobalStyles.mt30, GlobalStyles.mb40]}>
-        <Button title="Become A Space" type="outline-primary" />
+        <Button
+          onPress={() =>
+            navigation.navigate(APP_SCREEN_LIST.CREATE_SPACE_SCREEN)
+          }
+          title="Become A Space"
+          type="outline-primary"
+        />
       </View>
       <View style={[]}>
         <Button

@@ -3,12 +3,6 @@ import { APP_BASE_URL } from "../constants";
 import { store } from "../store/store";
 import { ISettingState } from "../reducers/settings";
 
-axios.defaults.headers.get["Accept"] = "application/json";
-axios.defaults.headers.post["Content-Type"] = "application/json";
-axios.defaults.headers.patch["Content-Type"] = "application/json";
-axios.defaults.headers.put["Content-Type"] = "application/json";
-axios.defaults.headers.delete["Accept"] = "application/json";
-
 // axios.defaults.withCredentials = true;
 axios.defaults.baseURL = APP_BASE_URL;
 
@@ -24,7 +18,7 @@ axios.interceptors.request.use((config: any) => {
     token =
       state?.userInfo?.access_token ||
       state.userInfo?.accessToken?.access_token ||
-      "";
+      (`${state.userInfo?.accessToken}` as string);
   }
 
   // get the JWT token out of it
