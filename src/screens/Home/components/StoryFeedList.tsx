@@ -1,5 +1,10 @@
 import { FlatList } from "native-base";
 import StoryFeedItem from "../../../components/StoryFeedItem/StoryFeedItem";
+import { useCallback, useEffect } from "react";
+import useAppDispatch from "../../../hooks/useAppDispatch";
+import { getPostFeedAction } from "../../../actions/post";
+import useAppSelector from "../../../hooks/useAppSelector";
+import { IPostState } from "../../../reducers/post_reducer";
 
 const DATA = [
   {
@@ -65,11 +70,29 @@ const DATA = [
 ];
 
 const StoryFeedList = () => {
+  const dispatch = useAppDispatch();
+  const state = useAppSelector((state: any) => state.postReducer) as IPostState;
+  const getPostFeeds = useCallback(() => {
+    dispatch(getPostFeedAction());
+  }, []);
+
+  useEffect(() => {
+    console.log("called o");
+    getPostFeeds();
+  }, []);
+
+  useEffect(() => {
+    if (state.getPostFeedStatus === "failed") {
+      console.log(state.getPostFeedError);
+    }
+  }, [state.getPostFeedStatus]);
+
+  console.log("posts> ", state.postFeeds);
   return (
     <FlatList
       showsVerticalScrollIndicator={false}
       renderItem={(props) => <StoryFeedItem item={props.item} />}
-      data={DATA}
+      data={state.postFeeds}
       keyExtractor={(item) => `${item.id}`}
       style={{ flex: 1, flexGrow: 1 }}
     />

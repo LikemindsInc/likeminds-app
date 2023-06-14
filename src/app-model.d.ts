@@ -143,6 +143,42 @@ declare module "@app-model" {
 
   interface ICreatePostDTO {
     content: string;
-    image?: string;
+    image?: ImagePicker.ImagePickerAsset[];
+  }
+
+  interface IPostFeed {
+    id: string;
+    content: string;
+    images: string[];
+    files: any[];
+    likedBy: any[];
+    comments: any[];
+    authorId: string;
+    spaceId: null;
+    createdAt: string;
+    updatedAt: string;
+    commentCount: number;
+    reactionCount: number;
+    user: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      profilePicture: string | null;
+    };
+  }
+
+  interface ICreateJobDTO {
+    industry: string;
+    companyName: string;
+    companyDescription: string;
+    companyLocation: string;
+    jobTitle: string;
+    jobName: string;
+    jobType: string[];
+    jobLocation: string;
+    jobDescription: string;
+    salary: number;
+    experienceLevel: string[];
   }
 }

@@ -16,6 +16,9 @@ export const GlobalStyles = StyleSheet.create({
   textGrey: {
     color: colors.grey,
   },
+  textRed: {
+    color: colors.red,
+  },
   textWhite: {
     color: colors.white,
   },

@@ -56,6 +56,8 @@ import CreatePassword from "../screens/CreatePassword/CreatePassword";
 import CreateSpace from "../screens/CreateSpace/CreateSpace";
 import CreateSpaceAddPicture from "../screens/CreateSpace/CreateSpaceAddPicture";
 import CreatePost from "../screens/CreatePost/CreatePost";
+import UserProfile from "../screens/Profile/UserProfile";
+import PostJob from "../screens/Job/PostJob/PostJob";
 
 const Stack = createNativeStackNavigator();
 
@@ -389,6 +391,14 @@ const AppRoutes = () => {
       <Stack.Screen
         name={APP_SCREEN_LIST.CREATE_SPACE_ADD_PICTURE}
         component={CreateSpaceAddPicture}
+      />
+      <Stack.Screen
+        name={APP_SCREEN_LIST.USER_PROFILE_SCREEN}
+        component={UserProfile}
+      />
+      <Stack.Screen
+        name={APP_SCREEN_LIST.POST_JOB_SCREEN}
+        component={PostJob}
       />
     </Stack.Navigator>
   );

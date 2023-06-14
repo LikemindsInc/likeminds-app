@@ -110,6 +110,8 @@ export enum APP_SCREEN_LIST {
   CREATE_PASSWORD_SCREEN = "CREATE_PASSWORD_SCREEN",
   CREATE_SPACE_SCREEN = "CREATE_SPACE_SCREEN",
   CREATE_SPACE_ADD_PICTURE = "CREATE_SPACE_ADD_PICTURE",
+  USER_PROFILE_SCREEN = "USER_PROFILE_SCREEN",
+  POST_JOB_SCREEN = "POST_JOB_SCREEN",
 }
 
 export const APP_KEY = {
@@ -139,3 +141,34 @@ export type INavigationProps = NavigationProp<
   {},
   {}
 >;
+
+export const INDUSTRIES = [
+  "Retail",
+  "Manufacturing",
+  "Construction",
+  "Internet Technology",
+  "Food",
+  "Space",
+  "Defense",
+  "Agriculture",
+  "Chemical",
+];
+
+export const JOB_TYPES = [
+  "Part Time",
+  "Full Time",
+  "Internship",
+  "Volunteer",
+  "Contract",
+];
+
+export const JOB_EXPERIENCE = [
+  "Student",
+  "Entry Level",
+  "Mid Level",
+  "Senior Level",
+  "Director",
+  "Executive",
+];
+
+export const JOB_LOCATION = ["On Site", "Remote", "Hybrid"];

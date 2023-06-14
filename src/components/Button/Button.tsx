@@ -16,6 +16,7 @@ interface IButtonProps extends ButtonProps {
   type?: "secondary" | "primary" | "outline-primary" | "cancel" | "tertiary";
   style?: ViewStyle;
   loading?: boolean;
+  containerStyle?: ViewStyle;
 }
 
 const Button: FC<IButtonProps> = (props) => {
@@ -129,8 +130,64 @@ const Button: FC<IButtonProps> = (props) => {
       </View>
     );
   }
+  if (props.type === "cancel") {
+    return (
+      <View style={props.containerStyle}>
+        {props.disabled ? (
+          <View
+            style={[
+              GlobalStyles.buttonStyle,
+              { backgroundColor: "#88969D" },
+              props.style ? props.style : {},
+            ]}
+          >
+            <Text
+              style={[
+                GlobalStyles.textWhite,
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+              ]}
+            >
+              {props.title}
+            </Text>
+            {props.loading ? (
+              <Spinner color={colors.primary} />
+            ) : (
+              <View style={[GlobalStyles.pl4]}>{props.Icon}</View>
+            )}
+          </View>
+        ) : (
+          <TouchableOpacity onPress={props.loading ? () => {} : props.onPress}>
+            <View
+              style={[
+                GlobalStyles.buttonStyle,
+                GlobalStyles.primaryButtonOnline,
+                { backgroundColor: "#88969D", borderColor: "#88969D" },
+                props.style ? props.style : {},
+              ]}
+            >
+              <Text
+                style={[
+                  GlobalStyles.textWhite,
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                ]}
+              >
+                {props.title}
+              </Text>
+              {props.loading ? (
+                <Spinner color={colors.primary} />
+              ) : (
+                <View style={[GlobalStyles.pl4]}>{props.Icon}</View>
+              )}
+            </View>
+          </TouchableOpacity>
+        )}
+      </View>
+    );
+  }
   return (
-    <View>
+    <View style={props.containerStyle ? props.containerStyle : {}}>
       {props.disabled ? (
         <View
           style={[

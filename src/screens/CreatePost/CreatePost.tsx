@@ -10,7 +10,7 @@ import { Text } from "react-native";
 import Button from "../../components/Button/Button";
 import Input from "../../components/Input/Input";
 import colors, { addOpacity } from "../../theme/colors";
-import { Entypo, FontAwesome } from "@expo/vector-icons";
+import { Entypo, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from "react";
 import { useToast } from "native-base";
@@ -52,7 +52,7 @@ const CreatePost = () => {
         variant: "contained",
       });
 
-    dispatch(createPostAction({ content, image: "" }));
+    dispatch(createPostAction({ content, image: images }));
   };
 
   useEffect(() => {
@@ -62,6 +62,7 @@ const CreatePost = () => {
         description: "Post creared successfully",
         variant: "contained",
       });
+      setImages([]);
       navigation.navigate(APP_SCREEN_LIST.HOME_SCREEN);
       dispatch(clearCreatePostStatus());
     } else if (postState.createPostStatus === "failed") {
@@ -71,6 +72,12 @@ const CreatePost = () => {
       });
     }
   }, [postState.createPostStatus]);
+
+  useEffect(() => {
+    return () => {
+      setImages([]);
+    };
+  }, []);
   return (
     <View style={[GlobalStyles.container]}>
       <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
@@ -94,6 +101,11 @@ const CreatePost = () => {
           onChangeText={(value) => setContent(value)}
         />
         <View style={styles.buttonWrapper}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate(APP_SCREEN_LIST.POST_JOB_SCREEN)}
+          >
+            <FontAwesome5 name="toolbox" size={24} color={colors.navyBlue} />
+          </TouchableOpacity>
           <TouchableOpacity onPress={handleMediaSelect}>
             <FontAwesome name="photo" size={24} color={colors.navyBlue} />
           </TouchableOpacity>

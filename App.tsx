@@ -12,6 +12,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AppRoutes from "./src/navigation/routes";
 import { NativeBaseProvider, extendTheme } from "native-base";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 SplashScreen.preventAutoHideAsync();
 LogBox.ignoreLogs([
@@ -19,6 +20,7 @@ LogBox.ignoreLogs([
   "Require cycle: src/store/store.ts",
   "No native splash screen registered for given view controller",
   `Key "cancelled" in the image picker result is deprecated`,
+  "Constants.platform.ios.model",
 ]);
 
 const Stack = createNativeStackNavigator();
@@ -74,22 +76,24 @@ export default function App() {
 
   return (
     <SafeAreaView style={GlobalStyles.container} onLayout={onLayoutRootView}>
-      <NativeBaseProvider theme={theme}>
-        <Provider>
-          <ToastProvider
-            placement="bottom"
-            animationType="slide-in"
-            offsetBottom={100}
-            swipeEnabled={true}
-            duration={5000}
-            animationDuration={250}
-          >
-            <NavigationContainer>
-              <AppRoutes />
-            </NavigationContainer>
-          </ToastProvider>
-        </Provider>
-      </NativeBaseProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <NativeBaseProvider theme={theme}>
+          <Provider>
+            <ToastProvider
+              placement="bottom"
+              animationType="slide-in"
+              offsetBottom={100}
+              swipeEnabled={true}
+              duration={5000}
+              animationDuration={250}
+            >
+              <NavigationContainer>
+                <AppRoutes />
+              </NavigationContainer>
+            </ToastProvider>
+          </Provider>
+        </NativeBaseProvider>
+      </GestureHandlerRootView>
     </SafeAreaView>
   );
 }

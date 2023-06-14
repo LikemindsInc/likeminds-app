@@ -4,21 +4,14 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import colors from "../../theme/colors";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import { Feather, AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import { IPostFeed } from "@app-model";
 
 interface IProps {
-  item: {
-    id: number;
-    profileImage: any;
-    firstName: string;
-    lastName: string;
-    postImage: any;
-    reactionCount: number;
-    commentCount: number;
-    title: string;
-  };
+  item: IPostFeed;
 }
 
 const StoryFeedItem: FC<IProps> = ({ item }) => {
+  console.log(">>>", item?.images);
   return (
     <View style={styles.container}>
       <View>
@@ -28,7 +21,11 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
           >
             <View>
               <Image
-                source={item.profileImage}
+                source={
+                  item.user?.profilePicture
+                    ? { uri: item.user.profilePicture }
+                    : require("../../../assets/image3.png")
+                }
                 style={{ width: 40, height: 40, borderRadius: 20 }}
               />
             </View>
@@ -41,7 +38,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
                 GlobalStyles.pl4,
               ]}
             >
-              {item.firstName} {item.lastName}
+              {item?.user?.firstName} {item?.user?.firstName}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={{ justifyContent: "center" }}>
@@ -49,12 +46,21 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
           </TouchableOpacity>
         </View>
         <TouchableOpacity>
-          <Image
-            source={item.postImage}
-            style={styles.image}
-            resizeMethod="auto"
-            resizeMode="cover"
-          />
+          {item.images ? (
+            <Image
+              source={{ uri: item.images[0] }}
+              style={styles.image}
+              resizeMethod="auto"
+              resizeMode="cover"
+            />
+          ) : (
+            <Image
+              source={require("../../../assets/image8.png")}
+              style={styles.image}
+              resizeMethod="auto"
+              resizeMode="cover"
+            />
+          )}
         </TouchableOpacity>
       </View>
       <View
@@ -124,7 +130,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
             GlobalStyles.fontWeight400,
           ]}
         >
-          {item.title}
+          {item.content}
         </Text>
       </View>
     </View>
@@ -143,6 +149,7 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     borderRadius: 10,
+    height: 300,
   },
 });
 

@@ -112,7 +112,7 @@ const Login = () => {
         onPress={handleOnLogin}
         title="Login"
       />
-      <View style={[GlobalStyles.mt40]}>
+      {/* <View style={[GlobalStyles.mt40]}>
         <Text
           style={[
             GlobalStyles.textGrey,
@@ -128,7 +128,7 @@ const Login = () => {
         <IconButton image={require("../../../assets/linkedln.png")} />
         <IconButton image={require("../../../assets/facebook.png")} />
         <IconButton image={require("../../../assets/instagram.png")} />
-      </View>
+      </View> */}
       <View style={[GlobalStyles.mt20]}>
         <Text
           style={[
