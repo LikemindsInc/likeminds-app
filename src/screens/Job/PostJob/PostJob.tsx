@@ -171,7 +171,7 @@ const PostJob = () => {
             placeholder="Company Description"
             autoCorrect={false}
             autoCapitalize={"none"}
-            inputStyle={{ height: 100 }}
+            contentContainerStyle={{ height: 100, alignItems: "flex-start" }}
             textAlignVertical="top"
             textAlign="left"
             multiline={true}
@@ -216,7 +216,7 @@ const PostJob = () => {
             placeholder="Job Description"
             autoCorrect={false}
             autoCapitalize={"none"}
-            inputStyle={{ height: 100 }}
+            contentContainerStyle={{ height: 100, alignItems: "flex-start" }}
             textAlignVertical="top"
             textAlign="left"
             multiline={true}

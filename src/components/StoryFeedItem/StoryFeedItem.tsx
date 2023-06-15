@@ -11,7 +11,6 @@ interface IProps {
 }
 
 const StoryFeedItem: FC<IProps> = ({ item }) => {
-  console.log(">>>", item?.images);
   return (
     <View style={styles.container}>
       <View>

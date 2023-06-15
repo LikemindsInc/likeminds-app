@@ -95,7 +95,7 @@ const CreatePost = () => {
         <Input
           placeholder="What’s on your mind"
           textAlignVertical="top"
-          inputStyle={styles.inputStyle}
+          contentContainerStyle={styles.inputStyle}
           multiline={true}
           value={content}
           onChangeText={(value) => setContent(value)}
@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     height: 300,
     paddingLeft: 0,
+    alignItems: "flex-start",
   },
   imagesWrapper: {
     flexWrap: "wrap",

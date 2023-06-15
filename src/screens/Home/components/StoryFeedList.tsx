@@ -1,4 +1,4 @@
-import { FlatList } from "native-base";
+import { FlatList, useToast } from "native-base";
 import StoryFeedItem from "../../../components/StoryFeedItem/StoryFeedItem";
 import { useCallback, useEffect } from "react";
 import useAppDispatch from "../../../hooks/useAppDispatch";
@@ -76,18 +76,32 @@ const StoryFeedList = () => {
     dispatch(getPostFeedAction());
   }, []);
 
+  const toast = useToast();
+
   useEffect(() => {
-    console.log("called o");
     getPostFeeds();
   }, []);
 
   useEffect(() => {
     if (state.getPostFeedStatus === "failed") {
-      console.log(state.getPostFeedError);
+      toast.show({
+        description:
+          state.getPostFeedError || "unable to fetch posts. Please try again",
+        variant: "success",
+      });
     }
   }, [state.getPostFeedStatus]);
 
-  console.log("posts> ", state.postFeeds);
+  useEffect(() => {
+    if (state.createPostStatus === "completed") {
+      getPostFeeds();
+    }
+  }, [state.createPostStatus]);
+
+  const handleOnRefres = () => {
+    getPostFeeds();
+  };
+
   return (
     <FlatList
       showsVerticalScrollIndicator={false}
@@ -95,6 +109,7 @@ const StoryFeedList = () => {
       data={state.postFeeds}
       keyExtractor={(item) => `${item.id}`}
       style={{ flex: 1, flexGrow: 1 }}
+      onRefresh={handleOnRefres}
     />
   );
 };

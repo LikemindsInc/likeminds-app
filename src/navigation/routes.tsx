@@ -58,6 +58,7 @@ import CreateSpaceAddPicture from "../screens/CreateSpace/CreateSpaceAddPicture"
 import CreatePost from "../screens/CreatePost/CreatePost";
 import UserProfile from "../screens/Profile/UserProfile";
 import PostJob from "../screens/Job/PostJob/PostJob";
+import SpaceSearch from "../screens/Spaces/SpaceSearch/SpaceSearch";
 
 const Stack = createNativeStackNavigator();
 
@@ -84,7 +85,7 @@ const AppHome = () => {
           switch (route.name) {
             case APP_SCREEN_LIST.HOME_SCREEN:
               return <Feather name="home" size={size} color={color} />;
-            case APP_SCREEN_LIST.SETTINGS_SCREEN:
+            case APP_SCREEN_LIST.SPACE_SEARCH_SCREEN:
               return (
                 <MaterialCommunityIcons name="sort" size={size} color={color} />
               );
@@ -113,7 +114,10 @@ const AppHome = () => {
       initialRouteName={APP_SCREEN_LIST.HOME_SCREEN}
     >
       <Tab.Screen name={APP_SCREEN_LIST.HOME_SCREEN} component={Home} />
-      <Tab.Screen name={APP_SCREEN_LIST.SETTINGS_SCREEN} component={Home} />
+      <Tab.Screen
+        name={APP_SCREEN_LIST.SPACE_SEARCH_SCREEN}
+        component={SpaceSearch}
+      />
       <Tab.Screen name={APP_SCREEN_LIST.POST_ICON_TAB} component={CreatePost} />
       <Tab.Screen name={APP_SCREEN_LIST.TOOLBOX_ICON_TAB} component={Home} />
       <Tab.Screen name={APP_SCREEN_LIST.CHAT_ICON_TAB} component={Home} />

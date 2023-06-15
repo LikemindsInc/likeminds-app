@@ -162,14 +162,8 @@ export const GlobalStyles = StyleSheet.create({
   },
 
   inputStyle: {
-    backgroundColor: "#F3F5F7",
-    height: 60,
-    paddingLeft: 16,
-    paddingRight: 16,
-    borderRadius: 10,
     fontFamily: "Inter-Regular",
     fontSize: font.size.font13,
-    marginBottom: 20,
   },
   primaryButtonOnline: {
     borderColor: colors.primary,

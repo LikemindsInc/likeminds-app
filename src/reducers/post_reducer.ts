@@ -82,6 +82,19 @@ const PostSlice = createSlice({
       state.createPostError = action.payload?.message as string;
     });
 
+    builder.addCase(getPostFeedAction.pending, (state) => {
+      state.getPostFeedStatus = "loading";
+    });
+    builder.addCase(getPostFeedAction.fulfilled, (state, action) => {
+      state.getPostFeedStatus = "completed";
+      state.postFeeds = action.payload.data;
+      state.getPostFeedSuccess = action.payload?.message;
+    });
+    builder.addCase(getPostFeedAction.rejected, (state, action) => {
+      state.getPostFeedStatus = "failed";
+      state.getPostFeedError = action.payload?.message as string;
+    });
+
     builder.addCase(createJobAction.pending, (state) => {
       state.createJobStatus = "loading";
     });

@@ -55,8 +55,9 @@ export const getPostFeedAction = asyncThunkWrapper<
   ApiResponseSuccess<IPostFeed[]>,
   void
 >(GET_POST_FEED, async () => {
-  const response = await axiosClient.get<AxiosResponse<any>>("/api/post/feeds");
-
+  const response = await axiosClient.get<AxiosResponse<any>>(
+    "/api/post/feeds?page=1&limit=1000"
+  );
   return response.data;
 });
 

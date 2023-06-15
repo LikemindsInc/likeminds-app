@@ -71,7 +71,7 @@ const CreateSpace = () => {
           autoCapitalize={"none"}
           value={description}
           onChangeText={(text) => setDescription(text)}
-          inputStyle={{ height: 300 }}
+          contentContainerStyle={{ height: 300, alignItems: "flex-start" }}
           textAlignVertical="top"
           textAlign="left"
           multiline={true}
