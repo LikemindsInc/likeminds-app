@@ -175,10 +175,22 @@ declare module "@app-model" {
     companyLocation: string;
     jobTitle: string;
     jobName: string;
-    jobType: string[];
+    jobType: string;
     jobLocation: string;
     jobDescription: string;
     salary: number;
-    experienceLevel: string[];
+    experienceLevel: string;
+  }
+
+  interface ISpaceList {
+    createdAt: string;
+    description: string;
+    events: null | any;
+    followers: null | any;
+    id: string;
+    profilePicture: string;
+    title: string;
+    updatedAt: string;
+    userId: string;
   }
 }

@@ -17,6 +17,7 @@ interface IButtonProps extends ButtonProps {
   style?: ViewStyle;
   loading?: boolean;
   containerStyle?: ViewStyle;
+  buttonStyle?: ViewStyle;
 }
 
 const Button: FC<IButtonProps> = (props) => {
@@ -27,6 +28,7 @@ const Button: FC<IButtonProps> = (props) => {
           <View
             style={[
               GlobalStyles.buttonStyle,
+              props.buttonStyle,
               { backgroundColor: "#245264" },
               props.style ? props.style : {},
             ]}
@@ -51,6 +53,7 @@ const Button: FC<IButtonProps> = (props) => {
             <View
               style={[
                 GlobalStyles.buttonStyle,
+                props.buttonStyle,
                 { backgroundColor: "#245264" },
                 props.style ? props.style : {},
               ]}
@@ -82,6 +85,7 @@ const Button: FC<IButtonProps> = (props) => {
           <View
             style={[
               GlobalStyles.buttonStyle,
+              props.buttonStyle,
               { backgroundColor: "#88969D" },
               props.style ? props.style : {},
             ]}
@@ -106,6 +110,7 @@ const Button: FC<IButtonProps> = (props) => {
             <View
               style={[
                 GlobalStyles.buttonStyle,
+                props.buttonStyle,
                 GlobalStyles.primaryButtonOnline,
                 props.style ? props.style : {},
               ]}
@@ -137,6 +142,7 @@ const Button: FC<IButtonProps> = (props) => {
           <View
             style={[
               GlobalStyles.buttonStyle,
+              props.buttonStyle,
               { backgroundColor: "#88969D" },
               props.style ? props.style : {},
             ]}
@@ -161,6 +167,7 @@ const Button: FC<IButtonProps> = (props) => {
             <View
               style={[
                 GlobalStyles.buttonStyle,
+                props.buttonStyle,
                 GlobalStyles.primaryButtonOnline,
                 { backgroundColor: "#88969D", borderColor: "#88969D" },
                 props.style ? props.style : {},
@@ -192,6 +199,7 @@ const Button: FC<IButtonProps> = (props) => {
         <View
           style={[
             GlobalStyles.buttonStyle,
+            props.buttonStyle,
             { backgroundColor: "#88969D" },
             props.style ? props.style : {},
           ]}
@@ -214,7 +222,11 @@ const Button: FC<IButtonProps> = (props) => {
       ) : (
         <TouchableOpacity onPress={props.loading ? () => {} : props.onPress}>
           <LinearGradient
-            style={[GlobalStyles.buttonStyle, props.style ? props.style : {}]}
+            style={[
+              GlobalStyles.buttonStyle,
+              props.buttonStyle,
+              props.style ? props.style : {},
+            ]}
             colors={["#00CDFE", "#009AEE"]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}

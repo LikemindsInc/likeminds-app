@@ -30,7 +30,7 @@ const PostJob = () => {
 
   const [selectedIndustry, setSelectedIndustry] = useState("");
   const [jobType, setJobType] = useState("");
-  const [jobLocation, setJobLocation] = useState("");
+  const [jobLocation, setJobLocation] = useState(JOB_LOCATION[0].value);
   const [jobExperience, setJobExperience] = useState("");
 
   const [companyName, setCompanyName] = useState("");
@@ -47,8 +47,13 @@ const PostJob = () => {
 
   // variables
   const snapPoints = useMemo(() => ["50%", "60%"], []);
-  const radioButtons: RadioButtonProps[] = useMemo(
-    () => JOB_LOCATION.map((item) => ({ id: item, label: item, value: item })),
+  const radioButtons: any[] = useMemo(
+    () =>
+      JOB_LOCATION.map((item, i) => ({
+        id: item.value,
+        label: item.label,
+        value: item.value,
+      })),
     []
   );
 
@@ -103,10 +108,10 @@ const PostJob = () => {
         jobName: payload.jobName,
         jobDescription: payload.jobDescription,
         salary: +payload.salary,
-        experienceLevel: [payload.jobExperience],
+        experienceLevel: payload.jobExperience,
         industry: payload.selectedIndustry,
         jobLocation: payload.jobLocation,
-        jobType: [payload.jobType],
+        jobType: payload.jobType,
       })
     );
   };
@@ -139,6 +144,7 @@ const PostJob = () => {
           state.createJobError || "Unable to post Job. Please try again",
         variant: "contained",
       });
+      dispatch(clearCreateJobStatus());
     }
   }, [state.createJobStatus]);
 
@@ -255,9 +261,9 @@ const PostJob = () => {
           >
             {JOB_TYPES.map((item, i) => (
               <JobType
-                isSelected={item === jobType}
-                onPress={handleOnJobTypeSelect}
-                text={item}
+                isSelected={item.value === jobType}
+                onPress={() => handleOnJobTypeSelect(item.value)}
+                text={item.label}
                 key={i}
               />
             ))}
@@ -341,9 +347,9 @@ const PostJob = () => {
           >
             {JOB_EXPERIENCE.map((item, i) => (
               <JobType
-                isSelected={item === jobExperience}
-                onPress={(text: string) => setJobExperience(text)}
-                text={item}
+                isSelected={item.value === jobExperience}
+                onPress={() => setJobExperience(item.value)}
+                text={item.label}
                 key={i}
               />
             ))}

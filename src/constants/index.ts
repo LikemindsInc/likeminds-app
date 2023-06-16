@@ -113,6 +113,7 @@ export enum APP_SCREEN_LIST {
   USER_PROFILE_SCREEN = "USER_PROFILE_SCREEN",
   POST_JOB_SCREEN = "POST_JOB_SCREEN",
   SPACE_SEARCH_SCREEN = "SPACE_SEARCH_SCREEN",
+  SPACE_PROFILE_SCREEN = "SPACE_PROFILE_SCREEN",
 }
 
 export const APP_KEY = {
@@ -156,20 +157,24 @@ export const INDUSTRIES = [
 ];
 
 export const JOB_TYPES = [
-  "Part Time",
-  "Full Time",
-  "Internship",
-  "Volunteer",
-  "Contract",
+  { label: "Part Time", value: "part-time" },
+  { label: "Full Time", value: "full-time" },
+  { label: "Internship", value: "internship" },
+  { label: "Volunteer", value: "volunteer" },
+  { label: "Contract", value: "contract" },
 ];
 
 export const JOB_EXPERIENCE = [
-  "Student",
-  "Entry Level",
-  "Mid Level",
-  "Senior Level",
-  "Director",
-  "Executive",
+  { label: "Student", value: "student" },
+  { label: "Entry Level", value: "entry-level" },
+  { label: "Mid Level", value: "mid-level" },
+  { label: "Senior Level", value: "senior-level" },
+  { label: "Director", value: "director" },
+  { label: "Executive", value: "executive" },
 ];
 
-export const JOB_LOCATION = ["On Site", "Remote", "Hybrid"];
+export const JOB_LOCATION = [
+  { label: "On Site", value: "on-Site" },
+  { label: "Remote", value: "remote" },
+  { label: "Hybrid", value: "hybrid" },
+];

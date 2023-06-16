@@ -177,4 +177,14 @@ export const GlobalStyles = StyleSheet.create({
     paddingTop: 60,
     paddingBottom: 25,
   },
+  shadowBox: {
+    shadowColor: "#2844531a",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 100,
+    shadowRadius: 3,
+    elevation: 10,
+  },
 });

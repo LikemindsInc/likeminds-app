@@ -59,6 +59,7 @@ import CreatePost from "../screens/CreatePost/CreatePost";
 import UserProfile from "../screens/Profile/UserProfile";
 import PostJob from "../screens/Job/PostJob/PostJob";
 import SpaceSearch from "../screens/Spaces/SpaceSearch/SpaceSearch";
+import SpaceProfile from "../screens/Spaces/SpaceProfile";
 
 const Stack = createNativeStackNavigator();
 
@@ -368,6 +369,10 @@ const AppRoutes = () => {
       <Stack.Screen name={APP_SCREEN_LIST.MAIN_SCREEN} component={AppDrawer} />
 
       <Stack.Screen name={APP_SCREEN_LIST.LOGIN_SCREEN} component={Login} />
+      <Stack.Screen
+        name={APP_SCREEN_LIST.SPACE_PROFILE_SCREEN}
+        component={SpaceProfile}
+      />
       <Stack.Screen
         name={APP_SCREEN_LIST.FORGOT_PASSWORD_SCREEN}
         component={ForgotPassword}

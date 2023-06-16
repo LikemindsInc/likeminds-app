@@ -21,6 +21,7 @@ LogBox.ignoreLogs([
   "No native splash screen registered for given view controller",
   `Key "cancelled" in the image picker result is deprecated`,
   "Constants.platform.ios.model",
+  "Each child in a list",
 ]);
 
 const Stack = createNativeStackNavigator();

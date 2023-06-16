@@ -34,24 +34,16 @@ const SpaceSearch = () => {
           <Feather name="sliders" size={24} color={colors.grey} />
         </TouchableOpacity>
       </View>
-      <View style={{ flex: 1 }}>
+      <View style={[GlobalStyles.mt20, { flex: 1 }]}>
         <SpacePeopleTabView />
       </View>
     </View>
   );
 };
 
-const FirstRoute = () => (
-  <View style={{ flex: 1, backgroundColor: "#ff4081" }} />
-);
-
-const SecondRoute = () => (
-  <View style={{ flex: 1, backgroundColor: "#673ab7" }} />
-);
-
 const renderScene = SceneMap({
-  first: FirstRoute,
-  second: SecondRoute,
+  space: Spaces,
+  people: PeopleList,
 });
 
 function SpacePeopleTabView() {
@@ -59,8 +51,8 @@ function SpacePeopleTabView() {
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    { key: "first", title: "Spaces" },
-    { key: "second", title: "People" },
+    { key: "space", title: "Spaces" },
+    { key: "people", title: "People" },
   ]);
 
   const renderTabBar = (props: any) => {
