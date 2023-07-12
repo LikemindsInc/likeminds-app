@@ -38,6 +38,7 @@ const Input: FC<ITextInputProps> = (props) => {
         <View style={{ paddingRight: 8 }}>{props.prefixIcon}</View>
       )}
       <TextInput
+        returnKeyType="done"
         {...props}
         ref={props.inputRef}
         style={[GlobalStyles.inputStyle, props.inputStyle]}
@@ -54,7 +55,9 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     borderRadius: 10,
     marginBottom: 20,
-    flex: 1,
+  },
+  inputStyle: {
+    width: "100%",
   },
 });
 

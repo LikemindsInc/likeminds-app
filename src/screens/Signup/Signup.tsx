@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Keyboard, View } from "react-native";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import { Text } from "react-native";
 import Input from "../../components/Input/Input";
@@ -18,6 +18,7 @@ import {
 } from "../../reducers/session";
 import { signupUserActionAction } from "../../actions/auth";
 import { useToast } from "native-base";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const Signup = () => {
   const toast = useToast();
@@ -91,30 +92,36 @@ const Signup = () => {
           keyboardType="email-address"
           value={email}
           onChangeText={(text) => setEmail(text)}
+          returnKeyType="done"
         />
         <Input
           placeholder="Phone number"
           autoCorrect={false}
           autoCapitalize={"none"}
-          keyboardType="number-pad"
+          keyboardType="default"
           value={phone}
           onChangeText={(text) => setPhone(text)}
+          returnKeyType="done"
         />
         <Input
           placeholder="Password"
           autoCorrect={false}
           autoCapitalize={"none"}
+          keyboardType="default"
           secureTextEntry
           value={password}
           onChangeText={(text) => setPassword(text)}
+          returnKeyType="done"
         />
         <Input
           placeholder="Confirm Password"
           autoCorrect={false}
           autoCapitalize={"none"}
+          keyboardType="default"
           secureTextEntry
           value={confirmPassword}
           onChangeText={(text) => setConfirmPassword(text)}
+          returnKeyType="done"
         />
       </View>
       <Button

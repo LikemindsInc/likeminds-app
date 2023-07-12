@@ -1,4 +1,11 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Image,
+  TouchableWithoutFeedback,
+} from "react-native";
 import Button from "../../components/Button/Button";
 import Input from "../../components/Input/Input";
 import { GlobalStyles } from "../../theme/GlobalStyles";
@@ -10,6 +17,7 @@ import { ISessionState } from "../../reducers/session";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import { loginUserActionAction } from "../../actions/auth";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { Keyboard } from "react-native";
 
 const IconButton: FC<{ image: any }> = ({ image }) => {
   return (
@@ -80,6 +88,7 @@ const Login = () => {
           value={email}
           keyboardType="email-address"
           onChangeText={(text) => setEmail(text)}
+          returnKeyType="done"
         />
         <Input
           placeholder="Password"
@@ -88,6 +97,7 @@ const Login = () => {
           secureTextEntry
           value={password}
           onChangeText={(text) => setPassword(text)}
+          returnKeyType="done"
         />
       </View>
       <TouchableOpacity
