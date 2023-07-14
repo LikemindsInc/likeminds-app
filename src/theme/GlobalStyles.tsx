@@ -16,6 +16,9 @@ export const GlobalStyles = StyleSheet.create({
   textGrey: {
     color: colors.grey,
   },
+  textRed: {
+    color: colors.red,
+  },
   textWhite: {
     color: colors.white,
   },
@@ -159,14 +162,8 @@ export const GlobalStyles = StyleSheet.create({
   },
 
   inputStyle: {
-    backgroundColor: "#F3F5F7",
-    height: 60,
-    paddingLeft: 16,
-    paddingRight: 16,
-    borderRadius: 10,
     fontFamily: "Inter-Regular",
     fontSize: font.size.font13,
-    marginBottom: 20,
   },
   primaryButtonOnline: {
     borderColor: colors.primary,
@@ -179,5 +176,15 @@ export const GlobalStyles = StyleSheet.create({
     paddingHorizontal: 25,
     paddingTop: 60,
     paddingBottom: 25,
+  },
+  shadowBox: {
+    shadowColor: "#2844531a",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 100,
+    shadowRadius: 3,
+    elevation: 10,
   },
 });

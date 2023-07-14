@@ -16,6 +16,8 @@ interface IButtonProps extends ButtonProps {
   type?: "secondary" | "primary" | "outline-primary" | "cancel" | "tertiary";
   style?: ViewStyle;
   loading?: boolean;
+  containerStyle?: ViewStyle;
+  buttonStyle?: ViewStyle;
 }
 
 const Button: FC<IButtonProps> = (props) => {
@@ -26,6 +28,7 @@ const Button: FC<IButtonProps> = (props) => {
           <View
             style={[
               GlobalStyles.buttonStyle,
+              props.buttonStyle,
               { backgroundColor: "#245264" },
               props.style ? props.style : {},
             ]}
@@ -50,6 +53,7 @@ const Button: FC<IButtonProps> = (props) => {
             <View
               style={[
                 GlobalStyles.buttonStyle,
+                props.buttonStyle,
                 { backgroundColor: "#245264" },
                 props.style ? props.style : {},
               ]}
@@ -81,6 +85,7 @@ const Button: FC<IButtonProps> = (props) => {
           <View
             style={[
               GlobalStyles.buttonStyle,
+              props.buttonStyle,
               { backgroundColor: "#88969D" },
               props.style ? props.style : {},
             ]}
@@ -105,6 +110,7 @@ const Button: FC<IButtonProps> = (props) => {
             <View
               style={[
                 GlobalStyles.buttonStyle,
+                props.buttonStyle,
                 GlobalStyles.primaryButtonOnline,
                 props.style ? props.style : {},
               ]}
@@ -129,12 +135,71 @@ const Button: FC<IButtonProps> = (props) => {
       </View>
     );
   }
+  if (props.type === "cancel") {
+    return (
+      <View style={props.containerStyle}>
+        {props.disabled ? (
+          <View
+            style={[
+              GlobalStyles.buttonStyle,
+              props.buttonStyle,
+              { backgroundColor: "#88969D" },
+              props.style ? props.style : {},
+            ]}
+          >
+            <Text
+              style={[
+                GlobalStyles.textWhite,
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+              ]}
+            >
+              {props.title}
+            </Text>
+            {props.loading ? (
+              <Spinner color={colors.primary} />
+            ) : (
+              <View style={[GlobalStyles.pl4]}>{props.Icon}</View>
+            )}
+          </View>
+        ) : (
+          <TouchableOpacity onPress={props.loading ? () => {} : props.onPress}>
+            <View
+              style={[
+                GlobalStyles.buttonStyle,
+                props.buttonStyle,
+                GlobalStyles.primaryButtonOnline,
+                { backgroundColor: "#88969D", borderColor: "#88969D" },
+                props.style ? props.style : {},
+              ]}
+            >
+              <Text
+                style={[
+                  GlobalStyles.textWhite,
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                ]}
+              >
+                {props.title}
+              </Text>
+              {props.loading ? (
+                <Spinner color={colors.primary} />
+              ) : (
+                <View style={[GlobalStyles.pl4]}>{props.Icon}</View>
+              )}
+            </View>
+          </TouchableOpacity>
+        )}
+      </View>
+    );
+  }
   return (
-    <View>
+    <View style={props.containerStyle ? props.containerStyle : {}}>
       {props.disabled ? (
         <View
           style={[
             GlobalStyles.buttonStyle,
+            props.buttonStyle,
             { backgroundColor: "#88969D" },
             props.style ? props.style : {},
           ]}
@@ -157,7 +222,11 @@ const Button: FC<IButtonProps> = (props) => {
       ) : (
         <TouchableOpacity onPress={props.loading ? () => {} : props.onPress}>
           <LinearGradient
-            style={[GlobalStyles.buttonStyle, props.style ? props.style : {}]}
+            style={[
+              GlobalStyles.buttonStyle,
+              props.buttonStyle,
+              props.style ? props.style : {},
+            ]}
             colors={["#00CDFE", "#009AEE"]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}

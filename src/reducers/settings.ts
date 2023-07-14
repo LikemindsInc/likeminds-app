@@ -61,6 +61,7 @@ const settingSlice = createSlice({
     builder.addCase(verifyOTPActionAction.rejected, (state, action) => {});
 
     builder.addCase(loginUserActionAction.fulfilled, (state, action) => {
+      console.log("user data> ", action.payload.data);
       state.userInfo = action.payload.data;
     });
   },

@@ -1,24 +1,41 @@
 import { IFlatListProps } from "native-base/lib/typescript/components/basic/FlatList";
-import { FC } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import colors from "../../theme/colors";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import { Feather, AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import { IPostFeed } from "@app-model";
+import useAppSelector from "../../hooks/useAppSelector";
+import { ISettingState } from "../../reducers/settings";
 
 interface IProps {
-  item: {
-    id: number;
-    profileImage: any;
-    firstName: string;
-    lastName: string;
-    postImage: any;
-    reactionCount: number;
-    commentCount: number;
-    title: string;
-  };
+  item: IPostFeed;
 }
 
 const StoryFeedItem: FC<IProps> = ({ item }) => {
+  const state = useAppSelector(
+    (state: any) => state.settingReducer
+  ) as ISettingState;
+
+  const [isPostLiked, setLiked] = useState(false);
+
+  const isPostLikedByUser = useCallback(() => {
+    const isLiked = item.likedBy.includes(state?.userInfo?.id as string);
+    setLiked(isLiked);
+  }, [item.likedBy]);
+
+  useEffect(() => {
+    isPostLikedByUser();
+  }, [isPostLikedByUser]);
+
+  const handleLikeReactionOnPost = () => {
+    if (isPostLiked) return setLiked(false);
+    // dispatch unLikePost
+
+    setLiked(true);
+    // dispatch likePost
+  };
+
   return (
     <View style={styles.container}>
       <View>
@@ -28,7 +45,11 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
           >
             <View>
               <Image
-                source={item.profileImage}
+                source={
+                  item.user?.profilePicture
+                    ? { uri: item.user.profilePicture }
+                    : require("../../../assets/image3.png")
+                }
                 style={{ width: 40, height: 40, borderRadius: 20 }}
               />
             </View>
@@ -41,7 +62,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
                 GlobalStyles.pl4,
               ]}
             >
-              {item.firstName} {item.lastName}
+              {item?.user?.firstName} {item?.user?.firstName}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={{ justifyContent: "center" }}>
@@ -49,12 +70,14 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
           </TouchableOpacity>
         </View>
         <TouchableOpacity>
-          <Image
-            source={item.postImage}
-            style={styles.image}
-            resizeMethod="auto"
-            resizeMode="cover"
-          />
+          {item.images && item.images.length > 0 ? (
+            <Image
+              source={{ uri: item.images[0] }}
+              style={styles.image}
+              resizeMethod="auto"
+              resizeMode="cover"
+            />
+          ) : null}
         </TouchableOpacity>
       </View>
       <View
@@ -108,8 +131,12 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
               color={colors.navyBlue}
             />
           </TouchableOpacity>
-          <TouchableOpacity>
-            <AntDesign name="hearto" size={24} color={colors.navyBlue} />
+          <TouchableOpacity onPress={() => handleLikeReactionOnPost()}>
+            <AntDesign
+              name={isPostLiked ? "heart" : "hearto"}
+              size={24}
+              color={isPostLiked ? colors.red : colors.navyBlue}
+            />
           </TouchableOpacity>
           <TouchableOpacity>
             <Feather name="send" size={24} color={colors.navyBlue} />
@@ -124,7 +151,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
             GlobalStyles.fontWeight400,
           ]}
         >
-          {item.title}
+          {item.content}
         </Text>
       </View>
     </View>
@@ -143,6 +170,7 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     borderRadius: 10,
+    height: 300,
   },
 });
 

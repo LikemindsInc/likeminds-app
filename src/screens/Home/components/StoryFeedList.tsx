@@ -1,5 +1,10 @@
-import { FlatList } from "native-base";
+import { FlatList, useToast } from "native-base";
 import StoryFeedItem from "../../../components/StoryFeedItem/StoryFeedItem";
+import { useCallback, useEffect } from "react";
+import useAppDispatch from "../../../hooks/useAppDispatch";
+import { getPostFeedAction } from "../../../actions/post";
+import useAppSelector from "../../../hooks/useAppSelector";
+import { IPostState } from "../../../reducers/post_reducer";
 
 const DATA = [
   {
@@ -65,13 +70,47 @@ const DATA = [
 ];
 
 const StoryFeedList = () => {
+  const dispatch = useAppDispatch();
+  const state = useAppSelector((state: any) => state.postReducer) as IPostState;
+  const getPostFeeds = useCallback(() => {
+    dispatch(getPostFeedAction());
+  }, []);
+
+  const toast = useToast();
+
+  useEffect(() => {
+    getPostFeeds();
+  }, []);
+
+  useEffect(() => {
+    if (state.getPostFeedStatus === "failed") {
+      console.log("error:", state.getPostFeedError);
+      toast.show({
+        description:
+          state.getPostFeedError || "unable to fetch posts. Please try again",
+        variant: "success",
+      });
+    }
+  }, [state.getPostFeedStatus]);
+
+  useEffect(() => {
+    if (state.createPostStatus === "completed") {
+      getPostFeeds();
+    }
+  }, [state.createPostStatus]);
+
+  const handleOnRefres = () => {
+    getPostFeeds();
+  };
+
   return (
     <FlatList
       showsVerticalScrollIndicator={false}
       renderItem={(props) => <StoryFeedItem item={props.item} />}
-      data={DATA}
+      data={state.postFeeds}
       keyExtractor={(item) => `${item.id}`}
       style={{ flex: 1, flexGrow: 1 }}
+      onRefresh={handleOnRefres}
     />
   );
 };

@@ -1,4 +1,11 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Image,
+  TouchableWithoutFeedback,
+} from "react-native";
 import Button from "../../components/Button/Button";
 import Input from "../../components/Input/Input";
 import { GlobalStyles } from "../../theme/GlobalStyles";
@@ -10,6 +17,8 @@ import { ISessionState } from "../../reducers/session";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import { loginUserActionAction } from "../../actions/auth";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { Keyboard } from "react-native";
+import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
 
 const IconButton: FC<{ image: any }> = ({ image }) => {
   return (
@@ -72,47 +81,53 @@ const Login = () => {
           Enter your email address and password to login to your account
         </Text>
       </View>
-      <View style={[GlobalStyles.mb20]}>
-        <Input
-          placeholder="Email Address"
-          autoCorrect={false}
-          autoCapitalize={"none"}
-          value={email}
-          keyboardType="email-address"
-          onChangeText={(text) => setEmail(text)}
-        />
-        <Input
-          placeholder="Password"
-          autoCorrect={false}
-          autoCapitalize={"none"}
-          secureTextEntry
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-        />
-      </View>
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate(APP_SCREEN_LIST.FORGOT_PASSWORD_SCREEN)
-        }
-        style={[GlobalStyles.mb40]}
-      >
-        <Text
-          style={[
-            GlobalStyles.fontInterMedium,
-            GlobalStyles.fontSize13,
-            GlobalStyles.fontWeight700,
-            GlobalStyles.textPrimary,
-          ]}
+
+      <View>
+        <View style={[GlobalStyles.mb20]}>
+          <Input
+            placeholder="Email Address"
+            autoCorrect={false}
+            autoCapitalize={"none"}
+            value={email}
+            keyboardType="email-address"
+            onChangeText={(text) => setEmail(text)}
+            returnKeyType="done"
+          />
+          <Input
+            placeholder="Password"
+            autoCorrect={false}
+            autoCapitalize={"none"}
+            secureTextEntry
+            value={password}
+            keyboardType="default"
+            onChangeText={(text) => setPassword(text)}
+            returnKeyType="done"
+          />
+        </View>
+
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate(APP_SCREEN_LIST.FORGOT_PASSWORD_SCREEN)
+          }
+          style={[GlobalStyles.mb40]}
         >
-          Forgot Your Password?
-        </Text>
-      </TouchableOpacity>
-      <Button
-        loading={session.signingInStatus === "loading"}
-        onPress={handleOnLogin}
-        title="Login"
-      />
-      <View style={[GlobalStyles.mt40]}>
+          <Text
+            style={[
+              GlobalStyles.fontInterMedium,
+              GlobalStyles.fontSize13,
+              GlobalStyles.fontWeight700,
+              GlobalStyles.textPrimary,
+            ]}
+          >
+            Forgot Your Password?
+          </Text>
+        </TouchableOpacity>
+        <Button
+          loading={session.signingInStatus === "loading"}
+          onPress={handleOnLogin}
+          title="Login"
+        />
+        {/* <View style={[GlobalStyles.mt40]}>
         <Text
           style={[
             GlobalStyles.textGrey,
@@ -128,24 +143,25 @@ const Login = () => {
         <IconButton image={require("../../../assets/linkedln.png")} />
         <IconButton image={require("../../../assets/facebook.png")} />
         <IconButton image={require("../../../assets/instagram.png")} />
-      </View>
-      <View style={[GlobalStyles.mt20]}>
-        <Text
-          style={[
-            GlobalStyles.textGrey,
-            GlobalStyles.fontSize15,
-            GlobalStyles.fontInterRegular,
-            GlobalStyles.fontWeight400,
-          ]}
-        >
-          Don’t have an account yet?
-        </Text>
-      </View>
-      <View style={[GlobalStyles.mt20]}>
-        <TextLink
-          linkTo={APP_SCREEN_LIST.USER_SIGNUP_SCREEN}
-          title="Create Account"
-        />
+      </View> */}
+        <View style={[GlobalStyles.mt20]}>
+          <Text
+            style={[
+              GlobalStyles.textGrey,
+              GlobalStyles.fontSize15,
+              GlobalStyles.fontInterRegular,
+              GlobalStyles.fontWeight400,
+            ]}
+          >
+            Don’t have an account yet?
+          </Text>
+        </View>
+        <View style={[GlobalStyles.mt20]}>
+          <TextLink
+            linkTo={APP_SCREEN_LIST.USER_SIGNUP_SCREEN}
+            title="Create Account"
+          />
+        </View>
       </View>
     </View>
   );

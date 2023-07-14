@@ -23,6 +23,7 @@ import { APP_SCREEN_LIST } from "../constants";
 import { persistor } from "../store/store";
 import { Platform } from "react-native";
 import reportError from "../utils/reportError";
+import { Image } from "react-native-compressor";
 
 const SIGN_IN = "authentication:SIGN_IN";
 const SIGN_OUT = "authentication:SIGN_OUT";
@@ -160,8 +161,13 @@ export const completeUserProfileAction = asyncThunkWrapper<
 
       const file = new File([profileImageBlob], "file");
 
+      const result = await Image.compress(profilePictureFile.assets[0].uri, {
+        maxWidth: 1000,
+        quality: 0.8,
+      });
+
       formData.append("file", {
-        uri: profilePictureFile.assets[0].uri,
+        uri: result,
         type: profilePictureFile.assets[0].type,
         name: profilePictureFile.assets[0].fileName,
       });

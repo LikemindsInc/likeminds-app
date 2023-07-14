@@ -1,6 +1,7 @@
 {
   "expo": {
     "plugins": [
+      "react-native-compressor",
       [
         "expo-document-picker",
         {
@@ -14,9 +15,9 @@
         }
       ]
     ],
-    "name": "likeminds",
+    "name": "likemindsAppTest",
     "slug": "likeminds",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -27,16 +28,24 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.charlesinto.likeminds"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": ["android.permission.RECORD_AUDIO"],
+      "package": "com.charlesinto.likeminds"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e78a9dfa-f7d4-4145-aa5b-c2d1afc12f26"
+      }
     }
   }
 }

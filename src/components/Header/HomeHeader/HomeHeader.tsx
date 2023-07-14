@@ -7,6 +7,7 @@ import { GlobalStyles } from "../../../theme/GlobalStyles";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
+import { APP_SCREEN_LIST } from "../../../constants";
 
 const HomeHeader = () => {
   const navigation = useNavigation<DrawerNavigationProp<any>>();
@@ -33,7 +34,10 @@ const HomeHeader = () => {
           style={styles.notificationIcon}
         />
       </TouchableOpacity>
-      <TouchableOpacity style={[{ paddingLeft: 30 }]}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate(APP_SCREEN_LIST.USER_PROFILE_SCREEN)}
+        style={[{ paddingLeft: 30 }]}
+      >
         <Image
           source={require("../../../../assets/image3.png")}
           style={{ width: 30, height: 30, borderRadius: 15 }}

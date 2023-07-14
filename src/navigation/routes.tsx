@@ -56,6 +56,10 @@ import CreatePassword from "../screens/CreatePassword/CreatePassword";
 import CreateSpace from "../screens/CreateSpace/CreateSpace";
 import CreateSpaceAddPicture from "../screens/CreateSpace/CreateSpaceAddPicture";
 import CreatePost from "../screens/CreatePost/CreatePost";
+import UserProfile from "../screens/Profile/UserProfile";
+import PostJob from "../screens/Job/PostJob/PostJob";
+import SpaceSearch from "../screens/Spaces/SpaceSearch/SpaceSearch";
+import SpaceProfile from "../screens/Spaces/SpaceProfile";
 
 const Stack = createNativeStackNavigator();
 
@@ -82,7 +86,7 @@ const AppHome = () => {
           switch (route.name) {
             case APP_SCREEN_LIST.HOME_SCREEN:
               return <Feather name="home" size={size} color={color} />;
-            case APP_SCREEN_LIST.SETTINGS_SCREEN:
+            case APP_SCREEN_LIST.SPACE_SEARCH_SCREEN:
               return (
                 <MaterialCommunityIcons name="sort" size={size} color={color} />
               );
@@ -111,7 +115,10 @@ const AppHome = () => {
       initialRouteName={APP_SCREEN_LIST.HOME_SCREEN}
     >
       <Tab.Screen name={APP_SCREEN_LIST.HOME_SCREEN} component={Home} />
-      <Tab.Screen name={APP_SCREEN_LIST.SETTINGS_SCREEN} component={Home} />
+      <Tab.Screen
+        name={APP_SCREEN_LIST.SPACE_SEARCH_SCREEN}
+        component={SpaceSearch}
+      />
       <Tab.Screen name={APP_SCREEN_LIST.POST_ICON_TAB} component={CreatePost} />
       <Tab.Screen name={APP_SCREEN_LIST.TOOLBOX_ICON_TAB} component={Home} />
       <Tab.Screen name={APP_SCREEN_LIST.CHAT_ICON_TAB} component={Home} />
@@ -363,6 +370,10 @@ const AppRoutes = () => {
 
       <Stack.Screen name={APP_SCREEN_LIST.LOGIN_SCREEN} component={Login} />
       <Stack.Screen
+        name={APP_SCREEN_LIST.SPACE_PROFILE_SCREEN}
+        component={SpaceProfile}
+      />
+      <Stack.Screen
         name={APP_SCREEN_LIST.FORGOT_PASSWORD_SCREEN}
         component={ForgotPassword}
       />
@@ -389,6 +400,14 @@ const AppRoutes = () => {
       <Stack.Screen
         name={APP_SCREEN_LIST.CREATE_SPACE_ADD_PICTURE}
         component={CreateSpaceAddPicture}
+      />
+      <Stack.Screen
+        name={APP_SCREEN_LIST.USER_PROFILE_SCREEN}
+        component={UserProfile}
+      />
+      <Stack.Screen
+        name={APP_SCREEN_LIST.POST_JOB_SCREEN}
+        component={PostJob}
       />
     </Stack.Navigator>
   );

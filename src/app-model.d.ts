@@ -112,6 +112,21 @@ declare module "@app-model" {
     role: "user";
     email: string | null;
     message: string | null;
+    followers: any[] | null;
+    id: string;
+    isActive: boolean;
+    isVerified: boolean;
+    role: "user";
+    skills: string[];
+    socialLogin: boolean;
+    refreshToken: string;
+    countryOfOrigin: string | null;
+    city: string | null;
+    country: string | null;
+    certificates: string[];
+    bio: string | null;
+    education: any[];
+    experience: any[];
   }
 
   interface IRequestOTPEmail {
@@ -143,6 +158,54 @@ declare module "@app-model" {
 
   interface ICreatePostDTO {
     content: string;
-    image?: string;
+    image?: ImagePicker.ImagePickerAsset[];
+  }
+
+  interface IPostFeed {
+    id: string;
+    content: string;
+    images: string[];
+    files: any[];
+    likedBy: string[];
+    comments: any[];
+    authorId: string;
+    spaceId: null;
+    createdAt: string;
+    updatedAt: string;
+    commentCount: number;
+    reactionCount: number;
+    user: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      profilePicture: string | null;
+    };
+  }
+
+  interface ICreateJobDTO {
+    industry: string;
+    companyName: string;
+    companyDescription: string;
+    companyLocation: string;
+    jobTitle: string;
+    jobName: string;
+    jobType: string;
+    jobLocation: string;
+    jobDescription: string;
+    salary: number;
+    experienceLevel: string;
+  }
+
+  interface ISpaceList {
+    createdAt: string;
+    description: string;
+    events: null | any;
+    followers: null | any;
+    id: string;
+    profilePicture: string;
+    title: string;
+    updatedAt: string;
+    userId: string;
   }
 }

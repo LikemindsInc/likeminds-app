@@ -110,6 +110,10 @@ export enum APP_SCREEN_LIST {
   CREATE_PASSWORD_SCREEN = "CREATE_PASSWORD_SCREEN",
   CREATE_SPACE_SCREEN = "CREATE_SPACE_SCREEN",
   CREATE_SPACE_ADD_PICTURE = "CREATE_SPACE_ADD_PICTURE",
+  USER_PROFILE_SCREEN = "USER_PROFILE_SCREEN",
+  POST_JOB_SCREEN = "POST_JOB_SCREEN",
+  SPACE_SEARCH_SCREEN = "SPACE_SEARCH_SCREEN",
+  SPACE_PROFILE_SCREEN = "SPACE_PROFILE_SCREEN",
 }
 
 export const APP_KEY = {
@@ -139,3 +143,38 @@ export type INavigationProps = NavigationProp<
   {},
   {}
 >;
+
+export const INDUSTRIES = [
+  "Retail",
+  "Manufacturing",
+  "Construction",
+  "Internet Technology",
+  "Food",
+  "Space",
+  "Defense",
+  "Agriculture",
+  "Chemical",
+];
+
+export const JOB_TYPES = [
+  { label: "Part Time", value: "part-time" },
+  { label: "Full Time", value: "full-time" },
+  { label: "Internship", value: "internship" },
+  { label: "Volunteer", value: "volunteer" },
+  { label: "Contract", value: "contract" },
+];
+
+export const JOB_EXPERIENCE = [
+  { label: "Student", value: "student" },
+  { label: "Entry Level", value: "entry-level" },
+  { label: "Mid Level", value: "mid-level" },
+  { label: "Senior Level", value: "senior-level" },
+  { label: "Director", value: "director" },
+  { label: "Executive", value: "executive" },
+];
+
+export const JOB_LOCATION = [
+  { label: "On Site", value: "on-Site" },
+  { label: "Remote", value: "remote" },
+  { label: "Hybrid", value: "hybrid" },
+];

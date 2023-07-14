@@ -1,4 +1,4 @@
-import { FlatList, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import HomeHeader from "../../components/Header/HomeHeader/HomeHeader";
 import LiveFeedList from "./components/LiveFeedList";
@@ -108,7 +108,7 @@ const DATA: { type: "LIVE_FEED" | "INTRO_FEED" | "STORY_FEED"; data: any[] }[] =
 
 const Home = () => {
   const height = useDimension().height;
-  console.log("height: ", height);
+
   const renderItems = ({
     item,
   }: {
