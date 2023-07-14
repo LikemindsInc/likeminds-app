@@ -10,6 +10,9 @@ import {
 import { uploadFile } from "./auth";
 
 const CREATE_POST = "post:CREATE_POST";
+const UNLIKE_POST = "post:UNLIKE_POST";
+const LIKE_POST = "post:LIKE_POST";
+
 const GET_POST_FEED = "post:GET_POST_FEED";
 const CREATE_JOB = "job:CREATE_JOB";
 import { Image } from "react-native-compressor";
@@ -66,6 +69,30 @@ export const createJobAction = asyncThunkWrapper<
   ICreateJobDTO
 >(CREATE_JOB, async (args: ICreateJobDTO) => {
   const response = await axiosClient.post<AxiosResponse<any>>("/api/job", args);
+
+  return response.data;
+});
+
+export const likePostAction = asyncThunkWrapper<
+  ApiResponseSuccess<any>,
+  string
+>(LIKE_POST, async (args: string) => {
+  const response = await axiosClient.post<AxiosResponse<any>>(
+    `/api/post/${args}/like`,
+    {}
+  );
+
+  return response.data;
+});
+
+export const unlikePostAction = asyncThunkWrapper<
+  ApiResponseSuccess<any>,
+  string
+>(UNLIKE_POST, async (args: string) => {
+  const response = await axiosClient.post<AxiosResponse<any>>(
+    `/api/post/${args}/unlike`,
+    {}
+  );
 
   return response.data;
 });

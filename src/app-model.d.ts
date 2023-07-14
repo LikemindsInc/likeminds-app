@@ -112,6 +112,21 @@ declare module "@app-model" {
     role: "user";
     email: string | null;
     message: string | null;
+    followers: any[] | null;
+    id: string;
+    isActive: boolean;
+    isVerified: boolean;
+    role: "user";
+    skills: string[];
+    socialLogin: boolean;
+    refreshToken: string;
+    countryOfOrigin: string | null;
+    city: string | null;
+    country: string | null;
+    certificates: string[];
+    bio: string | null;
+    education: any[];
+    experience: any[];
   }
 
   interface IRequestOTPEmail {
@@ -151,7 +166,7 @@ declare module "@app-model" {
     content: string;
     images: string[];
     files: any[];
-    likedBy: any[];
+    likedBy: string[];
     comments: any[];
     authorId: string;
     spaceId: null;

@@ -1,16 +1,41 @@
 import { IFlatListProps } from "native-base/lib/typescript/components/basic/FlatList";
-import { FC } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import colors from "../../theme/colors";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import { Feather, AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import { IPostFeed } from "@app-model";
+import useAppSelector from "../../hooks/useAppSelector";
+import { ISettingState } from "../../reducers/settings";
 
 interface IProps {
   item: IPostFeed;
 }
 
 const StoryFeedItem: FC<IProps> = ({ item }) => {
+  const state = useAppSelector(
+    (state: any) => state.settingReducer
+  ) as ISettingState;
+
+  const [isPostLiked, setLiked] = useState(false);
+
+  const isPostLikedByUser = useCallback(() => {
+    const isLiked = item.likedBy.includes(state?.userInfo?.id as string);
+    setLiked(isLiked);
+  }, [item.likedBy]);
+
+  useEffect(() => {
+    isPostLikedByUser();
+  }, [isPostLikedByUser]);
+
+  const handleLikeReactionOnPost = () => {
+    if (isPostLiked) return setLiked(false);
+    // dispatch unLikePost
+
+    setLiked(true);
+    // dispatch likePost
+  };
+
   return (
     <View style={styles.container}>
       <View>
@@ -45,21 +70,14 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
           </TouchableOpacity>
         </View>
         <TouchableOpacity>
-          {item.images ? (
+          {item.images && item.images.length > 0 ? (
             <Image
               source={{ uri: item.images[0] }}
               style={styles.image}
               resizeMethod="auto"
               resizeMode="cover"
             />
-          ) : (
-            <Image
-              source={require("../../../assets/image8.png")}
-              style={styles.image}
-              resizeMethod="auto"
-              resizeMode="cover"
-            />
-          )}
+          ) : null}
         </TouchableOpacity>
       </View>
       <View
@@ -113,8 +131,12 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
               color={colors.navyBlue}
             />
           </TouchableOpacity>
-          <TouchableOpacity>
-            <AntDesign name="hearto" size={24} color={colors.navyBlue} />
+          <TouchableOpacity onPress={() => handleLikeReactionOnPost()}>
+            <AntDesign
+              name={isPostLiked ? "heart" : "hearto"}
+              size={24}
+              color={isPostLiked ? colors.red : colors.navyBlue}
+            />
           </TouchableOpacity>
           <TouchableOpacity>
             <Feather name="send" size={24} color={colors.navyBlue} />

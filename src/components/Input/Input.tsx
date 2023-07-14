@@ -41,7 +41,7 @@ const Input: FC<ITextInputProps> = (props) => {
         returnKeyType="done"
         {...props}
         ref={props.inputRef}
-        style={[GlobalStyles.inputStyle, props.inputStyle]}
+        style={[{ width: "100%" }, GlobalStyles.inputStyle, props.inputStyle]}
       />
     </TouchableOpacity>
   );

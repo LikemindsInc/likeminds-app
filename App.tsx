@@ -13,6 +13,7 @@ import AppRoutes from "./src/navigation/routes";
 import { NativeBaseProvider, extendTheme } from "native-base";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import KeyboardDismisser from "./src/components/KeyboardDismisser/KeyboardDismisser";
 
 SplashScreen.preventAutoHideAsync();
 LogBox.ignoreLogs([
@@ -76,26 +77,28 @@ export default function App() {
   });
 
   return (
-    <SafeAreaView style={GlobalStyles.container} onLayout={onLayoutRootView}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <NativeBaseProvider theme={theme}>
-          <Provider>
-            <ToastProvider
-              placement="bottom"
-              animationType="slide-in"
-              offsetBottom={100}
-              swipeEnabled={true}
-              duration={5000}
-              animationDuration={250}
-            >
-              <NavigationContainer>
-                <AppRoutes />
-              </NavigationContainer>
-            </ToastProvider>
-          </Provider>
-        </NativeBaseProvider>
-      </GestureHandlerRootView>
-    </SafeAreaView>
+    <KeyboardDismisser>
+      <SafeAreaView style={GlobalStyles.container} onLayout={onLayoutRootView}>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <NativeBaseProvider theme={theme}>
+            <Provider>
+              <ToastProvider
+                placement="bottom"
+                animationType="slide-in"
+                offsetBottom={100}
+                swipeEnabled={true}
+                duration={5000}
+                animationDuration={250}
+              >
+                <NavigationContainer>
+                  <AppRoutes />
+                </NavigationContainer>
+              </ToastProvider>
+            </Provider>
+          </NativeBaseProvider>
+        </GestureHandlerRootView>
+      </SafeAreaView>
+    </KeyboardDismisser>
   );
 }
 

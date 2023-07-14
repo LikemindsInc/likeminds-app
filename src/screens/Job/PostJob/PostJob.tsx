@@ -156,11 +156,11 @@ const PostJob = () => {
       <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
         <View style={[GlobalStyles.mb20]}>
           <Input
-            placeholder="Job Name"
+            placeholder="Job Title"
             autoCorrect={false}
             autoCapitalize={"none"}
-            value={jobName}
-            onChangeText={(text) => setJobName(text)}
+            value={jobTitle}
+            onChangeText={(text) => setJobTitle(text)}
           />
         </View>
         <View style={[GlobalStyles.mb20]}>
@@ -208,15 +208,7 @@ const PostJob = () => {
             </View>
           </TouchableOpacity>
         </View>
-        <View style={[GlobalStyles.mb20]}>
-          <Input
-            placeholder="Job Title"
-            autoCorrect={false}
-            autoCapitalize={"none"}
-            value={jobTitle}
-            onChangeText={(text) => setJobTitle(text)}
-          />
-        </View>
+
         <View style={[GlobalStyles.mb20]}>
           <Input
             placeholder="Job Description"

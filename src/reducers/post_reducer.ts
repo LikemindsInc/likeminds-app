@@ -92,6 +92,7 @@ const PostSlice = createSlice({
     });
     builder.addCase(getPostFeedAction.rejected, (state, action) => {
       state.getPostFeedStatus = "failed";
+      console.log("action.payload?.messag> ", action.payload?.message);
       state.getPostFeedError = action.payload?.message as string;
     });
 

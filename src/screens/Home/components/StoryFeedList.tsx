@@ -84,6 +84,7 @@ const StoryFeedList = () => {
 
   useEffect(() => {
     if (state.getPostFeedStatus === "failed") {
+      console.log("error:", state.getPostFeedError);
       toast.show({
         description:
           state.getPostFeedError || "unable to fetch posts. Please try again",
