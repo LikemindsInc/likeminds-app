@@ -60,6 +60,7 @@ import UserProfile from "../screens/Profile/UserProfile";
 import PostJob from "../screens/Job/PostJob/PostJob";
 import SpaceSearch from "../screens/Spaces/SpaceSearch/SpaceSearch";
 import SpaceProfile from "../screens/Spaces/SpaceProfile";
+import PostDetail from "../screens/Home/components/PostDetail";
 
 const Stack = createNativeStackNavigator();
 
@@ -409,6 +410,7 @@ const AppRoutes = () => {
         name={APP_SCREEN_LIST.POST_JOB_SCREEN}
         component={PostJob}
       />
+      <Stack.Screen name={APP_SCREEN_LIST.POST_DETAIL} component={PostDetail} />
     </Stack.Navigator>
   );
 };

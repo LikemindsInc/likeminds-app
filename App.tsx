@@ -83,7 +83,7 @@ export default function App() {
           <NativeBaseProvider theme={theme}>
             <Provider>
               <ToastProvider
-                placement="bottom"
+                placement="top"
                 animationType="slide-in"
                 offsetBottom={100}
                 swipeEnabled={true}

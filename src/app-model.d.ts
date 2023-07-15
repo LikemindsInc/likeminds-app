@@ -183,6 +183,27 @@ declare module "@app-model" {
     };
   }
 
+  interface IPostCommentFeed {
+    id: string;
+    comment: string;
+    postId: string;
+    commentId: string | null;
+    commentCount: number;
+    reactionCount: number;
+    authorId: string;
+    createdAt: string;
+    updatedAt: string;
+    commentCount: number;
+    reactionCount: number;
+    user: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      profilePicture: string | null;
+    };
+  }
+
   interface ICreateJobDTO {
     industry: string;
     companyName: string;
@@ -207,5 +228,10 @@ declare module "@app-model" {
     title: string;
     updatedAt: string;
     userId: string;
+  }
+
+  interface ICommentOnPostDTO {
+    postId: string;
+    comment: string;
   }
 }
