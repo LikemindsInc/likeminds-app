@@ -32,6 +32,7 @@ import { Spinner, useToast } from "native-base";
 import { ScrollView } from "react-native-gesture-handler";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { APP_SCREEN_LIST } from "../../constants";
+import FbGrid from "react-native-fb-image-grid";
 
 interface IProps {
   item: IPostFeed;
@@ -257,6 +258,13 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
     );
   };
 
+  const onPress = (url: any, index: any, event: any) => {
+    // url and index of the image you have clicked alongwith onPress event.
+    console.log("url> ", url);
+    console.log("index> ", index);
+    console.log("event> ", event);
+  };
+
   return (
     <KeyboardAvoidingView behavior="position">
       <View style={styles.container}>
@@ -291,16 +299,24 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
               <Feather name="more-horizontal" size={24} color={colors.grey} />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity>
+          <View style={{ width: "100%", height: 300 }}>
             {item.images && item.images.length > 0 ? (
+              // <Image
+              //   source={{ uri: item.images[0] }}
+              //   style={styles.image}
+              //   resizeMethod="auto"
+              //   resizeMode="cover"
+              // />
+              <FbGrid images={item.images} onPress={onPress} />
+            ) : (
               <Image
-                source={{ uri: item.images[0] }}
+                source={require("../../../assets/image8.png")}
                 style={styles.image}
                 resizeMethod="auto"
                 resizeMode="cover"
               />
-            ) : null}
-          </TouchableOpacity>
+            )}
+          </View>
         </View>
         <View
           style={[

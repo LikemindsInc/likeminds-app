@@ -8,6 +8,7 @@ import {
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import _ from "lodash";
 import {
+  commentOnCommentAction,
   commentOnPostAction,
   createJobAction,
   createPostAction,
@@ -30,6 +31,10 @@ export interface IPostState {
   commentOnPostStatus: IThunkAPIStatus;
   commentOnPostSuccess: string;
   commentOnPostError: string;
+
+  commentOnCommentStatus: IThunkAPIStatus;
+  commentOnCommentSuccess: string;
+  commentOnCommentError: string;
 
   getCommentOnPostStatus: IThunkAPIStatus;
   getCommentOnPostSuccess: string;
@@ -72,6 +77,10 @@ const initialState: IPostState = {
   commentOnPostStatus: "idle",
   commentOnPostSuccess: "",
   commentOnPostError: "",
+
+  commentOnCommentStatus: "idle",
+  commentOnCommentSuccess: "",
+  commentOnCommentError: "",
 
   getCommentOnPostStatus: "idle",
   getCommentOnPostSuccess: "",
@@ -209,6 +218,19 @@ const PostSlice = createSlice({
     builder.addCase(getCommentsOnPostAction.rejected, (state, action) => {
       state.getCommentOnPostStatus = "failed";
       state.getCommentOnPostError = action.payload?.message as string;
+    });
+
+    builder.addCase(commentOnCommentAction.pending, (state) => {
+      state.commentOnCommentStatus = "loading";
+    });
+    builder.addCase(commentOnCommentAction.fulfilled, (state, action) => {
+      state.commentOnCommentStatus = "completed";
+
+      state.commentOnCommentSuccess = action.payload?.message;
+    });
+    builder.addCase(commentOnCommentAction.rejected, (state, action) => {
+      state.commentOnCommentStatus = "failed";
+      state.commentOnCommentError = action.payload?.message as string;
     });
   },
 });

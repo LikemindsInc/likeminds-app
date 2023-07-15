@@ -1,5 +1,5 @@
 import { IPostCommentFeed } from "@app-model";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   Image,
   StyleSheet,
@@ -8,11 +8,15 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { GlobalStyles } from "../../../theme/GlobalStyles";
-import { View } from "native-base";
+import { View, useToast } from "native-base";
 import colors from "../../../theme/colors";
 import DateFormatter from "../../../utils/date-formatter";
 import Input from "../../../components/Input/Input";
 import { Feather, AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import useAppDispatch from "../../../hooks/useAppDispatch";
+import { commentOnCommentAction } from "../../../actions/post";
+import useAppSelector from "../../../hooks/useAppSelector";
+import { IPostState } from "../../../reducers/post_reducer";
 
 interface Props {
   item: IPostCommentFeed;
@@ -23,7 +27,33 @@ const CommentRowItem: FC<Props> = ({ item }) => {
 
   const [commentOnComment, setCommentOnComment] = useState("");
 
-  const handlePostComment = () => {};
+  const postState = useAppSelector(
+    (state: any) => state.postReducer
+  ) as IPostState;
+
+  const dispatch = useAppDispatch();
+
+  const toast = useToast();
+
+  useEffect(() => {
+    if (postState.commentOnCommentStatus === "failed") {
+      toast.show({ description: postState.commentOnCommentError });
+    } else if (postState.commentOnCommentStatus === "completed") {
+      setCommentOnComment("");
+    }
+  }, [postState.commentOnCommentStatus]);
+
+  const handlePostComment = () => {
+    if (commentOnComment.trim() == "") return;
+
+    dispatch(
+      commentOnCommentAction({
+        commentId: item.id,
+        postId: item.postId,
+        comment: commentOnComment,
+      })
+    );
+  };
 
   const handleCommentOnComment = () => {
     setShowCommentInput((state) => !state);

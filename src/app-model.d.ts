@@ -234,4 +234,10 @@ declare module "@app-model" {
     postId: string;
     comment: string;
   }
+
+  interface ICommentOnCommentDTO {
+    postId: string;
+    commentId: string;
+    comment: string;
+  }
 }

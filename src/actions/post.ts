@@ -3,6 +3,7 @@ import axiosClient from "../config/axiosClient";
 import asyncThunkWrapper from "../helpers/asyncThunkWrapper";
 import {
   ApiResponseSuccess,
+  ICommentOnCommentDTO,
   ICommentOnPostDTO,
   ICreateJobDTO,
   ICreatePostDTO,
@@ -13,6 +14,7 @@ import { uploadFile } from "./auth";
 
 const CREATE_POST = "post:CREATE_POST";
 const COMMENT_ON_POST = "post:COMMENT_ON_POST";
+const COMMENT_ON_COMMENT = "post:COMMENT_ON_COMMENT";
 const GET_COMMENT_ON_POST = "post:GET_COMMENT_ON_POST";
 const UNLIKE_POST = "post:UNLIKE_POST";
 const LIKE_POST = "post:LIKE_POST";
@@ -122,6 +124,20 @@ export const getCommentsOnPostAction = asyncThunkWrapper<
 >(GET_COMMENT_ON_POST, async (args: string) => {
   const response = await axiosClient.get<AxiosResponse<any>>(
     `/api/comment/${args}`
+  );
+
+  return response.data;
+});
+
+export const commentOnCommentAction = asyncThunkWrapper<
+  ApiResponseSuccess<any>,
+  ICommentOnCommentDTO
+>(COMMENT_ON_COMMENT, async (args: ICommentOnCommentDTO) => {
+  const response = await axiosClient.post<AxiosResponse<any>>(
+    `/api/comment/${args.postId}/${args.commentId}`,
+    {
+      comment: args.comment,
+    }
   );
 
   return response.data;
