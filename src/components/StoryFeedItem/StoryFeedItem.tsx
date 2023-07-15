@@ -262,7 +262,6 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
     // url and index of the image you have clicked alongwith onPress event.
     console.log("url> ", url);
     console.log("index> ", index);
-    console.log("event> ", event);
   };
 
   return (
@@ -299,6 +298,25 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
               <Feather name="more-horizontal" size={24} color={colors.grey} />
             </TouchableOpacity>
           </View>
+          <TouchableOpacity onPress={handleLoadComments} style={{}}>
+            <ReadMore
+              renderTruncatedFooter={_renderTruncatedFooter}
+              renderRevealedFooter={_renderRevealedFooter}
+              numberOfLines={3}
+            >
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.fontWeight400,
+                ]}
+              >
+                {item.content}
+              </Text>
+            </ReadMore>
+
+            {renderComments()}
+          </TouchableOpacity>
           <View style={{ width: "100%", height: 300 }}>
             {item.images && item.images.length > 0 ? (
               // <Image
@@ -383,25 +401,6 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
             </TouchableOpacity>
           </View>
         </View>
-        <TouchableOpacity onPress={handleLoadComments} style={{}}>
-          <ReadMore
-            renderTruncatedFooter={_renderTruncatedFooter}
-            renderRevealedFooter={_renderRevealedFooter}
-            numberOfLines={3}
-          >
-            <Text
-              style={[
-                GlobalStyles.fontInterRegular,
-                GlobalStyles.fontSize13,
-                GlobalStyles.fontWeight400,
-              ]}
-            >
-              {item.content}
-            </Text>
-          </ReadMore>
-
-          {renderComments()}
-        </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   );
