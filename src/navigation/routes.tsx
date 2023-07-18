@@ -13,6 +13,8 @@ import SignupSkills from "../screens/SignupSkills/SignupSkills";
 import { APP_SCREEN_LIST, DRAWER_WIDTH } from "../constants";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
 
 import {
   MaterialCommunityIcons,
@@ -128,7 +130,7 @@ const AppHome = () => {
 
 const Drawer = createDrawerNavigator();
 
-function CustomDrawerContent(props: DrawerContentComponentProps) {
+function CustomDrawerContent(props: DrawerContentComponentProps ) {
   const { height } = useWindowDimensions();
   const width =
     useWindowDimensions().width * 0.5 < DRAWER_WIDTH
@@ -138,6 +140,7 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
   const handleNavigation = (linkTo: string) => {};
 
   const dispatch = useAppDispatch();
+  const navigation = useNavigation<NavigationProp<any>>();
 
   return (
     <DrawerContentScrollView {...props}>
@@ -158,7 +161,7 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
             />
           </View>
           <View style={[GlobalStyles.mb40]}>
-            <Button type="tertiary" title="Switch To Space" />
+            <Button type="tertiary" title="Switch To Space" onPress={() => navigation.navigate(APP_SCREEN_LIST.SPACE_PROFILE_SCREEN)} />
           </View>
           <View style={[GlobalStyles.flexOne, GlobalStyles.mt20]}>
             <TouchableOpacity
@@ -288,6 +291,7 @@ const AppDrawer = () => {
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
       <Drawer.Screen name="DrawerHome" component={AppHome} />
+      <Drawer.Screen name="SpaceProfile" component={SpaceProfile} />
     </Drawer.Navigator>
   );
 };
