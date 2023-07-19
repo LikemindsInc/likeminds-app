@@ -33,6 +33,8 @@ import colors from "../../../theme/colors";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import CommentRowItem from "./CommentRowItem";
 import FbGrid from "react-native-fb-image-grid";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import ReactionIcon from "../../../components/ReactionIcon/ReactionIcon";
 interface IProps {
   item: IPostFeed;
 }
@@ -200,14 +202,11 @@ const PostDetail = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior="padding"
-      style={{ flexGrow: 1, flex: 1, backgroundColor: colors.white }}
+    <KeyboardAwareScrollView
+    //   behavior="padding"
+    //   style={{ flexGrow: 1, flex: 1, backgroundColor: colors.white }}
     >
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={[GlobalStyles.container, { paddingBottom: 300 }]}
-      >
+      <View style={[GlobalStyles.container, { flex: 1 }]}>
         <TouchableOpacity
           style={[GlobalStyles.mb20]}
           onPress={() => navigation.goBack()}
@@ -317,13 +316,19 @@ const PostDetail = () => {
                 color={colors.navyBlue}
               />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleLikeReactionOnPost()}>
+            <ReactionIcon
+              post={item}
+              isLiked={isPostLiked}
+              handleLikeReactionOnPost={handleLikeReactionOnPost}
+              handleOnReactionActivate={() => {}}
+            />
+            {/* <TouchableOpacity onPress={() => handleLikeReactionOnPost()}>
               <AntDesign
                 name={isPostLiked ? "heart" : "hearto"}
                 size={24}
                 color={isPostLiked ? colors.red : colors.navyBlue}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity>
               <Feather name="send" size={24} color={colors.navyBlue} />
             </TouchableOpacity>
@@ -347,7 +352,7 @@ const PostDetail = () => {
           </ReadMore>
         </TouchableOpacity>
         <View style={{ paddingBottom: 200 }}>{renderComments()}</View>
-      </ScrollView>
+      </View>
       <View style={styles.bottomInputStyle}>
         <Input
           inputViewStyle={styles.commentInputViewStyle}
@@ -361,7 +366,7 @@ const PostDetail = () => {
           returnKeyType="done"
         />
       </View>
-    </KeyboardAvoidingView>
+    </KeyboardAwareScrollView>
   );
 };
 

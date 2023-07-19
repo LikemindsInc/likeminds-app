@@ -27,7 +27,7 @@ const rootPersistConfig = {
   timeout: 10000,
   version: CACHE_VERSION,
   key: __ROOT_REDUX_STATE_KEY__,
-  stateReconciler: autoMergeLevel2,
+  // stateReconciler: autoMergeLevel2,
   blacklist: ["errorReducer", "sessionReducer"], // only settings and other state stores will be persisted
 };
 

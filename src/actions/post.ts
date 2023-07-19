@@ -9,6 +9,7 @@ import {
   ICreatePostDTO,
   IPostCommentFeed,
   IPostFeed,
+  IReactionToPostDTO,
 } from "@app-model";
 import { uploadFile } from "./auth";
 
@@ -17,6 +18,7 @@ const COMMENT_ON_POST = "post:COMMENT_ON_POST";
 const COMMENT_ON_COMMENT = "post:COMMENT_ON_COMMENT";
 const GET_COMMENT_ON_POST = "post:GET_COMMENT_ON_POST";
 const UNLIKE_POST = "post:UNLIKE_POST";
+const REACTION_TO_POST = "post:REACTION_TO_POST";
 const LIKE_POST = "post:LIKE_POST";
 
 const GET_POST_FEED = "post:GET_POST_FEED";
@@ -99,6 +101,20 @@ export const unlikePostAction = asyncThunkWrapper<
   const response = await axiosClient.post<AxiosResponse<any>>(
     `/api/post/${args}/unlike`,
     {}
+  );
+
+  return response.data;
+});
+
+export const reactToPostAction = asyncThunkWrapper<
+  ApiResponseSuccess<any>,
+  IReactionToPostDTO
+>(REACTION_TO_POST, async (args: IReactionToPostDTO) => {
+  const response = await axiosClient.post<AxiosResponse<any>>(
+    `/api/post/reaction/${args.postId}`,
+    {
+      reaction: args.reaction,
+    }
   );
 
   return response.data;

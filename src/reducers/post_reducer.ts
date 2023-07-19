@@ -15,6 +15,7 @@ import {
   getCommentsOnPostAction,
   getPostFeedAction,
   likePostAction,
+  reactToPostAction,
   unlikePostAction,
 } from "../actions/post";
 
@@ -48,6 +49,10 @@ export interface IPostState {
   getPostFeedSuccess: string;
   getPostFeedError: string;
 
+  reactToPostStatus: IThunkAPIStatus;
+  reactToPostSuccess: string;
+  reactToPostError: string;
+
   postFeeds: IPostFeed[];
 
   postComments: IPostCommentFeed[];
@@ -59,6 +64,10 @@ export interface IPostState {
   createJobDTO: ICreateJobDTO | null;
 
   postDetail: IPostFeed | null;
+
+  showReactionView: boolean;
+
+  postReacted: IPostFeed | null;
 }
 
 const initialState: IPostState = {
@@ -90,6 +99,10 @@ const initialState: IPostState = {
   unlikePostSuccess: "",
   unlikePostError: "",
 
+  reactToPostStatus: "idle",
+  reactToPostSuccess: "",
+  reactToPostError: "",
+
   getPostFeedStatus: "idle",
   getPostFeedSuccess: "",
   getPostFeedError: "",
@@ -105,16 +118,33 @@ const initialState: IPostState = {
   postComments: [],
 
   postDetail: null,
+
+  showReactionView: false,
+
+  postReacted: null,
 };
 
 const PostSlice = createSlice({
   name: "post-slice",
   initialState,
   reducers: {
+    showReactionView(
+      state: IPostState,
+      action: PayloadAction<{ post: IPostFeed | null; show: boolean }>
+    ) {
+      state.showReactionView = action.payload.show;
+      state.postReacted = action.payload.post;
+    },
     clearCreatePostStatus(state: IPostState) {
       state.createPostStatus = "idle";
       state.createPostSuccess = "";
       state.createPostError = "";
+    },
+
+    clearPostRactionStatus(state: IPostState) {
+      state.reactToPostStatus = "idle";
+      state.reactToPostSuccess = "";
+      state.reactToPostSuccess = "";
     },
 
     clearCreateJobStatus(state: IPostState) {
@@ -232,6 +262,17 @@ const PostSlice = createSlice({
       state.commentOnCommentStatus = "failed";
       state.commentOnCommentError = action.payload?.message as string;
     });
+
+    builder.addCase(reactToPostAction.pending, (state) => {
+      state.reactToPostStatus = "loading";
+    });
+    builder.addCase(reactToPostAction.fulfilled, (state, action) => {
+      state.reactToPostStatus = "completed";
+    });
+    builder.addCase(reactToPostAction.rejected, (state, action) => {
+      state.reactToPostStatus = "failed";
+      state.reactToPostError = action.payload?.message as string;
+    });
   },
 });
 
@@ -240,6 +281,8 @@ export const {
   clearCreateJobStatus,
   clearCreateCommentOnPostState,
   savePostDetail,
+  showReactionView,
+  clearPostRactionStatus,
 } = PostSlice.actions;
 
 export default PostSlice.reducer;

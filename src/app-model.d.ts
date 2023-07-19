@@ -42,6 +42,12 @@ declare module "@app-model" {
     password: string;
   }
 
+  interface IReactionToPostDTO {
+    postId: string;
+
+    reaction: string;
+  }
+
   interface IProfileInformation {
     firstName: string;
     lastName: string;

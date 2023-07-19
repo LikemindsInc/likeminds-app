@@ -33,6 +33,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { APP_SCREEN_LIST } from "../../constants";
 import FbGrid from "react-native-fb-image-grid";
+import ReactionIcon from "../ReactionIcon/ReactionIcon";
 
 interface IProps {
   item: IPostFeed;
@@ -382,20 +383,26 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
               { gap: 20, justifyContent: "flex-end", flex: 1 },
             ]}
           >
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleLoadComments}>
               <MaterialCommunityIcons
                 name="message-processing-outline"
                 size={24}
                 color={colors.navyBlue}
               />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleLikeReactionOnPost()}>
+            <ReactionIcon
+              isLiked={isPostLiked}
+              post={item}
+              handleLikeReactionOnPost={handleLikeReactionOnPost}
+              handleOnReactionActivate={() => {}}
+            />
+            {/* <TouchableOpacity onPress={() => handleLikeReactionOnPost()}>
               <AntDesign
                 name={isPostLiked ? "heart" : "hearto"}
                 size={24}
                 color={isPostLiked ? colors.red : colors.navyBlue}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity>
               <Feather name="send" size={24} color={colors.navyBlue} />
             </TouchableOpacity>

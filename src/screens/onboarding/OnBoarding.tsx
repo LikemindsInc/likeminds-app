@@ -171,6 +171,7 @@ const OnBoarding = () => {
         renderNextButton={DoneButton}
         renderDoneButton={DoneButton}
         onDone={handleOnDone}
+        scrollEnabled
       />
       <StatusBar style="dark" />
     </View>

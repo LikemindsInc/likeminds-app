@@ -18,10 +18,17 @@ import { TabView, SceneMap } from "react-native-tab-view";
 import { useState } from "react";
 import { StatusBar } from "react-native";
 import { Box, Pressable, useColorModeValue } from "native-base";
+import useAppSelector from "../../hooks/useAppSelector";
+import { ISessionState } from "../../reducers/session";
+import { ISettingState } from "../../reducers/settings";
 
 const UserProfile = () => {
   const height = useDimension().height;
   const navigation = useNavigation<NavigationProp<any>>();
+
+  const state = useAppSelector(
+    (state: any) => state.settingReducer
+  ) as ISettingState;
   return (
     <View
       style={[
@@ -32,7 +39,10 @@ const UserProfile = () => {
       <View>
         <ImageBackground
           resizeMode="cover"
-          source={require("../../../assets/image9.png")}
+          source={
+            state.userInfo?.profilePicture ||
+            require("../../../assets/image9.png")
+          }
           style={[
             styles.imageBg,
             height * 0.4 > 240 ? { height: 240 } : { height: height * 0.4 },
@@ -63,7 +73,8 @@ const UserProfile = () => {
                 GlobalStyles.textNavyBlue,
               ]}
             >
-              Jacob Dominic
+              {state.userInfo?.firstName || "John"}{" "}
+              {state.userInfo?.lastName || "Doe"}
             </Text>
           </View>
           <TouchableOpacity>
@@ -80,7 +91,7 @@ const UserProfile = () => {
               GlobalStyles.mb10,
             ]}
           >
-            UI/UX Designer
+            {state.userInfo?.role}
           </Text>
           <Text
             style={[
@@ -91,7 +102,9 @@ const UserProfile = () => {
               GlobalStyles.mb10,
             ]}
           >
-            From Lagos, Nigeria. Lives in LA, California.
+            From {state.userInfo?.city || "Lagos"},{" "}
+            {state.userInfo?.country || "Nigeria"}. Lives in{" "}
+            {state.userInfo?.countryOfOrigin || "Nigeria"}.
           </Text>
           <Text
             style={[
@@ -102,7 +115,7 @@ const UserProfile = () => {
               GlobalStyles.mb10,
             ]}
           >
-            I enjoy creating products that improve the user experience.
+            {state.userInfo?.bio}
           </Text>
         </View>
         <View style={[GlobalStyles.flewRow, GlobalStyles.mb30, { gap: 20 }]}>
