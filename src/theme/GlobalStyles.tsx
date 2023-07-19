@@ -43,6 +43,9 @@ export const GlobalStyles = StyleSheet.create({
   fontInterMedium: {
     fontFamily: "Inter-Medium",
   },
+  fontWeight100: {
+    fontWeight: "100",
+  },
   fontWeight400: {
     fontWeight: "400",
   },
@@ -178,13 +181,13 @@ export const GlobalStyles = StyleSheet.create({
     paddingBottom: 25,
   },
   shadowBox: {
-    shadowColor: "#2844531a",
+    shadowColor: "#88969D30",
     shadowOffset: {
       width: 0,
       height: 0,
     },
     shadowOpacity: 100,
     shadowRadius: 3,
-    elevation: 10,
+    elevation: 1,
   },
 });
