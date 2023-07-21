@@ -62,6 +62,8 @@ import UserProfile from "../screens/Profile/UserProfile";
 import PostJob from "../screens/Job/PostJob/PostJob";
 import SpaceSearch from "../screens/Spaces/SpaceSearch/SpaceSearch";
 import SpaceProfile from "../screens/Spaces/SpaceProfile";
+import Jobs from "../screens/Job/PostJob/Jobs";
+import Messages from "../screens/Message/Messages";
 
 const Stack = createNativeStackNavigator();
 
@@ -122,8 +124,8 @@ const AppHome = () => {
         component={SpaceSearch}
       />
       <Tab.Screen name={APP_SCREEN_LIST.POST_ICON_TAB} component={CreatePost} />
-      <Tab.Screen name={APP_SCREEN_LIST.TOOLBOX_ICON_TAB} component={Home} />
-      <Tab.Screen name={APP_SCREEN_LIST.CHAT_ICON_TAB} component={Home} />
+      <Tab.Screen name={APP_SCREEN_LIST.TOOLBOX_ICON_TAB} component={Jobs} />
+      <Tab.Screen name={APP_SCREEN_LIST.CHAT_ICON_TAB} component={Messages} />
     </Tab.Navigator>
   );
 };

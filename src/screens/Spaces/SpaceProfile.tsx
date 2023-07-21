@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import useDimension from "../../hooks/useDimension";
-import { AntDesign, Feather, Foundation } from "@expo/vector-icons";
+import { AntDesign, Feather, Foundation, FontAwesome, Ionicons } from "@expo/vector-icons";
 import colors from "../../theme/colors";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native";
@@ -19,6 +19,7 @@ import { useState } from "react";
 import { StatusBar } from "react-native";
 import { Box, Pressable, useColorModeValue } from "native-base";
 import LiveFeedList from "../Home/components/LiveFeedList";
+import { APP_SCREEN_LIST } from "../../constants";
 
 const SpaceProfile = () => {
   const height = useDimension().height;
@@ -169,6 +170,11 @@ const SpaceProfile = () => {
         </View>
         <TabViewExample />
       </ScrollView>
+      <View style={[GlobalStyles.flewRow, {justifyContent:"space-between", paddingTop: 8}]}>
+      <TouchableOpacity onPress={() => navigation.navigate(APP_SCREEN_LIST.SPACE_SEARCH_SCREEN)}><FontAwesome name="fighter-jet" size={24} color={colors.grey} /></TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate(APP_SCREEN_LIST.HOME_SCREEN)}><AntDesign name="plus" size={24} color={colors.grey} /></TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate(APP_SCREEN_LIST.CHAT_ICON_TAB)}><Ionicons name="chatbubbles-outline" size={24} color={colors.grey} /></TouchableOpacity>
+      </View>
     </View>
   );
 };

@@ -10,6 +10,10 @@ export const GlobalStyles = StyleSheet.create({
     paddingBottom: 16,
     backgroundColor: colors.white,
   },
+  title: {
+    fontSize: 24,
+    
+  },
   textCenter: {
     textAlign: "center",
   },
