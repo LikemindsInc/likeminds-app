@@ -24,7 +24,7 @@ export default function Jobs() {
     <View style={[GlobalStyles.container, {width: "100%"}]}>
     <View style={[GlobalStyles.flewRow, {marginBottom: 8}]}>
       <View style={[GlobalStyles.flexOne]}>
-        <Text style={[GlobalStyles.title, {fontWeight: "800"}]}> Jobs </Text>
+        <Text style={[GlobalStyles.title, GlobalStyles.fontInterRegular, {fontWeight: "800"}]}> Jobs </Text>
       </View>
       <TouchableOpacity style={styles.filter}>
         <Feather name="sliders" size={24} color={colors.black} />
@@ -49,8 +49,8 @@ export default function Jobs() {
 
     <View style={[GlobalStyles.flewRow, {marginBottom: 8}]}>
         <View style={[GlobalStyles.flexOne]}>
-            <Text style={{fontWeight: "800"}}>Project Manager</Text>
-            <Text style={[{fontSize:12}, GlobalStyles.textGrey]}>3h ago</Text>
+            <Text style={[GlobalStyles.fontInterRegular, {fontWeight: "800"}]}>Project Manager</Text>
+            <Text style={[{fontSize:12}, GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>3h ago</Text>
         </View>
         <TouchableOpacity style={styles.search}>
         <AntDesign name="ellipsis1" size={24} color={colors.black} />
@@ -58,53 +58,53 @@ export default function Jobs() {
     </View>
 
     <View style={{marginBottom: 8}}>
-        <Text style={{fontSize:12, fontWeight: "300"}}>
+        <Text style={[GlobalStyles.fontInterRegular, {fontSize:12, fontWeight: "300"}]}>
             Are you Interested in making an impact in a new start-up geared towards empowering manginalized communities? Likeminds is looking for a project Manager to help drive the vision of our products and services.
         </Text>
     </View>
 
     <View style={[GlobalStyles.flewRow, {marginBottom: 8}]}>
         <View style={{flex:1}}>
-            <Text style={[GlobalStyles.textGrey]}>Industry</Text>
-            <Text style={{fontWeight:"800"}}>Internet Technology</Text>
+            <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>Industry</Text>
+            <Text style={[GlobalStyles.fontInterRegular, {fontWeight:"800"}]}>Internet Technology</Text>
         </View>
 
         <View style={{marginRight: 8, flex: 0}}>
-            <Text style={[GlobalStyles.textGrey]}>Location</Text>
-            <Text style={{fontWeight:"800"}}>Remote</Text>
+            <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>Location</Text>
+            <Text style={[GlobalStyles.fontInterRegular, {fontWeight:"800"}]}>Remote</Text>
         </View>
     </View>
 
     <View style={[GlobalStyles.flewRow, {marginBottom: 8}]}>
         <View style={{flex: 1}}>
-            <Text style={[GlobalStyles.textGrey]}>Type</Text>
-            <Text style={{fontWeight:"800"}}>Full Time</Text>
+            <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>Type</Text>
+            <Text style={[GlobalStyles.fontInterRegular, {fontWeight:"800"}]}>Full Time</Text>
         </View>
 
         <View style={{marginRight: 8, flex: 0}}>
-            <Text style={[GlobalStyles.textGrey]}>Company</Text>
-            <Text style={{fontWeight:"800"}}>Likeminds</Text>
+            <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>Company</Text>
+            <Text style={[GlobalStyles.fontInterRegular, {fontWeight:"800"}]}>Likeminds</Text>
         </View>
     </View>
 
     <View style={{marginBottom: 8}}>
-        <Text style={[GlobalStyles.textGrey]}>Experience Level</Text>
-        <Text style={{fontWeight:"800"}}>Senior Level</Text>
+        <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>Experience Level</Text>
+        <Text style={[GlobalStyles.fontInterRegular, {fontWeight:"800"}]}>Senior Level</Text>
     </View>
 
     <View style={{marginBottom: 8}}>
-        <Text style={[GlobalStyles.textGrey]}>Tailor</Text>
-        <Text style={{fontWeight:"800"}}>Sponsoring Companies, DI&E Hires</Text>
+        <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>Tailor</Text>
+        <Text style={[GlobalStyles.fontInterRegular, {fontWeight:"800"}]}>Sponsoring Companies, DI&E Hires</Text>
     </View>
 
     <View style={{marginBottom: 8}}>
-        <Text style={[GlobalStyles.textGrey]}>Salary</Text>
-        <Text style={{fontWeight:"800", fontSize: 14, color: "#47D0FD"}}>$150k/year</Text>
+        <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>Salary</Text>
+        <Text style={[GlobalStyles.fontInterRegular, {fontWeight:"800", fontSize: 14, color: "#47D0FD"}]}>$150k/year</Text>
     </View>
 
     <View>
-        <Text style={{fontSize: 12, fontWeight: "800"}}>About LikeMinds</Text>
-        <Text style={{fontSize:12, fontWeight: "300"}}>
+        <Text style={[GlobalStyles.fontInterRegular, {fontSize: 12, fontWeight: "800"}]}>About LikeMinds</Text>
+        <Text style={[GlobalStyles.fontInterRegular, {fontSize:12, fontWeight: "300"}]}>
             LikeMinds is a platform for briging together talents yet disadvantaged communities to support one another and grow.
         </Text>
     </View>

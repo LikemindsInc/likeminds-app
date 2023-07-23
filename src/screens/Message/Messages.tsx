@@ -22,7 +22,7 @@ export default function Messages() {
   return (
     <View style={[GlobalStyles.container]}>
         <View style={{marginBottom: 8}}>
-            <Text style={[GlobalStyles.title, {fontWeight: "800"}]}> Messages </Text>
+            <Text style={[GlobalStyles.title, GlobalStyles.fontInterRegular, {fontWeight: "800"}]}> Messages </Text>
         </View>
       <View>
           <Input

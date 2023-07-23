@@ -87,7 +87,7 @@ const PeopleList = () => {
     <View>
     <ScrollView style = {{marginTop: 8}} showsVerticalScrollIndicator = {false}>
     <View style={{marginTop: 8, marginBottom: 8}}>
-      <Text style={styles.label}> From School </Text>
+      <Text style={[GlobalStyles.fontInterRegular, styles.label]}> From School </Text>
 
         <ScrollView horizontal = {true} style = {{marginTop: 8}} showsHorizontalScrollIndicator = {false}>
 
@@ -113,6 +113,7 @@ const PeopleList = () => {
             GlobalStyles.fontInterMedium,
             GlobalStyles.fontSize15,
             GlobalStyles.fontWeight400,
+            GlobalStyles.fontInterRegular
           ]}
         >
           {item.title !== "" ? item.title : "Abdul Ibrahim"}
@@ -123,7 +124,8 @@ const PeopleList = () => {
             GlobalStyles.fontInterMedium,
             GlobalStyles.fontSize10,
             GlobalStyles.fontWeight100,
-            {alignSelf: "center", color: "#88969D"}
+            {alignSelf: "center", color: "#88969D"},
+            GlobalStyles.fontInterRegular
           ]}
         >
           {item.description !== "" ? item.description : "Data Science"}
@@ -150,7 +152,7 @@ const PeopleList = () => {
     </View>
 
 <View style={{marginTop: 8, marginBottom: 8}}>
-<Text style={styles.label}> Base On Industry </Text>
+<Text style={[GlobalStyles.fontInterRegular, styles.label]}> Base On Industry </Text>
 
   <ScrollView horizontal = {true} style = {{marginTop: 8}} showsHorizontalScrollIndicator = {false}>
     {
@@ -179,6 +181,7 @@ const PeopleList = () => {
               GlobalStyles.fontInterMedium,
               GlobalStyles.fontSize15,
               GlobalStyles.fontWeight400,
+              GlobalStyles.fontInterRegular
             ]}
           >
             {item.title !== "" ? item.title : "Abdul Ibrahim"}
@@ -189,7 +192,8 @@ const PeopleList = () => {
               GlobalStyles.fontInterMedium,
               GlobalStyles.fontSize10,
               GlobalStyles.fontWeight100,
-              {alignSelf: "center", color: "#88969D"}
+              {alignSelf: "center", color: "#88969D"},
+              GlobalStyles.fontInterRegular
             ]}
           >
             {item.description !== "" ? item.description : "Data Science"}
@@ -246,6 +250,7 @@ const PeopleList = () => {
                     GlobalStyles.fontInterMedium,
                     GlobalStyles.fontSize15,
                     GlobalStyles.fontWeight400,
+                    GlobalStyles.fontInterRegular
                   ]}
                 >
                   {item.title !== "" ? item.title : "Abdul Ibrahim"}
@@ -256,7 +261,8 @@ const PeopleList = () => {
                     GlobalStyles.fontInterMedium,
                     GlobalStyles.fontSize10,
                     GlobalStyles.fontWeight100,
-                    {color: "#88969D"}
+                    {color: "#88969D"},
+                    GlobalStyles.fontInterRegular
                   ]}
                 >
                   {item.description !== "" ? item.description : "Data Science"}

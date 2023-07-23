@@ -87,11 +87,11 @@ const items = [
         </View>
         <View>
           <View style={[GlobalStyles.flewRow]}>
-              <Text style={{fontWeight:"500"}}>{item.title}</Text>
-              <Text style={{fontSize: 10, marginLeft: -15, color:"grey"}}>{item.CreatedAt}</Text>
+              <Text style={[GlobalStyles.fontInterRegular, {fontWeight:"500"}]}>{item.title}</Text>
+              <Text style={[GlobalStyles.fontInterRegular, {fontSize: 10, marginLeft: -15, color:"grey"}]}>{item.CreatedAt}</Text>
           </View>
           <View>
-              <Text style={{fontSize: 12, color: mRead == true && ticket == item.ticket ? "#7DD1E4" : "#9EA0A0"}}>{item.message}</Text>
+              <Text style={[GlobalStyles.fontInterRegular, {fontSize: 12, color: mRead == true && ticket == item.ticket ? "#7DD1E4" : "#9EA0A0"}]}>{item.message}</Text>
         </View>
         </View>
         
