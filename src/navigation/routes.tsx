@@ -15,7 +15,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-
 import {
   MaterialCommunityIcons,
   Ionicons,
@@ -63,6 +62,8 @@ import PostJob from "../screens/Job/PostJob/PostJob";
 import SpaceSearch from "../screens/Spaces/SpaceSearch/SpaceSearch";
 import SpaceProfile from "../screens/Spaces/SpaceProfile";
 import PostDetail from "../screens/Home/components/PostDetail";
+import Jobs from "../screens/Job/PostJob/Jobs";
+import Messages from "../screens/Message/Messages";
 
 const Stack = createNativeStackNavigator();
 
@@ -123,15 +124,15 @@ const AppHome = () => {
         component={SpaceSearch}
       />
       <Tab.Screen name={APP_SCREEN_LIST.POST_ICON_TAB} component={CreatePost} />
-      <Tab.Screen name={APP_SCREEN_LIST.TOOLBOX_ICON_TAB} component={Home} />
-      <Tab.Screen name={APP_SCREEN_LIST.CHAT_ICON_TAB} component={Home} />
+      <Tab.Screen name={APP_SCREEN_LIST.TOOLBOX_ICON_TAB} component={Jobs} />
+      <Tab.Screen name={APP_SCREEN_LIST.CHAT_ICON_TAB} component={Messages} />
     </Tab.Navigator>
   );
 };
 
 const Drawer = createDrawerNavigator();
 
-function CustomDrawerContent(props: DrawerContentComponentProps ) {
+function CustomDrawerContent(props: DrawerContentComponentProps) {
   const { height } = useWindowDimensions();
   const width =
     useWindowDimensions().width * 0.5 < DRAWER_WIDTH
@@ -162,7 +163,13 @@ function CustomDrawerContent(props: DrawerContentComponentProps ) {
             />
           </View>
           <View style={[GlobalStyles.mb40]}>
-            <Button type="tertiary" title="Switch To Space" onPress={() => navigation.navigate(APP_SCREEN_LIST.SPACE_PROFILE_SCREEN)} />
+            <Button
+              type="tertiary"
+              title="Switch To Space"
+              onPress={() =>
+                navigation.navigate(APP_SCREEN_LIST.SPACE_PROFILE_SCREEN)
+              }
+            />
           </View>
           <View style={[GlobalStyles.flexOne, GlobalStyles.mt20]}>
             <TouchableOpacity

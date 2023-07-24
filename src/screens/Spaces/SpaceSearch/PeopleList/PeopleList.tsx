@@ -1,4 +1,4 @@
-import { IUserData } from "@app-model";
+import { ISpaceList } from "@app-model";
 import { FC, useEffect, useState } from "react";
 import {
   Image,
@@ -23,11 +23,45 @@ import { APP_SCREEN_LIST } from "../../../../constants";
 import { createEntityAdapter } from "@reduxjs/toolkit";
 import { ISO_8601, RFC_2822 } from "moment";
 
-interface IProps {
-  item?: IUserData;
-}
+const items = [
+  {
+    profilePicture:
+      "https://unsplash.com/photos/iFgRcqHznqg/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NXx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8fHwxNjg5ODg3MjMzfDA&force=true",
+    title: "Abdul Ibrahim",
+    description: "Data Science",
+    id: "2",
+  },
+  {
+    profilePicture:
+      "https://unsplash.com/photos/iFgRcqHznqg/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NXx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8fHwxNjg5ODg3MjMzfDA&force=true",
+    title: "Abdul Ibrahim",
+    description: "Data Science",
+    id: "3",
+  },
+  {
+    profilePicture:
+      "https://unsplash.com/photos/iFgRcqHznqg/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NXx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8fHwxNjg5ODg3MjMzfDA&force=true",
+    title: "Abdul Ibrahim",
+    description: "Data Science",
+    id: "4",
+  },
+  {
+    profilePicture:
+      "https://unsplash.com/photos/iFgRcqHznqg/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NXx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8fHwxNjg5ODg3MjMzfDA&force=true",
+    title: "Abdul Ibrahim",
+    description: "Data Science",
+    id: "5",
+  },
+  {
+    profilePicture:
+      "https://unsplash.com/photos/iFgRcqHznqg/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NXx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8fHwxNjg5ODg3MjMzfDA&force=true",
+    title: "Abdul Ibrahim",
+    description: "Data Science",
+    id: "2",
+  },
+];
 
-const PeopleList: FC<IProps> = ({ item }) => {
+const PeopleList: FC<any> = ({ item }) => {
   const navigation = useNavigation<NavigationProp<any>>();
   const dispatch = useAppDispatch();
   const state = useAppSelector(
