@@ -1,13 +1,22 @@
 import { IUserData } from "@app-model";
 import { FC, useEffect, useState } from "react";
-import { Image, StyleSheet, TouchableOpacity, View, ScrollView } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  ScrollView,
+} from "react-native";
 import { GlobalStyles } from "../../../../theme/GlobalStyles";
 import colors from "../../../../theme/colors";
 import { Text, useToast } from "native-base";
 import Button from "../../../../components/Button/Button";
 import useAppDispatch from "../../../../hooks/useAppDispatch";
 import useAppSelector from "../../../../hooks/useAppSelector";
-import { ISpaceState, clearFollowSpaceStatus } from "../../../../reducers/space_reducer";
+import {
+  ISpaceState,
+  clearFollowSpaceStatus,
+} from "../../../../reducers/space_reducer";
 import { followSpaceAction } from "../../../../actions/space";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { APP_SCREEN_LIST } from "../../../../constants";
@@ -17,7 +26,6 @@ import { ISO_8601, RFC_2822 } from "moment";
 interface IProps {
   item?: IUserData;
 }
-
 
 const PeopleList: FC<IProps> = ({ item }) => {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -52,199 +60,240 @@ const PeopleList: FC<IProps> = ({ item }) => {
     }
   }, [state.followSpaceStatus]);
 
-  return(
+  return (
     <View>
-    <ScrollView style = {{marginTop: 8}} showsVerticalScrollIndicator = {false}>
-    <View style={{marginTop: 8, marginBottom: 8}}>
-      <Text style={styles.label}> From School </Text>
+      <ScrollView style={{ marginTop: 8 }} showsVerticalScrollIndicator={false}>
+        <View style={{ marginTop: 8, marginBottom: 8 }}>
+          <Text style={styles.label}> From School </Text>
 
-        <ScrollView horizontal = {true} style = {{marginTop: 8}} showsHorizontalScrollIndicator = {false}>
-        <TouchableOpacity
-      style={[
-        GlobalStyles.shadowBox,
-        styles.container,
-      ]}
-      onPress={() => navigation.navigate(APP_SCREEN_LIST.SPACE_PROFILE_SCREEN)}
-    >
-      <View style={{marginTop: 18,}}>
-        <Image
-          source={
-            item?.profilePicture && item?.profilePicture.trim() !== ""
-              ? { uri: item?.profilePicture }
-              : require("../../../../../assets/image10.png")}
-          resizeMethod="auto"
-          resizeMode="cover"
-          style={styles.profilePhoto}
-        />
-      </View>
-      <View style={styles.contentWrapper}>
-        <Text
-          style={[
-            GlobalStyles.fontInterMedium,
-            GlobalStyles.fontSize15,
-            GlobalStyles.fontWeight400,
-          ]}
-        >
-          {item?.firstName !== "" && item?.lastName !== "" ? item?.firstName + " " + item?.lastName : "Abdul Ibrahim"}
-        </Text>
+          <ScrollView
+            horizontal={true}
+            style={{ marginTop: 8 }}
+            showsHorizontalScrollIndicator={false}
+          >
+            <TouchableOpacity
+              style={[GlobalStyles.shadowBox, styles.container]}
+              onPress={() =>
+                navigation.navigate(APP_SCREEN_LIST.SPACE_PROFILE_SCREEN)
+              }
+            >
+              <View style={{ marginTop: 18 }}>
+                <Image
+                  source={
+                    item?.profilePicture && item?.profilePicture.trim() !== ""
+                      ? { uri: item?.profilePicture }
+                      : require("../../../../../assets/image10.png")
+                  }
+                  resizeMethod="auto"
+                  resizeMode="cover"
+                  style={styles.profilePhoto}
+                />
+              </View>
+              <View style={styles.contentWrapper}>
+                <Text
+                  style={[
+                    GlobalStyles.fontInterMedium,
+                    GlobalStyles.fontSize15,
+                    GlobalStyles.fontWeight400,
+                  ]}
+                >
+                  {item?.firstName !== "" && item?.lastName !== ""
+                    ? item?.firstName + " " + item?.lastName
+                    : "Abdul Ibrahim"}
+                </Text>
 
-        <Text
-          style={[
-            GlobalStyles.fontInterMedium,
-            GlobalStyles.fontSize10,
-            GlobalStyles.fontWeight100,
-            {alignSelf: "center", color: "#88969D"}
-          ]}
-        >
-          {item?.bio !== "" ? item?.bio : "Data Science"}
-        </Text>
-        <View style={[GlobalStyles.mt10, { alignItems: "center" }]}>
-          <Button
-            buttonStyle={{
-              paddingVertical: 0,
-              paddingHorizontal: 0,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            style={{ width: "100%", height: 35, margin: 8, padding: 8, alignSelf: "center" }}
-            title="Connect"
-            onPress={() => {handleSpaceFollow(item?.id)} }
-            loading={isLoading}
-          />
+                <Text
+                  style={[
+                    GlobalStyles.fontInterMedium,
+                    GlobalStyles.fontSize10,
+                    GlobalStyles.fontWeight100,
+                    { alignSelf: "center", color: "#88969D" },
+                  ]}
+                >
+                  {item?.bio !== "" ? item?.bio : "Data Science"}
+                </Text>
+                <View style={[GlobalStyles.mt10, { alignItems: "center" }]}>
+                  <Button
+                    buttonStyle={{
+                      paddingVertical: 0,
+                      paddingHorizontal: 0,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                    style={{
+                      width: "100%",
+                      height: 35,
+                      margin: 8,
+                      padding: 8,
+                      alignSelf: "center",
+                    }}
+                    title="Connect"
+                    onPress={() => {
+                      handleSpaceFollow(item?.id as string);
+                    }}
+                    loading={isLoading}
+                  />
+                </View>
+              </View>
+            </TouchableOpacity>
+          </ScrollView>
         </View>
-      </View>
-    </TouchableOpacity>
-    </ScrollView>
-    </View>
 
-<View style={{marginTop: 8, marginBottom: 8}}>
-<Text style={styles.label}> Base On Industry </Text>
+        <View style={{ marginTop: 8, marginBottom: 8 }}>
+          <Text style={styles.label}> Base On Industry </Text>
 
-  <ScrollView horizontal = {true} style = {{marginTop: 8}} showsHorizontalScrollIndicator = {false}>
-  <TouchableOpacity
-style={[
-  GlobalStyles.shadowBox,
-  styles.container,
-]}
-onPress={() => navigation.navigate(APP_SCREEN_LIST.SPACE_PROFILE_SCREEN)}
->
-<View style={{marginTop: 18,}}>
-  <Image
-    source={
-      item?.profilePicture && item?.profilePicture.trim() !== ""
-        ? { uri: item?.profilePicture }
-        : require("../../../../../assets/image10.png")}
-    resizeMethod="auto"
-    resizeMode="cover"
-    style={styles.profilePhoto}
-  />
-</View>
-<View style={styles.contentWrapper}>
-  <Text
-    style={[
-      GlobalStyles.fontInterMedium,
-      GlobalStyles.fontSize15,
-      GlobalStyles.fontWeight400,
-    ]}
-  >
-    {item?.firstName !== "" && item?.lastName !== "" ? item?.firstName + " " + item?.lastName : "Abdul Ibrahim"}
-  </Text>
+          <ScrollView
+            horizontal={true}
+            style={{ marginTop: 8 }}
+            showsHorizontalScrollIndicator={false}
+          >
+            <TouchableOpacity
+              style={[GlobalStyles.shadowBox, styles.container]}
+              onPress={() =>
+                navigation.navigate(APP_SCREEN_LIST.SPACE_PROFILE_SCREEN)
+              }
+            >
+              <View style={{ marginTop: 18 }}>
+                <Image
+                  source={
+                    item?.profilePicture && item?.profilePicture.trim() !== ""
+                      ? { uri: item?.profilePicture }
+                      : require("../../../../../assets/image10.png")
+                  }
+                  resizeMethod="auto"
+                  resizeMode="cover"
+                  style={styles.profilePhoto}
+                />
+              </View>
+              <View style={styles.contentWrapper}>
+                <Text
+                  style={[
+                    GlobalStyles.fontInterMedium,
+                    GlobalStyles.fontSize15,
+                    GlobalStyles.fontWeight400,
+                  ]}
+                >
+                  {item?.firstName !== "" && item?.lastName !== ""
+                    ? item?.firstName + " " + item?.lastName
+                    : "Abdul Ibrahim"}
+                </Text>
 
-  <Text
-    style={[
-      GlobalStyles.fontInterMedium,
-      GlobalStyles.fontSize10,
-      GlobalStyles.fontWeight100,
-      {alignSelf: "center", color: "#88969D"}
-    ]}
-  >
-    {item?.bio !== "" ? item?.bio : "Data Science"}
-  </Text>
-  <View style={[GlobalStyles.mt10, { alignItems: "center" }]}>
-    <Button
-      buttonStyle={{
-        paddingVertical: 0,
-        paddingHorizontal: 0,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-      style={{ width: "100%", height: 35, margin: 8, padding: 8, alignSelf: "center" }}
-      title="Connect"
-      onPress={() => {handleSpaceFollow(item?.id)} }
-      loading={isLoading}
-    />
-  </View>
-</View>
-</TouchableOpacity>
-  </ScrollView>
-</View>
-
-<View style={{marginTop: 8, marginBottom: 8}}>
-      <Text style={styles.label}> Suggestions </Text>
-
-        <ScrollView style = {{marginTop: 8}} showsVerticalScrollIndicator = {false}>
-        <TouchableOpacity
-      style={[
-        {flex: 1, flexDirection: "row", justifyContent: "space-between"},
-        styles.container,
-      ]}
-      onPress={() => navigation.navigate(APP_SCREEN_LIST.SPACE_PROFILE_SCREEN)}
-    >
-      <View style={{flex: 1, alignItems: "flex-start"}}>
-        <Image
-          source={
-            item?.profilePicture && item?.profilePicture.trim() !== ""
-              ? { uri: item?.profilePicture }
-              : require("../../../../../assets/image10.png")}
-          resizeMethod="auto"
-          resizeMode="cover"
-          style={styles.profilePhoto}
-        />
-      </View>
-      <View style={{flex: 2}}>
-        <Text
-          style={[
-            GlobalStyles.fontInterMedium,
-            GlobalStyles.fontSize15,
-            GlobalStyles.fontWeight400,
-          ]}
-        >
-          {item?.firstName !== "" && item?.lastName !== "" ? item?.firstName + " " + item?.lastName : "Abdul Ibrahim"}
-        </Text>
-
-        <Text
-          style={[
-            GlobalStyles.fontInterMedium,
-            GlobalStyles.fontSize10,
-            GlobalStyles.fontWeight100,
-            {color: "#88969D"}
-          ]}
-        >
-          {item?.bio !== "" ? item?.bio : "Data Science"}
-        </Text>
+                <Text
+                  style={[
+                    GlobalStyles.fontInterMedium,
+                    GlobalStyles.fontSize10,
+                    GlobalStyles.fontWeight100,
+                    { alignSelf: "center", color: "#88969D" },
+                  ]}
+                >
+                  {item?.bio !== "" ? item?.bio : "Data Science"}
+                </Text>
+                <View style={[GlobalStyles.mt10, { alignItems: "center" }]}>
+                  <Button
+                    buttonStyle={{
+                      paddingVertical: 0,
+                      paddingHorizontal: 0,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                    style={{
+                      width: "100%",
+                      height: 35,
+                      margin: 8,
+                      padding: 8,
+                      alignSelf: "center",
+                    }}
+                    title="Connect"
+                    onPress={() => {
+                      handleSpaceFollow(item?.id as string);
+                    }}
+                    loading={isLoading}
+                  />
+                </View>
+              </View>
+            </TouchableOpacity>
+          </ScrollView>
         </View>
-        <View style={[GlobalStyles.mt10, { flex:1, alignItems: "flex-end" }]}>
-          <Button
-            buttonStyle={{
-              paddingVertical: 0,
-              paddingHorizontal: 0,
-            }}
-            style={{ width: "100%", height: 35, margin: 8, padding: 8 }}
-            title="Connect"
-            onPress={() => {handleSpaceFollow(item?.id)} }
-            loading={isLoading}
-          />
+
+        <View style={{ marginTop: 8, marginBottom: 8 }}>
+          <Text style={styles.label}> Suggestions </Text>
+
+          <ScrollView
+            style={{ marginTop: 8 }}
+            showsVerticalScrollIndicator={false}
+          >
+            <TouchableOpacity
+              style={[
+                {
+                  flex: 1,
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                },
+                styles.container,
+              ]}
+              onPress={() =>
+                navigation.navigate(APP_SCREEN_LIST.SPACE_PROFILE_SCREEN)
+              }
+            >
+              <View style={{ flex: 1, alignItems: "flex-start" }}>
+                <Image
+                  source={
+                    item?.profilePicture && item?.profilePicture.trim() !== ""
+                      ? { uri: item?.profilePicture }
+                      : require("../../../../../assets/image10.png")
+                  }
+                  resizeMethod="auto"
+                  resizeMode="cover"
+                  style={styles.profilePhoto}
+                />
+              </View>
+              <View style={{ flex: 2 }}>
+                <Text
+                  style={[
+                    GlobalStyles.fontInterMedium,
+                    GlobalStyles.fontSize15,
+                    GlobalStyles.fontWeight400,
+                  ]}
+                >
+                  {item?.firstName !== "" && item?.lastName !== ""
+                    ? item?.firstName + " " + item?.lastName
+                    : "Abdul Ibrahim"}
+                </Text>
+
+                <Text
+                  style={[
+                    GlobalStyles.fontInterMedium,
+                    GlobalStyles.fontSize10,
+                    GlobalStyles.fontWeight100,
+                    { color: "#88969D" },
+                  ]}
+                >
+                  {item?.bio !== "" ? item?.bio : "Data Science"}
+                </Text>
+              </View>
+              <View
+                style={[GlobalStyles.mt10, { flex: 1, alignItems: "flex-end" }]}
+              >
+                <Button
+                  buttonStyle={{
+                    paddingVertical: 0,
+                    paddingHorizontal: 0,
+                  }}
+                  style={{ width: "100%", height: 35, margin: 8, padding: 8 }}
+                  title="Connect"
+                  onPress={() => {
+                    handleSpaceFollow(item?.id as string);
+                  }}
+                  loading={isLoading}
+                />
+              </View>
+            </TouchableOpacity>
+          </ScrollView>
         </View>
-      
-    </TouchableOpacity>
-        </ScrollView>
+      </ScrollView>
     </View>
-    </ScrollView>
-    </View>
-    
   );
-
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -261,15 +310,15 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   profilePhoto: {
-        width: 50,
-        height: 50,
-        borderRadius: 50 / 2, 
-    },
-    label: {
-      fontSize: 14,
-      fontWeight: "500",
-      color: "#88969D"
-    },
+    width: 50,
+    height: 50,
+    borderRadius: 50 / 2,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#88969D",
+  },
 });
 
 export default PeopleList;
