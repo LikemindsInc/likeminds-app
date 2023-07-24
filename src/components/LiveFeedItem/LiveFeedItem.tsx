@@ -12,6 +12,7 @@ import { GlobalStyles } from "../../theme/GlobalStyles";
 import font from "../../theme/font";
 import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign } from "@expo/vector-icons";
+import useAppSelector from "../../hooks/useAppSelector";
 
 interface IProps {
   item: {
@@ -24,12 +25,24 @@ interface IProps {
 }
 
 const LiveFeedItem: FC<IProps> = ({ item }) => {
+  const state = useAppSelector((state) => state.settingReducer);
+
+  const renderProfilePicture = () => {
+    if (item.isUserProfile) {
+      if (state.userInfo?.profilePicture) {
+        return { uri: state.userInfo?.profilePicture };
+      } else {
+        return item.image;
+      }
+    }
+    return item.image;
+  };
   if (item.isUserProfile) {
     return (
       <TouchableOpacity style={styles.container}>
         <View style={styles.profileImage}>
           <Image
-            source={item.image}
+            source={renderProfilePicture()}
             style={{ width: 58, height: 58, borderRadius: 29 }}
           />
           <LinearGradient

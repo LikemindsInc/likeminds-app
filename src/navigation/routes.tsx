@@ -48,7 +48,7 @@ import { PURGE } from "redux-persist";
 import { __ROOT_REDUX_STATE_KEY__ } from "../store/constants";
 import { logoutAction } from "../actions/auth";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { ISettingState } from "../reducers/settings";
+import { ISettingState, logoutUserAction } from "../reducers/settings";
 import ForgotPassword from "../screens/ForgotPassword/ForgotPassword";
 import RecoverWithPhone from "../screens/ForgotEmail/RecoverWithPhone";
 import OTPScreen from "../screens/ForgotEmail/OTPScreen";
@@ -269,7 +269,10 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
           </View>
           <View style={[{ marginBottom: 110 }]}>
             <Button
-              onPress={() => dispatch(logoutAction())}
+              onPress={() => {
+                dispatch(logoutUserAction());
+                dispatch(logoutAction());
+              }}
               type="tertiary"
               title="Logout"
             />

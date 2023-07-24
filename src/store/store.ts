@@ -24,10 +24,9 @@ import postReducer from "../reducers/post_reducer";
 
 const rootPersistConfig = {
   storage: AsyncStorage,
-  timeout: 10000,
-  version: CACHE_VERSION,
   key: __ROOT_REDUX_STATE_KEY__,
   // stateReconciler: autoMergeLevel2,
+  whitelist: ["settingReducer"],
   blacklist: ["errorReducer", "sessionReducer"], // only settings and other state stores will be persisted
 };
 

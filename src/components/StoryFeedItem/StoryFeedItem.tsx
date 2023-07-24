@@ -23,6 +23,7 @@ import useAppDispatch from "../../hooks/useAppDispatch";
 import {
   commentOnPostAction,
   getCommentsOnPostAction,
+  getPostFeedAction,
   likePostAction,
   unlikePostAction,
 } from "../../actions/post";
@@ -62,13 +63,22 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
     const isLiked = item.likedBy.includes(state?.userInfo?.id as string);
 
     setLiked(isLiked);
-  }, []);
+  }, [postState.postDetail]);
 
   const toast = useToast();
 
   useEffect(() => {
     isPostLikedByUser();
   }, [isPostLikedByUser]);
+
+  useEffect(() => {
+    if (
+      postState.likePostStatus === "completed" ||
+      postState.unlikePostStatus === "completed"
+    ) {
+      dispatch(getPostFeedAction());
+    }
+  }, [postState.likePostStatus, postState.unlikePostStatus]);
 
   useEffect(() => {
     if (showComments) dispatch(getCommentsOnPostAction(item.id));
@@ -366,7 +376,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
             >
               {item.commentCount} comments
             </Text>
-            <Text
+            {/* <Text
               style={[
                 GlobalStyles.fontInterMedium,
                 GlobalStyles.fontSize10,
@@ -375,7 +385,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
               ]}
             >
               {item.commentCount} shares
-            </Text>
+            </Text> */}
           </View>
           <View
             style={[
@@ -403,9 +413,9 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
                 color={isPostLiked ? colors.red : colors.navyBlue}
               />
             </TouchableOpacity> */}
-            <TouchableOpacity>
+            {/* <TouchableOpacity>
               <Feather name="send" size={24} color={colors.navyBlue} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
       </View>

@@ -2,6 +2,7 @@ import { FC, useCallback, useEffect, useState } from "react";
 import {
   Image,
   KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   Text,
   TextStyle,
@@ -14,6 +15,7 @@ import { IPostFeed } from "@app-model";
 import {
   commentOnPostAction,
   getCommentsOnPostAction,
+  getPostFeedByIdAction,
   likePostAction,
   unlikePostAction,
 } from "../../../actions/post";
@@ -64,7 +66,7 @@ const PostDetail = () => {
     const isLiked = item.likedBy.includes(state?.userInfo?.id as string);
 
     setLiked(isLiked);
-  }, []);
+  }, [postState.postDetail]);
 
   const onPress = (url: any, index: any, event: any) => {
     // url and index of the image you have clicked alongwith onPress event.
@@ -94,6 +96,15 @@ const PostDetail = () => {
   }, [postState.commentOnPostStatus]);
 
   useEffect(() => {
+    if (
+      postState.likePostStatus === "completed" ||
+      postState.unlikePostStatus === "completed"
+    ) {
+      dispatch(getPostFeedByIdAction(item.id));
+    }
+  }, [postState.likePostStatus, postState.unlikePostStatus]);
+
+  useEffect(() => {
     if (postState.getCommentOnPostStatus === "failed") {
       toast.show({ description: postState.commentOnPostError });
     }
@@ -101,11 +112,12 @@ const PostDetail = () => {
 
   const handleLikeReactionOnPost = () => {
     if (isPostLiked) {
+      console.log("unliking a post");
       dispatch(unlikePostAction(item.id));
-      setLiked(false);
+      // setLiked(false);
     } else {
       dispatch(likePostAction(item.id));
-      setLiked(true);
+      // setLiked(true);
     }
   };
 
@@ -203,10 +215,14 @@ const PostDetail = () => {
 
   return (
     <KeyboardAwareScrollView
-    //   behavior="padding"
-    //   style={{ flexGrow: 1, flex: 1, backgroundColor: colors.white }}
+      style={{ flexGrow: 1 }}
+      // behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardShouldPersistTaps={"always"}
     >
-      <View style={[GlobalStyles.container, { flex: 1 }]}>
+      <ScrollView
+        style={[GlobalStyles.container, { flex: 1 }]}
+        contentContainerStyle={[{ flexGrow: 1 }]}
+      >
         <TouchableOpacity
           style={[GlobalStyles.mb20]}
           onPress={() => navigation.goBack()}
@@ -292,7 +308,7 @@ const PostDetail = () => {
             >
               {item.commentCount} comments
             </Text>
-            <Text
+            {/* <Text
               style={[
                 GlobalStyles.fontInterMedium,
                 GlobalStyles.fontSize10,
@@ -301,7 +317,7 @@ const PostDetail = () => {
               ]}
             >
               {item.commentCount} shares
-            </Text>
+            </Text> */}
           </View>
           <View
             style={[
@@ -329,9 +345,9 @@ const PostDetail = () => {
                 color={isPostLiked ? colors.red : colors.navyBlue}
               />
             </TouchableOpacity> */}
-            <TouchableOpacity>
+            {/* <TouchableOpacity>
               <Feather name="send" size={24} color={colors.navyBlue} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
         <TouchableOpacity onPress={handleLoadComments} style={{}}>
@@ -352,7 +368,7 @@ const PostDetail = () => {
           </ReadMore>
         </TouchableOpacity>
         <View style={{ paddingBottom: 200 }}>{renderComments()}</View>
-      </View>
+      </ScrollView>
       <View style={styles.bottomInputStyle}>
         <Input
           inputViewStyle={styles.commentInputViewStyle}
@@ -399,6 +415,9 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 10,
     height: 300,
+  },
+  contentContainer: {
+    flexGrow: 1,
   },
 });
 

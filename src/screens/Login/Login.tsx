@@ -53,6 +53,8 @@ const Login = () => {
   useEffect(() => {
     if (session.signingInStatus === "completed") {
       navigation.navigate(APP_SCREEN_LIST.MAIN_SCREEN);
+    } else if (session.signingInStatus === "failed") {
+      console.log(session.signingInError);
     }
   }, [session.signingInStatus]);
 

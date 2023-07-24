@@ -7,6 +7,7 @@ import {
   ICommentOnPostDTO,
   ICreateJobDTO,
   ICreatePostDTO,
+  IJobDTO,
   IPostCommentFeed,
   IPostFeed,
   IReactionToPostDTO,
@@ -22,7 +23,9 @@ const REACTION_TO_POST = "post:REACTION_TO_POST";
 const LIKE_POST = "post:LIKE_POST";
 
 const GET_POST_FEED = "post:GET_POST_FEED";
+const GET_SINGLE_POST_FEED = "post:GET_SINGLE_POST_FEED";
 const CREATE_JOB = "job:CREATE_JOB";
+const GET_JOBS = "job:GET_JOBS";
 import { Image } from "react-native-compressor";
 
 export const createPostAction = asyncThunkWrapper<
@@ -72,6 +75,16 @@ export const getPostFeedAction = asyncThunkWrapper<
   return response.data;
 });
 
+export const getJobsAction = asyncThunkWrapper<
+  ApiResponseSuccess<IJobDTO[]>,
+  void
+>(GET_JOBS, async () => {
+  const response = await axiosClient.get<AxiosResponse<any>>(
+    "/api/job?page=1&limit=1000"
+  );
+  return response.data;
+});
+
 export const createJobAction = asyncThunkWrapper<
   ApiResponseSuccess<IPostFeed[]>,
   ICreateJobDTO
@@ -81,11 +94,21 @@ export const createJobAction = asyncThunkWrapper<
   return response.data;
 });
 
+export const getPostFeedByIdAction = asyncThunkWrapper<
+  ApiResponseSuccess<IPostFeed>,
+  string
+>(GET_SINGLE_POST_FEED, async (postId) => {
+  const response = await axiosClient.get<AxiosResponse<any>>(
+    `/api/post/feeds/${postId}`
+  );
+  return response.data;
+});
+
 export const likePostAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
   string
 >(LIKE_POST, async (args: string) => {
-  console.log("args> ", args);
+  console.log("called to like a post> ", args);
   const response = await axiosClient.post<AxiosResponse<any>>(
     `/api/post/${args}/like`,
     {}
@@ -98,6 +121,7 @@ export const unlikePostAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
   string
 >(UNLIKE_POST, async (args: string) => {
+  console.log("called to unklike a post> ", args);
   const response = await axiosClient.post<AxiosResponse<any>>(
     `/api/post/${args}/unlike`,
     {}

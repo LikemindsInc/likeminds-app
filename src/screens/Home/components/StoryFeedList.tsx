@@ -1,6 +1,6 @@
 import { FlatList, useToast } from "native-base";
 import StoryFeedItem from "../../../components/StoryFeedItem/StoryFeedItem";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useAppDispatch from "../../../hooks/useAppDispatch";
 import { getPostFeedAction } from "../../../actions/post";
 import useAppSelector from "../../../hooks/useAppSelector";
@@ -72,6 +72,7 @@ const DATA = [
 const StoryFeedList = () => {
   const dispatch = useAppDispatch();
   const state = useAppSelector((state: any) => state.postReducer) as IPostState;
+  const [isRefreshing, setRefresh] = useState(false);
   const getPostFeeds = useCallback(() => {
     dispatch(getPostFeedAction());
   }, []);
@@ -99,7 +100,15 @@ const StoryFeedList = () => {
     }
   }, [state.createPostStatus]);
 
+  useEffect(() => {
+    if (state.getPostFeedStatus === "completed") {
+      setRefresh(false);
+      getPostFeeds();
+    }
+  }, [state.getPostFeedStatus]);
+
   const handleOnRefres = () => {
+    setRefresh(true);
     getPostFeeds();
   };
 
@@ -110,7 +119,6 @@ const StoryFeedList = () => {
       data={state.postFeeds}
       keyExtractor={(item) => `${item.id}`}
       style={{ flex: 1, flexGrow: 1 }}
-      onRefresh={handleOnRefres}
     />
   );
 };

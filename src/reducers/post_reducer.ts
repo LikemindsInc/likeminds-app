@@ -1,6 +1,7 @@
 import {
   ICreateJobDTO,
   ICreatePostDTO,
+  IJobDTO,
   IPostCommentFeed,
   IPostFeed,
   IThunkAPIStatus,
@@ -13,7 +14,9 @@ import {
   createJobAction,
   createPostAction,
   getCommentsOnPostAction,
+  getJobsAction,
   getPostFeedAction,
+  getPostFeedByIdAction,
   likePostAction,
   reactToPostAction,
   unlikePostAction,
@@ -40,6 +43,14 @@ export interface IPostState {
   getCommentOnPostStatus: IThunkAPIStatus;
   getCommentOnPostSuccess: string;
   getCommentOnPostError: string;
+
+  getSinglePostStatus: IThunkAPIStatus;
+  getSinglePostSuccess: string;
+  getSinglePostError: string;
+
+  getJobsStatus: IThunkAPIStatus;
+  getJobsSuccess: string;
+  getJobsError: string;
 
   unlikePostStatus: IThunkAPIStatus;
   unlikePostSuccess: string;
@@ -68,6 +79,8 @@ export interface IPostState {
   showReactionView: boolean;
 
   postReacted: IPostFeed | null;
+
+  jobs: IJobDTO[];
 }
 
 const initialState: IPostState = {
@@ -94,6 +107,14 @@ const initialState: IPostState = {
   getCommentOnPostStatus: "idle",
   getCommentOnPostSuccess: "",
   getCommentOnPostError: "",
+
+  getSinglePostStatus: "idle",
+  getSinglePostSuccess: "",
+  getSinglePostError: "",
+
+  getJobsStatus: "idle",
+  getJobsSuccess: "",
+  getJobsError: "",
 
   unlikePostStatus: "idle",
   unlikePostSuccess: "",
@@ -122,6 +143,8 @@ const initialState: IPostState = {
   showReactionView: false,
 
   postReacted: null,
+
+  jobs: [],
 };
 
 const PostSlice = createSlice({
@@ -272,6 +295,30 @@ const PostSlice = createSlice({
     builder.addCase(reactToPostAction.rejected, (state, action) => {
       state.reactToPostStatus = "failed";
       state.reactToPostError = action.payload?.message as string;
+    });
+
+    builder.addCase(getPostFeedByIdAction.pending, (state) => {
+      state.getSinglePostStatus = "loading";
+    });
+    builder.addCase(getPostFeedByIdAction.fulfilled, (state, action) => {
+      state.getSinglePostStatus = "completed";
+      state.postDetail = action.payload.data;
+    });
+    builder.addCase(getPostFeedByIdAction.rejected, (state, action) => {
+      state.getSinglePostStatus = "failed";
+      state.getSinglePostError = action.payload?.message as string;
+    });
+
+    builder.addCase(getJobsAction.pending, (state) => {
+      state.getJobsStatus = "loading";
+    });
+    builder.addCase(getJobsAction.fulfilled, (state, action) => {
+      state.getJobsStatus = "completed";
+      state.jobs = action.payload.data;
+    });
+    builder.addCase(getJobsAction.rejected, (state, action) => {
+      state.getJobsStatus = "failed";
+      state.getJobsError = action.payload?.message as string;
     });
   },
 });

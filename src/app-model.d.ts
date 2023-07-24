@@ -246,4 +246,28 @@ declare module "@app-model" {
     commentId: string;
     comment: string;
   }
+
+  interface IJobDTO {
+    id: string;
+    creatorId: string;
+    industry: string;
+    companyName: string;
+    companyDescription: string;
+    companyLocation: string;
+    jobTitle: string;
+    jobDescription: string;
+    jobType: string;
+    jobLocation: string;
+    salary: number;
+    experienceLevel: string;
+    createdAt: string;
+    updatedAt: string;
+    user: {
+      id: string;
+      firstName: string | null;
+      lastName: string | null;
+      email: string;
+      profilePicture: string | null;
+    };
+  }
 }
