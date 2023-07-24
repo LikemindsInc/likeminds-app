@@ -1,4 +1,4 @@
-import { IUserData } from "@app-model";
+import { ISpaceList } from "@app-model";
 import { FC, useEffect, useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View, ScrollView } from "react-native";
 import { GlobalStyles } from "../../../../theme/GlobalStyles";
@@ -14,12 +14,43 @@ import { APP_SCREEN_LIST } from "../../../../constants";
 import { createEntityAdapter } from "@reduxjs/toolkit";
 import { ISO_8601, RFC_2822 } from "moment";
 
-interface IProps {
-  item?: IUserData;
-}
+
+const items = [
+  {
+    profilePicture: "https://unsplash.com/photos/iFgRcqHznqg/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NXx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8fHwxNjg5ODg3MjMzfDA&force=true",
+    title: "Abdul Ibrahim",
+    description: "Data Science",
+    id: "2"
+  },
+  {
+    profilePicture: "https://unsplash.com/photos/iFgRcqHznqg/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NXx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8fHwxNjg5ODg3MjMzfDA&force=true",
+    title: "Abdul Ibrahim",
+    description: "Data Science",
+    id: "3"
+  },
+  {
+    profilePicture: "https://unsplash.com/photos/iFgRcqHznqg/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NXx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8fHwxNjg5ODg3MjMzfDA&force=true",
+    title: "Abdul Ibrahim",
+    description: "Data Science",
+    id: "4"
+  },
+  {
+    profilePicture: "https://unsplash.com/photos/iFgRcqHznqg/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NXx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8fHwxNjg5ODg3MjMzfDA&force=true",
+    title: "Abdul Ibrahim",
+    description: "Data Science",
+    id: "5"
+  },
+  {
+    profilePicture: "https://unsplash.com/photos/iFgRcqHznqg/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NXx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8fHwxNjg5ODg3MjMzfDA&force=true",
+    title: "Abdul Ibrahim",
+    description: "Data Science",
+    id: "2"
+  }
+]
 
 
-const PeopleList: FC<IProps> = ({ item }) => {
+
+const PeopleList = () => {
   const navigation = useNavigation<NavigationProp<any>>();
   const dispatch = useAppDispatch();
   const state = useAppSelector(
@@ -56,22 +87,21 @@ const PeopleList: FC<IProps> = ({ item }) => {
     <View>
     <ScrollView style = {{marginTop: 8}} showsVerticalScrollIndicator = {false}>
     <View style={{marginTop: 8, marginBottom: 8}}>
-      <Text style={styles.label}> From School </Text>
+      <Text style={[GlobalStyles.fontInterRegular, styles.label]}> From School </Text>
 
         <ScrollView horizontal = {true} style = {{marginTop: 8}} showsHorizontalScrollIndicator = {false}>
-        <TouchableOpacity
-      style={[
-        GlobalStyles.shadowBox,
-        styles.container,
-      ]}
-      onPress={() => navigation.navigate(APP_SCREEN_LIST.SPACE_PROFILE_SCREEN)}
-    >
-      <View style={{marginTop: 18,}}>
+
+          {
+            items.map(item => 
+              (
+              <TouchableOpacity style={[ GlobalStyles.shadowBox, styles.container,]} 
+              onPress={() => navigation.navigate(APP_SCREEN_LIST.SPACE_PROFILE_SCREEN)} >
+              <View style={{marginTop: 18,}}>
         <Image
           source={
-            item?.profilePicture && item?.profilePicture.trim() !== ""
-              ? { uri: item?.profilePicture }
-              : require("../../../../../assets/image10.png")}
+            item.profilePicture && item.profilePicture.trim() !== ""
+              ? { uri: item.profilePicture }
+              : require("../../../../../assets/image9.png")}
           resizeMethod="auto"
           resizeMode="cover"
           style={styles.profilePhoto}
@@ -83,9 +113,10 @@ const PeopleList: FC<IProps> = ({ item }) => {
             GlobalStyles.fontInterMedium,
             GlobalStyles.fontSize15,
             GlobalStyles.fontWeight400,
+            GlobalStyles.fontInterRegular
           ]}
         >
-          {item?.firstName !== "" && item?.lastName !== "" ? item?.firstName + " " + item?.lastName : "Abdul Ibrahim"}
+          {item.title !== "" ? item.title : "Abdul Ibrahim"}
         </Text>
 
         <Text
@@ -93,10 +124,11 @@ const PeopleList: FC<IProps> = ({ item }) => {
             GlobalStyles.fontInterMedium,
             GlobalStyles.fontSize10,
             GlobalStyles.fontWeight100,
-            {alignSelf: "center", color: "#88969D"}
+            {alignSelf: "center", color: "#88969D"},
+            GlobalStyles.fontInterRegular
           ]}
         >
-          {item?.bio !== "" ? item?.bio : "Data Science"}
+          {item.description !== "" ? item.description : "Data Science"}
         </Text>
         <View style={[GlobalStyles.mt10, { alignItems: "center" }]}>
           <Button
@@ -108,74 +140,83 @@ const PeopleList: FC<IProps> = ({ item }) => {
             }}
             style={{ width: "100%", height: 35, margin: 8, padding: 8, alignSelf: "center" }}
             title="Connect"
-            onPress={() => {handleSpaceFollow(item?.id)} }
+            onPress={() => {handleSpaceFollow(item.id)} }
             loading={isLoading}
           />
         </View>
       </View>
     </TouchableOpacity>
+              ))
+          }
     </ScrollView>
     </View>
 
 <View style={{marginTop: 8, marginBottom: 8}}>
-<Text style={styles.label}> Base On Industry </Text>
+<Text style={[GlobalStyles.fontInterRegular, styles.label]}> Base On Industry </Text>
 
   <ScrollView horizontal = {true} style = {{marginTop: 8}} showsHorizontalScrollIndicator = {false}>
-  <TouchableOpacity
-style={[
-  GlobalStyles.shadowBox,
-  styles.container,
-]}
-onPress={() => navigation.navigate(APP_SCREEN_LIST.SPACE_PROFILE_SCREEN)}
->
-<View style={{marginTop: 18,}}>
-  <Image
-    source={
-      item?.profilePicture && item?.profilePicture.trim() !== ""
-        ? { uri: item?.profilePicture }
-        : require("../../../../../assets/image10.png")}
-    resizeMethod="auto"
-    resizeMode="cover"
-    style={styles.profilePhoto}
-  />
-</View>
-<View style={styles.contentWrapper}>
-  <Text
-    style={[
-      GlobalStyles.fontInterMedium,
-      GlobalStyles.fontSize15,
-      GlobalStyles.fontWeight400,
-    ]}
-  >
-    {item?.firstName !== "" && item?.lastName !== "" ? item?.firstName + " " + item?.lastName : "Abdul Ibrahim"}
-  </Text>
-
-  <Text
-    style={[
-      GlobalStyles.fontInterMedium,
-      GlobalStyles.fontSize10,
-      GlobalStyles.fontWeight100,
-      {alignSelf: "center", color: "#88969D"}
-    ]}
-  >
-    {item?.bio !== "" ? item?.bio : "Data Science"}
-  </Text>
-  <View style={[GlobalStyles.mt10, { alignItems: "center" }]}>
-    <Button
-      buttonStyle={{
-        paddingVertical: 0,
-        paddingHorizontal: 0,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-      style={{ width: "100%", height: 35, margin: 8, padding: 8, alignSelf: "center" }}
-      title="Connect"
-      onPress={() => {handleSpaceFollow(item?.id)} }
-      loading={isLoading}
-    />
-  </View>
-</View>
-</TouchableOpacity>
+    {
+      items.map(item => (
+        <TouchableOpacity
+        style={[
+          GlobalStyles.shadowBox,
+          styles.container,
+        ]}
+        onPress={() => navigation.navigate(APP_SCREEN_LIST.SPACE_PROFILE_SCREEN)}
+        >
+        <View style={{marginTop: 18,}}>
+          <Image
+            source={
+              item.profilePicture && item.profilePicture.trim() !== ""
+                ? { uri: item.profilePicture }
+                : require("../../../../../assets/image10.png")}
+            resizeMethod="auto"
+            resizeMode="cover"
+            style={styles.profilePhoto}
+          />
+        </View>
+        <View style={styles.contentWrapper}>
+          <Text
+            style={[
+              GlobalStyles.fontInterMedium,
+              GlobalStyles.fontSize15,
+              GlobalStyles.fontWeight400,
+              GlobalStyles.fontInterRegular
+            ]}
+          >
+            {item.title !== "" ? item.title : "Abdul Ibrahim"}
+          </Text>
+        
+          <Text
+            style={[
+              GlobalStyles.fontInterMedium,
+              GlobalStyles.fontSize10,
+              GlobalStyles.fontWeight100,
+              {alignSelf: "center", color: "#88969D"},
+              GlobalStyles.fontInterRegular
+            ]}
+          >
+            {item.description !== "" ? item.description : "Data Science"}
+          </Text>
+          <View style={[GlobalStyles.mt10, { alignItems: "center" }]}>
+            <Button
+              buttonStyle={{
+                paddingVertical: 0,
+                paddingHorizontal: 0,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              style={{ width: "100%", height: 35, margin: 8, padding: 8, alignSelf: "center" }}
+              title="Connect"
+              onPress={() => {handleSpaceFollow(item.id)} }
+              loading={isLoading}
+            />
+          </View>
+        </View>
+        </TouchableOpacity>
+      ))
+    }
+  
   </ScrollView>
 </View>
 
@@ -183,60 +224,67 @@ onPress={() => navigation.navigate(APP_SCREEN_LIST.SPACE_PROFILE_SCREEN)}
       <Text style={styles.label}> Suggestions </Text>
 
         <ScrollView style = {{marginTop: 8}} showsVerticalScrollIndicator = {false}>
-        <TouchableOpacity
-      style={[
-        {flex: 1, flexDirection: "row", justifyContent: "space-between"},
-        styles.container,
-      ]}
-      onPress={() => navigation.navigate(APP_SCREEN_LIST.SPACE_PROFILE_SCREEN)}
-    >
-      <View style={{flex: 1, alignItems: "flex-start"}}>
-        <Image
-          source={
-            item?.profilePicture && item?.profilePicture.trim() !== ""
-              ? { uri: item?.profilePicture }
-              : require("../../../../../assets/image10.png")}
-          resizeMethod="auto"
-          resizeMode="cover"
-          style={styles.profilePhoto}
-        />
-      </View>
-      <View style={{flex: 2}}>
-        <Text
-          style={[
-            GlobalStyles.fontInterMedium,
-            GlobalStyles.fontSize15,
-            GlobalStyles.fontWeight400,
-          ]}
-        >
-          {item?.firstName !== "" && item?.lastName !== "" ? item?.firstName + " " + item?.lastName : "Abdul Ibrahim"}
-        </Text>
-
-        <Text
-          style={[
-            GlobalStyles.fontInterMedium,
-            GlobalStyles.fontSize10,
-            GlobalStyles.fontWeight100,
-            {color: "#88969D"}
-          ]}
-        >
-          {item?.bio !== "" ? item?.bio : "Data Science"}
-        </Text>
-        </View>
-        <View style={[GlobalStyles.mt10, { flex:1, alignItems: "flex-end" }]}>
-          <Button
-            buttonStyle={{
-              paddingVertical: 0,
-              paddingHorizontal: 0,
-            }}
-            style={{ width: "100%", height: 35, margin: 8, padding: 8 }}
-            title="Connect"
-            onPress={() => {handleSpaceFollow(item?.id)} }
-            loading={isLoading}
-          />
-        </View>
-      
-    </TouchableOpacity>
+          {
+            items.map(item => (
+              <TouchableOpacity
+              style={[
+                {flex: 1, flexDirection: "row", justifyContent: "space-between"},
+                styles.container,
+              ]}
+              onPress={() => navigation.navigate(APP_SCREEN_LIST.SPACE_PROFILE_SCREEN)}
+            >
+              <View style={{flex: 1, alignItems: "flex-start"}}>
+                <Image
+                  source={
+                    item.profilePicture && item.profilePicture.trim() !== ""
+                      ? { uri: item.profilePicture }
+                      : require("../../../../../assets/image10.png")}
+                  resizeMethod="auto"
+                  resizeMode="cover"
+                  style={styles.profilePhoto}
+                />
+              </View>
+              <View style={{flex: 2}}>
+                <Text
+                  style={[
+                    GlobalStyles.fontInterMedium,
+                    GlobalStyles.fontSize15,
+                    GlobalStyles.fontWeight400,
+                    GlobalStyles.fontInterRegular
+                  ]}
+                >
+                  {item.title !== "" ? item.title : "Abdul Ibrahim"}
+                </Text>
+        
+                <Text
+                  style={[
+                    GlobalStyles.fontInterMedium,
+                    GlobalStyles.fontSize10,
+                    GlobalStyles.fontWeight100,
+                    {color: "#88969D"},
+                    GlobalStyles.fontInterRegular
+                  ]}
+                >
+                  {item.description !== "" ? item.description : "Data Science"}
+                </Text>
+                </View>
+                <View style={[GlobalStyles.mt10, { flex:1, alignItems: "flex-end" }]}>
+                  <Button
+                    buttonStyle={{
+                      paddingVertical: 0,
+                      paddingHorizontal: 0,
+                    }}
+                    style={{ width: "100%", height: 35, margin: 8, padding: 8 }}
+                    title="Connect"
+                    onPress={() => {handleSpaceFollow(item.id)} }
+                    loading={isLoading}
+                  />
+                </View>
+              
+            </TouchableOpacity>
+            ))
+          }
+        
         </ScrollView>
     </View>
     </ScrollView>
