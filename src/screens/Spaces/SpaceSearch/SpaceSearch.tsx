@@ -84,7 +84,6 @@ function SpacePeopleTabView() {
             >
               <Pressable
                 onPress={() => {
-                  console.log(i);
                   setIndex(i);
                 }}
               >

@@ -94,23 +94,23 @@ const StoryFeedList = () => {
     }
   }, [state.getPostFeedStatus]);
 
-  useEffect(() => {
-    if (state.createPostStatus === "completed") {
-      getPostFeeds();
-    }
-  }, [state.createPostStatus]);
+  // useEffect(() => {
+  //   if (state.createPostStatus === "completed") {
+  //     getPostFeeds();
+  //   }
+  // }, [state.createPostStatus]);
 
-  useEffect(() => {
-    if (state.getPostFeedStatus === "completed") {
-      setRefresh(false);
-      getPostFeeds();
-    }
-  }, [state.getPostFeedStatus]);
+  // useEffect(() => {
+  //   if (state.getPostFeedStatus === "completed") {
+  //     setRefresh(false);
+  //     getPostFeeds();
+  //   }
+  // }, [state.getPostFeedStatus]);
 
-  const handleOnRefres = () => {
-    setRefresh(true);
-    getPostFeeds();
-  };
+  // const handleOnRefres = () => {
+  //   setRefresh(true);
+  //   getPostFeeds();
+  // };
 
   return (
     <FlatList

@@ -81,6 +81,8 @@ export interface IPostState {
   postReacted: IPostFeed | null;
 
   jobs: IJobDTO[];
+
+  jobFilterTailorValue: string | null;
 }
 
 const initialState: IPostState = {
@@ -145,6 +147,7 @@ const initialState: IPostState = {
   postReacted: null,
 
   jobs: [],
+  jobFilterTailorValue: "",
 };
 
 const PostSlice = createSlice({
@@ -162,6 +165,10 @@ const PostSlice = createSlice({
       state.createPostStatus = "idle";
       state.createPostSuccess = "";
       state.createPostError = "";
+    },
+
+    setJobFilterTailorValue(state: IPostState, action) {
+      state.jobFilterTailorValue = action.payload;
     },
 
     clearPostRactionStatus(state: IPostState) {
@@ -330,6 +337,7 @@ export const {
   savePostDetail,
   showReactionView,
   clearPostRactionStatus,
+  setJobFilterTailorValue,
 } = PostSlice.actions;
 
 export default PostSlice.reducer;

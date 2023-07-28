@@ -139,21 +139,21 @@ const Home = () => {
 
   const state = useAppSelector((state) => state.postReducer);
 
-  useEffect(() => {
-    if (state.getPostFeedStatus === "completed") {
-      setRefresh(false);
-      getPostFeeds();
-    }
-  }, [state.getPostFeedStatus]);
+  // useEffect(() => {
+  //   if (state.getPostFeedStatus === "completed") {
+  //     setRefresh(false);
+  //     getPostFeeds();
+  //   }
+  // }, [state.getPostFeedStatus]);
 
-  const [isRefreshing, setRefresh] = useState(false);
-  const getPostFeeds = useCallback(() => {
-    dispatch(getPostFeedAction());
-  }, []);
-  const handleOnRefresh = () => {
-    setRefresh(true);
-    getPostFeeds();
-  };
+  // const [isRefreshing, setRefresh] = useState(false);
+  // const getPostFeeds = useCallback(() => {
+  //   dispatch(getPostFeedAction());
+  // }, []);
+  // const handleOnRefresh = () => {
+  //   setRefresh(true);
+  //   getPostFeeds();
+  // };
   return (
     <View style={[GlobalStyles.flexOne]}>
       <HomeHeader />
@@ -163,8 +163,6 @@ const Home = () => {
           showsVerticalScrollIndicator={false}
           data={DATA}
           renderItem={renderItems}
-          refreshing={isRefreshing}
-          onRefresh={handleOnRefresh}
         />
       </View>
     </View>

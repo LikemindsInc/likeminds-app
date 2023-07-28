@@ -216,12 +216,22 @@ declare module "@app-model" {
     companyDescription: string;
     companyLocation: string;
     jobTitle: string;
-    jobName: string;
+    jobName?: string;
     jobType: string;
     jobLocation: string;
     jobDescription: string;
     salary: number;
     experienceLevel: string;
+  }
+
+  interface IGetJobDTO {
+    experienceLevel?: string;
+    postedDate?: "anytime" | "oneday" | "week" | "month";
+    sort?: "recent" | "relevant";
+    search?: string;
+    companyName?: string;
+    page?: number;
+    size?: number;
   }
 
   interface ISpaceList {

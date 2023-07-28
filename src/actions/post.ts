@@ -7,6 +7,7 @@ import {
   ICommentOnPostDTO,
   ICreateJobDTO,
   ICreatePostDTO,
+  IGetJobDTO,
   IJobDTO,
   IPostCommentFeed,
   IPostFeed,
@@ -77,11 +78,19 @@ export const getPostFeedAction = asyncThunkWrapper<
 
 export const getJobsAction = asyncThunkWrapper<
   ApiResponseSuccess<IJobDTO[]>,
-  void
->(GET_JOBS, async () => {
-  const response = await axiosClient.get<AxiosResponse<any>>(
-    "/api/job?page=1&limit=1000"
-  );
+  IGetJobDTO | void
+>(GET_JOBS, async (data: any) => {
+  let url = "/api/job?page=1&limit=1000";
+
+  if (data) {
+    Object.keys(data).forEach((key) => {
+      if (!data[key] && data[key].trim() === "") return;
+
+      url += `&${key}=${data[key]}`;
+    });
+  }
+  console.log(url);
+  const response = await axiosClient.get<AxiosResponse<any>>(url);
   return response.data;
 });
 

@@ -87,7 +87,6 @@ const PostJob = () => {
       locationAddress,
       jobExperience,
       salary,
-      jobName,
     };
     const isInComplete = Object.values(payload).some(
       (value) => value.trim() === ""
@@ -105,7 +104,6 @@ const PostJob = () => {
         companyName: payload.companyName,
         companyLocation: locationAddress,
         jobTitle: payload.jobTitle,
-        jobName: payload.jobName,
         jobDescription: payload.jobDescription,
         salary: +payload.salary,
         experienceLevel: payload.jobExperience,
@@ -404,7 +402,7 @@ const PostJob = () => {
   );
 };
 
-const IndustryItem = (props: any) => {
+export const IndustryItem = (props: any) => {
   return (
     <TouchableOpacity
       onPress={() => props.handleOnSelect(props.text)}
@@ -436,7 +434,7 @@ const IndustryItem = (props: any) => {
   );
 };
 
-const JobType = (props: any) => {
+export const JobType = (props: any) => {
   return (
     <TouchableOpacity
       onPress={() => props.onPress(props.text)}
