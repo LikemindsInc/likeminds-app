@@ -15,6 +15,7 @@ import { IPostFeed } from "@app-model";
 import {
   commentOnPostAction,
   getCommentsOnPostAction,
+  getPostFeedAction,
   getPostFeedByIdAction,
   likePostAction,
   unlikePostAction,
@@ -92,6 +93,7 @@ const PostDetail = () => {
       toast.show({ description: "Comment created successfully" });
       dispatch(clearCreateCommentOnPostState());
       dispatch(getCommentsOnPostAction(item.id));
+      dispatch(getPostFeedAction());
     }
   }, [postState.commentOnPostStatus]);
 

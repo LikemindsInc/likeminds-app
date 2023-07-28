@@ -21,6 +21,7 @@ import { Box, Pressable, useColorModeValue } from "native-base";
 import useAppSelector from "../../hooks/useAppSelector";
 import { ISessionState } from "../../reducers/session";
 import { ISettingState } from "../../reducers/settings";
+import StoryFeedList from "../Home/components/StoryFeedList";
 
 const UserProfile = () => {
   const height = useDimension().height;
@@ -40,8 +41,10 @@ const UserProfile = () => {
         <ImageBackground
           resizeMode="cover"
           source={
-            state.userInfo?.profilePicture ||
-            require("../../../assets/image9.png")
+            state.userInfo?.profilePicture &&
+            state.userInfo.profilePicture.trim() !== ""
+              ? { uri: state.userInfo.profilePicture }
+              : require("../../../assets/image9.png")
           }
           style={[
             styles.imageBg,
@@ -129,7 +132,7 @@ const UserProfile = () => {
                 GlobalStyles.textNavyBlue,
               ]}
             >
-              593
+              0
             </Text>
             <Text
               style={[
@@ -153,7 +156,7 @@ const UserProfile = () => {
                 GlobalStyles.textNavyBlue,
               ]}
             >
-              17
+              0
             </Text>
             <Text
               style={[
@@ -177,7 +180,7 @@ const UserProfile = () => {
                 GlobalStyles.textNavyBlue,
               ]}
             >
-              34
+              0
             </Text>
             <Text
               style={[
@@ -196,19 +199,23 @@ const UserProfile = () => {
           <Button containerStyle={{ flex: 1 }} title="Connect" />
           <Button type="cancel" containerStyle={{ flex: 1 }} title="Chat" />
         </View>
-        <TabViewExample />
+        <View style={{ height: 600 }}>
+          <TabViewExample />
+        </View>
       </ScrollView>
     </View>
   );
 };
 
-const FirstRoute = () => (
-  <View style={{ flex: 1, backgroundColor: "#ff4081" }} />
-);
+const FirstRoute = () => <View style={{ flex: 1 }} />;
 
-const SecondRoute = () => (
-  <View style={{ flex: 1, backgroundColor: "#673ab7" }} />
-);
+const SecondRoute = () => {
+  return (
+    <View style={[GlobalStyles.mt20, GlobalStyles.mb20, { flex: 1 }]}>
+      <StoryFeedList />
+    </View>
+  );
+};
 
 const renderScene = SceneMap({
   first: FirstRoute,
@@ -273,13 +280,15 @@ function TabViewExample() {
   };
 
   return (
-    <TabView
-      navigationState={{ index, routes }}
-      renderScene={renderScene}
-      onIndexChange={setIndex}
-      initialLayout={{ width: layout.width }}
-      renderTabBar={renderTabBar}
-    />
+    <View style={{ flex: 1 }}>
+      <TabView
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        initialLayout={{ width: layout.width }}
+        renderTabBar={renderTabBar}
+      />
+    </View>
   );
 }
 
