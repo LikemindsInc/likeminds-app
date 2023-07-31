@@ -64,6 +64,8 @@ import SpaceProfile from "../screens/Spaces/SpaceProfile";
 import PostDetail from "../screens/Home/components/PostDetail";
 import Jobs from "../screens/Job/PostJob/Jobs";
 import Messages from "../screens/Message/Messages";
+import ConnectionProfile from "../screens/Profile/ConnectionProfile";
+import Notification from "../screens/Notification/Notification";
 
 const Stack = createNativeStackNavigator();
 
@@ -423,6 +425,14 @@ const AppRoutes = () => {
       <Stack.Screen
         name={APP_SCREEN_LIST.POST_JOB_SCREEN}
         component={PostJob}
+      />
+      <Stack.Screen
+        name={APP_SCREEN_LIST.CONNECTION_PROFILE_SCREEN}
+        component={ConnectionProfile}
+      />
+      <Stack.Screen
+        name={APP_SCREEN_LIST.NOTIFICATION_SCREEN}
+        component={Notification}
       />
       <Stack.Screen name={APP_SCREEN_LIST.POST_DETAIL} component={PostDetail} />
     </Stack.Navigator>

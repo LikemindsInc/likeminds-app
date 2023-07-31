@@ -70,7 +70,6 @@ const DATA = [
 ];
 
 const StoryFeedList = () => {
-  console.log("alert");
   const dispatch = useAppDispatch();
   const state = useAppSelector((state: any) => state.postReducer) as IPostState;
   const [isRefreshing, setRefresh] = useState(false);

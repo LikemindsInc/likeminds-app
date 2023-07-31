@@ -13,6 +13,7 @@ const Spaces = () => {
   const state = useAppSelector(
     (state: any) => state.spaceReducer
   ) as ISpaceState;
+
   const getSpaceList = useCallback(() => {
     dispatch(getSpaceListAction());
   }, []);

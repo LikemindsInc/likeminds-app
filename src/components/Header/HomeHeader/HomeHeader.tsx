@@ -34,7 +34,10 @@ const HomeHeader = () => {
           resizeMode="contain"
         />
       </View>
-      <TouchableOpacity style={[]}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate(APP_SCREEN_LIST.NOTIFICATION_SCREEN)}
+        style={[]}
+      >
         <MaterialCommunityIcons
           name="bell-ring-outline"
           size={24}

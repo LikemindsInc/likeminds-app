@@ -234,6 +234,12 @@ declare module "@app-model" {
     size?: number;
   }
 
+  interface ISearchDTO {
+    search: string;
+    page?: number;
+    size?: number;
+  }
+
   interface ISpaceList {
     createdAt: string;
     description: string;
@@ -273,6 +279,22 @@ declare module "@app-model" {
     createdAt: string;
     updatedAt: string;
     user: {
+      id: string;
+      firstName: string | null;
+      lastName: string | null;
+      email: string;
+      profilePicture: string | null;
+    };
+  }
+
+  interface IConnectionReceivedDTO {
+    id: string;
+    creatorId: string;
+    receiverId: string;
+    status: string;
+    createdAt: string;
+    updatedAt: string;
+    user?: {
       id: string;
       firstName: string | null;
       lastName: string | null;
