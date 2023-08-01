@@ -89,7 +89,6 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
       toast.show({ description: postState.commentOnPostError });
     } else if (postState.commentOnPostStatus === "completed") {
       setComment("");
-      toast.show({ description: "Comment created successfully" });
       dispatch(clearCreateCommentOnPostState());
     }
   }, [postState.commentOnPostStatus]);

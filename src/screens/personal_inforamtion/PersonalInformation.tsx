@@ -96,7 +96,7 @@ const PersonalInformation = () => {
             GlobalStyles.fontWeight700,
           ]}
         >
-          Personal Information
+          Personal Informations
         </Text>
       </View>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
@@ -107,6 +107,7 @@ const PersonalInformation = () => {
             placeholder="First Name"
             value={firstName}
             autoCorrect={false}
+            inputViewStyle={{ width: "50%" }}
           />
           <Input
             onChangeText={(text) => setLastName(text)}
@@ -114,6 +115,7 @@ const PersonalInformation = () => {
             placeholder="Last Name"
             value={lastName}
             autoCorrect={false}
+            inputViewStyle={{ width: "50%" }}
           />
         </View>
         <View style={[GlobalStyles.mb30]}>

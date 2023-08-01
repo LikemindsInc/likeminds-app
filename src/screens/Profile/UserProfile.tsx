@@ -195,10 +195,10 @@ const UserProfile = () => {
             </Text>
           </View>
         </View>
-        <View style={[GlobalStyles.flewRow, GlobalStyles.mb30, { gap: 20 }]}>
+        {/* <View style={[GlobalStyles.flewRow, GlobalStyles.mb30, { gap: 20 }]}>
           <Button containerStyle={{ flex: 1 }} title="Connect" />
           <Button type="cancel" containerStyle={{ flex: 1 }} title="Chat" />
-        </View>
+        </View> */}
         <View style={{ height: 600 }}>
           <TabViewExample />
         </View>

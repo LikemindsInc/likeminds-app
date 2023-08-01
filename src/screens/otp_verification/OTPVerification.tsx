@@ -22,6 +22,7 @@ import { useToast } from "native-base";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import { verifyOTPActionAction } from "../../actions/auth";
 import { PURGE } from "redux-persist";
+import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
 
 const OTPVerification = () => {
   let otpInput = useRef(null) as React.RefObject<any>;
@@ -107,36 +108,37 @@ const OTPVerification = () => {
   }, [session.otpVerificationStatus]);
 
   return (
-    <View style={[GlobalStyles.container]}>
-      <View style={[styles.container]}>
-        <BackButton title="Verification" iconColor={colors.primary} />
-        <View style={[GlobalStyles.mb40, GlobalStyles.mt30]}>
-          <Text
-            style={[
-              GlobalStyles.fontInterRegular,
-              GlobalStyles.fontSize13,
-              GlobalStyles.fontWeight700,
-              GlobalStyles.textGrey,
-            ]}
-          >
-            Enter the 4 digit verification code sent to your phone number
-          </Text>
-        </View>
-        <View>
-          <OTPTextInput
-            textInputStyle={{
-              borderWidth: 4,
-              borderRadius: 8,
-              backgroundColor: "#F3F5F7",
-              borderColor: "#F3F5F7",
-            }}
-            ref={(e: any) => (otpInput = e)}
-            autoFocus
-            tintColor={colors.primary}
-            handleTextChange={handleTextChange}
-          />
-        </View>
-        {/* <View style={[styles.inputWrapper]}>
+    <KeyboardDismisser style={{ flex: 1 }}>
+      <View style={[GlobalStyles.container]}>
+        <View style={[styles.container]}>
+          <BackButton title="Verification" iconColor={colors.primary} />
+          <View style={[GlobalStyles.mb40, GlobalStyles.mt30]}>
+            <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+                GlobalStyles.fontWeight700,
+                GlobalStyles.textGrey,
+              ]}
+            >
+              Enter the 4 digit verification code sent to your phone number
+            </Text>
+          </View>
+          <View>
+            <OTPTextInput
+              textInputStyle={{
+                borderWidth: 4,
+                borderRadius: 8,
+                backgroundColor: "#F3F5F7",
+                borderColor: "#F3F5F7",
+              }}
+              ref={(e: any) => (otpInput = e)}
+              autoFocus
+              tintColor={colors.primary}
+              handleTextChange={handleTextChange}
+            />
+          </View>
+          {/* <View style={[styles.inputWrapper]}>
           <Input
             textAlign="center"
             onKeyPress={(e) => onKeyPress(e, "input1")}
@@ -166,28 +168,29 @@ const OTPVerification = () => {
             style={styles.input}
           />
         </View> */}
-        <View style={[GlobalStyles.mt20]}>
-          <Text
-            style={[
-              GlobalStyles.textGrey,
-              GlobalStyles.fontSize15,
-              GlobalStyles.fontInterRegular,
-              GlobalStyles.fontWeight400,
-            ]}
-          >
-            Don’t have an account yet?
-          </Text>
+          <View style={[GlobalStyles.mt20]}>
+            <Text
+              style={[
+                GlobalStyles.textGrey,
+                GlobalStyles.fontSize15,
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontWeight400,
+              ]}
+            >
+              Not received code yet?
+            </Text>
+          </View>
+          <View style={[GlobalStyles.mt10]}>
+            <TextLink title="Resend Code" />
+          </View>
         </View>
-        <View style={[GlobalStyles.mt10]}>
-          <TextLink title="Resend Code" />
-        </View>
+        <Button
+          loading={session.otpVerificationStatus === "loading"}
+          title="Verify"
+          onPress={handleOnVerify}
+        />
       </View>
-      <Button
-        loading={session.otpVerificationStatus === "loading"}
-        title="Verify"
-        onPress={handleOnVerify}
-      />
-    </View>
+    </KeyboardDismisser>
   );
 };
 

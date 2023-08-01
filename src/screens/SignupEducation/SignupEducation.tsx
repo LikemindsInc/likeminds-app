@@ -12,6 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import DateFormatter from "../../utils/date-formatter";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import { updateEducation } from "../../reducers/session";
+import BackButton from "../../components/Navigation/BackButton/BackButton";
 
 const SignupEducation = () => {
   const [startDate, setStartDate] = useState("");
@@ -31,16 +32,8 @@ const SignupEducation = () => {
   };
   return (
     <View style={[GlobalStyles.container]}>
-      <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
-        <Text
-          style={[
-            GlobalStyles.fontInterMedium,
-            GlobalStyles.fontSize20,
-            GlobalStyles.fontWeight700,
-          ]}
-        >
-          Education
-        </Text>
+      <View style={{ marginBottom: 20 }}>
+        <BackButton title="Education" />
       </View>
       <View style={[GlobalStyles.mb40]}>
         <Text

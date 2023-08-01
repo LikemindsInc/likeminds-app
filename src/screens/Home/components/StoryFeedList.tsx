@@ -94,23 +94,22 @@ const StoryFeedList = () => {
     }
   }, [state.getPostFeedStatus]);
 
-  // useEffect(() => {
-  //   if (state.createPostStatus === "completed") {
-  //     getPostFeeds();
-  //   }
-  // }, [state.createPostStatus]);
+  useEffect(() => {
+    if (state.createPostStatus === "completed") {
+      getPostFeeds();
+    }
+  }, [state.createPostStatus]);
 
-  // useEffect(() => {
-  //   if (state.getPostFeedStatus === "completed") {
-  //     setRefresh(false);
-  //     getPostFeeds();
-  //   }
-  // }, [state.getPostFeedStatus]);
+  useEffect(() => {
+    if (state.getPostFeedStatus === "completed") {
+      setRefresh(false);
+    }
+  }, [state.getPostFeedStatus]);
 
-  // const handleOnRefres = () => {
-  //   setRefresh(true);
-  //   getPostFeeds();
-  // };
+  const handleOnRefresh = () => {
+    setRefresh(true);
+    getPostFeeds();
+  };
 
   return (
     <FlatList
@@ -118,7 +117,9 @@ const StoryFeedList = () => {
       renderItem={(props) => <StoryFeedItem item={props.item} />}
       data={state.postFeeds}
       keyExtractor={(item) => `${item.id}`}
-      style={{ flex: 1, flexGrow: 1 }}
+      style={{ flexGrow: 1 }}
+      refreshing={isRefreshing}
+      onRefresh={handleOnRefresh}
     />
   );
 };

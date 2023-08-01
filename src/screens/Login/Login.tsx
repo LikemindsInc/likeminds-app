@@ -19,6 +19,7 @@ import { loginUserActionAction } from "../../actions/auth";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { Keyboard } from "react-native";
 import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
+import BackButton from "../../components/Navigation/BackButton/BackButton";
 
 const IconButton: FC<{ image: any }> = ({ image }) => {
   return (
@@ -60,16 +61,8 @@ const Login = () => {
 
   return (
     <View style={[GlobalStyles.container]}>
-      <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
-        <Text
-          style={[
-            GlobalStyles.fontInterMedium,
-            GlobalStyles.fontSize20,
-            GlobalStyles.fontWeight700,
-          ]}
-        >
-          Login
-        </Text>
+      <View style={{ marginBottom: 20 }}>
+        <BackButton title="Login" />
       </View>
       <View style={[GlobalStyles.mb40]}>
         <Text

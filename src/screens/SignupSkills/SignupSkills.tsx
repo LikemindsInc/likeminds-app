@@ -8,21 +8,14 @@ import colors from "../../theme/colors";
 import DatePicker from "../../components/DatePicker/DatePicker";
 import { APP_SCREEN_LIST } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
+import BackButton from "../../components/Navigation/BackButton/BackButton";
 
 const SignupSkills = () => {
   const navigation = useNavigation<any>();
   return (
     <View style={[GlobalStyles.container]}>
-      <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
-        <Text
-          style={[
-            GlobalStyles.fontInterMedium,
-            GlobalStyles.fontSize20,
-            GlobalStyles.fontWeight700,
-          ]}
-        >
-          Skills
-        </Text>
+      <View style={{ marginBottom: 20 }}>
+        <BackButton title="Skills" />
       </View>
       <View style={[GlobalStyles.mb40]}>
         <Text

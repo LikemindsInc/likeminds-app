@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { Text, View, StyleSheet, Image } from "react-native";
+import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import AppIntroSlider from "react-native-app-intro-slider";
 import font from "../../theme/font";
 import { GlobalStyles } from "../../theme/GlobalStyles";
@@ -134,7 +134,7 @@ const OnBoarding = () => {
   };
 
   const DoneButton = () => (
-    <View style={styles.nextButtonStyle}>
+    <TouchableOpacity onPress={handleOnDone} style={styles.nextButtonStyle}>
       <LinearGradient
         style={[GlobalStyles.buttonStyle, styles.getStartedButtonStyle]}
         colors={["#00CDFE", "#009AEE"]}
@@ -154,7 +154,7 @@ const OnBoarding = () => {
           <AntDesign name="arrowright" size={24} color={colors.white} />
         </View>
       </LinearGradient>
-    </View>
+    </TouchableOpacity>
   );
 
   const handleOnDone = () => {

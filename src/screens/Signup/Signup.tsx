@@ -18,7 +18,7 @@ import {
 } from "../../reducers/session";
 import { signupUserActionAction } from "../../actions/auth";
 import { useToast } from "native-base";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import BackButton from "../../components/Navigation/BackButton/BackButton";
 
 const Signup = () => {
   const toast = useToast();
@@ -32,12 +32,41 @@ const Signup = () => {
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [countryCode, setCountryCode] = useState("");
 
   const handleSubmitAccount = () => {
     try {
       //handleSubmitAccount
+      if (email.trim() === "")
+        return toast.show({
+          description: "Email is required",
+          variant: "contained",
+        });
+
+      if (countryCode.startsWith("+000") || countryCode.trim() === "")
+        return toast.show({
+          description: "Phone number is invalid",
+          variant: "contained",
+        });
+
+      if (password.trim() === "")
+        return toast.show({
+          description: "Password is required",
+          variant: "contained",
+        });
+
+      if (password !== confirmPassword)
+        return toast.show({
+          description: "Passwords do not match",
+          variant: "contained",
+        });
       dispatch(
-        signupUserActionAction({ email, password, confirmPassword, phone })
+        signupUserActionAction({
+          email,
+          password,
+          confirmPassword,
+          phone: `${countryCode}${phone}`,
+        })
       );
     } catch (error: any) {
       reportError(error);
@@ -61,16 +90,8 @@ const Signup = () => {
   const navigation = useNavigation<NavigationProp<any>>();
   return (
     <View style={[GlobalStyles.container]}>
-      <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
-        <Text
-          style={[
-            GlobalStyles.fontInterMedium,
-            GlobalStyles.fontSize20,
-            GlobalStyles.fontWeight700,
-          ]}
-        >
-          Create Account
-        </Text>
+      <View style={{ marginBottom: 20 }}>
+        <BackButton title="Create Account" />
       </View>
       <View style={[GlobalStyles.mb40]}>
         <Text
@@ -95,13 +116,15 @@ const Signup = () => {
           returnKeyType="done"
         />
         <Input
-          placeholder="Phone number"
+          placeholder="8163113450"
           autoCorrect={false}
           autoCapitalize={"none"}
           keyboardType="default"
           value={phone}
           onChangeText={(text) => setPhone(text)}
           returnKeyType="done"
+          mode="phone-pad"
+          onCountryCodeSelect={(value) => setCountryCode(value)}
         />
         <Input
           placeholder="Password"

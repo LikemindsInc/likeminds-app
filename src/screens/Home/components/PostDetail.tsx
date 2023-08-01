@@ -90,7 +90,6 @@ const PostDetail = () => {
       toast.show({ description: postState.commentOnPostError });
     } else if (postState.commentOnPostStatus === "completed") {
       setComment("");
-      toast.show({ description: "Comment created successfully" });
       dispatch(clearCreateCommentOnPostState());
       dispatch(getCommentsOnPostAction(item.id));
       dispatch(getPostFeedAction());
