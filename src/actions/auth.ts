@@ -171,15 +171,9 @@ export const completeUserProfileAction = asyncThunkWrapper<
         type: profilePictureFile.assets[0].type,
         name: profilePictureFile.assets[0].fileName,
       });
-      uploadFile(formData)
-        .then((response) => {
-          profileResponseUrl = response.data?.data?.url || "";
-          console.log("profile> ", profileResponseUrl);
-        })
-        .catch((error) => {
-          console.log("error> ", error?.response || error);
-          // reportError(error);
-        });
+      const response = await uploadFile(formData);
+
+      profileResponseUrl = response.data?.data?.url || "";
     }
 
     if (
@@ -198,14 +192,8 @@ export const completeUserProfileAction = asyncThunkWrapper<
         name: certificateFile.assets[0].fileName,
       });
 
-      uploadFile(formData)
-        .then((response) => {
-          certificateFileUrl = response.data?.data?.url || "";
-        })
-        .catch((error) => {
-          console.log("error> ", error?.response || error);
-          // reportError(error);
-        });
+      const response = await uploadFile(formData);
+      certificateFileUrl = response.data?.data?.url || "";
     }
 
     if (resumeFile && resumeFile.assets && resumeFile.assets[0].uri) {
@@ -221,14 +209,17 @@ export const completeUserProfileAction = asyncThunkWrapper<
         name: resumeFile.assets[0].fileName,
       });
 
-      uploadFile(formData)
-        .then((response) => {
-          resumeUrl = response.data?.data?.url || "";
-        })
-        .catch((error) => {
-          // reportError(error);
-          console.log("error> ", error?.response || error);
-        });
+      // uploadFile(formData)
+      //   .then((response) => {
+      //     resumeUrl = response.data?.data?.url || "";
+      //   })
+      //   .catch((error) => {
+      //     // reportError(error);
+      //     console.log("error> ", error?.response || error);
+      //   });
+
+      const response = await uploadFile(formData);
+      resumeUrl = response.data?.data?.url || "";
     }
 
     const response = await axiosClient.patch<AxiosResponse<any>>(

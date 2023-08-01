@@ -15,7 +15,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-
 import {
   MaterialCommunityIcons,
   Ionicons,
@@ -49,7 +48,7 @@ import { PURGE } from "redux-persist";
 import { __ROOT_REDUX_STATE_KEY__ } from "../store/constants";
 import { logoutAction } from "../actions/auth";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { ISettingState } from "../reducers/settings";
+import { ISettingState, logoutUserAction } from "../reducers/settings";
 import ForgotPassword from "../screens/ForgotPassword/ForgotPassword";
 import RecoverWithPhone from "../screens/ForgotEmail/RecoverWithPhone";
 import OTPScreen from "../screens/ForgotEmail/OTPScreen";
@@ -62,8 +61,11 @@ import UserProfile from "../screens/Profile/UserProfile";
 import PostJob from "../screens/Job/PostJob/PostJob";
 import SpaceSearch from "../screens/Spaces/SpaceSearch/SpaceSearch";
 import SpaceProfile from "../screens/Spaces/SpaceProfile";
+import PostDetail from "../screens/Home/components/PostDetail";
 import Jobs from "../screens/Job/PostJob/Jobs";
 import Messages from "../screens/Message/Messages";
+import ConnectionProfile from "../screens/Profile/ConnectionProfile";
+import Notification from "../screens/Notification/Notification";
 
 const Stack = createNativeStackNavigator();
 
@@ -132,7 +134,7 @@ const AppHome = () => {
 
 const Drawer = createDrawerNavigator();
 
-function CustomDrawerContent(props: DrawerContentComponentProps ) {
+function CustomDrawerContent(props: DrawerContentComponentProps) {
   const { height } = useWindowDimensions();
   const width =
     useWindowDimensions().width * 0.5 < DRAWER_WIDTH
@@ -163,7 +165,13 @@ function CustomDrawerContent(props: DrawerContentComponentProps ) {
             />
           </View>
           <View style={[GlobalStyles.mb40]}>
-            <Button type="tertiary" title="Switch To Space" onPress={() => navigation.navigate(APP_SCREEN_LIST.SPACE_PROFILE_SCREEN)} />
+            <Button
+              type="tertiary"
+              title="Switch To Space"
+              onPress={() =>
+                navigation.navigate(APP_SCREEN_LIST.SPACE_PROFILE_SCREEN)
+              }
+            />
           </View>
           <View style={[GlobalStyles.flexOne, GlobalStyles.mt20]}>
             <TouchableOpacity
@@ -263,7 +271,10 @@ function CustomDrawerContent(props: DrawerContentComponentProps ) {
           </View>
           <View style={[{ marginBottom: 110 }]}>
             <Button
-              onPress={() => dispatch(logoutAction())}
+              onPress={() => {
+                dispatch(logoutUserAction());
+                dispatch(logoutAction());
+              }}
               type="tertiary"
               title="Logout"
             />
@@ -415,6 +426,15 @@ const AppRoutes = () => {
         name={APP_SCREEN_LIST.POST_JOB_SCREEN}
         component={PostJob}
       />
+      <Stack.Screen
+        name={APP_SCREEN_LIST.CONNECTION_PROFILE_SCREEN}
+        component={ConnectionProfile}
+      />
+      <Stack.Screen
+        name={APP_SCREEN_LIST.NOTIFICATION_SCREEN}
+        component={Notification}
+      />
+      <Stack.Screen name={APP_SCREEN_LIST.POST_DETAIL} component={PostDetail} />
     </Stack.Navigator>
   );
 };

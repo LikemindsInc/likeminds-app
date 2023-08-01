@@ -21,13 +21,13 @@ import errorReducer from "../reducers/errorHanlder";
 import settingReducer from "../reducers/settings";
 import spaceReducer from "../reducers/space_reducer";
 import postReducer from "../reducers/post_reducer";
+import connectionReducer from "../reducers/connection";
 
 const rootPersistConfig = {
   storage: AsyncStorage,
-  timeout: 10000,
-  version: CACHE_VERSION,
   key: __ROOT_REDUX_STATE_KEY__,
-  stateReconciler: autoMergeLevel2,
+  // stateReconciler: autoMergeLevel2,
+  whitelist: ["settingReducer"],
   blacklist: ["errorReducer", "sessionReducer"], // only settings and other state stores will be persisted
 };
 
@@ -47,6 +47,7 @@ const persistedReducer = persistReducer(
     settingReducer,
     spaceReducer,
     postReducer,
+    connectionReducer,
   })
 );
 // create the saga middleware

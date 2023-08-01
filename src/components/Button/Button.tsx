@@ -23,7 +23,7 @@ interface IButtonProps extends ButtonProps {
 const Button: FC<IButtonProps> = (props) => {
   if (props.type === "tertiary") {
     return (
-      <View>
+      <View style={props.containerStyle ? props.containerStyle : {}}>
         {props.disabled ? (
           <View
             style={[
@@ -80,7 +80,7 @@ const Button: FC<IButtonProps> = (props) => {
   }
   if (props.type === "outline-primary") {
     return (
-      <View>
+      <View style={props.containerStyle ? props.containerStyle : {}}>
         {props.disabled ? (
           <View
             style={[

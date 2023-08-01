@@ -77,13 +77,16 @@ export default function App() {
   });
 
   return (
-    <KeyboardDismisser>
-      <SafeAreaView style={GlobalStyles.container} onLayout={onLayoutRootView}>
-        <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <KeyboardDismisser>
+        <SafeAreaView
+          style={GlobalStyles.container}
+          onLayout={onLayoutRootView}
+        >
           <NativeBaseProvider theme={theme}>
             <Provider>
               <ToastProvider
-                placement="bottom"
+                placement="top"
                 animationType="slide-in"
                 offsetBottom={100}
                 swipeEnabled={true}
@@ -96,9 +99,9 @@ export default function App() {
               </ToastProvider>
             </Provider>
           </NativeBaseProvider>
-        </GestureHandlerRootView>
-      </SafeAreaView>
-    </KeyboardDismisser>
+        </SafeAreaView>
+      </KeyboardDismisser>
+    </GestureHandlerRootView>
   );
 }
 

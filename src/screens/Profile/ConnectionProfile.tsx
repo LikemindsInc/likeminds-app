@@ -15,21 +15,102 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native";
 import Button from "../../components/Button/Button";
 import { TabView, SceneMap } from "react-native-tab-view";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { StatusBar } from "react-native";
 import { Box, Pressable, useColorModeValue } from "native-base";
 import useAppSelector from "../../hooks/useAppSelector";
 import { ISessionState } from "../../reducers/session";
 import { ISettingState } from "../../reducers/settings";
 import StoryFeedList from "../Home/components/StoryFeedList";
+import useAppDispatch from "../../hooks/useAppDispatch";
+import {
+  getRequestConnectionStatus,
+  getSingleUserAction,
+  requestConnection,
+} from "../../actions/connection";
+import { useToast } from "react-native-toast-notifications";
+import { clearRequestConnection } from "../../reducers/connection";
 
-const UserProfile = () => {
+const ConnectionProfile = () => {
   const height = useDimension().height;
   const navigation = useNavigation<NavigationProp<any>>();
+
+  const dispatch = useAppDispatch();
 
   const state = useAppSelector(
     (state: any) => state.settingReducer
   ) as ISettingState;
+
+  const selector = useAppSelector((state) => state.connectionReducer);
+
+  const toast = useToast();
+
+  useEffect(() => {
+    if (selector.requestConnectionStatus === "completed") {
+      toast.show("Connection sent successfully", {
+        placement: "top",
+        type: "success",
+        animationType: "slide-in",
+      });
+      getStatus();
+    }
+
+    dispatch(clearRequestConnection());
+  }, [selector.requestConnectionStatus]);
+
+  const getStatus = useCallback(() => {
+    if (!selector.profile?.id) return;
+    dispatch(getRequestConnectionStatus(selector.profile?.id as string));
+  }, [selector.profile?.id]);
+
+  const getUserProfile = useCallback(() => {
+    dispatch(getSingleUserAction(selector.profileId));
+  }, [selector.profileId]);
+
+  useEffect(() => {
+    getStatus();
+    getUserProfile();
+  }, [getStatus]);
+
+  const handleConnectToUser = () => {
+    dispatch(requestConnection(selector.profile?.id as string));
+  };
+
+  const getButtonType = () => {
+    if (!selector.connectionStatus) return "primary";
+
+    switch (selector.connectionStatus) {
+      case "approved":
+        return "outline-primary";
+      case "pending":
+        return "tertiary";
+      default:
+        return "primary";
+    }
+  };
+
+  const requestButtonDisabled = () => {
+    if (selector.requestConnectionStatus === "loading") return true;
+
+    if (selector.connectionStatus && selector.connectionStatus === "pending")
+      return true;
+
+    return false;
+  };
+
+  const getText = () => {
+    if (!selector.connectionStatus) return "Connect";
+
+    switch (selector.connectionStatus) {
+      case "approved":
+        return "Following";
+      case "pending":
+        return "Pending";
+      default:
+        return "Connect";
+    }
+  };
+
   return (
     <View
       style={[
@@ -41,9 +122,9 @@ const UserProfile = () => {
         <ImageBackground
           resizeMode="cover"
           source={
-            state.userInfo?.profilePicture &&
-            state.userInfo.profilePicture.trim() !== ""
-              ? { uri: state.userInfo.profilePicture }
+            selector.profile?.profilePicture &&
+            selector.profile.profilePicture.trim() !== ""
+              ? { uri: selector.profile.profilePicture }
               : require("../../../assets/image9.png")
           }
           style={[
@@ -76,8 +157,8 @@ const UserProfile = () => {
                 GlobalStyles.textNavyBlue,
               ]}
             >
-              {state.userInfo?.firstName || "John"}{" "}
-              {state.userInfo?.lastName || "Doe"}
+              {selector.profile?.firstName || "John"}{" "}
+              {selector.profile?.lastName || "Doe"}
             </Text>
           </View>
           <TouchableOpacity>
@@ -94,7 +175,7 @@ const UserProfile = () => {
               GlobalStyles.mb10,
             ]}
           >
-            {state.userInfo?.bio}
+            {selector.profile?.bio}
           </Text>
           <Text
             style={[
@@ -105,9 +186,9 @@ const UserProfile = () => {
               GlobalStyles.mb10,
             ]}
           >
-            From {state.userInfo?.city || "Lagos"},{" "}
-            {state.userInfo?.country || "Nigeria"}. Lives in{" "}
-            {state.userInfo?.countryOfOrigin || "Nigeria"}.
+            From {selector.profile?.city || "Lagos"},{" "}
+            {selector.profile?.country || "Nigeria"}. Lives in{" "}
+            {selector.profile?.countryOfOrigin || "Nigeria"}.
           </Text>
           <Text
             style={[
@@ -118,7 +199,7 @@ const UserProfile = () => {
               GlobalStyles.mb10,
             ]}
           >
-            {state.userInfo?.bio}
+            {selector.profile?.bio}
           </Text>
         </View>
         <View style={[GlobalStyles.flewRow, GlobalStyles.mb30, { gap: 20 }]}>
@@ -196,7 +277,14 @@ const UserProfile = () => {
           </View>
         </View>
         <View style={[GlobalStyles.flewRow, GlobalStyles.mb30, { gap: 20 }]}>
-          <Button containerStyle={{ flex: 1 }} title="Connect" />
+          <Button
+            loading={selector.requestConnectionStatus === "loading"}
+            disabled={requestButtonDisabled()}
+            onPress={handleConnectToUser}
+            containerStyle={{ flex: 1 }}
+            type={getButtonType()}
+            title={getText()}
+          />
           <Button type="cancel" containerStyle={{ flex: 1 }} title="Chat" />
         </View>
         <View style={{ height: 600 }}>
@@ -331,4 +419,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserProfile;
+export default ConnectionProfile;

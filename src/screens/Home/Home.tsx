@@ -5,6 +5,10 @@ import LiveFeedList from "./components/LiveFeedList";
 import IntroList from "./components/IntroList";
 import StoryFeedList from "./components/StoryFeedList";
 import useDimension from "../../hooks/useDimension";
+import useAppDispatch from "../../hooks/useAppDispatch";
+import { getPostFeedAction } from "../../actions/post";
+import { useCallback, useEffect, useState } from "react";
+import useAppSelector from "../../hooks/useAppSelector";
 
 const DATA: { type: "LIVE_FEED" | "INTRO_FEED" | "STORY_FEED"; data: any[] }[] =
   [
@@ -131,6 +135,25 @@ const Home = () => {
         );
     }
   };
+  const dispatch = useAppDispatch();
+
+  const state = useAppSelector((state) => state.postReducer);
+
+  // useEffect(() => {
+  //   if (state.getPostFeedStatus === "completed") {
+  //     setRefresh(false);
+  //     getPostFeeds();
+  //   }
+  // }, [state.getPostFeedStatus]);
+
+  // const [isRefreshing, setRefresh] = useState(false);
+  // const getPostFeeds = useCallback(() => {
+  //   dispatch(getPostFeedAction());
+  // }, []);
+  // const handleOnRefresh = () => {
+  //   setRefresh(true);
+  //   getPostFeeds();
+  // };
   return (
     <View style={[GlobalStyles.flexOne]}>
       <HomeHeader />

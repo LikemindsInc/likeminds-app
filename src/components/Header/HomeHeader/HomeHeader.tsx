@@ -8,8 +8,16 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import { APP_SCREEN_LIST } from "../../../constants";
+import useAppSelector from "../../../hooks/useAppSelector";
 
 const HomeHeader = () => {
+  const state = useAppSelector((state) => state.settingReducer);
+  const renderProfilePicture = () => {
+    if (state.userInfo?.profilePicture) {
+      return { uri: state.userInfo.profilePicture };
+    }
+    return require("../../../../assets/image3.png");
+  };
   const navigation = useNavigation<DrawerNavigationProp<any>>();
   return (
     <View style={[GlobalStyles.header]}>
@@ -26,7 +34,10 @@ const HomeHeader = () => {
           resizeMode="contain"
         />
       </View>
-      <TouchableOpacity style={[]}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate(APP_SCREEN_LIST.NOTIFICATION_SCREEN)}
+        style={[]}
+      >
         <MaterialCommunityIcons
           name="bell-ring-outline"
           size={24}
@@ -39,7 +50,7 @@ const HomeHeader = () => {
         style={[{ paddingLeft: 30 }]}
       >
         <Image
-          source={require("../../../../assets/image3.png")}
+          source={renderProfilePicture()}
           style={{ width: 30, height: 30, borderRadius: 15 }}
           resizeMethod="auto"
           resizeMode="cover"

@@ -2,6 +2,7 @@ import {
   Animated,
   Pressable,
   StyleSheet,
+  TextInput,
   TouchableOpacity,
   View,
   useWindowDimensions,
@@ -11,23 +12,57 @@ import Input from "../../../components/Input/Input";
 import { Feather, AntDesign } from "@expo/vector-icons";
 import colors from "../../../theme/colors";
 import { TabView, SceneMap } from "react-native-tab-view";
-import { useState } from "react";
+import {
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Box, useColorModeValue } from "native-base";
 import { StatusBar } from "react-native";
 import Spaces from "./Spaces/Spaces";
 import PeopleList from "./PeopleList/PeopleList";
+import _ from "underscore";
+import Util from "../../../utils";
+import useAppDispatch from "../../../hooks/useAppDispatch";
+import useAppSelector from "../../../hooks/useAppSelector";
+import { getUsers } from "../../../actions/connection";
+import { clearSearchedUsers } from "../../../reducers/connection";
 
 const SpaceSearch = () => {
+  const ref = useRef<TextInput>(null) as MutableRefObject<TextInput>;
+
+  const [searchText, setSearchText] = useState("");
+
+  const dispatch = useAppDispatch();
+
+  const handleTextChange = Util.debounce((text) => {
+    // Do other processing with the debounced value here
+
+    if (searchText.trim() === "") return dispatch(clearSearchedUsers());
+
+    dispatch(getUsers({ search: searchText, page: 1, size: 10000 }));
+  }, 300);
+
+  useEffect(() => {
+    handleTextChange();
+  }, [searchText]);
+
   return (
     <View style={[GlobalStyles.container]}>
       <View style={[GlobalStyles.flewRow]}>
         <View style={[GlobalStyles.flexOne]}>
           <Input
+            inputRef={ref}
             contentContainerStyle={{ marginBottom: 0 }}
             prefixIcon={
               <AntDesign name="search1" size={24} color={colors.primary} />
             }
             placeholder="search"
+            value={searchText}
+            onChangeText={(value) => setSearchText(value)}
           />
         </View>
         <TouchableOpacity style={styles.searchButton}>
@@ -84,7 +119,6 @@ function SpacePeopleTabView() {
             >
               <Pressable
                 onPress={() => {
-                  console.log(i);
                   setIndex(i);
                 }}
               >

@@ -27,21 +27,12 @@ const initialState: ISettingState = {
 const settingSlice = createSlice({
   name: "settings",
   initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder.addCase(PURGE, (state) => {
-      state.countries = [];
+  reducers: {
+    logoutUserAction(state) {
       state.userInfo = null;
-      state.getCountriesStatus = "idle";
-      state.getCountriesSuccess = "";
-      state.getCountriesError = "";
-    });
-    builder.addCase(REHYDRATE, (state) => {
-      state.countries = [];
-      state.getCountriesStatus = "idle";
-      state.getCountriesSuccess = "";
-      state.getCountriesError = "";
-    });
+    },
+  },
+  extraReducers: (builder) => {
     builder.addCase(getCountriesAction.pending, (state) => {
       state.getCountriesStatus = "loading";
     });
@@ -67,6 +58,6 @@ const settingSlice = createSlice({
   },
 });
 
-export const {} = settingSlice.actions;
+export const { logoutUserAction } = settingSlice.actions;
 
 export default settingSlice.reducer;

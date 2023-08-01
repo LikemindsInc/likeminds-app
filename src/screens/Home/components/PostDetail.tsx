@@ -1,46 +1,48 @@
-import { IFlatListProps } from "native-base/lib/typescript/components/basic/FlatList";
 import { FC, useCallback, useEffect, useState } from "react";
 import {
   Image,
   KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   Text,
+  TextStyle,
   TouchableOpacity,
   View,
 } from "react-native";
-import colors from "../../theme/colors";
-import { GlobalStyles } from "../../theme/GlobalStyles";
 import { Feather, AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
-import { IPostCommentFeed, IPostFeed } from "@app-model";
-import useAppSelector from "../../hooks/useAppSelector";
-import { ISettingState } from "../../reducers/settings";
-import {
-  IPostState,
-  clearCreateCommentOnPostState,
-  savePostDetail,
-} from "../../reducers/post_reducer";
-import useAppDispatch from "../../hooks/useAppDispatch";
+import { IPostFeed } from "@app-model";
+
 import {
   commentOnPostAction,
   getCommentsOnPostAction,
   getPostFeedAction,
+  getPostFeedByIdAction,
   likePostAction,
   unlikePostAction,
-} from "../../actions/post";
+} from "../../../actions/post";
 import ReadMore from "react-native-read-more-text";
-import Input from "../Input/Input";
 import { Spinner, useToast } from "native-base";
 import { ScrollView } from "react-native-gesture-handler";
+import {
+  IPostState,
+  clearCreateCommentOnPostState,
+} from "../../../reducers/post_reducer";
+import Input from "../../../components/Input/Input";
+import useAppDispatch from "../../../hooks/useAppDispatch";
+import { ISettingState } from "../../../reducers/settings";
+import useAppSelector from "../../../hooks/useAppSelector";
+import { GlobalStyles } from "../../../theme/GlobalStyles";
+import colors from "../../../theme/colors";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { APP_SCREEN_LIST } from "../../constants";
+import CommentRowItem from "./CommentRowItem";
 import FbGrid from "react-native-fb-image-grid";
-import ReactionIcon from "../ReactionIcon/ReactionIcon";
-
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import ReactionIcon from "../../../components/ReactionIcon/ReactionIcon";
 interface IProps {
   item: IPostFeed;
 }
 
-const StoryFeedItem: FC<IProps> = ({ item }) => {
+const PostDetail = () => {
   const state = useAppSelector(
     (state: any) => state.settingReducer
   ) as ISettingState;
@@ -55,9 +57,11 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
     (state: any) => state.postReducer
   ) as IPostState;
 
+  const item = postState.postDetail as IPostFeed;
+
   const [isPostLiked, setLiked] = useState(false);
 
-  const [showComments, setShowComments] = useState(false);
+  const [showComments, setShowComments] = useState(true);
 
   const isPostLikedByUser = useCallback(() => {
     const isLiked = item.likedBy.includes(state?.userInfo?.id as string);
@@ -65,20 +69,17 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
     setLiked(isLiked);
   }, [postState.postDetail]);
 
+  const onPress = (url: any, index: any, event: any) => {
+    // url and index of the image you have clicked alongwith onPress event.
+    console.log("url> ", url);
+    console.log("index> ", index);
+  };
+
   const toast = useToast();
 
   useEffect(() => {
     isPostLikedByUser();
   }, [isPostLikedByUser]);
-
-  useEffect(() => {
-    if (
-      postState.likePostStatus === "completed" ||
-      postState.unlikePostStatus === "completed"
-    ) {
-      dispatch(getPostFeedAction());
-    }
-  }, [postState.likePostStatus, postState.unlikePostStatus]);
 
   useEffect(() => {
     if (showComments) dispatch(getCommentsOnPostAction(item.id));
@@ -91,8 +92,19 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
       setComment("");
       toast.show({ description: "Comment created successfully" });
       dispatch(clearCreateCommentOnPostState());
+      dispatch(getCommentsOnPostAction(item.id));
+      dispatch(getPostFeedAction());
     }
   }, [postState.commentOnPostStatus]);
+
+  useEffect(() => {
+    if (
+      postState.likePostStatus === "completed" ||
+      postState.unlikePostStatus === "completed"
+    ) {
+      dispatch(getPostFeedByIdAction(item.id));
+    }
+  }, [postState.likePostStatus, postState.unlikePostStatus]);
 
   useEffect(() => {
     if (postState.getCommentOnPostStatus === "failed") {
@@ -102,18 +114,16 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
 
   const handleLikeReactionOnPost = () => {
     if (isPostLiked) {
+      console.log("unliking a post");
       dispatch(unlikePostAction(item.id));
-      setLiked(false);
+      // setLiked(false);
     } else {
       dispatch(likePostAction(item.id));
-      setLiked(true);
+      // setLiked(true);
     }
   };
 
-  const handleLoadComments = () => {
-    dispatch(savePostDetail(item));
-    navigation.navigate(APP_SCREEN_LIST.POST_DETAIL);
-  };
+  const handleLoadComments = () => {};
 
   const _renderTruncatedFooter = (handlePress: any) => {
     return (
@@ -147,67 +157,13 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
     );
   };
 
-  const renderCommentRowItem = (item: IPostCommentFeed) => {
-    return (
-      <View style={[GlobalStyles.mb5, { flexDirection: "row", gap: 12 }]}>
-        <View style={[styles.storyHeader]}>
-          <TouchableOpacity
-            style={{ flexDirection: "row", alignItems: "center" }}
-          >
-            <View>
-              <Image
-                source={
-                  item.user?.profilePicture
-                    ? { uri: item.user.profilePicture }
-                    : require("../../../assets/image3.png")
-                }
-                style={{ width: 30, height: 30, borderRadius: 15 }}
-              />
-            </View>
-            <Text
-              style={[
-                GlobalStyles.fontInterMedium,
-                GlobalStyles.textNavyBlue,
-                GlobalStyles.fontSize13,
-                GlobalStyles.fontWeight700,
-                GlobalStyles.pl4,
-              ]}
-            >
-              {item?.user?.firstName} {item?.user?.firstName}
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={[{ flex: 1 }]}>
-          <ReadMore
-            numberOfLines={1}
-            renderRevealedFooter={_renderRevealedFooter}
-            renderTruncatedFooter={_renderTruncatedFooter}
-          >
-            <Text
-              style={[
-                GlobalStyles.fontInterRegular,
-                GlobalStyles.fontSize10,
-                GlobalStyles.fontWeight400,
-              ]}
-            >
-              {item.comment}
-            </Text>
-          </ReadMore>
-        </View>
-        <View>
-          <AntDesign name={"hearto"} size={14} color={colors.navyBlue} />
-        </View>
-      </View>
-    );
-  };
-
   const handlePostComment = () => {
     if (comment.trim() === "") return;
 
     dispatch(commentOnPostAction({ postId: item.id, comment }));
   };
 
-  const renderSendButton = () => {
+  const renderSendButton = (styles?: TextStyle) => {
     return (
       <TouchableOpacity onPress={handlePostComment}>
         <Text
@@ -216,6 +172,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
             GlobalStyles.fontWeight700,
             GlobalStyles.fontSize13,
             GlobalStyles.textPrimary,
+            styles,
           ]}
         >
           SEND
@@ -229,7 +186,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
 
     return (
       <View style={styles.commentWrapper}>
-        <View style={[GlobalStyles.flewRow, GlobalStyles.mb10]}>
+        <View style={[GlobalStyles.flewRow, GlobalStyles.mb20]}>
           <Text
             style={[
               GlobalStyles.fontInterMedium,
@@ -249,35 +206,31 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
             )}
           </View>
         </View>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={{ flex: 1, paddingBottom: 20 }}
-        >
+        <View style={{ flex: 1, paddingBottom: 20 }}>
           {postState.postComments.map((comment) => (
-            <View key={comment.id}>{renderCommentRowItem(comment)}</View>
+            <CommentRowItem key={comment.id} item={comment} />
           ))}
-        </ScrollView>
-        <Input
-          inputViewStyle={styles.commentInputViewStyle}
-          placeholder="Comment"
-          multiline
-          suffixElement={renderSendButton()}
-          onChangeText={(value) => setComment(value)}
-          value={comment}
-        />
+        </View>
       </View>
     );
   };
 
-  const onPress = (url: any, index: any, event: any) => {
-    // url and index of the image you have clicked alongwith onPress event.
-    console.log("url> ", url);
-    console.log("index> ", index);
-  };
-
   return (
-    <KeyboardAvoidingView behavior="position">
-      <View style={styles.container}>
+    <KeyboardAwareScrollView
+      style={{ flexGrow: 1 }}
+      // behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardShouldPersistTaps={"always"}
+    >
+      <ScrollView
+        style={[GlobalStyles.container, { flex: 1 }]}
+        contentContainerStyle={[{ flexGrow: 1 }]}
+      >
+        <TouchableOpacity
+          style={[GlobalStyles.mb20]}
+          onPress={() => navigation.goBack()}
+        >
+          <AntDesign name="arrowleft" size={24} color={colors.primary} />
+        </TouchableOpacity>
         <View>
           <View style={styles.storyHeader}>
             <TouchableOpacity
@@ -288,7 +241,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
                   source={
                     item.user?.profilePicture
                       ? { uri: item.user.profilePicture }
-                      : require("../../../assets/image3.png")
+                      : require("../../../../assets/image3.png")
                   }
                   style={{ width: 40, height: 40, borderRadius: 20 }}
                 />
@@ -309,25 +262,6 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
               <Feather name="more-horizontal" size={24} color={colors.grey} />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={handleLoadComments} style={{}}>
-            <ReadMore
-              renderTruncatedFooter={_renderTruncatedFooter}
-              renderRevealedFooter={_renderRevealedFooter}
-              numberOfLines={3}
-            >
-              <Text
-                style={[
-                  GlobalStyles.fontInterRegular,
-                  GlobalStyles.fontSize13,
-                  GlobalStyles.fontWeight400,
-                ]}
-              >
-                {item.content}
-              </Text>
-            </ReadMore>
-
-            {renderComments()}
-          </TouchableOpacity>
           <View style={{ width: "100%", height: 300 }}>
             {item.images && item.images.length > 0 ? (
               // <Image
@@ -339,7 +273,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
               <FbGrid images={item.images} onPress={onPress} />
             ) : (
               <Image
-                source={require("../../../assets/image8.png")}
+                source={require("../../../../assets/image8.png")}
                 style={styles.image}
                 resizeMethod="auto"
                 resizeMode="cover"
@@ -393,7 +327,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
               { gap: 20, justifyContent: "flex-end", flex: 1 },
             ]}
           >
-            <TouchableOpacity onPress={handleLoadComments}>
+            <TouchableOpacity>
               <MaterialCommunityIcons
                 name="message-processing-outline"
                 size={24}
@@ -401,8 +335,8 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
               />
             </TouchableOpacity>
             <ReactionIcon
-              isLiked={isPostLiked}
               post={item}
+              isLiked={isPostLiked}
               handleLikeReactionOnPost={handleLikeReactionOnPost}
               handleOnReactionActivate={() => {}}
             />
@@ -418,14 +352,51 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
             </TouchableOpacity> */}
           </View>
         </View>
+        <TouchableOpacity onPress={handleLoadComments} style={{}}>
+          <ReadMore
+            renderTruncatedFooter={_renderTruncatedFooter}
+            renderRevealedFooter={_renderRevealedFooter}
+            numberOfLines={3}
+          >
+            <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+                GlobalStyles.fontWeight400,
+              ]}
+            >
+              {item.content}
+            </Text>
+          </ReadMore>
+        </TouchableOpacity>
+        <View style={{ paddingBottom: 200 }}>{renderComments()}</View>
+      </ScrollView>
+      <View style={styles.bottomInputStyle}>
+        <Input
+          inputViewStyle={styles.commentInputViewStyle}
+          placeholder="Comment"
+          multiline
+          suffixElement={renderSendButton()}
+          onChangeText={(value) => setComment(value)}
+          value={comment}
+          autoCorrect={false}
+          keyboardType="default"
+          returnKeyType="done"
+        />
       </View>
-    </KeyboardAvoidingView>
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   commentInputViewStyle: {
     height: 44,
+  },
+  bottomInputStyle: {
+    backgroundColor: colors.white,
+    paddingHorizontal: 25,
+    paddingTop: 16,
+    justifyContent: "center",
   },
   commentWrapper: {
     borderTopWidth: StyleSheet.hairlineWidth,
@@ -447,6 +418,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 300,
   },
+  contentContainer: {
+    flexGrow: 1,
+  },
 });
 
-export default StoryFeedItem;
+export default PostDetail;

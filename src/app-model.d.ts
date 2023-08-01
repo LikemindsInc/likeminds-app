@@ -42,6 +42,12 @@ declare module "@app-model" {
     password: string;
   }
 
+  interface IReactionToPostDTO {
+    postId: string;
+
+    reaction: string;
+  }
+
   interface IProfileInformation {
     firstName: string;
     lastName: string;
@@ -183,18 +189,55 @@ declare module "@app-model" {
     };
   }
 
+  interface IPostCommentFeed {
+    id: string;
+    comment: string;
+    postId: string;
+    commentId: string | null;
+    commentCount: number;
+    reactionCount: number;
+    authorId: string;
+    createdAt: string;
+    updatedAt: string;
+    commentCount: number;
+    reactionCount: number;
+    user: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      profilePicture: string | null;
+    };
+  }
+
   interface ICreateJobDTO {
     industry: string;
     companyName: string;
     companyDescription: string;
     companyLocation: string;
     jobTitle: string;
-    jobName: string;
+    jobName?: string;
     jobType: string;
     jobLocation: string;
     jobDescription: string;
     salary: number;
     experienceLevel: string;
+  }
+
+  interface IGetJobDTO {
+    experienceLevel?: string;
+    postedDate?: "anytime" | "oneday" | "week" | "month";
+    sort?: "recent" | "relevant";
+    search?: string;
+    companyName?: string;
+    page?: number;
+    size?: number;
+  }
+
+  interface ISearchDTO {
+    search: string;
+    page?: number;
+    size?: number;
   }
 
   interface ISpaceList {
@@ -207,5 +250,56 @@ declare module "@app-model" {
     title: string;
     updatedAt: string;
     userId: string;
+  }
+
+  interface ICommentOnPostDTO {
+    postId: string;
+    comment: string;
+  }
+
+  interface ICommentOnCommentDTO {
+    postId: string;
+    commentId: string;
+    comment: string;
+  }
+
+  interface IJobDTO {
+    id: string;
+    creatorId: string;
+    industry: string;
+    companyName: string;
+    companyDescription: string;
+    companyLocation: string;
+    jobTitle: string;
+    jobDescription: string;
+    jobType: string;
+    jobLocation: string;
+    salary: number;
+    experienceLevel: string;
+    createdAt: string;
+    updatedAt: string;
+    user: {
+      id: string;
+      firstName: string | null;
+      lastName: string | null;
+      email: string;
+      profilePicture: string | null;
+    };
+  }
+
+  interface IConnectionReceivedDTO {
+    id: string;
+    creatorId: string;
+    receiverId: string;
+    status: string;
+    createdAt: string;
+    updatedAt: string;
+    user?: {
+      id: string;
+      firstName: string | null;
+      lastName: string | null;
+      email: string;
+      profilePicture: string | null;
+    };
   }
 }

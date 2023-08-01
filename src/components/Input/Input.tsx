@@ -3,6 +3,7 @@ import {
   StyleSheet,
   TextInput,
   TextInputProps,
+  TextStyle,
   TouchableWithoutFeedback,
   View,
   ViewStyle,
@@ -20,8 +21,10 @@ export interface ITextInputProps extends TextInputProps {
   showUpdateButton?: boolean;
   onUpdate?: () => void;
   onPress?: () => void;
-  inputStyle?: ViewStyle;
+  inputStyle?: ViewStyle | TextStyle;
+  inputViewStyle?: ViewStyle;
   prefixIcon?: JSX.Element;
+  suffixElement?: JSX.Element;
 }
 
 const Input: FC<ITextInputProps> = (props) => {
@@ -31,6 +34,7 @@ const Input: FC<ITextInputProps> = (props) => {
         styles.input,
         { flexDirection: "row", width: "100%", alignItems: "center" },
         props.contentContainerStyle,
+        props.inputViewStyle,
       ]}
       onPress={props.onPress}
     >
@@ -41,8 +45,9 @@ const Input: FC<ITextInputProps> = (props) => {
         returnKeyType="done"
         {...props}
         ref={props.inputRef}
-        style={[{ width: "100%" }, GlobalStyles.inputStyle, props.inputStyle]}
+        style={[{ flex: 1 }, GlobalStyles.inputStyle, props.inputStyle]}
       />
+      {props.suffixElement && props.suffixElement}
     </TouchableOpacity>
   );
 };
