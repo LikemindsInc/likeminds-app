@@ -122,11 +122,12 @@ const Home = () => {
       case "LIVE_FEED":
         return <LiveFeedList />;
       case "INTRO_FEED":
-        return (
-          <View style={[GlobalStyles.mt20, GlobalStyles.mb20]}>
-            <IntroList />
-          </View>
-        );
+        return null;
+      // return (
+      //   <View style={[GlobalStyles.mt20, GlobalStyles.mb20]}>
+      //     <IntroList />
+      //   </View>
+      // );
       case "STORY_FEED":
         return (
           <View style={[GlobalStyles.mt20, GlobalStyles.mb20, { flex: 1 }]}>
@@ -158,12 +159,7 @@ const Home = () => {
     <View style={[GlobalStyles.flexOne]}>
       <HomeHeader />
       <View style={[GlobalStyles.container, { marginRight: 0, flex: 1 }]}>
-        <FlatList
-          style={{ flex: 1 }}
-          showsVerticalScrollIndicator={false}
-          data={DATA}
-          renderItem={renderItems}
-        />
+        {DATA.map((item) => renderItems({ item }))}
       </View>
     </View>
   );

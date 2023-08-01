@@ -11,6 +11,7 @@ import { requestOTPEmailAction } from "../../actions/auth";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
 import { ISessionState, storeOTPChannelValue } from "../../reducers/session";
+import BackButton from "../../components/Navigation/BackButton/BackButton";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -42,17 +43,8 @@ const ForgotPassword = () => {
   return (
     <View style={[GlobalStyles.container]}>
       <View style={styles.container}>
-        <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
-          <Text
-            style={[
-              GlobalStyles.fontInterMedium,
-              GlobalStyles.fontSize20,
-              GlobalStyles.fontWeight700,
-              { lineHeight: 30 },
-            ]}
-          >
-            Forgot Password
-          </Text>
+        <View style={{ marginBottom: 20 }}>
+          <BackButton title="Fogort Password" />
         </View>
         <View style={[GlobalStyles.mb40]}>
           <Text

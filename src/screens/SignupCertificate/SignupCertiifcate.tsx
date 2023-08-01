@@ -16,6 +16,7 @@ import { ISessionState, updateCertificate } from "../../reducers/session";
 import useAppSelector from "../../hooks/useAppSelector";
 import { completeUserProfileAction } from "../../actions/auth";
 import { useToast } from "native-base";
+import BackButton from "../../components/Navigation/BackButton/BackButton";
 
 const SignupCertificate = () => {
   const navigation = useNavigation<any>();
@@ -59,16 +60,8 @@ const SignupCertificate = () => {
 
   return (
     <View style={[GlobalStyles.container]}>
-      <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
-        <Text
-          style={[
-            GlobalStyles.fontInterMedium,
-            GlobalStyles.fontSize20,
-            GlobalStyles.fontWeight700,
-          ]}
-        >
-          Certificate
-        </Text>
+      <View style={{ marginBottom: 20 }}>
+        <BackButton title="Certificate" />
       </View>
       <View style={[GlobalStyles.mb40]}>
         <Text

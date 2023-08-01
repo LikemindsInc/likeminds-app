@@ -11,6 +11,7 @@ import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
 import { ISessionState, storeOTPChannelValue } from "../../reducers/session";
 import { requestOTPPhoneAction } from "../../actions/auth";
+import BackButton from "../../components/Navigation/BackButton/BackButton";
 
 const RecoverWithPhone = () => {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -42,17 +43,8 @@ const RecoverWithPhone = () => {
   return (
     <View style={[GlobalStyles.container]}>
       <View style={styles.container}>
-        <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
-          <Text
-            style={[
-              GlobalStyles.fontInterMedium,
-              GlobalStyles.fontSize20,
-              GlobalStyles.fontWeight700,
-              { lineHeight: 30 },
-            ]}
-          >
-            Forgot Password
-          </Text>
+        <View style={{ marginBottom: 20 }}>
+          <BackButton title="Forgot Password" />
         </View>
         <View style={[GlobalStyles.mb40]}>
           <Text
@@ -71,7 +63,7 @@ const RecoverWithPhone = () => {
             placeholder="Phone Number"
             autoCorrect={false}
             autoCapitalize={"none"}
-            keyboardType="number-pad"
+            keyboardType="default"
             value={phone}
             onChangeText={(value) => setPhone(value)}
           />

@@ -59,7 +59,7 @@ const ConnectionNotificationItem: FC<IProps> = ({ item }) => {
     dispatch(
       acceptConnectionRequestAction({
         connectionId: item.id,
-        status: "approved",
+        status: "accepted",
       })
     );
   };
@@ -84,7 +84,7 @@ const ConnectionNotificationItem: FC<IProps> = ({ item }) => {
             <Text
               style={[GlobalStyles.textNavyBlue, GlobalStyles.fontWeight700]}
             >
-              Gabriella
+              {item.user?.firstName} {item.user?.lastName}
             </Text>
           </View>
           wants to connect with you

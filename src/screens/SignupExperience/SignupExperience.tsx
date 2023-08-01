@@ -14,6 +14,7 @@ import { ISessionState, updateExperience } from "../../reducers/session";
 import { ISettingState } from "../../reducers/settings";
 import DateFormatter from "../../utils/date-formatter";
 import useAppDispatch from "../../hooks/useAppDispatch";
+import BackButton from "../../components/Navigation/BackButton/BackButton";
 
 const SignupExperience = () => {
   const navigation = useNavigation<any>();
@@ -49,16 +50,8 @@ const SignupExperience = () => {
   };
   return (
     <View style={[GlobalStyles.container]}>
-      <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
-        <Text
-          style={[
-            GlobalStyles.fontInterMedium,
-            GlobalStyles.fontSize20,
-            GlobalStyles.fontWeight700,
-          ]}
-        >
-          Experience
-        </Text>
+      <View style={{ marginBottom: 20 }}>
+        <BackButton title="Experience" />
       </View>
       <View style={[GlobalStyles.mb40]}>
         <Text

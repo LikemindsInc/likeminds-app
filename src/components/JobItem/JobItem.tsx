@@ -7,6 +7,7 @@ import { IJobDTO } from "@app-model";
 import { FC } from "react";
 import moment from "moment";
 import ReadMore from "react-native-read-more-text";
+import Util from "../../utils";
 
 interface IProps {
   item: IJobDTO;
@@ -56,8 +57,14 @@ const JobItem: FC<IProps> = ({ item }) => {
     >
       <View style={[GlobalStyles.flewRow, { marginBottom: 8 }]}>
         <View style={[GlobalStyles.flexOne]}>
-          <Text style={[GlobalStyles.fontInterRegular, { fontWeight: "800" }]}>
-            {item.jobTitle}
+          <Text
+            style={[
+              GlobalStyles.fontInterBlack,
+              GlobalStyles.textNavyBlue,
+              { fontWeight: "800" },
+            ]}
+          >
+            {Util.capitalize(item.jobTitle, " ")}
           </Text>
           <Text
             style={[
@@ -97,7 +104,13 @@ const JobItem: FC<IProps> = ({ item }) => {
           <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>
             Industry
           </Text>
-          <Text style={[GlobalStyles.fontInterRegular, { fontWeight: "800" }]}>
+          <Text
+            style={[
+              GlobalStyles.fontInterBlack,
+              GlobalStyles.textNavyBlue,
+              { fontWeight: "800" },
+            ]}
+          >
             {item.industry}
           </Text>
         </View>
@@ -106,8 +119,14 @@ const JobItem: FC<IProps> = ({ item }) => {
           <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>
             Location
           </Text>
-          <Text style={[GlobalStyles.fontInterRegular, { fontWeight: "800" }]}>
-            {item.jobLocation}
+          <Text
+            style={[
+              GlobalStyles.fontInterBlack,
+              GlobalStyles.textNavyBlue,
+              { fontWeight: "800" },
+            ]}
+          >
+            {Util.capitalize(item.jobLocation, "")}
           </Text>
         </View>
       </View>
@@ -117,8 +136,14 @@ const JobItem: FC<IProps> = ({ item }) => {
           <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>
             Type
           </Text>
-          <Text style={[GlobalStyles.fontInterRegular, { fontWeight: "800" }]}>
-            {item.jobType}
+          <Text
+            style={[
+              GlobalStyles.textNavyBlue,
+              GlobalStyles.fontInterBlack,
+              { fontWeight: "800" },
+            ]}
+          >
+            {Util.capitalize(item.jobType)}
           </Text>
         </View>
 
@@ -126,8 +151,14 @@ const JobItem: FC<IProps> = ({ item }) => {
           <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>
             Company
           </Text>
-          <Text style={[GlobalStyles.fontInterRegular, { fontWeight: "800" }]}>
-            {item.companyName}
+          <Text
+            style={[
+              GlobalStyles.textNavyBlue,
+              GlobalStyles.fontInterBlack,
+              { fontWeight: "800" },
+            ]}
+          >
+            {Util.capitalize(item.companyName, "")}
           </Text>
         </View>
       </View>
@@ -136,8 +167,14 @@ const JobItem: FC<IProps> = ({ item }) => {
         <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>
           Experience Level
         </Text>
-        <Text style={[GlobalStyles.fontInterRegular, { fontWeight: "800" }]}>
-          {item.experienceLevel}
+        <Text
+          style={[
+            GlobalStyles.fontInterBlack,
+            GlobalStyles.textNavyBlue,
+            { fontWeight: "800" },
+          ]}
+        >
+          {Util.capitalize(item.experienceLevel)}
         </Text>
       </View>
 
@@ -145,7 +182,13 @@ const JobItem: FC<IProps> = ({ item }) => {
         <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>
           Tailor
         </Text>
-        <Text style={[GlobalStyles.fontInterRegular, { fontWeight: "800" }]}>
+        <Text
+          style={[
+            GlobalStyles.fontInterBlack,
+            GlobalStyles.textNavyBlue,
+            { fontWeight: "800" },
+          ]}
+        >
           Sponsoring Companies, DI&E Hires
         </Text>
       </View>
@@ -156,7 +199,7 @@ const JobItem: FC<IProps> = ({ item }) => {
         </Text>
         <Text
           style={[
-            GlobalStyles.fontInterRegular,
+            GlobalStyles.fontInterBlack,
             { fontWeight: "800", fontSize: 14, color: "#47D0FD" },
           ]}
         >

@@ -8,6 +8,16 @@ export class Util {
       }, delay);
     };
   };
+
+  static capitalize(value: string, separator = "-") {
+    if (separator === "" || !separator)
+      return `${value.charAt(0).toUpperCase()}${value.slice(1)}`;
+
+    return value
+      .split(separator)
+      .map((item) => `${item.charAt(0).toUpperCase()}${item.slice(1)}`)
+      .join(" ");
+  }
 }
 
 export default Util;

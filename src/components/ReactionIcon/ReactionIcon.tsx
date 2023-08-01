@@ -40,10 +40,6 @@ const ReactionIcon: FC<Props> = ({
 
   useEffect(() => {
     if (state.reactToPostStatus === "completed") {
-      toast.show({
-        description: "Reaction to post successful",
-        variant: "contained",
-      });
     } else if (state.reactToPostStatus === "failed") {
       toast.show({
         description: state.reactToPostError,
