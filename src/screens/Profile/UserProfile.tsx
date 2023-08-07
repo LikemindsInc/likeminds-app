@@ -22,6 +22,7 @@ import useAppSelector from "../../hooks/useAppSelector";
 import { ISessionState } from "../../reducers/session";
 import { ISettingState } from "../../reducers/settings";
 import StoryFeedList from "../Home/components/StoryFeedList";
+import UserPostFeed from "./components/UserPostFeed";
 
 const UserProfile = () => {
   const height = useDimension().height;
@@ -212,7 +213,7 @@ const FirstRoute = () => <View style={{ flex: 1 }} />;
 const SecondRoute = () => {
   return (
     <View style={[GlobalStyles.mt20, GlobalStyles.mb20, { flex: 1 }]}>
-      <StoryFeedList />
+      <UserPostFeed />
     </View>
   );
 };

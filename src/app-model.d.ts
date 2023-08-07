@@ -2,6 +2,14 @@ declare module "@app-model" {
   import * as DocumentPicker from "expo-document-picker";
   import * as ImagePicker from "expo-image-picker";
 
+  interface FilePickerFormat {
+    mimeType: string;
+    name: string;
+    size: number;
+    type: "success" | "cancel";
+    uri: string;
+  }
+
   interface ResponseInterface<T = null> {
     payload: T;
     message: string;
@@ -53,10 +61,7 @@ declare module "@app-model" {
     lastName: string;
     country: string;
     countryOfOrigin: string;
-    resume:
-      | DocumentPicker.DocumentResult
-      | ImagePicker.ImagePickerResult
-      | null;
+    resume: FilePickerFormat | ImagePicker.ImagePickerResult | null;
     bio: string;
     city: string;
   }
@@ -180,6 +185,21 @@ declare module "@app-model" {
     updatedAt: string;
     commentCount: number;
     reactionCount: number;
+    user: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      profilePicture: string | null;
+    };
+  }
+
+  interface IPostReaction {
+    id: string;
+    postId: string;
+    reaction: string;
+    createdAt: string;
+    updatedAt: string;
     user: {
       id: string;
       firstName: string;

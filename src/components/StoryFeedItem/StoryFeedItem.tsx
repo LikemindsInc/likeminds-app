@@ -1,5 +1,5 @@
 import { IFlatListProps } from "native-base/lib/typescript/components/basic/FlatList";
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Image,
   KeyboardAvoidingView,
@@ -14,6 +14,7 @@ import { Feather, AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import { IPostCommentFeed, IPostFeed } from "@app-model";
 import useAppSelector from "../../hooks/useAppSelector";
 import { ISettingState } from "../../reducers/settings";
+import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import {
   IPostState,
   clearCreateCommentOnPostState,
@@ -24,6 +25,7 @@ import {
   commentOnPostAction,
   getCommentsOnPostAction,
   getPostFeedAction,
+  getPostReactions,
   likePostAction,
   unlikePostAction,
 } from "../../actions/post";
@@ -44,6 +46,10 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
   const state = useAppSelector(
     (state: any) => state.settingReducer
   ) as ISettingState;
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const snapPoints = useMemo(() => ["50%", "60%"], []);
+
+  const handleSheetChanges = useCallback((index: number) => {}, []);
 
   const dispatch = useAppDispatch();
 
@@ -274,89 +280,92 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
     console.log("index> ", index);
   };
 
-  return (
-    <KeyboardAvoidingView behavior="position">
-      <View style={styles.container}>
-        <View>
-          <View style={styles.storyHeader}>
-            <TouchableOpacity
-              style={{ flexDirection: "row", alignItems: "center" }}
-            >
-              <View>
-                <Image
-                  source={
-                    item.user?.profilePicture
-                      ? { uri: item.user.profilePicture }
-                      : require("../../../assets/image3.png")
-                  }
-                  style={{ width: 40, height: 40, borderRadius: 20 }}
-                />
-              </View>
-              <Text
-                style={[
-                  GlobalStyles.fontInterMedium,
-                  GlobalStyles.textNavyBlue,
-                  GlobalStyles.fontSize15,
-                  GlobalStyles.fontWeight700,
-                  GlobalStyles.pl4,
-                ]}
-              >
-                {item?.user?.firstName} {item?.user?.firstName}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={{ justifyContent: "center" }}>
-              <Feather name="more-horizontal" size={24} color={colors.grey} />
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity onPress={handleLoadComments} style={{}}>
-            <ReadMore
-              renderTruncatedFooter={_renderTruncatedFooter}
-              renderRevealedFooter={_renderRevealedFooter}
-              numberOfLines={3}
-            >
-              <Text
-                style={[
-                  GlobalStyles.fontInterRegular,
-                  GlobalStyles.fontSize13,
-                  GlobalStyles.fontWeight400,
-                ]}
-              >
-                {item.content}
-              </Text>
-            </ReadMore>
+  const getReactionOnPost = (postId: string) => {
+    dispatch(getPostReactions(postId));
+  };
 
-            {renderComments()}
-          </TouchableOpacity>
-          <View style={{ width: "100%", height: 300 }}>
-            {item.images && item.images.length > 0 ? (
-              // <Image
-              //   source={{ uri: item.images[0] }}
-              //   style={styles.image}
-              //   resizeMethod="auto"
-              //   resizeMode="cover"
-              // />
-              <FbGrid images={item.images} onPress={onPress} />
-            ) : (
-              <Image
-                source={require("../../../assets/image8.png")}
-                style={styles.image}
-                resizeMethod="auto"
-                resizeMode="cover"
-              />
-            )}
-          </View>
-        </View>
-        <View
-          style={[
-            GlobalStyles.flewRow,
-            GlobalStyles.mt10,
-            GlobalStyles.mb10,
-            { alignItems: "center" },
-          ]}
-        >
-          <View
-            style={[GlobalStyles.flewRow, { gap: 12, alignItems: "center" }]}
+  return (
+    <View style={styles.container}>
+      <View>
+        <View style={styles.storyHeader}>
+          <TouchableOpacity
+            style={{ flexDirection: "row", alignItems: "center" }}
           >
+            <View>
+              <Image
+                source={
+                  item.user?.profilePicture
+                    ? { uri: item.user.profilePicture }
+                    : require("../../../assets/image3.png")
+                }
+                style={{ width: 40, height: 40, borderRadius: 20 }}
+              />
+            </View>
+            <Text
+              style={[
+                GlobalStyles.fontInterMedium,
+                GlobalStyles.textNavyBlue,
+                GlobalStyles.fontSize15,
+                GlobalStyles.fontWeight700,
+                GlobalStyles.pl4,
+                GlobalStyles.mb20,
+              ]}
+            >
+              {item?.user?.firstName} {item?.user?.lastName}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{ justifyContent: "center" }}>
+            <Feather name="more-horizontal" size={24} color={colors.grey} />
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity onPress={handleLoadComments} style={{}}>
+          <ReadMore
+            renderTruncatedFooter={_renderTruncatedFooter}
+            renderRevealedFooter={_renderRevealedFooter}
+            numberOfLines={3}
+          >
+            <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+                GlobalStyles.fontWeight400,
+              ]}
+            >
+              {item.content}
+            </Text>
+          </ReadMore>
+
+          {renderComments()}
+        </TouchableOpacity>
+        <View style={{ width: "100%", height: 300 }}>
+          {item.images && item.images.length > 0 ? (
+            // <Image
+            //   source={{ uri: item.images[0] }}
+            //   style={styles.image}
+            //   resizeMethod="auto"
+            //   resizeMode="cover"
+            // />
+            <FbGrid images={item.images} onPress={onPress} />
+          ) : (
+            <Image
+              source={require("../../../assets/image8.png")}
+              style={styles.image}
+              resizeMethod="auto"
+              resizeMode="cover"
+            />
+          )}
+        </View>
+      </View>
+      <View
+        style={[
+          GlobalStyles.flewRow,
+          GlobalStyles.mt10,
+          GlobalStyles.mb10,
+          { alignItems: "center" },
+        ]}
+      >
+        <View style={[GlobalStyles.flewRow, { gap: 12, alignItems: "center" }]}>
+          <TouchableOpacity onPress={() => getReactionOnPost(item.id)}>
             <Text
               style={[
                 GlobalStyles.fontInterMedium,
@@ -366,16 +375,17 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
             >
               {item.reactionCount} Reactions
             </Text>
-            <Text
-              style={[
-                GlobalStyles.fontInterMedium,
-                GlobalStyles.fontSize10,
-                GlobalStyles.fontWeight700,
-              ]}
-            >
-              {item.commentCount} comments
-            </Text>
-            {/* <Text
+          </TouchableOpacity>
+          <Text
+            style={[
+              GlobalStyles.fontInterMedium,
+              GlobalStyles.fontSize10,
+              GlobalStyles.fontWeight700,
+            ]}
+          >
+            {item.commentCount} comments
+          </Text>
+          {/* <Text
               style={[
                 GlobalStyles.fontInterMedium,
                 GlobalStyles.fontSize10,
@@ -385,40 +395,39 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
             >
               {item.commentCount} shares
             </Text> */}
-          </View>
-          <View
-            style={[
-              GlobalStyles.flewRow,
-              { gap: 20, justifyContent: "flex-end", flex: 1 },
-            ]}
-          >
-            <TouchableOpacity onPress={handleLoadComments}>
-              <MaterialCommunityIcons
-                name="message-processing-outline"
-                size={24}
-                color={colors.navyBlue}
-              />
-            </TouchableOpacity>
-            <ReactionIcon
-              isLiked={isPostLiked}
-              post={item}
-              handleLikeReactionOnPost={handleLikeReactionOnPost}
-              handleOnReactionActivate={() => {}}
+        </View>
+        <View
+          style={[
+            GlobalStyles.flewRow,
+            { gap: 20, justifyContent: "flex-end", flex: 1 },
+          ]}
+        >
+          <TouchableOpacity onPress={handleLoadComments}>
+            <MaterialCommunityIcons
+              name="message-processing-outline"
+              size={24}
+              color={colors.navyBlue}
             />
-            {/* <TouchableOpacity onPress={() => handleLikeReactionOnPost()}>
+          </TouchableOpacity>
+          <ReactionIcon
+            isLiked={isPostLiked}
+            post={item}
+            handleLikeReactionOnPost={handleLikeReactionOnPost}
+            handleOnReactionActivate={() => {}}
+          />
+          {/* <TouchableOpacity onPress={() => handleLikeReactionOnPost()}>
               <AntDesign
                 name={isPostLiked ? "heart" : "hearto"}
                 size={24}
                 color={isPostLiked ? colors.red : colors.navyBlue}
               />
             </TouchableOpacity> */}
-            {/* <TouchableOpacity>
+          {/* <TouchableOpacity>
               <Feather name="send" size={24} color={colors.navyBlue} />
             </TouchableOpacity> */}
-          </View>
         </View>
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 

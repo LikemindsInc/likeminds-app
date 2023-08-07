@@ -1,4 +1,4 @@
-import { FlatList, Text, View } from "react-native";
+import { FlatList, Image, ScrollView, Text, View } from "react-native";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import HomeHeader from "../../components/Header/HomeHeader/HomeHeader";
 import LiveFeedList from "./components/LiveFeedList";
@@ -7,8 +7,11 @@ import StoryFeedList from "./components/StoryFeedList";
 import useDimension from "../../hooks/useDimension";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import { getPostFeedAction } from "../../actions/post";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useAppSelector from "../../hooks/useAppSelector";
+import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import { IPostReaction } from "@app-model";
+import moment from "moment";
 
 const DATA: { type: "LIVE_FEED" | "INTRO_FEED" | "STORY_FEED"; data: any[] }[] =
   [
@@ -111,7 +114,18 @@ const DATA: { type: "LIVE_FEED" | "INTRO_FEED" | "STORY_FEED"; data: any[] }[] =
   ];
 
 const Home = () => {
+  const bottomSheetRef2 = useRef<BottomSheet>(null);
+  const snapPoints = useMemo(() => ["50%", "60%"], []);
+
+  const handleSheetChanges = useCallback((index: number) => {}, []);
   const height = useDimension().height;
+
+  const renderProfilePicture = (item: IPostReaction) => {
+    if (item.user.profilePicture && item.user.profilePicture.trim() !== "") {
+      return { uri: item.user.profilePicture };
+    }
+    return require("../../../assets/image3.png");
+  };
 
   const renderItems = ({
     item,
@@ -155,12 +169,81 @@ const Home = () => {
   //   setRefresh(true);
   //   getPostFeeds();
   // };
+
+  useEffect(() => {
+    if (state.postReaction.length > 0) {
+      bottomSheetRef2.current?.expand();
+    }
+  }, [state.postReaction]);
   return (
     <View style={[GlobalStyles.flexOne]}>
       <HomeHeader />
-      <View style={[GlobalStyles.container, { marginRight: 0, flex: 1 }]}>
+      <ScrollView style={[GlobalStyles.container, { marginRight: 0, flex: 1 }]}>
         {DATA.map((item) => renderItems({ item }))}
-      </View>
+      </ScrollView>
+      <BottomSheet
+        ref={bottomSheetRef2}
+        index={-1}
+        snapPoints={snapPoints}
+        onChange={handleSheetChanges}
+        backdropComponent={(props: any) => (
+          <BottomSheetBackdrop {...props} pressBehavior={"close"} />
+        )}
+      >
+        <View style={{ flex: 1 }}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={{ flexGrow: 1, flex: 1 }}
+          >
+            <View style={[GlobalStyles.container, { backgroundColor: "#fff" }]}>
+              {state.postReaction.map((item) => (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    marginBottom: 20,
+                    justifyContent: "space-between",
+                  }}
+                  key={item.id}
+                >
+                  <View style={{ flex: 1, flexDirection: "row", gap: 10 }}>
+                    <View>
+                      <Image
+                        source={renderProfilePicture(item)}
+                        style={{ width: 30, height: 30, borderRadius: 15 }}
+                        resizeMethod="auto"
+                        resizeMode="cover"
+                      />
+                    </View>
+                    <View>
+                      <Text
+                        style={[
+                          GlobalStyles.fontInterRegular,
+                          GlobalStyles.fontSize13,
+                          GlobalStyles.textNavyBlue,
+                        ]}
+                      >
+                        {item.user?.firstName} {item.user?.lastName}
+                      </Text>
+                      <Text
+                        style={[
+                          GlobalStyles.fontInterRegular,
+                          GlobalStyles.fontSize10,
+                          GlobalStyles.textGrey,
+                        ]}
+                      >
+                        {moment(item.createdAt).fromNow()}
+                      </Text>
+                    </View>
+                  </View>
+                  <View>
+                    <Text>{item.reaction}</Text>
+                  </View>
+                </View>
+              ))}
+            </View>
+          </ScrollView>
+        </View>
+      </BottomSheet>
     </View>
   );
 };

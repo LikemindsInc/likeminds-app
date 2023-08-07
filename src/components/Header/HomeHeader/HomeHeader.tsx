@@ -9,12 +9,14 @@ import { useNavigation } from "@react-navigation/native";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import { APP_SCREEN_LIST } from "../../../constants";
 import useAppSelector from "../../../hooks/useAppSelector";
+import { useUser } from "../../../hooks/userUser";
 
 const HomeHeader = () => {
   const state = useAppSelector((state) => state.settingReducer);
+  const [user] = useUser();
   const renderProfilePicture = () => {
-    if (state.userInfo?.profilePicture) {
-      return { uri: state.userInfo.profilePicture };
+    if (user && user.profilePicture && user.profilePicture.trim() !== "") {
+      return { uri: user.profilePicture };
     }
     return require("../../../../assets/image3.png");
   };

@@ -1,3 +1,5 @@
+import _ from "lodash";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   ICreateJobDTO,
   ICreatePostDTO,
@@ -5,18 +7,19 @@ import {
   IPostCommentFeed,
   IPostFeed,
   IThunkAPIStatus,
+  IPostReaction,
 } from "@app-model";
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import _ from "lodash";
 import {
   commentOnCommentAction,
   commentOnPostAction,
   createJobAction,
   createPostAction,
   getCommentsOnPostAction,
+  getCurrentUserFeedAction,
   getJobsAction,
   getPostFeedAction,
   getPostFeedByIdAction,
+  getPostReactions,
   likePostAction,
   reactToPostAction,
   unlikePostAction,
@@ -27,6 +30,14 @@ export interface IPostState {
   createPostStatus: IThunkAPIStatus;
   createPostSuccess: string;
   createPostError: string;
+
+  getCurrentUserPostStatus: IThunkAPIStatus;
+  getCurrentUserPostSuccess: string;
+  getCurrentUserPostError: string;
+
+  getPostReactionStatus: IThunkAPIStatus;
+  getPostReactionSuccess: string;
+  getPostReactionPostError: string;
 
   likePostStatus: IThunkAPIStatus;
   likePostSuccess: string;
@@ -66,6 +77,8 @@ export interface IPostState {
 
   postFeeds: IPostFeed[];
 
+  currentUserPostFeeds: IPostFeed[];
+
   postComments: IPostCommentFeed[];
 
   createJobStatus: IThunkAPIStatus;
@@ -83,6 +96,8 @@ export interface IPostState {
   jobs: IJobDTO[];
 
   jobFilterTailorValue: string | null;
+
+  postReaction: IPostReaction[];
 }
 
 const initialState: IPostState = {
@@ -93,6 +108,14 @@ const initialState: IPostState = {
   createPostStatus: "idle",
   createPostSuccess: "",
   createPostError: "",
+
+  getCurrentUserPostStatus: "idle",
+  getCurrentUserPostSuccess: "",
+  getCurrentUserPostError: "",
+
+  getPostReactionStatus: "idle",
+  getPostReactionSuccess: "",
+  getPostReactionPostError: "",
 
   likePostStatus: "idle",
   likePostSuccess: "",
@@ -148,6 +171,10 @@ const initialState: IPostState = {
 
   jobs: [],
   jobFilterTailorValue: "",
+
+  currentUserPostFeeds: [],
+
+  postReaction: [],
 };
 
 const PostSlice = createSlice({
@@ -175,6 +202,10 @@ const PostSlice = createSlice({
       state.reactToPostStatus = "idle";
       state.reactToPostSuccess = "";
       state.reactToPostSuccess = "";
+    },
+
+    clearSinglePostReactions(state) {
+      state.postReaction = [];
     },
 
     clearCreateJobStatus(state: IPostState) {
@@ -217,6 +248,20 @@ const PostSlice = createSlice({
       state.getPostFeedStatus = "failed";
       console.log("action.payload?.messag> ", action.payload?.message);
       state.getPostFeedError = action.payload?.message as string;
+    });
+
+    builder.addCase(getCurrentUserFeedAction.pending, (state) => {
+      state.getCurrentUserPostStatus = "loading";
+    });
+    builder.addCase(getCurrentUserFeedAction.fulfilled, (state, action) => {
+      state.getCurrentUserPostStatus = "completed";
+      state.currentUserPostFeeds = action.payload.data;
+      state.getCurrentUserPostSuccess = action.payload?.message;
+    });
+    builder.addCase(getCurrentUserFeedAction.rejected, (state, action) => {
+      state.getCurrentUserPostStatus = "failed";
+      console.log("action.payload?.messag> ", action.payload?.message);
+      state.getCurrentUserPostError = action.payload?.message as string;
     });
 
     builder.addCase(createJobAction.pending, (state) => {
@@ -326,6 +371,18 @@ const PostSlice = createSlice({
     builder.addCase(getJobsAction.rejected, (state, action) => {
       state.getJobsStatus = "failed";
       state.getJobsError = action.payload?.message as string;
+    });
+
+    builder.addCase(getPostReactions.pending, (state) => {
+      state.getPostReactionStatus = "loading";
+    });
+    builder.addCase(getPostReactions.fulfilled, (state, action) => {
+      state.getPostReactionStatus = "completed";
+      state.postReaction = action.payload.data;
+    });
+    builder.addCase(getPostReactions.rejected, (state, action) => {
+      state.getPostReactionStatus = "failed";
+      state.getPostReactionPostError = action.payload?.message as string;
     });
   },
 });

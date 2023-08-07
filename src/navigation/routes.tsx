@@ -29,6 +29,7 @@ import {
   createDrawerNavigator,
 } from "@react-navigation/drawer";
 import {
+  BackHandler,
   Image,
   TouchableOpacity,
   View,
@@ -39,10 +40,9 @@ import useDimension from "../hooks/useDimension";
 import Button from "../components/Button/Button";
 import colors from "../theme/colors";
 import { Text } from "react-native";
-import { useToast } from "native-base";
 import { useEffect } from "react";
 import useAppSelector from "../hooks/useAppSelector";
-import { IGlobalErrorState } from "../reducers/errorHanlder";
+import { IGlobalErrorState, clearNetworkError } from "../reducers/errorHanlder";
 import useAppDispatch from "../hooks/useAppDispatch";
 import { PURGE } from "redux-persist";
 import { __ROOT_REDUX_STATE_KEY__ } from "../store/constants";
@@ -66,6 +66,7 @@ import Jobs from "../screens/Job/PostJob/Jobs";
 import Messages from "../screens/Message/Messages";
 import ConnectionProfile from "../screens/Profile/ConnectionProfile";
 import Notification from "../screens/Notification/Notification";
+import { useToast } from "react-native-toast-notifications";
 
 const Stack = createNativeStackNavigator();
 
@@ -76,6 +77,35 @@ const AppHome = () => {
   const setting = useAppSelector(
     (state: any) => state.settingReducer
   ) as ISettingState;
+
+  const handleBackPress = () => {
+    // Add your logic to decide whether to prevent navigation
+    // For example, return true to prevent navigation, or false to allow it
+    //  if (shouldPreventNavigation) {
+    //    return true; // Prevent navigation
+    //  }
+    return true;
+    // return false; // Allow navigation
+  };
+
+  const handleBackNavigation = (e: any) => {
+    // Add your logic to decide whether to prevent navigation
+    // For example, return true to prevent navigation, or false to allow it
+    if (!setting.userInfo) {
+      return true; // Prevent navigation
+    }
+    e.preventDefault();
+    // return false; // Allow navigation
+  };
+
+  useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", handleBackPress);
+    navigation.addListener("beforeRemove", handleBackNavigation);
+    return () => {
+      BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
+      navigation.removeListener("beforeRemove", handleBackNavigation);
+    };
+  }, [navigation, setting.userInfo]);
 
   useEffect(() => {
     if (!setting.userInfo)
@@ -272,8 +302,10 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
           <View style={[{ marginBottom: 110 }]}>
             <Button
               onPress={() => {
+                console.log("CALLED");
                 dispatch(logoutUserAction());
                 dispatch(logoutAction());
+                navigation.navigate(APP_SCREEN_LIST.ONBOARDING_SCREEN);
               }}
               type="tertiary"
               title="Logout"
@@ -290,6 +322,8 @@ const AppDrawer = () => {
     useWindowDimensions().width * 0.5 < DRAWER_WIDTH
       ? DRAWER_WIDTH
       : useWindowDimensions().width * 0.5;
+  const state = useAppSelector((state) => state.settingReducer);
+
   return (
     <Drawer.Navigator
       screenOptions={{
@@ -313,10 +347,15 @@ const AppRoutes = () => {
   const errorReducer = useAppSelector(
     (state: any) => state.errorReducer
   ) as IGlobalErrorState;
+
+  const state = useAppSelector((state) => state.settingReducer);
   const toast = useToast();
   useEffect(() => {
-    if (errorReducer.message?.trim() !== "")
-      toast.show({ description: errorReducer.message });
+    if (errorReducer.message?.trim() !== "") {
+      // toast.show({ description: errorReducer.message });
+      toast.show(errorReducer.message, { type: "normal" });
+      dispatch(clearNetworkError());
+    }
   }, [errorReducer.message]);
 
   const dispatch = useAppDispatch();
@@ -383,7 +422,11 @@ const AppRoutes = () => {
         component={SignupProfilePicture}
       />
 
-      <Stack.Screen name={APP_SCREEN_LIST.MAIN_SCREEN} component={AppDrawer} />
+      <Stack.Screen
+        options={{ gestureEnabled: false }}
+        name={APP_SCREEN_LIST.MAIN_SCREEN}
+        component={AppDrawer}
+      />
 
       <Stack.Screen name={APP_SCREEN_LIST.LOGIN_SCREEN} component={Login} />
       <Stack.Screen

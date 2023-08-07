@@ -1,5 +1,6 @@
 import {
   ApiResponseSuccess,
+  FilePickerFormat,
   IChangePasswordDTO,
   ILogin,
   IRequestOTPEmail,
@@ -35,6 +36,7 @@ const REQUEST_OTP_PHONE = "authentication:REQUEST_OTP_PHONE";
 const CHANGE_PASSWORD_OTP = "authentication:CHANGE_PASSWORD_OTP";
 const VERIFY_PHONE_EMAIL_OTP = "authentication:VERIFY_PHONE_EMAIL_OTP";
 const STORE_OTP_CHANNEL_VALUE = "authentication:STORE_OTP_CHANNEL_VALUE";
+const GET_CURRENT_USER = "authentication:GET_CURRENT_USER";
 
 export const loginUserActionAction = asyncThunkWrapper<
   ApiResponseSuccess<IUserData>,
@@ -117,6 +119,17 @@ export const changePasswordAction = asyncThunkWrapper<
   return response.data;
 });
 
+export const getCurrentUserAction = asyncThunkWrapper<
+  ApiResponseSuccess<IUserData>,
+  void
+>(GET_CURRENT_USER, async () => {
+  const response = await axiosClient.get<AxiosResponse<any>>(
+    "/api/users/current"
+  );
+
+  return response.data;
+});
+
 export const verifyOTPOnChangePasswordAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
   IVerifyPhoneEmailOTP
@@ -141,8 +154,7 @@ export const completeUserProfileAction = asyncThunkWrapper<
     const certificateFile = agrs
       .certificates[0] as ImagePicker.ImagePickerResult;
 
-    const resumeFile = agrs.personalInformation
-      .resume as ImagePicker.ImagePickerResult;
+    const resumeFile = agrs.personalInformation.resume as FilePickerFormat;
 
     let profileResponseUrl = "";
     let certificateFileUrl = "";
@@ -196,27 +208,13 @@ export const completeUserProfileAction = asyncThunkWrapper<
       certificateFileUrl = response.data?.data?.url || "";
     }
 
-    if (resumeFile && resumeFile.assets && resumeFile.assets[0].uri) {
-      console.log(">>>>3");
-      const resumeBlob = Converter.dataURItoBlob(
-        resumeFile?.assets ? resumeFile.assets[0].uri : ""
-      );
-
+    if (resumeFile && resumeFile.uri) {
       const formData = new FormData() as any;
       formData.append("file", {
-        uri: resumeFile.assets[0].uri,
-        type: resumeFile.assets[0].type,
-        name: resumeFile.assets[0].fileName,
+        uri: resumeFile.uri,
+        type: resumeFile.type,
+        name: resumeFile.name,
       });
-
-      // uploadFile(formData)
-      //   .then((response) => {
-      //     resumeUrl = response.data?.data?.url || "";
-      //   })
-      //   .catch((error) => {
-      //     // reportError(error);
-      //     console.log("error> ", error?.response || error);
-      //   });
 
       const response = await uploadFile(formData);
       resumeUrl = response.data?.data?.url || "";

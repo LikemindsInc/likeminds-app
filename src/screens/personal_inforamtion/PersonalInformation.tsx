@@ -21,6 +21,8 @@ import {
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import { SelectList } from "react-native-dropdown-select-list";
+import { FilePickerFormat } from "@app-model";
+import { useToast } from "react-native-toast-notifications";
 
 const PersonalInformation = () => {
   const settings = useAppSelector(
@@ -54,7 +56,7 @@ const PersonalInformation = () => {
   );
 
   const [resume, setResume] = useState<
-    DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult | null
+    FilePickerFormat | ImagePicker.ImagePickerResult | null
   >(session.profileData?.personalInformation?.resume);
 
   useEffect(() => {
@@ -62,7 +64,7 @@ const PersonalInformation = () => {
   }, [getCountries]);
 
   const handleFileSelect = (
-    file: DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult
+    file: FilePickerFormat | ImagePicker.ImagePickerResult
   ) => {
     setResume(file);
     return null;
@@ -72,7 +74,14 @@ const PersonalInformation = () => {
 
   const navigation = useNavigation<any>();
 
+  const toast = useToast();
+
   const handleOnNextPress = () => {
+    if (firstName.trim() === "")
+      return toast.show("Please provide first name", { type: "normal" });
+    if (lastName.trim() === "")
+      return toast.show("Please provide last name", { type: "normal" });
+
     dispatch(
       updatePersonalInformation({
         firstName,
@@ -195,7 +204,7 @@ const PersonalInformation = () => {
         </View>
         <DropZone
           onSelect={handleFileSelect}
-          type="document"
+          type="all"
           emptyIcon={<FileUploadEmptyIcon />}
         />
       </ScrollView>

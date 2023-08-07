@@ -10,14 +10,15 @@ import {
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
+import colors from "../../theme/colors";
+import { AntDesign } from "@expo/vector-icons";
+import { FilePickerFormat } from "@app-model";
 
 interface IProps {
   emptyIcon?: JSX.Element | undefined;
   style?: ViewStyle;
   type?: "image" | "video" | "all" | "document";
-  onSelect?: (
-    file: DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult
-  ) => null;
+  onSelect?: (file: FilePickerFormat | ImagePicker.ImagePickerResult) => null;
 }
 
 const DropZone: FC<IProps> = ({
@@ -36,13 +37,16 @@ const DropZone: FC<IProps> = ({
   //   useEffect(() => {
   //     console.log("permission stauts> ", status);
   //   }, [status]);
+  const [file, setFile] = useState<FilePickerFormat>();
   const handleFileSelect = async () => {
     try {
-      const result = await DocumentPicker.getDocumentAsync({
+      const result = (await DocumentPicker.getDocumentAsync({
         copyToCacheDirectory: true,
-      });
+      })) as FilePickerFormat;
 
       // console.log("result > ", result);
+
+      setFile(result);
 
       onSelect && onSelect(result);
     } catch (error) {}
@@ -75,12 +79,45 @@ const DropZone: FC<IProps> = ({
     } catch (error) {}
   };
   const handleDocumentSelect = async () => {
-    if (type === "document") return handleFileSelect();
+    if (type === "all") return handleFileSelect();
 
     return handleMediaSelect();
   };
 
   const renderSelectedFiles = () => {
+    if (type === "all" && file && file?.type !== "cancel") {
+      return (
+        <View
+          style={{
+            flexDirection: "row",
+            height: "100%",
+            gap: 8,
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: colors.primary,
+              justifyContent: "center",
+              alignItems: "center",
+              width: 80,
+            }}
+          >
+            <AntDesign name="addfile" size={32} color="white" />
+          </View>
+          <View style={{ flex: 1, justifyContent: "center" }}>
+            <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+                { textTransform: "capitalize" },
+              ]}
+            >
+              {file?.name}
+            </Text>
+          </View>
+        </View>
+      );
+    }
     if (type === "image" && image) {
       return (
         <Image

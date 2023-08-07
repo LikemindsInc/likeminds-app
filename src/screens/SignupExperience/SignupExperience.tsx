@@ -74,13 +74,15 @@ const SignupExperience = () => {
             placeholder="Start Date"
             style={styles.inputFlex}
           />
-          <DatePicker
-            onDateChange={(date) =>
-              setEndDate(DateFormatter.format(date, "YYYY-MM-DD"))
-            }
-            placeholder="End Date"
-            style={styles.inputFlex}
-          />
+          {!stillWorkHere && (
+            <DatePicker
+              onDateChange={(date) =>
+                setEndDate(DateFormatter.format(date, "YYYY-MM-DD"))
+              }
+              placeholder="End Date"
+              style={styles.inputFlex}
+            />
+          )}
         </View>
         <View
           style={[
@@ -125,6 +127,8 @@ const SignupExperience = () => {
             value={responsibilities}
             onChangeText={(text) => setResponsibilities(text)}
             placeholder="Responsibilities"
+            multiline
+            style={[styles.inputFlex, { height: 100, paddingVertical: 8 }]}
           />
         </View>
       </ScrollView>

@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getCountriesAction } from "../actions/settings";
 import { PURGE, REHYDRATE } from "redux-persist";
 import {
+  getCurrentUserAction,
   loginUserActionAction,
   signupUserActionAction,
   verifyOTPActionAction,
@@ -12,6 +13,10 @@ export interface ISettingState {
   getCountriesStatus: IThunkAPIStatus;
   getCountriesSuccess: string;
   getCountriesError?: string;
+
+  getCurrentUserStatus: IThunkAPIStatus;
+  getCurrentUserSuccess: string;
+  getCurrentUserError?: string;
   countries: ICountry[];
   userInfo: IUserData | null;
 }
@@ -20,6 +25,11 @@ const initialState: ISettingState = {
   getCountriesStatus: "idle",
   getCountriesSuccess: "",
   getCountriesError: "",
+
+  getCurrentUserStatus: "idle",
+  getCurrentUserSuccess: "",
+  getCurrentUserError: "",
+
   countries: [],
   userInfo: null,
 };
@@ -51,8 +61,20 @@ const settingSlice = createSlice({
 
     builder.addCase(verifyOTPActionAction.rejected, (state, action) => {});
 
+    builder.addCase(getCurrentUserAction.pending, (state) => {
+      state.getCurrentUserStatus = "loading";
+    });
+    builder.addCase(getCurrentUserAction.fulfilled, (state, action) => {
+      state.getCurrentUserStatus = "completed";
+      state.userInfo = { ...state.userInfo, ...action.payload.data };
+    });
+
+    builder.addCase(getCurrentUserAction.rejected, (state, action) => {
+      state.getCurrentUserStatus = "failed";
+      state.getCurrentUserError = action.payload?.message as string;
+    });
+
     builder.addCase(loginUserActionAction.fulfilled, (state, action) => {
-      console.log("user data> ", action.payload.data);
       state.userInfo = action.payload.data;
     });
   },

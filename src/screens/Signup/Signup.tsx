@@ -17,8 +17,8 @@ import {
   updatePhoneNumber,
 } from "../../reducers/session";
 import { signupUserActionAction } from "../../actions/auth";
-import { useToast } from "native-base";
 import BackButton from "../../components/Navigation/BackButton/BackButton";
+import { useToast } from "react-native-toast-notifications";
 
 const Signup = () => {
   const toast = useToast();
@@ -38,28 +38,16 @@ const Signup = () => {
     try {
       //handleSubmitAccount
       if (email.trim() === "")
-        return toast.show({
-          description: "Email is required",
-          variant: "contained",
-        });
+        return toast.show("Email is required", { type: "noraml" });
 
       if (countryCode.startsWith("+000") || countryCode.trim() === "")
-        return toast.show({
-          description: "Phone number is invalid",
-          variant: "contained",
-        });
+        return toast.show("Phone number is invalid", { type: "normal" });
 
       if (password.trim() === "")
-        return toast.show({
-          description: "Password is required",
-          variant: "contained",
-        });
+        return toast.show("Password is required", { type: "normal" });
 
       if (password !== confirmPassword)
-        return toast.show({
-          description: "Passwords do not match",
-          variant: "contained",
-        });
+        return toast.show("Passwords do not match", { type: "normal" });
       dispatch(
         signupUserActionAction({
           email,
@@ -80,8 +68,8 @@ const Signup = () => {
       session.signingUpStatus === "completed" &&
       session.signingUpSuccess !== ""
     ) {
-      dispatch(updatePhoneNumber(phone));
-      toast.show({ description: session.signingUpSuccess, variant: "subtle" });
+      dispatch(updatePhoneNumber(`${countryCode}${phone}`));
+      toast.show(session.signingUpSuccess, { type: "normal" });
       handleNextNavigation();
       dispatch(clearSignupStatus());
     }

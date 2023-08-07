@@ -13,6 +13,7 @@ import font from "../../theme/font";
 import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign } from "@expo/vector-icons";
 import useAppSelector from "../../hooks/useAppSelector";
+import { useUser } from "../../hooks/userUser";
 
 interface IProps {
   item: {
@@ -27,16 +28,14 @@ interface IProps {
 const LiveFeedItem: FC<IProps> = ({ item }) => {
   const state = useAppSelector((state) => state.settingReducer);
 
+  const [user] = useUser();
   const renderProfilePicture = () => {
-    if (item.isUserProfile) {
-      if (state.userInfo?.profilePicture) {
-        return { uri: state.userInfo?.profilePicture };
-      } else {
-        return item.image;
-      }
+    if (user && user.profilePicture && user.profilePicture.trim() !== "") {
+      return { uri: user.profilePicture };
     }
-    return item.image;
+    return require("../../../assets/image3.png");
   };
+
   if (item.isUserProfile) {
     return (
       <TouchableOpacity style={styles.container}>
