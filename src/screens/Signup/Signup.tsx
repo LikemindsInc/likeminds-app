@@ -34,20 +34,77 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [countryCode, setCountryCode] = useState("");
 
+  const [errors, setErrors] = useState<{
+    email: null | string;
+    password: null | string;
+    phone: null | string;
+    confirmPassword: null | string;
+  }>({ email: null, password: null, confirmPassword: null, phone: null });
+
+  useEffect(() => {
+    setErrors({
+      email: null,
+      password: null,
+      confirmPassword: null,
+      phone: null,
+    });
+  }, []);
+
+  useEffect(() => {
+    if (email.trim() !== "") setErrors((state) => ({ ...state, email: null }));
+    else setErrors((state) => ({ ...state, email: "Email is required" }));
+  }, [email]);
+
+  useEffect(() => {
+    if (password.trim() !== "")
+      setErrors((state) => ({ ...state, password: null }));
+    else setErrors((state) => ({ ...state, password: "Password is required" }));
+  }, [password]);
+
+  useEffect(() => {
+    if (phone.trim() !== "") setErrors((state) => ({ ...state, phone: null }));
+    else setErrors((state) => ({ ...state, phone: "Phone is required" }));
+  }, [phone]);
+
+  useEffect(() => {
+    if (confirmPassword.trim() !== "")
+      setErrors((state) => ({ ...state, confirmPassword: null }));
+    else
+      setErrors((state) => ({
+        ...state,
+        confirmPassword: "Confirm Password is required",
+      }));
+  }, [confirmPassword]);
+
   const handleSubmitAccount = () => {
     try {
       //handleSubmitAccount
       if (email.trim() === "")
-        return toast.show("Email is required", { type: "noraml" });
+        return setErrors((state) => ({ ...state, email: "Email is required" }));
 
       if (countryCode.startsWith("+000") || countryCode.trim() === "")
-        return toast.show("Phone number is invalid", { type: "normal" });
+        return setErrors((state) => ({
+          ...state,
+          phone: "Please select country code",
+        }));
+      if (phone.trim() === "")
+        return setErrors((state) => ({
+          ...state,
+          phone: "Phone number is required",
+        }));
 
       if (password.trim() === "")
-        return toast.show("Password is required", { type: "normal" });
+        return setErrors((state) => ({
+          ...state,
+          password: "Password is required",
+        }));
 
       if (password !== confirmPassword)
-        return toast.show("Passwords do not match", { type: "normal" });
+        return setErrors((state) => ({
+          ...state,
+          confirmPassword: "Confirm password and Password do not match",
+        }));
+
       dispatch(
         signupUserActionAction({
           email,
@@ -102,6 +159,7 @@ const Signup = () => {
           value={email}
           onChangeText={(text) => setEmail(text)}
           returnKeyType="done"
+          errorMessage={errors.email}
         />
         <Input
           placeholder="8163113450"
@@ -112,6 +170,7 @@ const Signup = () => {
           onChangeText={(text) => setPhone(text)}
           returnKeyType="done"
           mode="phone-pad"
+          errorMessage={errors.phone}
           onCountryCodeSelect={(value) => setCountryCode(value)}
         />
         <Input
@@ -121,6 +180,7 @@ const Signup = () => {
           keyboardType="default"
           secureTextEntry
           value={password}
+          errorMessage={errors.password}
           onChangeText={(text) => setPassword(text)}
           returnKeyType="done"
         />
@@ -131,6 +191,7 @@ const Signup = () => {
           keyboardType="default"
           secureTextEntry
           value={confirmPassword}
+          errorMessage={errors.confirmPassword}
           onChangeText={(text) => setConfirmPassword(text)}
           returnKeyType="done"
         />

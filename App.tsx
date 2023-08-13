@@ -23,6 +23,7 @@ LogBox.ignoreLogs([
   `Key "cancelled" in the image picker result is deprecated`,
   "Constants.platform.ios.model",
   "Each child in a list",
+  "Require cycle",
 ]);
 
 const Stack = createNativeStackNavigator();

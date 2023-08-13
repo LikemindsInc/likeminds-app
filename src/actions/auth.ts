@@ -3,6 +3,7 @@ import {
   FilePickerFormat,
   IChangePasswordDTO,
   ILogin,
+  IRefreshTokenResponse,
   IRequestOTPEmail,
   IRequestOTPPhone,
   ISignUp,
@@ -14,7 +15,7 @@ import {
 import asyncThunkWrapper from "../helpers/asyncThunkWrapper";
 import { network } from "../config/network.config";
 import { AxiosResponse } from "axios";
-import axiosClient from "../config/axiosClient";
+import axiosClient, { axioxRefreshClient } from "../config/axiosClient";
 import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
 import Converter from "../utils/Converters";
@@ -25,8 +26,10 @@ import { persistor } from "../store/store";
 import { Platform } from "react-native";
 import reportError from "../utils/reportError";
 import { Image } from "react-native-compressor";
+import { err } from "react-native-svg/lib/typescript/xml";
 
 const SIGN_IN = "authentication:SIGN_IN";
+const REFRSH_TOKEN = "authentication:REFRSH_TOKEN";
 const SIGN_OUT = "authentication:SIGN_OUT";
 const SIGNUP = "authentication:SIGNUP";
 const VERIFY_OTP = "authentication:VERIFY_OTP";
@@ -50,6 +53,29 @@ export const loginUserActionAction = asyncThunkWrapper<
   console.log(response.data);
 
   return response.data;
+});
+
+export const refreshTokenAction = asyncThunkWrapper<
+  ApiResponseSuccess<IRefreshTokenResponse>,
+  string
+>(REFRSH_TOKEN, async (token) => {
+  try {
+    const response = await axioxRefreshClient.post<
+      AxiosResponse<IRefreshTokenResponse>
+    >(
+      "/api/auth/refresh_token",
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error);
+  }
 });
 
 export const storeOTPChannelValueAction = asyncThunkWrapper<string, string>(

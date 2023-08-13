@@ -5,6 +5,7 @@ import { PURGE, REHYDRATE } from "redux-persist";
 import {
   getCurrentUserAction,
   loginUserActionAction,
+  refreshTokenAction,
   signupUserActionAction,
   verifyOTPActionAction,
 } from "../actions/auth";
@@ -76,6 +77,21 @@ const settingSlice = createSlice({
 
     builder.addCase(loginUserActionAction.fulfilled, (state, action) => {
       state.userInfo = action.payload.data;
+      state.userInfo.refreshToken = action.payload.data.refreshToken;
+    });
+
+    builder.addCase(refreshTokenAction.fulfilled, (state, action) => {
+      if (state.userInfo) {
+        state.userInfo = {
+          ...state.userInfo,
+          access_token: action.payload.data.access_token,
+          refreshToken: action.payload.data.refresh_token,
+        };
+      }
+    });
+
+    builder.addCase(refreshTokenAction.rejected, (state, action) => {
+      state.userInfo = null;
     });
   },
 });

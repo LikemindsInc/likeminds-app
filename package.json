@@ -50,6 +50,7 @@
     "react-native-snap-carousel": "^4.0.0-beta.6",
     "react-native-svg": "13.4.0",
     "react-native-tab-view": "^3.5.1",
+    "react-native-timeline-flatlist": "^0.8.0",
     "react-native-toast-notifications": "^3.3.1",
     "react-native-vector-icons": "^9.2.0",
     "react-native-viewpager": "^0.2.13",

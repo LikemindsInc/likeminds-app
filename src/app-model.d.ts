@@ -125,6 +125,8 @@ declare module "@app-model" {
     message: string | null;
     followers: any[] | null;
     id: string;
+    postCount: number;
+    followingCount: number;
     isActive: boolean;
     isVerified: boolean;
     role: "user";
@@ -137,7 +139,7 @@ declare module "@app-model" {
     certificates: string[];
     bio: string | null;
     education: any[];
-    experience: any[];
+    experience: IExperience[];
   }
 
   interface IRequestOTPEmail {
@@ -321,5 +323,10 @@ declare module "@app-model" {
       email: string;
       profilePicture: string | null;
     };
+  }
+
+  interface IRefreshTokenResponse {
+    access_token: string;
+    refresh_token: string;
   }
 }

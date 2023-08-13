@@ -10,12 +10,12 @@ import {
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import useDimension from "../../hooks/useDimension";
 import { AntDesign, Feather } from "@expo/vector-icons";
-import colors from "../../theme/colors";
+import colors, { addOpacity } from "../../theme/colors";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native";
 import Button from "../../components/Button/Button";
 import { TabView, SceneMap } from "react-native-tab-view";
-import { useCallback, useEffect, useState } from "react";
+import { Profiler, useCallback, useEffect, useState } from "react";
 import { StatusBar } from "react-native";
 import { Box, Pressable, useColorModeValue } from "native-base";
 import useAppSelector from "../../hooks/useAppSelector";
@@ -30,6 +30,10 @@ import {
 } from "../../actions/connection";
 import { useToast } from "react-native-toast-notifications";
 import { clearRequestConnection } from "../../reducers/connection";
+import UserExperience from "./components/UserExperience";
+import { Title } from "react-native-paper";
+import ConnectionPostFeed from "./components/ConnectionPostFeed";
+import ReadMore from "react-native-read-more-text";
 
 const ConnectionProfile = () => {
   const height = useDimension().height;
@@ -49,7 +53,7 @@ const ConnectionProfile = () => {
     if (selector.requestConnectionStatus === "completed") {
       toast.show("Connection sent successfully", {
         placement: "top",
-        type: "success",
+        type: "normal",
         animationType: "slide-in",
       });
       getStatus();
@@ -111,6 +115,38 @@ const ConnectionProfile = () => {
     }
   };
 
+  const _renderTruncatedFooter = (handlePress: any) => {
+    return (
+      <Text
+        style={[
+          GlobalStyles.fontInterRegular,
+          GlobalStyles.fontSize10,
+          GlobalStyles.fontWeight400,
+          { color: colors.navyBlue, marginTop: 5 },
+        ]}
+        onPress={handlePress}
+      >
+        Read more
+      </Text>
+    );
+  };
+
+  const _renderRevealedFooter = (handlePress: any) => {
+    return (
+      <Text
+        style={[
+          GlobalStyles.fontInterRegular,
+          GlobalStyles.fontSize10,
+          GlobalStyles.fontWeight400,
+          { color: colors.navyBlue, marginTop: 5 },
+        ]}
+        onPress={handlePress}
+      >
+        Show less
+      </Text>
+    );
+  };
+
   return (
     <View
       style={[
@@ -129,14 +165,35 @@ const ConnectionProfile = () => {
           }
           style={[
             styles.imageBg,
-            height * 0.4 > 240 ? { height: 240 } : { height: height * 0.4 },
+            height * 0.4 > 240
+              ? { height: 240 }
+              : { height: height * 0.4, position: "relative" },
           ]}
         >
+          <View
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              height: "100%",
+              width: "100%",
+              backgroundColor: "rgba(0,0,0,0.5)",
+            }}
+          ></View>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
             style={[styles.imageHeaderWrapper]}
           >
-            <AntDesign name="arrowleft" size={24} color={colors.white} />
+            <AntDesign
+              name="arrowleft"
+              size={24}
+              style={{
+                textShadowColor: "rgba(0, 0, 0, 0.75)",
+                textShadowRadius: 10,
+                textShadowOffset: { width: 2, height: 2 },
+                color: colors.white,
+              }}
+            />
           </TouchableOpacity>
         </ImageBackground>
       </View>
@@ -175,7 +232,7 @@ const ConnectionProfile = () => {
               GlobalStyles.mb10,
             ]}
           >
-            {selector.profile?.bio}
+            {selector.profile?.experience[0]?.jobTitle}
           </Text>
           <Text
             style={[
@@ -186,21 +243,27 @@ const ConnectionProfile = () => {
               GlobalStyles.mb10,
             ]}
           >
-            From {selector.profile?.city || "Lagos"},{" "}
-            {selector.profile?.country || "Nigeria"}. Lives in{" "}
-            {selector.profile?.countryOfOrigin || "Nigeria"}.
+            From {selector.profile?.city}
+            {selector.profile?.country}
+            {selector.profile?.countryOfOrigin}.
           </Text>
-          <Text
-            style={[
-              GlobalStyles.fontInterRegular,
-              GlobalStyles.fontSize15,
-              GlobalStyles.textGrey,
-              GlobalStyles.fontWeight400,
-              GlobalStyles.mb10,
-            ]}
+          <ReadMore
+            renderTruncatedFooter={_renderTruncatedFooter}
+            renderRevealedFooter={_renderRevealedFooter}
+            numberOfLines={3}
           >
-            {selector.profile?.bio}
-          </Text>
+            <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textGrey,
+                GlobalStyles.fontWeight400,
+                GlobalStyles.mb10,
+              ]}
+            >
+              {selector.profile?.bio}
+            </Text>
+          </ReadMore>
         </View>
         <View style={[GlobalStyles.flewRow, GlobalStyles.mb30, { gap: 20 }]}>
           <View style={styles.boxSummary}>
@@ -237,7 +300,7 @@ const ConnectionProfile = () => {
                 GlobalStyles.textNavyBlue,
               ]}
             >
-              0
+              {state.userInfo?.followingCount || 0}
             </Text>
             <Text
               style={[
@@ -261,7 +324,7 @@ const ConnectionProfile = () => {
                 GlobalStyles.textNavyBlue,
               ]}
             >
-              0
+              {state.userInfo?.postCount || 0}
             </Text>
             <Text
               style={[
@@ -295,12 +358,46 @@ const ConnectionProfile = () => {
   );
 };
 
-const FirstRoute = () => <View style={{ flex: 1 }} />;
+const FirstRoute = () => {
+  const selector = useAppSelector((state) => state.connectionReducer);
+  const dispatch = useAppDispatch();
+  const getUserProfile = useCallback(() => {
+    dispatch(getSingleUserAction(selector.profileId));
+  }, [selector.profileId]);
+
+  useEffect(() => {
+    getUserProfile();
+  }, [getUserProfile]);
+
+  const filterExperience = () => {
+    return (
+      selector.profile?.experience
+        .filter(
+          (item) =>
+            item.companyName !== "" &&
+            item.responsiblities?.trim() !== "" &&
+            item.jobTitle?.trim() !== ""
+        )
+        .map((item) => ({
+          title: item.companyName,
+          description: item.jobTitle,
+        })) || []
+    );
+  };
+
+  return (
+    <View style={{ flex: 1, marginTop: 20 }}>
+      {filterExperience().length > 0 && (
+        <UserExperience data={filterExperience()} />
+      )}
+    </View>
+  );
+};
 
 const SecondRoute = () => {
   return (
     <View style={[GlobalStyles.mt20, GlobalStyles.mb20, { flex: 1 }]}>
-      <StoryFeedList />
+      <ConnectionPostFeed />
     </View>
   );
 };

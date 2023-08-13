@@ -3,18 +3,20 @@ import StoryFeedItem from "../../../components/StoryFeedItem/StoryFeedItem";
 import { useCallback, useEffect, useState } from "react";
 import useAppDispatch from "../../../hooks/useAppDispatch";
 import {
+  getConnectionPostFeedAction,
   getCurrentUserFeedAction,
   getPostFeedAction,
 } from "../../../actions/post";
 import useAppSelector from "../../../hooks/useAppSelector";
 import { IPostState } from "../../../reducers/post_reducer";
 
-const UserPostFeed = () => {
+const ConnectionPostFeed = () => {
   const dispatch = useAppDispatch();
   const state = useAppSelector((state: any) => state.postReducer) as IPostState;
+  const connection = useAppSelector((state) => state.connectionReducer);
   const [isRefreshing, setRefresh] = useState(false);
   const getPostFeeds = useCallback(() => {
-    dispatch(getCurrentUserFeedAction());
+    dispatch(getConnectionPostFeedAction(connection.profileId));
   }, []);
 
   const toast = useToast();
@@ -24,10 +26,10 @@ const UserPostFeed = () => {
   }, []);
 
   useEffect(() => {
-    if (state.getCurrentUserPostStatus === "failed") {
+    if (state.getConnectionPostFeedStatus === "failed") {
       console.log("error:", state.getPostFeedError);
     }
-  }, [state.getCurrentUserPostStatus]);
+  }, [state.getConnectionPostFeedStatus]);
 
   useEffect(() => {
     if (state.createPostStatus === "completed") {
@@ -50,7 +52,7 @@ const UserPostFeed = () => {
     <FlatList
       showsVerticalScrollIndicator={false}
       renderItem={(props) => <StoryFeedItem item={props.item} />}
-      data={state.currentUserPostFeeds}
+      data={state.connectionPostFeeds}
       keyExtractor={(item) => `${item.id}`}
       style={{ flexGrow: 1 }}
       refreshing={isRefreshing}
@@ -59,4 +61,4 @@ const UserPostFeed = () => {
   );
 };
 
-export default UserPostFeed;
+export default ConnectionPostFeed;

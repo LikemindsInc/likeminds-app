@@ -1,12 +1,17 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { APP_BASE_URL } from "../constants";
 import { store } from "../store/store";
 import { ISettingState } from "../reducers/settings";
+import { refreshTokenAction } from "../actions/auth";
 
 // axios.defaults.withCredentials = true;
 axios.defaults.baseURL = APP_BASE_URL;
 
-axios.interceptors.request.use((config: any) => {
+const axiosClient = axios.create({ baseURL: APP_BASE_URL });
+
+export const axioxRefreshClient = axios.create({ baseURL: APP_BASE_URL });
+
+axiosClient.interceptors.request.use((config: any) => {
   // grab current state
   let token = "";
 
@@ -33,14 +38,29 @@ axios.interceptors.request.use((config: any) => {
   };
 });
 
-export default axios;
+export default axiosClient;
 
-// export default (() => {
-//   axios.defaults.headers.get["Authorization"] = `Bearer ${token}`;
-//   axios.defaults.headers.post["Authorization"] = `Bearer ${token}`;
-//   axios.defaults.headers.patch["Authorization"] = `Bearer ${token}`;
-//   axios.defaults.headers.put["Authorization"] = `Bearer ${token}`;
-//   axios.defaults.headers.delete["Authorization"] = `Bearer ${token}`;
+axiosClient.interceptors.response.use(
+  (response) => response,
+  async (error: AxiosError<any>) => {
+    if (
+      error?.response?.status === 403 ||
+      error?.response?.data?.statusCode === 403 ||
+      error?.response?.status === 401 ||
+      error?.response?.data?.statusCode === 401
+    ) {
+      //   const state = store.getState();
+      //   const refresh_token = state?.session?.userData?.token;
 
-//   return axios;
-// })();
+      const state = (store.getState() as any).settingReducer as ISettingState;
+      const token = state.userInfo?.refreshToken as string;
+
+      store.dispatch(refreshTokenAction(token));
+
+      return;
+    }
+
+    reportError(error?.response?.data as Error);
+    return Promise.reject(error?.response?.data as Error);
+  }
+);

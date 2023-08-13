@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import Input from "../../components/Input/Input";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../../components/Button/Button";
 import TextLink from "../../components/TextLink/TextLink";
 import colors from "../../theme/colors";
@@ -15,16 +15,120 @@ import { ISettingState } from "../../reducers/settings";
 import DateFormatter from "../../utils/date-formatter";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import BackButton from "../../components/Navigation/BackButton/BackButton";
+import moment from "moment";
 
 const SignupExperience = () => {
   const navigation = useNavigation<any>();
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(
+    moment().subtract("7", "days").format("YYYY-MM-DD")
+  );
+  const [endDate, setEndDate] = useState(moment().format("YYYY-MM-DD"));
   const [stillWorkHere, setStillWorkHere] = useState(false);
   const [jobTitle, setJobTitle] = useState("");
-
   const [companyName, setCompanyName] = useState("");
   const [responsibilities, setResponsibilities] = useState("");
+
+  const [errors, setErrors] = useState<{
+    startDate: null | string;
+    endDate: null | string;
+    companyName: string | null;
+    jobTitle: string | null;
+    responsibilities: string | null;
+  }>({
+    startDate: null,
+    endDate: null,
+    companyName: null,
+    jobTitle: null,
+    responsibilities: null,
+  });
+
+  useEffect(() => {
+    setErrors({
+      startDate: null,
+      endDate: null,
+      companyName: null,
+      jobTitle: null,
+      responsibilities: null,
+    });
+  }, []);
+
+  useEffect(() => {
+    if (jobTitle.trim() !== "")
+      setErrors((state) => ({ ...state, jobTitle: null }));
+    else
+      setErrors((state) => ({ ...state, jobTitle: "Job title is required" }));
+  }, [jobTitle]);
+
+  useEffect(() => {
+    if (companyName.trim() !== "")
+      setErrors((state) => ({ ...state, companyName: null }));
+    else
+      setErrors((state) => ({
+        ...state,
+        companyName: "Company name is required",
+      }));
+  }, [companyName]);
+
+  useEffect(() => {
+    if (responsibilities.trim() !== "")
+      setErrors((state) => ({ ...state, responsibilities: null }));
+    else
+      setErrors((state) => ({
+        ...state,
+        responsibilities: "Please provide responsiblities",
+      }));
+  }, [responsibilities]);
+
+  const validateStartDate = () => {
+    if (startDate.trim() !== "") {
+      if (moment().diff(startDate, "days") < 0) {
+        return setErrors((state) => ({
+          ...state,
+          startDate: "Start date can not be a future date",
+        }));
+      } else if (
+        startDate.trim() !== "" &&
+        moment(endDate).diff(startDate, "days") < 0
+      ) {
+        return setErrors((state) => ({
+          ...state,
+          startDate: "Start date can not be earlier than end date ",
+        }));
+      }
+      setErrors((state) => ({ ...state, startDate: null }));
+    } else
+      setErrors((state) => ({
+        ...state,
+        startDate: "start date is required",
+      }));
+  };
+
+  const validateEndDate = () => {
+    if (!stillWorkHere) {
+      setErrors((state) => ({ ...state, endDate: null }));
+    } else if (endDate.trim() !== "") {
+      if (
+        startDate.trim() !== "" &&
+        moment(startDate).diff(endDate, "days") < 0
+      ) {
+        return setErrors((state) => ({
+          ...state,
+          endDate: "End date can not be earlier than start date",
+        }));
+      }
+      setErrors((state) => ({ ...state, endDate: null }));
+    } else
+      setErrors((state) => ({ ...state, endDate: "End date is required" }));
+  };
+
+  useEffect(() => {
+    validateStartDate();
+  }, [startDate, endDate]);
+
+  useEffect(() => {
+    validateEndDate();
+  }, [endDate, stillWorkHere, startDate]);
+
   const session = useAppSelector(
     (state: any) => state.sessionReducer
   ) as ISessionState;
@@ -36,6 +140,27 @@ const SignupExperience = () => {
   const dispatch = useAppDispatch();
 
   const handleOnNextPress = () => {
+    if (companyName.trim() === "")
+      return setErrors((state) => ({
+        ...state,
+        companyName: "Company name is Required",
+      }));
+    if (responsibilities.trim() === "")
+      return setErrors((state) => ({
+        ...state,
+        responsibilities: "Responsibilities is Required",
+      }));
+    if (jobTitle.trim() === "")
+      return setErrors((state) => ({
+        ...state,
+        companyName: "Job title is Required",
+      }));
+
+    if (startDate.trim() === "")
+      return setErrors((state) => ({
+        ...state,
+        startDate: "start date is required",
+      }));
     dispatch(
       updateExperience({
         startDate,
@@ -46,6 +171,10 @@ const SignupExperience = () => {
         responsiblities: responsibilities,
       })
     );
+    navigation.navigate(APP_SCREEN_LIST.SIGNUP_EDUCATION_SCREEN);
+  };
+
+  const handleOnSkip = () => {
     navigation.navigate(APP_SCREEN_LIST.SIGNUP_EDUCATION_SCREEN);
   };
   return (
@@ -73,6 +202,7 @@ const SignupExperience = () => {
             }
             placeholder="Start Date"
             style={styles.inputFlex}
+            errorMessage={errors.startDate}
           />
           {!stillWorkHere && (
             <DatePicker
@@ -81,6 +211,7 @@ const SignupExperience = () => {
               }
               placeholder="End Date"
               style={styles.inputFlex}
+              errorMessage={errors.endDate}
             />
           )}
         </View>
@@ -113,6 +244,7 @@ const SignupExperience = () => {
             value={jobTitle}
             onChangeText={(text) => setJobTitle(text)}
             placeholder="Job Title"
+            errorMessage={errors.jobTitle}
           />
         </View>
         <View style={[GlobalStyles.mb10]}>
@@ -120,6 +252,7 @@ const SignupExperience = () => {
             value={companyName}
             onChangeText={(text) => setCompanyName(text)}
             placeholder="Company Name"
+            errorMessage={errors.companyName}
           />
         </View>
         <View style={[GlobalStyles.mb10]}>
@@ -128,13 +261,18 @@ const SignupExperience = () => {
             onChangeText={(text) => setResponsibilities(text)}
             placeholder="Responsibilities"
             multiline
-            style={[styles.inputFlex, { height: 100, paddingVertical: 8 }]}
+            errorMessage={errors.responsibilities}
+            inputContainer={{ height: 100, paddingVertical: 8 }}
           />
         </View>
       </ScrollView>
       <View>
         <View style={[GlobalStyles.mb20, GlobalStyles.displayRowCenter]}>
-          <TextLink title="Skip For Now" color={colors.black} />
+          <TextLink
+            title="Skip For Now"
+            onPress={handleOnSkip}
+            color={colors.black}
+          />
         </View>
         <Button title="Continue" onPress={handleOnNextPress} />
       </View>

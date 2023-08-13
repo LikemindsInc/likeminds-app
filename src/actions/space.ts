@@ -9,6 +9,7 @@ import {
 import { uploadFile } from "./auth";
 
 const CREATE_SPACE = "space:CREATE_SPACE";
+const GET_CURRENT_USER_SPACE = "space:GET_CURRENT_USER_SPACE";
 const GET_SPACE_LIST = "space:GET_SPACE_LIST";
 const FOLLOW_SPACE = "space:FOLLOW_SPACE";
 
@@ -50,6 +51,14 @@ export const getSpaceListAction = asyncThunkWrapper<
   const response = await axiosClient.get<AxiosResponse<any>>(
     "/api/space?page=1&limit=1000"
   );
+  return response.data;
+});
+
+export const getCurrentUserSpace = asyncThunkWrapper<
+  ApiResponseSuccess<ISpaceList[]>,
+  void
+>(GET_CURRENT_USER_SPACE, async () => {
+  const response = await axiosClient.get<AxiosResponse<any>>("/api/space/me");
   return response.data;
 });
 

@@ -25,6 +25,8 @@ const SignupCertificate = () => {
 
   const toast = useToast();
 
+  const [uploods, setUploads] = useState([{}]);
+
   const session = useAppSelector(
     (state: any) => state.sessionReducer
   ) as ISessionState;
@@ -80,26 +82,32 @@ const SignupCertificate = () => {
           <Input editable={false} placeholder="Certificate, Award, Volunteer" />
         </View>
         <View>
-          <DropZone
-            type="document"
-            style={{ height: 60 }}
-            onSelect={handleOnFileSelect}
-            emptyIcon={
-              <Text
-                style={[
-                  GlobalStyles.textPrimary,
-                  GlobalStyles.fontInterRegular,
-                  GlobalStyles.fontSize15,
-                  GlobalStyles.fontWeight400,
-                ]}
-              >
-                Upload a Document
-              </Text>
-            }
-          />
+          {uploods.map((item) => (
+            <DropZone
+              type="all"
+              style={{ height: 60 }}
+              onSelect={handleOnFileSelect}
+              emptyIcon={
+                <Text
+                  style={[
+                    GlobalStyles.textPrimary,
+                    GlobalStyles.fontInterRegular,
+                    GlobalStyles.fontSize15,
+                    GlobalStyles.fontWeight400,
+                  ]}
+                >
+                  Upload a Document
+                </Text>
+              }
+            />
+          ))}
         </View>
         <View>
-          <Button type="outline-primary" title="Add Another" />
+          <Button
+            type="outline-primary"
+            title="Add Another"
+            onPress={() => setUploads((state) => [...state, {}])}
+          />
         </View>
       </ScrollView>
       <View>

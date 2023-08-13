@@ -67,6 +67,7 @@ import Messages from "../screens/Message/Messages";
 import ConnectionProfile from "../screens/Profile/ConnectionProfile";
 import Notification from "../screens/Notification/Notification";
 import { useToast } from "react-native-toast-notifications";
+import { getCurrentUserSpace } from "../actions/space";
 
 const Stack = createNativeStackNavigator();
 
@@ -176,6 +177,12 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NavigationProp<any>>();
 
+  const state = useAppSelector((state) => state.spaceReducer);
+
+  useEffect(() => {
+    dispatch(getCurrentUserSpace());
+  }, []);
+
   return (
     <DrawerContentScrollView {...props}>
       <View style={[GlobalStyles.menuContainer, { width }]}>
@@ -195,13 +202,23 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
             />
           </View>
           <View style={[GlobalStyles.mb40]}>
-            <Button
-              type="tertiary"
-              title="Switch To Space"
-              onPress={() =>
-                navigation.navigate(APP_SCREEN_LIST.SPACE_PROFILE_SCREEN)
-              }
-            />
+            {state.currentUserSpaceList.length > 0 ? (
+              <Button
+                type="tertiary"
+                title="Switch To Space"
+                onPress={() =>
+                  navigation.navigate(APP_SCREEN_LIST.SPACE_PROFILE_SCREEN)
+                }
+              />
+            ) : (
+              <Button
+                type="tertiary"
+                title="Create Space"
+                onPress={() =>
+                  navigation.navigate(APP_SCREEN_LIST.CREATE_SPACE_SCREEN)
+                }
+              />
+            )}
           </View>
           <View style={[GlobalStyles.flexOne, GlobalStyles.mt20]}>
             <TouchableOpacity

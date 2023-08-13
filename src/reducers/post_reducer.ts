@@ -15,6 +15,7 @@ import {
   createJobAction,
   createPostAction,
   getCommentsOnPostAction,
+  getConnectionPostFeedAction,
   getCurrentUserFeedAction,
   getJobsAction,
   getPostFeedAction,
@@ -34,6 +35,10 @@ export interface IPostState {
   getCurrentUserPostStatus: IThunkAPIStatus;
   getCurrentUserPostSuccess: string;
   getCurrentUserPostError: string;
+
+  getConnectionPostFeedStatus: IThunkAPIStatus;
+  getConnectionPostFeedSuccess: string;
+  getConnectionPostFeedError: string;
 
   getPostReactionStatus: IThunkAPIStatus;
   getPostReactionSuccess: string;
@@ -78,6 +83,7 @@ export interface IPostState {
   postFeeds: IPostFeed[];
 
   currentUserPostFeeds: IPostFeed[];
+  connectionPostFeeds: IPostFeed[];
 
   postComments: IPostCommentFeed[];
 
@@ -112,6 +118,10 @@ const initialState: IPostState = {
   getCurrentUserPostStatus: "idle",
   getCurrentUserPostSuccess: "",
   getCurrentUserPostError: "",
+
+  getConnectionPostFeedStatus: "idle",
+  getConnectionPostFeedSuccess: "",
+  getConnectionPostFeedError: "",
 
   getPostReactionStatus: "idle",
   getPostReactionSuccess: "",
@@ -175,6 +185,8 @@ const initialState: IPostState = {
   currentUserPostFeeds: [],
 
   postReaction: [],
+
+  connectionPostFeeds: [],
 };
 
 const PostSlice = createSlice({
@@ -262,6 +274,20 @@ const PostSlice = createSlice({
       state.getCurrentUserPostStatus = "failed";
       console.log("action.payload?.messag> ", action.payload?.message);
       state.getCurrentUserPostError = action.payload?.message as string;
+    });
+
+    builder.addCase(getConnectionPostFeedAction.pending, (state) => {
+      state.getConnectionPostFeedStatus = "loading";
+    });
+    builder.addCase(getConnectionPostFeedAction.fulfilled, (state, action) => {
+      state.getConnectionPostFeedStatus = "completed";
+      state.connectionPostFeeds = action.payload.data;
+      state.getConnectionPostFeedSuccess = action.payload?.message;
+    });
+    builder.addCase(getConnectionPostFeedAction.rejected, (state, action) => {
+      state.getConnectionPostFeedStatus = "failed";
+      console.log("action.payload?.messag> ", action.payload?.message);
+      state.getConnectionPostFeedError = action.payload?.message as string;
     });
 
     builder.addCase(createJobAction.pending, (state) => {

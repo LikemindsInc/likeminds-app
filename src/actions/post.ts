@@ -24,6 +24,7 @@ const UNLIKE_POST = "post:UNLIKE_POST";
 const REACTION_TO_POST = "post:REACTION_TO_POST";
 const LIKE_POST = "post:LIKE_POST";
 const GET_USER_POST_FEED = "post:GET_USER_POST_FEED";
+const GET_CONNECTION_POST_FEED = "post:GET_CONNECTION_POST_FEED";
 const GET_POST_FEED_REACTIONS = "post:GET_POST_FEED_REACTIONS";
 
 const GET_POST_FEED = "post:GET_POST_FEED";
@@ -96,6 +97,16 @@ export const getCurrentUserFeedAction = asyncThunkWrapper<
 >(GET_USER_POST_FEED, async () => {
   const response = await axiosClient.get<AxiosResponse<any>>(
     "/api/post/me/feeds?page=1&limit=1000"
+  );
+  return response.data;
+});
+
+export const getConnectionPostFeedAction = asyncThunkWrapper<
+  ApiResponseSuccess<IPostFeed[]>,
+  string
+>(GET_CONNECTION_POST_FEED, async (userId) => {
+  const response = await axiosClient.get<AxiosResponse<any>>(
+    `/api/post/feeds/user/${userId}?page=1&limit=1000`
   );
   return response.data;
 });
