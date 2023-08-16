@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Image,
   KeyboardAvoidingView,
@@ -10,13 +10,14 @@ import {
   View,
 } from "react-native";
 import { Feather, AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
-import { IPostFeed } from "@app-model";
+import { IPostFeed, IPostReaction } from "@app-model";
 
 import {
   commentOnPostAction,
   getCommentsOnPostAction,
   getPostFeedAction,
   getPostFeedByIdAction,
+  getPostReactions,
   likePostAction,
   unlikePostAction,
 } from "../../../actions/post";
@@ -38,11 +39,17 @@ import CommentRowItem from "./CommentRowItem";
 import FbGrid from "react-native-fb-image-grid";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import ReactionIcon from "../../../components/ReactionIcon/ReactionIcon";
+import moment from "moment";
+import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 interface IProps {
   item: IPostFeed;
 }
 
 const PostDetail = () => {
+  const bottomSheetRef2 = useRef<BottomSheet>(null);
+  const snapPoints = useMemo(() => ["50%", "60%"], []);
+
+  const handleSheetChanges = useCallback((index: number) => {}, []);
   const state = useAppSelector(
     (state: any) => state.settingReducer
   ) as ISettingState;
@@ -120,6 +127,13 @@ const PostDetail = () => {
       dispatch(likePostAction(item.id));
       // setLiked(true);
     }
+  };
+
+  const renderProfilePicture = (item: IPostReaction) => {
+    if (item.user.profilePicture && item.user.profilePicture.trim() !== "") {
+      return { uri: item.user.profilePicture };
+    }
+    return require("../../../../assets/image3.png");
   };
 
   const handleLoadComments = () => {};
@@ -214,15 +228,26 @@ const PostDetail = () => {
     );
   };
 
+  const handleGetPostReactions = (postId: string) => {
+    dispatch(getPostReactions(postId));
+  };
+
+  useEffect(() => {
+    if (postState.postReaction.length > 0) {
+      bottomSheetRef2.current?.expand();
+    }
+  }, [postState.postReaction]);
+
   return (
-    <KeyboardAwareScrollView
-      style={{ flexGrow: 1 }}
-      // behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardShouldPersistTaps={"always"}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={50}
+      // keyboardShouldPersistTaps={"always"}
     >
       <ScrollView
-        style={[GlobalStyles.container, { flex: 1 }]}
-        contentContainerStyle={[{ flexGrow: 1 }]}
+        style={[GlobalStyles.container]}
+        // contentContainerStyle={[{ flexGrow: 1 }]}
       >
         <TouchableOpacity
           style={[GlobalStyles.mb20]}
@@ -252,9 +277,10 @@ const PostDetail = () => {
                   GlobalStyles.fontSize15,
                   GlobalStyles.fontWeight700,
                   GlobalStyles.pl4,
+                  GlobalStyles.mb20,
                 ]}
               >
-                {item?.user?.firstName} {item?.user?.firstName}
+                {item?.user?.firstName} {item?.user?.lastName}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity style={{ justifyContent: "center" }}>
@@ -263,12 +289,6 @@ const PostDetail = () => {
           </View>
           <View style={{ width: "100%", height: 300 }}>
             {item.images && item.images.length > 0 ? (
-              // <Image
-              //   source={{ uri: item.images[0] }}
-              //   style={styles.image}
-              //   resizeMethod="auto"
-              //   resizeMode="cover"
-              // />
               <FbGrid images={item.images} onPress={onPress} />
             ) : (
               <Image
@@ -291,15 +311,17 @@ const PostDetail = () => {
           <View
             style={[GlobalStyles.flewRow, { gap: 12, alignItems: "center" }]}
           >
-            <Text
-              style={[
-                GlobalStyles.fontInterMedium,
-                GlobalStyles.fontSize10,
-                GlobalStyles.fontWeight700,
-              ]}
-            >
-              {item.reactionCount} Reactions
-            </Text>
+            <TouchableOpacity onPress={() => handleGetPostReactions(item.id)}>
+              <Text
+                style={[
+                  GlobalStyles.fontInterMedium,
+                  GlobalStyles.fontSize10,
+                  GlobalStyles.fontWeight700,
+                ]}
+              >
+                {item.reactionCount} Reactions
+              </Text>
+            </TouchableOpacity>
             <Text
               style={[
                 GlobalStyles.fontInterMedium,
@@ -309,16 +331,6 @@ const PostDetail = () => {
             >
               {item.commentCount} comments
             </Text>
-            {/* <Text
-              style={[
-                GlobalStyles.fontInterMedium,
-                GlobalStyles.fontSize10,
-                GlobalStyles.fontWeight700,
-                GlobalStyles.textNavyBlue,
-              ]}
-            >
-              {item.commentCount} shares
-            </Text> */}
           </View>
           <View
             style={[
@@ -339,16 +351,6 @@ const PostDetail = () => {
               handleLikeReactionOnPost={handleLikeReactionOnPost}
               handleOnReactionActivate={() => {}}
             />
-            {/* <TouchableOpacity onPress={() => handleLikeReactionOnPost()}>
-              <AntDesign
-                name={isPostLiked ? "heart" : "hearto"}
-                size={24}
-                color={isPostLiked ? colors.red : colors.navyBlue}
-              />
-            </TouchableOpacity> */}
-            {/* <TouchableOpacity>
-              <Feather name="send" size={24} color={colors.navyBlue} />
-            </TouchableOpacity> */}
           </View>
         </View>
         <TouchableOpacity onPress={handleLoadComments} style={{}}>
@@ -370,6 +372,7 @@ const PostDetail = () => {
         </TouchableOpacity>
         <View style={{ paddingBottom: 200 }}>{renderComments()}</View>
       </ScrollView>
+
       <View style={styles.bottomInputStyle}>
         <Input
           inputViewStyle={styles.commentInputViewStyle}
@@ -383,7 +386,70 @@ const PostDetail = () => {
           returnKeyType="done"
         />
       </View>
-    </KeyboardAwareScrollView>
+      <BottomSheet
+        ref={bottomSheetRef2}
+        index={-1}
+        snapPoints={snapPoints}
+        onChange={handleSheetChanges}
+        backdropComponent={(props: any) => (
+          <BottomSheetBackdrop {...props} pressBehavior={"close"} />
+        )}
+      >
+        <View style={{ flex: 1 }}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={{ flexGrow: 1, flex: 1 }}
+          >
+            <View style={[GlobalStyles.container, { backgroundColor: "#fff" }]}>
+              {postState.postReaction.map((item) => (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    marginBottom: 20,
+                    justifyContent: "space-between",
+                  }}
+                  key={item.id}
+                >
+                  <View style={{ flex: 1, flexDirection: "row", gap: 10 }}>
+                    <View>
+                      <Image
+                        source={renderProfilePicture(item)}
+                        style={{ width: 30, height: 30, borderRadius: 15 }}
+                        resizeMethod="auto"
+                        resizeMode="cover"
+                      />
+                    </View>
+                    <View>
+                      <Text
+                        style={[
+                          GlobalStyles.fontInterRegular,
+                          GlobalStyles.fontSize13,
+                          GlobalStyles.textNavyBlue,
+                        ]}
+                      >
+                        {item.user?.firstName} {item.user?.lastName}
+                      </Text>
+                      <Text
+                        style={[
+                          GlobalStyles.fontInterRegular,
+                          GlobalStyles.fontSize10,
+                          GlobalStyles.textGrey,
+                        ]}
+                      >
+                        {moment(item.createdAt).fromNow()}
+                      </Text>
+                    </View>
+                  </View>
+                  <View>
+                    <Text>{item.reaction}</Text>
+                  </View>
+                </View>
+              ))}
+            </View>
+          </ScrollView>
+        </View>
+      </BottomSheet>
+    </KeyboardAvoidingView>
   );
 };
 

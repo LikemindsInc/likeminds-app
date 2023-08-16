@@ -20,6 +20,7 @@ import { IPostState, clearCreatePostStatus } from "../../reducers/post_reducer";
 import { createPostAction } from "../../actions/post";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { APP_SCREEN_LIST } from "../../constants";
+import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
 
 const CreatePost = () => {
   const [images, setImages] = useState<ImagePicker.ImagePickerAsset[]>([]);
@@ -79,62 +80,66 @@ const CreatePost = () => {
     };
   }, []);
   return (
-    <View style={[GlobalStyles.container]}>
-      <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
-        <Text
-          style={[
-            GlobalStyles.fontInterMedium,
-            GlobalStyles.fontSize20,
-            GlobalStyles.fontWeight700,
-          ]}
-        >
-          New Post
-        </Text>
-      </View>
-      <View style={[GlobalStyles.flexOne]}>
-        <Input
-          placeholder="What’s on your mind"
-          textAlignVertical="top"
-          contentContainerStyle={styles.inputStyle}
-          multiline={true}
-          value={content}
-          onChangeText={(value) => setContent(value)}
-        />
-        <View style={styles.buttonWrapper}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate(APP_SCREEN_LIST.POST_JOB_SCREEN)}
+    <KeyboardDismisser>
+      <View style={[GlobalStyles.container]}>
+        <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
+          <Text
+            style={[
+              GlobalStyles.fontInterMedium,
+              GlobalStyles.fontSize20,
+              GlobalStyles.fontWeight700,
+            ]}
           >
-            <FontAwesome5 name="toolbox" size={24} color={colors.navyBlue} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleMediaSelect}>
-            <FontAwesome name="photo" size={24} color={colors.navyBlue} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Entypo name="attachment" size={24} color={colors.navyBlue} />
-          </TouchableOpacity>
+            New Post
+          </Text>
         </View>
-        <ScrollView style={{ flex: 1, flexGrow: 1 }}>
-          <View style={styles.imagesWrapper}>
-            {images.map((item, i) => {
-              return (
-                <Image
-                  key={i}
-                  source={{ uri: item.uri }}
-                  resizeMode="cover"
-                  resizeMethod="auto"
-                  style={styles.files}
-                />
-              );
-            })}
+        <View style={[GlobalStyles.flexOne]}>
+          <Input
+            placeholder="What’s on your mind"
+            textAlignVertical="top"
+            contentContainerStyle={styles.inputStyle}
+            multiline={true}
+            value={content}
+            onChangeText={(value) => setContent(value)}
+          />
+          <View style={styles.buttonWrapper}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate(APP_SCREEN_LIST.POST_JOB_SCREEN)
+              }
+            >
+              <FontAwesome5 name="toolbox" size={24} color={colors.navyBlue} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleMediaSelect}>
+              <FontAwesome name="photo" size={24} color={colors.navyBlue} />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Entypo name="attachment" size={24} color={colors.navyBlue} />
+            </TouchableOpacity>
           </View>
-        </ScrollView>
+          <ScrollView style={{ flex: 1, flexGrow: 1 }}>
+            <View style={styles.imagesWrapper}>
+              {images.map((item, i) => {
+                return (
+                  <Image
+                    key={i}
+                    source={{ uri: item.uri }}
+                    resizeMode="cover"
+                    resizeMethod="auto"
+                    style={styles.files}
+                  />
+                );
+              })}
+            </View>
+          </ScrollView>
+        </View>
+        <Button
+          loading={postState.createPostStatus === "loading"}
+          onPress={handleCreatePost}
+          title="Post Now"
+        />
       </View>
-      <Button
-        loading={postState.createPostStatus === "loading"}
-        onPress={handleCreatePost}
-        title="Post Now"
-      />
-    </View>
+    </KeyboardDismisser>
   );
 };
 

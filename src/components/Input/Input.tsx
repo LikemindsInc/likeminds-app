@@ -27,8 +27,10 @@ export interface ITextInputProps extends TextInputProps {
   inputViewStyle?: ViewStyle;
   prefixIcon?: JSX.Element;
   suffixElement?: JSX.Element;
+  inputContainer?: ViewStyle;
   mode?: "phone-pad";
   onCountryCodeSelect?: (value: string) => void;
+  errorMessage?: string | null;
 }
 
 const Input: FC<ITextInputProps> = (props) => {
@@ -37,7 +39,7 @@ const Input: FC<ITextInputProps> = (props) => {
 
   if (props.mode && props.mode === "phone-pad") {
     return (
-      <View>
+      <View style={[styles.inputWrapper, props.inputViewStyle]}>
         <TouchableOpacity
           style={[
             styles.input,
@@ -94,45 +96,79 @@ const Input: FC<ITextInputProps> = (props) => {
             setShow(false);
           }}
         />
+        {props.errorMessage && (
+          <View style={[GlobalStyles.pl4]}>
+            <Text
+              style={[
+                GlobalStyles.textRed,
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize10,
+                GlobalStyles.fontWeight700,
+              ]}
+            >
+              {props.errorMessage}
+            </Text>
+          </View>
+        )}
       </View>
     );
   }
   return (
-    <TouchableOpacity
-      style={[
-        styles.input,
-        { flexDirection: "row", width: "100%", alignItems: "center" },
-        props.contentContainerStyle,
-        props.inputViewStyle,
-      ]}
-      onPress={props.onPress}
-    >
-      {props.prefixIcon && (
-        <View style={{ paddingRight: 8 }}>{props.prefixIcon}</View>
-      )}
-      <TextInput
-        returnKeyType="done"
-        {...props}
-        ref={props.inputRef}
+    <View style={[styles.inputWrapper, props.inputViewStyle]}>
+      <TouchableOpacity
         style={[
-          { flex: 1, height: "100%" },
-          GlobalStyles.inputStyle,
-          props.inputStyle,
+          styles.input,
+          { flexDirection: "row", width: "100%", alignItems: "center" },
+          props.contentContainerStyle,
+          props.inputContainer,
         ]}
-      />
-      {props.suffixElement && props.suffixElement}
-    </TouchableOpacity>
+        onPress={props.onPress}
+      >
+        {props.prefixIcon && (
+          <View style={{ paddingRight: 8 }}>{props.prefixIcon}</View>
+        )}
+        <TextInput
+          returnKeyType="done"
+          {...props}
+          ref={props.inputRef}
+          style={[
+            { flex: 1, height: "100%" },
+            GlobalStyles.inputStyle,
+            props.inputStyle,
+          ]}
+        />
+        {props.suffixElement && props.suffixElement}
+      </TouchableOpacity>
+      {props.errorMessage && (
+        <View style={[GlobalStyles.pl4]}>
+          <Text
+            style={[
+              GlobalStyles.textRed,
+              GlobalStyles.fontInterRegular,
+              GlobalStyles.fontSize10,
+              GlobalStyles.fontWeight700,
+            ]}
+          >
+            {props.errorMessage}
+          </Text>
+        </View>
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  inputWrapper: {
+    marginBottom: 20,
+    width: "100%",
+  },
   input: {
     backgroundColor: "#F3F5F7",
     height: 60,
     paddingLeft: 16,
     paddingRight: 16,
     borderRadius: 10,
-    marginBottom: 20,
+    marginBottom: 6,
   },
   inputStyle: {
     width: "100%",

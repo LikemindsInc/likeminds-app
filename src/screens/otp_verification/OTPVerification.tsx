@@ -18,11 +18,11 @@ import { useNavigation } from "@react-navigation/native";
 import OTPTextInput from "react-native-otp-textinput";
 import useAppSelector from "../../hooks/useAppSelector";
 import { ISessionState } from "../../reducers/session";
-import { useToast } from "native-base";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import { verifyOTPActionAction } from "../../actions/auth";
 import { PURGE } from "redux-persist";
 import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
+import { useToast } from "react-native-toast-notifications";
 
 const OTPVerification = () => {
   let otpInput = useRef(null) as React.RefObject<any>;
@@ -84,8 +84,7 @@ const OTPVerification = () => {
   };
 
   const handleOnVerify = () => {
-    if (otp.length < 4)
-      return toast.show({ description: "Incomplete OTP", variant: "solid" });
+    if (otp.length < 4) return toast.show("Incomplete OTP", { type: "normal" });
 
     dispatch(
       verifyOTPActionAction({

@@ -8,6 +8,7 @@ import { useToast } from "native-base";
 import { storeSpaceTitleAndDescription } from "../../reducers/space_reducer";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { APP_SCREEN_LIST } from "../../constants";
+import BackButton from "../../components/Navigation/BackButton/BackButton";
 
 const CreateSpace = () => {
   const [title, setTitle] = useState("");
@@ -35,7 +36,8 @@ const CreateSpace = () => {
   return (
     <View style={[GlobalStyles.container]}>
       <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
-        <Text
+        <BackButton title="Create Your Space" />
+        {/* <Text
           style={[
             GlobalStyles.fontInterMedium,
             GlobalStyles.fontSize20,
@@ -43,7 +45,7 @@ const CreateSpace = () => {
           ]}
         >
           Create Your Space
-        </Text>
+        </Text> */}
       </View>
       <View style={[GlobalStyles.mb40]}>
         <Text

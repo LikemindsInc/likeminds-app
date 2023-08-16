@@ -11,6 +11,7 @@ import {
   IJobDTO,
   IPostCommentFeed,
   IPostFeed,
+  IPostReaction,
   IReactionToPostDTO,
 } from "@app-model";
 import { uploadFile } from "./auth";
@@ -22,11 +23,15 @@ const GET_COMMENT_ON_POST = "post:GET_COMMENT_ON_POST";
 const UNLIKE_POST = "post:UNLIKE_POST";
 const REACTION_TO_POST = "post:REACTION_TO_POST";
 const LIKE_POST = "post:LIKE_POST";
+const GET_USER_POST_FEED = "post:GET_USER_POST_FEED";
+const GET_CONNECTION_POST_FEED = "post:GET_CONNECTION_POST_FEED";
+const GET_POST_FEED_REACTIONS = "post:GET_POST_FEED_REACTIONS";
 
 const GET_POST_FEED = "post:GET_POST_FEED";
 const GET_SINGLE_POST_FEED = "post:GET_SINGLE_POST_FEED";
 const CREATE_JOB = "job:CREATE_JOB";
 const GET_JOBS = "job:GET_JOBS";
+
 import { Image } from "react-native-compressor";
 
 export const createPostAction = asyncThunkWrapper<
@@ -72,6 +77,36 @@ export const getPostFeedAction = asyncThunkWrapper<
 >(GET_POST_FEED, async () => {
   const response = await axiosClient.get<AxiosResponse<any>>(
     "/api/post/feeds?page=1&limit=1000"
+  );
+  return response.data;
+});
+
+export const getPostReactions = asyncThunkWrapper<
+  ApiResponseSuccess<IPostReaction[]>,
+  string
+>(GET_POST_FEED_REACTIONS, async (id) => {
+  const response = await axiosClient.get<AxiosResponse<any>>(
+    `/api/post/reaction/${id}`
+  );
+  return response.data;
+});
+
+export const getCurrentUserFeedAction = asyncThunkWrapper<
+  ApiResponseSuccess<IPostFeed[]>,
+  void
+>(GET_USER_POST_FEED, async () => {
+  const response = await axiosClient.get<AxiosResponse<any>>(
+    "/api/post/me/feeds?page=1&limit=1000"
+  );
+  return response.data;
+});
+
+export const getConnectionPostFeedAction = asyncThunkWrapper<
+  ApiResponseSuccess<IPostFeed[]>,
+  string
+>(GET_CONNECTION_POST_FEED, async (userId) => {
+  const response = await axiosClient.get<AxiosResponse<any>>(
+    `/api/post/feeds/user/${userId}?page=1&limit=1000`
   );
   return response.data;
 });

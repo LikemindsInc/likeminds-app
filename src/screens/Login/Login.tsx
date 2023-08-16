@@ -20,6 +20,7 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { Keyboard } from "react-native";
 import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
 import BackButton from "../../components/Navigation/BackButton/BackButton";
+import { err } from "react-native-svg/lib/typescript/xml";
 
 const IconButton: FC<{ image: any }> = ({ image }) => {
   return (
@@ -47,7 +48,36 @@ const Login = () => {
 
   const dispatch = useAppDispatch();
 
+  const [errors, setErrors] = useState<{
+    email: null | string;
+    password: null | string;
+  }>({ email: null, password: null });
+
+  useEffect(() => {
+    setErrors({ email: null, password: null });
+  }, []);
+
+  useEffect(() => {
+    if (email.trim() !== "") setErrors((state) => ({ ...state, email: null }));
+    else setErrors((state) => ({ ...state, email: "Email is required" }));
+  }, [email]);
+
+  useEffect(() => {
+    if (password.trim() !== "")
+      setErrors((state) => ({ ...state, password: null }));
+    else setErrors((state) => ({ ...state, password: "Password is required" }));
+  }, [password]);
+
   const handleOnLogin = () => {
+    if (email.trim() === "")
+      return setErrors((state) => ({ ...state, email: "Email is Required" }));
+
+    if (password.trim() === "")
+      return setErrors((state) => ({
+        ...state,
+        password: "Password is Required",
+      }));
+
     dispatch(loginUserActionAction({ email, password }));
   };
 
@@ -87,6 +117,7 @@ const Login = () => {
             keyboardType="email-address"
             onChangeText={(text) => setEmail(text)}
             returnKeyType="done"
+            errorMessage={errors.email}
           />
           <Input
             placeholder="Password"
@@ -97,6 +128,7 @@ const Login = () => {
             keyboardType="default"
             onChangeText={(text) => setPassword(text)}
             returnKeyType="done"
+            errorMessage={errors.password}
           />
         </View>
 

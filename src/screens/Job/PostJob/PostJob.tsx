@@ -24,6 +24,7 @@ import {
 } from "../../../reducers/post_reducer";
 import { createJobAction } from "../../../actions/post";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import KeyboardDismisser from "../../../components/KeyboardDismisser/KeyboardDismisser";
 
 const PostJob = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -147,258 +148,266 @@ const PostJob = () => {
   }, [state.createJobStatus]);
 
   return (
-    <View style={[GlobalStyles.container]}>
-      <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
-        <BackButton title="Job Post" iconColor={colors.primary} />
-      </View>
-      <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
-        <View style={[GlobalStyles.mb20]}>
-          <Input
-            placeholder="Job Title"
-            autoCorrect={false}
-            autoCapitalize={"none"}
-            value={jobTitle}
-            onChangeText={(text) => setJobTitle(text)}
-          />
+    <KeyboardDismisser>
+      <View style={[GlobalStyles.container]}>
+        <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
+          <BackButton title="Job Post" iconColor={colors.primary} />
         </View>
-        <View style={[GlobalStyles.mb20]}>
-          <Input
-            placeholder="Company Name"
-            autoCorrect={false}
-            autoCapitalize={"none"}
-            value={companyName}
-            onChangeText={(text) => setCompanyName(text)}
-          />
-        </View>
-        <View style={[GlobalStyles.mb20]}>
-          <Input
-            placeholder="Company Description"
-            autoCorrect={false}
-            autoCapitalize={"none"}
-            contentContainerStyle={{ height: 100, alignItems: "flex-start" }}
-            textAlignVertical="top"
-            textAlign="left"
-            multiline={true}
-            value={companyDescription}
-            onChangeText={(text) => setCompanyDescription(text)}
-          />
-        </View>
-        <View style={[GlobalStyles.mb20]}>
-          <TouchableOpacity onPress={handleOpenIndustrySelectPicker}>
-            <View style={styles.industryStyle}>
-              <View
-                style={[
-                  GlobalStyles.flewRow,
-                  { justifyContent: "space-between" },
-                ]}
-              >
-                <Text
-                  style={[
-                    GlobalStyles.fontInterRegular,
-                    GlobalStyles.fontWeight400,
-                    GlobalStyles.fontSize15,
-                  ]}
-                >
-                  {selectedIndustry === "" ? "Industry" : selectedIndustry}
-                </Text>
-                <AntDesign name="caretdown" size={24} color={colors.primary} />
-              </View>
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        <View style={[GlobalStyles.mb20]}>
-          <Input
-            placeholder="Job Description"
-            autoCorrect={false}
-            autoCapitalize={"none"}
-            contentContainerStyle={{ height: 100, alignItems: "flex-start" }}
-            textAlignVertical="top"
-            textAlign="left"
-            multiline={true}
-            value={jobDescription}
-            onChangeText={(text) => setJobDescription(text)}
-          />
-        </View>
-        <View style={[GlobalStyles.mb20]}>
-          <Text
-            style={[
-              GlobalStyles.fontInterMedium,
-              GlobalStyles.fontSize15,
-              GlobalStyles.fontWeight400,
-              GlobalStyles.textNavyBlue,
-              { justifyContent: "center" },
-            ]}
-          >
-            Job Type{" "}
-            <Text
-              style={[
-                GlobalStyles.fontInterMedium,
-                GlobalStyles.fontSize15,
-                GlobalStyles.fontWeight400,
-                GlobalStyles.textRed,
-              ]}
-            >
-              *
-            </Text>
-          </Text>
-          <View
-            style={[
-              GlobalStyles.flewRow,
-              GlobalStyles.mt20,
-              { flexWrap: "wrap", gap: 10 },
-            ]}
-          >
-            {JOB_TYPES.map((item, i) => (
-              <JobType
-                isSelected={item.value === jobType}
-                onPress={() => handleOnJobTypeSelect(item.value)}
-                text={item.label}
-                key={i}
-              />
-            ))}
-          </View>
-        </View>
-        <View style={[GlobalStyles.mb20]}>
-          <Text
-            style={[
-              GlobalStyles.fontInterMedium,
-              GlobalStyles.fontSize15,
-              GlobalStyles.fontWeight400,
-              GlobalStyles.textNavyBlue,
-              { justifyContent: "center" },
-            ]}
-          >
-            Location of Job{" "}
-            <Text
-              style={[
-                GlobalStyles.fontInterMedium,
-                GlobalStyles.fontSize15,
-                GlobalStyles.fontWeight400,
-                GlobalStyles.textRed,
-              ]}
-            >
-              *
-            </Text>
-          </Text>
-          <View
-            style={[
-              GlobalStyles.flewRow,
-              GlobalStyles.mt20,
-              { flexWrap: "wrap", gap: 10 },
-            ]}
-          >
-            <RadioGroup
-              radioButtons={radioButtons}
-              onPress={setJobLocation}
-              selectedId={jobLocation}
-              layout="row"
+        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
+          <View style={[GlobalStyles.mb20]}>
+            <Input
+              placeholder="Job Title"
+              autoCorrect={false}
+              autoCapitalize={"none"}
+              value={jobTitle}
+              onChangeText={(text) => setJobTitle(text)}
             />
           </View>
-        </View>
+          <View style={[GlobalStyles.mb20]}>
+            <Input
+              placeholder="Company Name"
+              autoCorrect={false}
+              autoCapitalize={"none"}
+              value={companyName}
+              onChangeText={(text) => setCompanyName(text)}
+            />
+          </View>
+          <View style={[GlobalStyles.mb20]}>
+            <Input
+              placeholder="Company Description"
+              autoCorrect={false}
+              autoCapitalize={"none"}
+              contentContainerStyle={{ height: 100, alignItems: "flex-start" }}
+              textAlignVertical="top"
+              textAlign="left"
+              multiline={true}
+              value={companyDescription}
+              onChangeText={(text) => setCompanyDescription(text)}
+            />
+          </View>
+          <View style={[GlobalStyles.mb20]}>
+            <TouchableOpacity onPress={handleOpenIndustrySelectPicker}>
+              <View style={styles.industryStyle}>
+                <View
+                  style={[
+                    GlobalStyles.flewRow,
+                    { justifyContent: "space-between" },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      GlobalStyles.fontInterRegular,
+                      GlobalStyles.fontWeight400,
+                      GlobalStyles.fontSize15,
+                    ]}
+                  >
+                    {selectedIndustry === "" ? "Industry" : selectedIndustry}
+                  </Text>
+                  <AntDesign
+                    name="caretdown"
+                    size={24}
+                    color={colors.primary}
+                  />
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
 
-        <View style={[GlobalStyles.mb20]}>
-          <Input
-            placeholder="Location"
-            autoCorrect={false}
-            autoCapitalize={"none"}
-            value={locationAddress}
-            onChangeText={(text) => setLocationAddress(text)}
-          />
-        </View>
-        <View style={[GlobalStyles.mb20]}>
-          <Text
-            style={[
-              GlobalStyles.fontInterMedium,
-              GlobalStyles.fontSize15,
-              GlobalStyles.fontWeight400,
-              GlobalStyles.textNavyBlue,
-              { justifyContent: "center" },
-            ]}
-          >
-            Job Experience{" "}
+          <View style={[GlobalStyles.mb20]}>
+            <Input
+              placeholder="Job Description"
+              autoCorrect={false}
+              autoCapitalize={"none"}
+              contentContainerStyle={{ height: 100, alignItems: "flex-start" }}
+              textAlignVertical="top"
+              textAlign="left"
+              multiline={true}
+              value={jobDescription}
+              onChangeText={(text) => setJobDescription(text)}
+            />
+          </View>
+          <View style={[GlobalStyles.mb20]}>
             <Text
               style={[
                 GlobalStyles.fontInterMedium,
                 GlobalStyles.fontSize15,
                 GlobalStyles.fontWeight400,
-                GlobalStyles.textRed,
+                GlobalStyles.textNavyBlue,
+                { justifyContent: "center" },
               ]}
             >
-              *
+              Job Type{" "}
+              <Text
+                style={[
+                  GlobalStyles.fontInterMedium,
+                  GlobalStyles.fontSize15,
+                  GlobalStyles.fontWeight400,
+                  GlobalStyles.textRed,
+                ]}
+              >
+                *
+              </Text>
             </Text>
-          </Text>
-          <View
-            style={[
-              GlobalStyles.flewRow,
-              GlobalStyles.mt20,
-              { flexWrap: "wrap", gap: 10 },
-            ]}
-          >
-            {JOB_EXPERIENCE.map((item, i) => (
-              <JobType
-                isSelected={item.value === jobExperience}
-                onPress={() => setJobExperience(item.value)}
-                text={item.label}
-                key={i}
-              />
-            ))}
-          </View>
-        </View>
-        <View style={[GlobalStyles.mb20]}>
-          <Input
-            placeholder="Salary"
-            autoCorrect={false}
-            autoCapitalize={"none"}
-            keyboardType="number-pad"
-            value={salary}
-            onChangeText={(text) => setSalary(text)}
-          />
-        </View>
-        <View>
-          <Button
-            loading={state.createJobStatus === "loading"}
-            onPress={handleOnPress}
-            title="Post Job"
-          />
-        </View>
-      </ScrollView>
-      <BottomSheet
-        ref={bottomSheetRef}
-        index={-1}
-        snapPoints={snapPoints}
-        onChange={handleSheetChanges}
-        backdropComponent={(props: any) => (
-          <BottomSheetBackdrop {...props} pressBehavior={"close"} />
-        )}
-      >
-        <View style={{ flex: 1 }}>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            style={{ flex: 1, flexGrow: 1, flexBasis: 1 }}
-          >
-            <View style={[GlobalStyles.container]}>
-              {INDUSTRIES.map((item, i) => (
-                <IndustryItem
-                  text={item}
+            <View
+              style={[
+                GlobalStyles.flewRow,
+                GlobalStyles.mt20,
+                { flexWrap: "wrap", gap: 10 },
+              ]}
+            >
+              {JOB_TYPES.map((item, i) => (
+                <JobType
+                  isSelected={item.value === jobType}
+                  onPress={() => handleOnJobTypeSelect(item.value)}
+                  text={item.label}
                   key={i}
-                  handleOnSelect={handleOnIndustrySelect}
-                  isSelected={item === selectedIndustry}
                 />
               ))}
             </View>
-          </ScrollView>
-          <View
-            style={[{ marginTop: 30, paddingHorizontal: 16, marginBottom: 20 }]}
-          >
-            <Button
-              onPress={() => bottomSheetRef.current?.close()}
-              title="Continue"
+          </View>
+          <View style={[GlobalStyles.mb20]}>
+            <Text
+              style={[
+                GlobalStyles.fontInterMedium,
+                GlobalStyles.fontSize15,
+                GlobalStyles.fontWeight400,
+                GlobalStyles.textNavyBlue,
+                { justifyContent: "center" },
+              ]}
+            >
+              Location of Job{" "}
+              <Text
+                style={[
+                  GlobalStyles.fontInterMedium,
+                  GlobalStyles.fontSize15,
+                  GlobalStyles.fontWeight400,
+                  GlobalStyles.textRed,
+                ]}
+              >
+                *
+              </Text>
+            </Text>
+            <View
+              style={[
+                GlobalStyles.flewRow,
+                GlobalStyles.mt20,
+                { flexWrap: "wrap", gap: 10 },
+              ]}
+            >
+              <RadioGroup
+                radioButtons={radioButtons}
+                onPress={setJobLocation}
+                selectedId={jobLocation}
+                layout="row"
+              />
+            </View>
+          </View>
+
+          <View style={[GlobalStyles.mb20]}>
+            <Input
+              placeholder="Location"
+              autoCorrect={false}
+              autoCapitalize={"none"}
+              value={locationAddress}
+              onChangeText={(text) => setLocationAddress(text)}
             />
           </View>
-        </View>
-      </BottomSheet>
-    </View>
+          <View style={[GlobalStyles.mb20]}>
+            <Text
+              style={[
+                GlobalStyles.fontInterMedium,
+                GlobalStyles.fontSize15,
+                GlobalStyles.fontWeight400,
+                GlobalStyles.textNavyBlue,
+                { justifyContent: "center" },
+              ]}
+            >
+              Job Experience{" "}
+              <Text
+                style={[
+                  GlobalStyles.fontInterMedium,
+                  GlobalStyles.fontSize15,
+                  GlobalStyles.fontWeight400,
+                  GlobalStyles.textRed,
+                ]}
+              >
+                *
+              </Text>
+            </Text>
+            <View
+              style={[
+                GlobalStyles.flewRow,
+                GlobalStyles.mt20,
+                { flexWrap: "wrap", gap: 10 },
+              ]}
+            >
+              {JOB_EXPERIENCE.map((item, i) => (
+                <JobType
+                  isSelected={item.value === jobExperience}
+                  onPress={() => setJobExperience(item.value)}
+                  text={item.label}
+                  key={i}
+                />
+              ))}
+            </View>
+          </View>
+          <View style={[GlobalStyles.mb20]}>
+            <Input
+              placeholder="Salary"
+              autoCorrect={false}
+              autoCapitalize={"none"}
+              keyboardType="number-pad"
+              value={salary}
+              onChangeText={(text) => setSalary(text)}
+            />
+          </View>
+          <View>
+            <Button
+              loading={state.createJobStatus === "loading"}
+              onPress={handleOnPress}
+              title="Post Job"
+            />
+          </View>
+        </ScrollView>
+        <BottomSheet
+          ref={bottomSheetRef}
+          index={-1}
+          snapPoints={snapPoints}
+          onChange={handleSheetChanges}
+          backdropComponent={(props: any) => (
+            <BottomSheetBackdrop {...props} pressBehavior={"close"} />
+          )}
+        >
+          <View style={{ flex: 1 }}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              style={{ flex: 1, flexGrow: 1, flexBasis: 1 }}
+            >
+              <View style={[GlobalStyles.container]}>
+                {INDUSTRIES.map((item, i) => (
+                  <IndustryItem
+                    text={item}
+                    key={i}
+                    handleOnSelect={handleOnIndustrySelect}
+                    isSelected={item === selectedIndustry}
+                  />
+                ))}
+              </View>
+            </ScrollView>
+            <View
+              style={[
+                { marginTop: 30, paddingHorizontal: 16, marginBottom: 20 },
+              ]}
+            >
+              <Button
+                onPress={() => bottomSheetRef.current?.close()}
+                title="Continue"
+              />
+            </View>
+          </View>
+        </BottomSheet>
+      </View>
+    </KeyboardDismisser>
   );
 };
 

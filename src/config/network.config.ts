@@ -3,6 +3,8 @@ import axios, { AxiosError, AxiosRequestConfig } from "axios";
 
 import { ResponseInterface } from "@app-model";
 import { APP_BASE_URL } from "../constants";
+import { store } from "../store/store";
+import { refreshTokenAction } from "../actions/auth";
 
 // Set config defaults when creating the instance
 export const network = axios.create({ baseURL: APP_BASE_URL });
@@ -64,11 +66,14 @@ network.interceptors.response.use(
 
     if (
       error?.response?.status === 403 ||
-      error?.response?.data?.statusCode === 403
+      error?.response?.data?.statusCode === 403 ||
+      error?.response?.status === 401 ||
+      error?.response?.data?.statusCode === 401
     ) {
       //   const state = store.getState();
       //   const refresh_token = state?.session?.userData?.token;
-      //   store.dispatch(logoutAction());
+      console.log("youshpud be here");
+      // store.dispatch(refreshTokenAction());
     }
 
     reportError(error?.response?.data as Error);

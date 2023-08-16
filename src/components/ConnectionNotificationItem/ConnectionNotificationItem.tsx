@@ -20,9 +20,10 @@ import useAppSelector from "../../hooks/useAppSelector";
 
 interface IProps {
   item: IConnectionReceivedDTO;
+  handleOnRespond: (item: IConnectionReceivedDTO) => void;
 }
 
-const ConnectionNotificationItem: FC<IProps> = ({ item }) => {
+const ConnectionNotificationItem: FC<IProps> = ({ item, handleOnRespond }) => {
   const renderImageSource = () => {
     if (
       !item.user ||
@@ -55,13 +56,14 @@ const ConnectionNotificationItem: FC<IProps> = ({ item }) => {
     dispatch(clearConnectionRespondStatus());
   }, [state.connectionRespondStatus]);
 
-  const handleOnRespond = () => {
-    dispatch(
-      acceptConnectionRequestAction({
-        connectionId: item.id,
-        status: "accepted",
-      })
-    );
+  const handleRespond = () => {
+    // dispatch(
+    //   acceptConnectionRequestAction({
+    //     connectionId: item.id,
+    //     status: "accepted",
+    //   })
+    // );
+    handleOnRespond && handleOnRespond(item);
   };
   return (
     <TouchableOpacity onPress={handleGotoProfile} style={[styles.container]}>
@@ -102,7 +104,7 @@ const ConnectionNotificationItem: FC<IProps> = ({ item }) => {
           </Text>
         </View>
       </View>
-      <Button onPress={handleOnRespond} title="Respond" />
+      <Button onPress={handleRespond} title="Respond" />
     </TouchableOpacity>
   );
 };

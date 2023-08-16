@@ -1,7 +1,9 @@
 import {
   ApiResponseSuccess,
+  FilePickerFormat,
   IChangePasswordDTO,
   ILogin,
+  IRefreshTokenResponse,
   IRequestOTPEmail,
   IRequestOTPPhone,
   ISignUp,
@@ -13,7 +15,7 @@ import {
 import asyncThunkWrapper from "../helpers/asyncThunkWrapper";
 import { network } from "../config/network.config";
 import { AxiosResponse } from "axios";
-import axiosClient from "../config/axiosClient";
+import axiosClient, { axioxRefreshClient } from "../config/axiosClient";
 import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
 import Converter from "../utils/Converters";
@@ -24,8 +26,10 @@ import { persistor } from "../store/store";
 import { Platform } from "react-native";
 import reportError from "../utils/reportError";
 import { Image } from "react-native-compressor";
+import { err } from "react-native-svg/lib/typescript/xml";
 
 const SIGN_IN = "authentication:SIGN_IN";
+const REFRSH_TOKEN = "authentication:REFRSH_TOKEN";
 const SIGN_OUT = "authentication:SIGN_OUT";
 const SIGNUP = "authentication:SIGNUP";
 const VERIFY_OTP = "authentication:VERIFY_OTP";
@@ -35,6 +39,7 @@ const REQUEST_OTP_PHONE = "authentication:REQUEST_OTP_PHONE";
 const CHANGE_PASSWORD_OTP = "authentication:CHANGE_PASSWORD_OTP";
 const VERIFY_PHONE_EMAIL_OTP = "authentication:VERIFY_PHONE_EMAIL_OTP";
 const STORE_OTP_CHANNEL_VALUE = "authentication:STORE_OTP_CHANNEL_VALUE";
+const GET_CURRENT_USER = "authentication:GET_CURRENT_USER";
 
 export const loginUserActionAction = asyncThunkWrapper<
   ApiResponseSuccess<IUserData>,
@@ -48,6 +53,29 @@ export const loginUserActionAction = asyncThunkWrapper<
   console.log(response.data);
 
   return response.data;
+});
+
+export const refreshTokenAction = asyncThunkWrapper<
+  ApiResponseSuccess<IRefreshTokenResponse>,
+  string
+>(REFRSH_TOKEN, async (token) => {
+  try {
+    const response = await axioxRefreshClient.post<
+      AxiosResponse<IRefreshTokenResponse>
+    >(
+      "/api/auth/refresh_token",
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error);
+  }
 });
 
 export const storeOTPChannelValueAction = asyncThunkWrapper<string, string>(
@@ -117,6 +145,17 @@ export const changePasswordAction = asyncThunkWrapper<
   return response.data;
 });
 
+export const getCurrentUserAction = asyncThunkWrapper<
+  ApiResponseSuccess<IUserData>,
+  void
+>(GET_CURRENT_USER, async () => {
+  const response = await axiosClient.get<AxiosResponse<any>>(
+    "/api/users/current"
+  );
+
+  return response.data;
+});
+
 export const verifyOTPOnChangePasswordAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
   IVerifyPhoneEmailOTP
@@ -141,8 +180,7 @@ export const completeUserProfileAction = asyncThunkWrapper<
     const certificateFile = agrs
       .certificates[0] as ImagePicker.ImagePickerResult;
 
-    const resumeFile = agrs.personalInformation
-      .resume as ImagePicker.ImagePickerResult;
+    const resumeFile = agrs.personalInformation.resume as FilePickerFormat;
 
     let profileResponseUrl = "";
     let certificateFileUrl = "";
@@ -196,27 +234,13 @@ export const completeUserProfileAction = asyncThunkWrapper<
       certificateFileUrl = response.data?.data?.url || "";
     }
 
-    if (resumeFile && resumeFile.assets && resumeFile.assets[0].uri) {
-      console.log(">>>>3");
-      const resumeBlob = Converter.dataURItoBlob(
-        resumeFile?.assets ? resumeFile.assets[0].uri : ""
-      );
-
+    if (resumeFile && resumeFile.uri) {
       const formData = new FormData() as any;
       formData.append("file", {
-        uri: resumeFile.assets[0].uri,
-        type: resumeFile.assets[0].type,
-        name: resumeFile.assets[0].fileName,
+        uri: resumeFile.uri,
+        type: resumeFile.type,
+        name: resumeFile.name,
       });
-
-      // uploadFile(formData)
-      //   .then((response) => {
-      //     resumeUrl = response.data?.data?.url || "";
-      //   })
-      //   .catch((error) => {
-      //     // reportError(error);
-      //     console.log("error> ", error?.response || error);
-      //   });
 
       const response = await uploadFile(formData);
       resumeUrl = response.data?.data?.url || "";

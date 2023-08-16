@@ -10,7 +10,7 @@ import {
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import useDimension from "../../hooks/useDimension";
 import { AntDesign, Feather } from "@expo/vector-icons";
-import colors from "../../theme/colors";
+import colors, { addOpacity } from "../../theme/colors";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native";
 import Button from "../../components/Button/Button";
@@ -22,14 +22,52 @@ import useAppSelector from "../../hooks/useAppSelector";
 import { ISessionState } from "../../reducers/session";
 import { ISettingState } from "../../reducers/settings";
 import StoryFeedList from "../Home/components/StoryFeedList";
+import UserPostFeed from "./components/UserPostFeed";
+import UserExperience from "./components/UserExperience";
+import { useUser } from "../../hooks/userUser";
+import ReadMore from "react-native-read-more-text";
 
 const UserProfile = () => {
   const height = useDimension().height;
   const navigation = useNavigation<NavigationProp<any>>();
 
+  const [user] = useUser();
+
   const state = useAppSelector(
     (state: any) => state.settingReducer
   ) as ISettingState;
+
+  const _renderTruncatedFooter = (handlePress: any) => {
+    return (
+      <Text
+        style={[
+          GlobalStyles.fontInterRegular,
+          GlobalStyles.fontSize10,
+          GlobalStyles.fontWeight400,
+          { color: colors.navyBlue, marginTop: 5 },
+        ]}
+        onPress={handlePress}
+      >
+        Read more
+      </Text>
+    );
+  };
+
+  const _renderRevealedFooter = (handlePress: any) => {
+    return (
+      <Text
+        style={[
+          GlobalStyles.fontInterRegular,
+          GlobalStyles.fontSize10,
+          GlobalStyles.fontWeight400,
+          { color: colors.navyBlue, marginTop: 5 },
+        ]}
+        onPress={handlePress}
+      >
+        Show less
+      </Text>
+    );
+  };
   return (
     <View
       style={[
@@ -48,15 +86,39 @@ const UserProfile = () => {
           }
           style={[
             styles.imageBg,
-            height * 0.4 > 240 ? { height: 240 } : { height: height * 0.4 },
+            height * 0.4 > 240
+              ? { height: 240 }
+              : { height: height * 0.4, position: "relative" },
           ]}
         >
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={[styles.imageHeaderWrapper]}
-          >
-            <AntDesign name="arrowleft" size={24} color={colors.white} />
-          </TouchableOpacity>
+          <View
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              height: "100%",
+              width: "100%",
+              backgroundColor: "rgba(0,0,0,0.4)",
+            }}
+          ></View>
+          <View>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={[styles.imageHeaderWrapper]}
+            >
+              <AntDesign
+                name="arrowleft"
+                size={24}
+                style={{
+                  textShadowColor: "rgba(0, 0, 0, 0.75)",
+                  textShadowRadius: 10,
+                  textShadowOffset: { width: 2, height: 2 },
+                  color: colors.white,
+                }}
+                // color={colors.white}
+              />
+            </TouchableOpacity>
+          </View>
         </ImageBackground>
       </View>
       <ScrollView style={styles.contentWrapper}>
@@ -94,32 +156,37 @@ const UserProfile = () => {
               GlobalStyles.mb10,
             ]}
           >
-            {state.userInfo?.bio}
+            {state.userInfo?.experience[0]?.jobTitle}
           </Text>
           <Text
             style={[
               GlobalStyles.fontInterRegular,
-              GlobalStyles.fontSize15,
+              GlobalStyles.fontSize13,
               GlobalStyles.textPrimary,
               GlobalStyles.fontWeight400,
               GlobalStyles.mb10,
             ]}
           >
-            From {state.userInfo?.city || "Lagos"},{" "}
-            {state.userInfo?.country || "Nigeria"}. Lives in{" "}
-            {state.userInfo?.countryOfOrigin || "Nigeria"}.
+            From {state.userInfo?.city}, {state.userInfo?.country}. Lives in{" "}
+            {state.userInfo?.countryOfOrigin}
           </Text>
-          <Text
-            style={[
-              GlobalStyles.fontInterRegular,
-              GlobalStyles.fontSize15,
-              GlobalStyles.textGrey,
-              GlobalStyles.fontWeight400,
-              GlobalStyles.mb10,
-            ]}
+          <ReadMore
+            renderTruncatedFooter={_renderTruncatedFooter}
+            renderRevealedFooter={_renderRevealedFooter}
+            numberOfLines={3}
           >
-            {state.userInfo?.bio}
-          </Text>
+            <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textGrey,
+                GlobalStyles.fontWeight400,
+                GlobalStyles.mb10,
+              ]}
+            >
+              {state.userInfo?.bio}
+            </Text>
+          </ReadMore>
         </View>
         <View style={[GlobalStyles.flewRow, GlobalStyles.mb30, { gap: 20 }]}>
           <View style={styles.boxSummary}>
@@ -156,7 +223,7 @@ const UserProfile = () => {
                 GlobalStyles.textNavyBlue,
               ]}
             >
-              0
+              {state.userInfo?.followingCount || 0}
             </Text>
             <Text
               style={[
@@ -180,7 +247,7 @@ const UserProfile = () => {
                 GlobalStyles.textNavyBlue,
               ]}
             >
-              0
+              {state.userInfo?.postCount}
             </Text>
             <Text
               style={[
@@ -207,12 +274,32 @@ const UserProfile = () => {
   );
 };
 
-const FirstRoute = () => <View style={{ flex: 1 }} />;
+const FirstRoute = () => {
+  const [user] = useUser();
+  const filterExperience = () => {
+    return user?.experience
+      .filter(
+        (item) =>
+          item.companyName !== "" &&
+          item.responsiblities?.trim() !== "" &&
+          item.jobTitle?.trim() !== ""
+      )
+      .map((item) => ({
+        title: item.companyName,
+        description: item.jobTitle,
+      }));
+  };
+  return (
+    <View style={[GlobalStyles.mt20, GlobalStyles.mb20, { flex: 1 }]}>
+      <UserExperience data={filterExperience()} />
+    </View>
+  );
+};
 
 const SecondRoute = () => {
   return (
     <View style={[GlobalStyles.mt20, GlobalStyles.mb20, { flex: 1 }]}>
-      <StoryFeedList />
+      <UserPostFeed />
     </View>
   );
 };

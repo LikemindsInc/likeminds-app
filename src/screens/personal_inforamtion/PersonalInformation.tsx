@@ -21,6 +21,8 @@ import {
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import { SelectList } from "react-native-dropdown-select-list";
+import { FilePickerFormat } from "@app-model";
+import { useToast } from "react-native-toast-notifications";
 
 const PersonalInformation = () => {
   const settings = useAppSelector(
@@ -53,8 +55,43 @@ const PersonalInformation = () => {
     session.profileData?.personalInformation?.countryOfOrigin
   );
 
+  const [errors, setErrors] = useState<{
+    firstName: null | string;
+    lastName: null | string;
+    city: string | null;
+    bio: string | null;
+  }>({ firstName: null, lastName: null, city: null, bio: null });
+
+  useEffect(() => {
+    setErrors({ firstName: null, lastName: null, city: null, bio: null });
+  }, []);
+
+  useEffect(() => {
+    if (firstName.trim() !== "")
+      setErrors((state) => ({ ...state, firstName: null }));
+    else
+      setErrors((state) => ({ ...state, firstName: "First name is required" }));
+  }, [firstName]);
+
+  useEffect(() => {
+    if (lastName.trim() !== "")
+      setErrors((state) => ({ ...state, lastName: null }));
+    else
+      setErrors((state) => ({ ...state, lastName: "Last name is required" }));
+  }, [lastName]);
+
+  useEffect(() => {
+    if (bio.trim() !== "") setErrors((state) => ({ ...state, bio: null }));
+    else setErrors((state) => ({ ...state, bio: "Bio is required" }));
+  }, [bio]);
+
+  useEffect(() => {
+    if (city.trim() !== "") setErrors((state) => ({ ...state, city: null }));
+    else setErrors((state) => ({ ...state, city: "City is required" }));
+  }, [city]);
+
   const [resume, setResume] = useState<
-    DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult | null
+    FilePickerFormat | ImagePicker.ImagePickerResult | null
   >(session.profileData?.personalInformation?.resume);
 
   useEffect(() => {
@@ -62,7 +99,7 @@ const PersonalInformation = () => {
   }, [getCountries]);
 
   const handleFileSelect = (
-    file: DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult
+    file: FilePickerFormat | ImagePicker.ImagePickerResult
   ) => {
     setResume(file);
     return null;
@@ -72,7 +109,38 @@ const PersonalInformation = () => {
 
   const navigation = useNavigation<any>();
 
+  const toast = useToast();
+
   const handleOnNextPress = () => {
+    if (firstName.trim() === "")
+      return setErrors((state) => ({
+        ...state,
+        firstName: "First name is Required",
+      }));
+    if (lastName.trim() === "")
+      return setErrors((state) => ({
+        ...state,
+        lastName: "Last name is Required",
+      }));
+
+    if (city.trim() === "")
+      return setErrors((state) => ({
+        ...state,
+        city: "City is Required",
+      }));
+
+    if (bio.trim() === "")
+      return setErrors((state) => ({
+        ...state,
+        bio: "Bio is Required",
+      }));
+
+    if (country.trim() === "")
+      return toast.show("Please provide your country of resident");
+
+    if (countryOfOrigin.trim() === "")
+      return toast.show("Please provide your country of origin");
+
     dispatch(
       updatePersonalInformation({
         firstName,
@@ -106,6 +174,7 @@ const PersonalInformation = () => {
             style={styles.inputFlex}
             placeholder="First Name"
             value={firstName}
+            errorMessage={errors.firstName}
             autoCorrect={false}
             inputViewStyle={{ width: "50%" }}
           />
@@ -115,6 +184,7 @@ const PersonalInformation = () => {
             placeholder="Last Name"
             value={lastName}
             autoCorrect={false}
+            errorMessage={errors.lastName}
             inputViewStyle={{ width: "50%" }}
           />
         </View>
@@ -150,6 +220,7 @@ const PersonalInformation = () => {
             onChangeText={(text) => setCity(text)}
             style={styles.inputFlex}
             placeholder="City"
+            errorMessage={errors.city}
             value={city}
             autoCorrect={false}
           />
@@ -157,12 +228,13 @@ const PersonalInformation = () => {
         <View style={[styles.inputDouble, GlobalStyles.mb10]}>
           <Input
             multiline
-            style={[styles.inputFlex, { height: 100, paddingVertical: 8 }]}
+            inputContainer={{ height: 100, paddingVertical: 8 }}
             placeholder="Bio"
             textAlignVertical="top"
             autoCorrect={false}
             onChangeText={(text) => setBio(text)}
             autoCapitalize="none"
+            errorMessage={errors.bio}
             value={bio}
           />
         </View>
@@ -182,7 +254,7 @@ const PersonalInformation = () => {
             }}
             save="key"
             fontFamily="Inter-Regular"
-            setSelected={(val: string) => setCountry(val)}
+            setSelected={(val: string) => setCountryOfOrigin(val)}
             data={(settings.countries || []).map((item) => ({
               key: item.name,
               value: item.name,
@@ -195,7 +267,7 @@ const PersonalInformation = () => {
         </View>
         <DropZone
           onSelect={handleFileSelect}
-          type="document"
+          type="all"
           emptyIcon={<FileUploadEmptyIcon />}
         />
       </ScrollView>
@@ -245,7 +317,7 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   inputFlex: {
-    flex: 1,
+    // flex: 1,
   },
 });
 

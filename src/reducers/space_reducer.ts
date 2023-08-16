@@ -13,6 +13,7 @@ import _ from "lodash";
 import {
   createSpaceAction,
   followSpaceAction,
+  getCurrentUserSpace,
   getSpaceListAction,
 } from "../actions/space";
 
@@ -31,6 +32,8 @@ export interface ISpaceState {
   followSpaceError: string;
 
   spaceList: ISpaceList[];
+
+  currentUserSpaceList: ISpaceList[];
 }
 
 const initialState: ISpaceState = {
@@ -52,6 +55,8 @@ const initialState: ISpaceState = {
   followSpaceError: "",
 
   spaceList: [],
+
+  currentUserSpaceList: [],
 };
 
 const SpaceSlice = createSlice({
@@ -114,6 +119,18 @@ const SpaceSlice = createSlice({
     builder.addCase(followSpaceAction.rejected, (state, action) => {
       state.followSpaceStatus = "failed";
       state.followSpaceError = action.payload?.message as string;
+    });
+
+    builder.addCase(getCurrentUserSpace.pending, (state) => {
+      state.getSpaceListStatus = "loading";
+    });
+    builder.addCase(getCurrentUserSpace.fulfilled, (state, action) => {
+      state.getSpaceListStatus = "completed";
+      state.currentUserSpaceList = action.payload.data;
+    });
+    builder.addCase(getCurrentUserSpace.rejected, (state, action) => {
+      state.getSpaceListStatus = "failed";
+      state.getSpaceListError = action.payload?.message as string;
     });
   },
 });

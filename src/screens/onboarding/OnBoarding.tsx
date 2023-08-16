@@ -70,7 +70,7 @@ const OnBoarding = () => {
   useEffect(() => {
     if (setting.userInfo)
       return navigation.navigate(APP_SCREEN_LIST.MAIN_SCREEN);
-  }, [setting.userInfo]);
+  }, []);
   const _renderItem = ({ item }: any) => {
     return (
       <View>
