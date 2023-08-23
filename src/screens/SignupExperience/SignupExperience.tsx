@@ -168,7 +168,7 @@ const SignupExperience = () => {
         endDate,
         jobTitle,
         companyName,
-        responsiblities: responsibilities,
+        responsibilities: responsibilities,
       })
     );
     navigation.navigate(APP_SCREEN_LIST.SIGNUP_EDUCATION_SCREEN);

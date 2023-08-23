@@ -1,4 +1,5 @@
 import {
+  FilePickerFormat,
   IEducation,
   IExperience,
   IProfileInformation,
@@ -94,7 +95,7 @@ const initialState: ISessionState = {
       bio: "",
       city: "",
     },
-    eduction: [],
+    education: [],
     experience: [],
     certificates: [],
     profilePicture: null,
@@ -179,13 +180,11 @@ const sessionSlice = createSlice({
       state.profileData.experience = [action.payload];
     },
     updateEducation(state: ISessionState, action: PayloadAction<IEducation>) {
-      state.profileData.eduction = [action.payload];
+      state.profileData.education = [action.payload];
     },
     updateCertificate(
       state: ISessionState,
-      action: PayloadAction<
-        DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult | null
-      >
+      action: PayloadAction<FilePickerFormat>
     ) {
       if (action.payload) state.profileData.certificates = [action.payload];
       else state.profileData.certificates = [];

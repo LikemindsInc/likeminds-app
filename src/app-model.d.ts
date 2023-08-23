@@ -72,7 +72,7 @@ declare module "@app-model" {
     stillWorkHere: boolean;
     jobTitle: string;
     companyName: string;
-    responsiblities: string;
+    responsibilities: string;
   }
 
   interface IEducation {
@@ -87,16 +87,13 @@ declare module "@app-model" {
     phoneNumber: string;
     personalInformation: IProfileInformation;
     experience: IExperience[];
-    eduction: IEducation[];
-    certificates: (
-      | DocumentPicker.DocumentResult
-      | ImagePicker.ImagePickerResult
-    )[];
+    certificates: FilePickerFormat[];
     profilePicture:
       | DocumentPicker.DocumentResult
       | ImagePicker.ImagePickerResult
       | null;
     skills: string[];
+    education: IEducation[];
   }
 
   interface IVerifyOtpPaylod {
@@ -137,10 +134,16 @@ declare module "@app-model" {
     countryOfOrigin: string | null;
     city: string | null;
     country: string | null;
-    certificates: string[];
+    certificates: ICertificate[];
     bio: string | null;
-    education: any[];
+    education: IEducation[];
     experience: IExperience[];
+    education: IEducation[];
+  }
+
+  interface ICertificate {
+    name: string;
+    url: string;
   }
 
   interface IRequestOTPEmail {

@@ -124,9 +124,7 @@ const AppHome = () => {
             case APP_SCREEN_LIST.HOME_SCREEN:
               return <Feather name="home" size={size} color={color} />;
             case APP_SCREEN_LIST.SPACE_SEARCH_SCREEN:
-              return (
-                <MaterialCommunityIcons name="sort" size={size} color={color} />
-              );
+              return <AntDesign name="search1" size={size} color={color} />;
             case APP_SCREEN_LIST.POST_ICON_TAB:
               return <AntDesign name="plus" size={size} color={color} />;
             case APP_SCREEN_LIST.TOOLBOX_ICON_TAB:

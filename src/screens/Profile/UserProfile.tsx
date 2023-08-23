@@ -122,7 +122,10 @@ const UserProfile = () => {
           </View>
         </ImageBackground>
       </View>
-      <ScrollView style={styles.contentWrapper}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.contentWrapper}
+      >
         <View
           style={[
             GlobalStyles.flewRow,
@@ -280,13 +283,14 @@ const UserProfile = () => {
 
 const FirstRoute = () => {
   const [user] = useUser();
+  console.log("user> ", user?.certificates);
   const filterExperience = () => {
     return (
       user?.experience
         .filter(
           (item) =>
             item.companyName !== "" &&
-            item.responsiblities?.trim() !== "" &&
+            item.responsibilities?.trim() !== "" &&
             item.jobTitle?.trim() !== ""
         )
         .map((item) => ({
@@ -334,19 +338,10 @@ const FirstRoute = () => {
                   GlobalStyles.fontSize13,
                   GlobalStyles.textPrimary,
                   GlobalStyles.mb10,
+                  GlobalStyles.mt10,
                 ]}
               >
                 {item.jobTitle}
-              </Text>
-              <Text
-                style={[
-                  GlobalStyles.fontInterRegular,
-                  GlobalStyles.fontSize13,
-                  GlobalStyles.textBlack,
-                  GlobalStyles.mb10,
-                ]}
-              >
-                {item.companyName}
               </Text>
 
               <Text
@@ -357,11 +352,107 @@ const FirstRoute = () => {
                   GlobalStyles.mb10,
                 ]}
               >
-                {item.responsiblities}
+                {item.responsibilities}
               </Text>
             </View>
           ),
         })) || []
+    );
+  };
+
+  const filterEducatio = () => {
+    return (
+      user?.education.map((item) => ({
+        title: (
+          <View
+            style={{
+              justifyContent: "space-between",
+              flexDirection: "row",
+              width: "100%",
+            }}
+          >
+            <Text
+              style={[
+                GlobalStyles.fontInterBlack,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textNavyBlue,
+              ]}
+            >
+              Education
+            </Text>
+            <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textGrey,
+                GlobalStyles.fontWeight700,
+              ]}
+            >
+              <Text>
+                {moment(item.startDate).format("MMM YYYY")} -{" "}
+                {moment(item.endDate).format("MMM YYYY")}
+              </Text>
+            </Text>
+          </View>
+        ),
+        description: (
+          <View style={[{ marginTop: -5 }]}>
+            <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textPrimary,
+                GlobalStyles.mb10,
+                GlobalStyles.mt10,
+              ]}
+            >
+              {item.degree}
+            </Text>
+
+            <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textGrey,
+                GlobalStyles.mb10,
+              ]}
+            >
+              {item.school}
+            </Text>
+          </View>
+        ),
+      })) || []
+    );
+  };
+
+  const filterCertificates = () => {
+    return (
+      user?.certificates.map((item) => ({
+        title: (
+          <View
+            style={{
+              justifyContent: "space-between",
+              flexDirection: "row",
+              width: "100%",
+            }}
+          ></View>
+        ),
+        description: (
+          <View style={[{ marginTop: -5 }]}>
+            <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textGrey,
+                GlobalStyles.mb10,
+                GlobalStyles.mt10,
+              ]}
+            >
+              {item.name}
+            </Text>
+          </View>
+        ),
+      })) || []
     );
   };
   return (
@@ -369,12 +460,22 @@ const FirstRoute = () => {
       <UserExperience
         data={[
           ...filterExperience(),
+          ...filterEducatio(),
           {
             title: "Skills",
             description: user?.skills.join(","),
           },
 
-          { title: "Certificates", description: "" },
+          {
+            title: "Certificates",
+            description: (
+              <View>
+                {filterCertificates().map((item) => (
+                  <View>{item.description}</View>
+                ))}
+              </View>
+            ),
+          },
         ]}
       />
     </View>

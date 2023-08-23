@@ -93,15 +93,15 @@ const Login = () => {
 
         return;
       }
-      navigation.navigate(APP_SCREEN_LIST.MAIN_SCREEN);
+      // navigation.navigate(APP_SCREEN_LIST.MAIN_SCREEN);
     } else if (session.signingInStatus === "failed") {
       console.log("error is> ", session.signingInError);
     }
   }, [session.signingInStatus]);
 
   useEffect(() => {
-    if (errorReducer.message === PENDING_OTP_MESSAGE)
-      return navigation.navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
+    if (errorReducer.message === PENDING_OTP_MESSAGE) return;
+    // return navigation.navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
   }, [errorReducer.message]);
 
   return (

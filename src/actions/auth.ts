@@ -178,10 +178,10 @@ export const completeUserProfileAction = asyncThunkWrapper<
     console.log("args> ", agrs);
     const profilePictureFile =
       agrs.profilePicture as ImagePicker.ImagePickerResult;
-    const certificateFile = agrs
-      .certificates[0] as ImagePicker.ImagePickerResult;
 
     const resumeFile = agrs.personalInformation.resume as FilePickerFormat;
+
+    const certificateFile = agrs.certificates as FilePickerFormat[];
 
     let profileResponseUrl = "";
     let certificateFileUrl = "";
@@ -215,20 +215,14 @@ export const completeUserProfileAction = asyncThunkWrapper<
       profileResponseUrl = response.data?.data?.url || "";
     }
 
-    if (
-      certificateFile &&
-      certificateFile.assets &&
-      certificateFile.assets[0].uri
-    ) {
+    if (certificateFile && certificateFile[0].uri) {
       console.log(">>>>2");
-      const certificateBlob = Converter.dataURItoBlob(
-        certificateFile?.assets ? certificateFile.assets[0].uri : ""
-      );
+
       const formData = new FormData() as any;
       formData.append("file", {
-        uri: certificateFile.assets[0].uri,
-        type: certificateFile.assets[0].type,
-        name: certificateFile.assets[0].fileName,
+        uri: certificateFile[0].uri,
+        type: certificateFile[0].type,
+        name: certificateFile[0].name,
       });
 
       const response = await uploadFile(formData);
@@ -262,15 +256,15 @@ export const completeUserProfileAction = asyncThunkWrapper<
           "stillWorkHere?": agrs.experience[0]?.stillWorkHere,
           jobTitle: agrs.experience[0]?.jobTitle,
           companyName: agrs.experience[0]?.companyName,
-          responsibilities: agrs.experience[0]?.responsiblities,
+          responsibilities: agrs.experience[0]?.responsibilities,
         },
       ],
       education: [
         {
-          startDate: agrs.eduction[0]?.startDate,
-          endDate: agrs.eduction[0]?.endDate,
-          degree: agrs.eduction[0]?.degree,
-          school: agrs.eduction[0]?.school,
+          startDate: agrs.education[0]?.startDate,
+          endDate: agrs.education[0]?.endDate,
+          degree: agrs.education[0]?.degree,
+          school: agrs.education[0]?.school,
         },
       ],
       skills: agrs.skills,
@@ -295,15 +289,15 @@ export const completeUserProfileAction = asyncThunkWrapper<
             "stillWorkHere?": agrs.experience[0]?.stillWorkHere,
             jobTitle: agrs.experience[0]?.jobTitle,
             companyName: agrs.experience[0]?.companyName,
-            responsibilities: agrs.experience[0]?.responsiblities,
+            responsibilities: agrs.experience[0]?.responsibilities,
           },
         ],
         education: [
           {
-            startDate: agrs.eduction[0]?.startDate,
-            endDate: agrs.eduction[0]?.endDate,
-            degree: agrs.eduction[0]?.degree,
-            school: agrs.eduction[0]?.school,
+            startDate: agrs.education[0]?.startDate,
+            endDate: agrs.education[0]?.endDate,
+            degree: agrs.education[0]?.degree,
+            school: agrs.education[0]?.school,
           },
         ],
         skills: agrs.skills,

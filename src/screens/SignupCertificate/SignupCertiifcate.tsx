@@ -17,6 +17,7 @@ import useAppSelector from "../../hooks/useAppSelector";
 import { completeUserProfileAction } from "../../actions/auth";
 import BackButton from "../../components/Navigation/BackButton/BackButton";
 import { useToast } from "react-native-toast-notifications";
+import { FilePickerFormat } from "@app-model";
 
 const SignupCertificate = () => {
   const navigation = useNavigation<any>();
@@ -32,17 +33,17 @@ const SignupCertificate = () => {
   ) as ISessionState;
 
   const [file, setFile] = useState<
-    DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult | null
+    FilePickerFormat | null | ImagePicker.ImagePickerResult
   >(null);
   const handleOnFileSelect = (
-    file: DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult
+    file: FilePickerFormat | ImagePicker.ImagePickerResult
   ) => {
     setFile(file);
     return null;
   };
   const handleOnNextPress = () => {
     if (file) {
-      dispatch(updateCertificate(file as DocumentPicker.DocumentResult));
+      dispatch(updateCertificate(file as FilePickerFormat));
     }
     dispatch(completeUserProfileAction(session.profileData));
   };
@@ -90,7 +91,7 @@ const SignupCertificate = () => {
                 />
               </View>
               <DropZone
-                type="all"
+                type="document"
                 style={{ height: 60 }}
                 onSelect={handleOnFileSelect}
                 emptyIcon={
