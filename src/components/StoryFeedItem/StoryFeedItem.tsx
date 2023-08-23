@@ -18,6 +18,7 @@ import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import {
   IPostState,
   clearCreateCommentOnPostState,
+  openReactionList,
   savePostDetail,
 } from "../../reducers/post_reducer";
 import useAppDispatch from "../../hooks/useAppDispatch";
@@ -281,7 +282,10 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
   };
 
   const getReactionOnPost = (postId: string) => {
+    console.log("called ooo");
     dispatch(getPostReactions(postId));
+
+    dispatch(openReactionList(true));
   };
 
   return (
@@ -337,24 +341,18 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
 
           {renderComments()}
         </TouchableOpacity>
-        <View style={{ width: "100%", height: 300 }}>
-          {item.images && item.images.length > 0 ? (
-            // <Image
-            //   source={{ uri: item.images[0] }}
-            //   style={styles.image}
-            //   resizeMethod="auto"
-            //   resizeMode="cover"
-            // />
+
+        {item.images && item.images.length > 0 ? (
+          // <Image
+          //   source={{ uri: item.images[0] }}
+          //   style={styles.image}
+          //   resizeMethod="auto"
+          //   resizeMode="cover"
+          // />
+          <View style={{ width: "100%", height: 300 }}>
             <FbGrid images={item.images} onPress={onPress} />
-          ) : (
-            <Image
-              source={require("../../../assets/image8.png")}
-              style={styles.image}
-              resizeMethod="auto"
-              resizeMode="cover"
-            />
-          )}
-        </View>
+          </View>
+        ) : null}
       </View>
       <View
         style={[

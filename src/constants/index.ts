@@ -182,3 +182,13 @@ export const JOB_LOCATION = [
   { label: "Remote", value: "remote" },
   { label: "Hybrid", value: "hybrid" },
 ];
+
+export const TAILOR_JOBS = [
+  { label: "Sponsoring Companies", value: "Sponsoring Companies" },
+  { label: "DI&E Hires", value: "DI&E Hires" },
+  { label: "Disability Hires", value: "Disability Hires" },
+  { label: "Work Life Balance", value: "Work Life Balance" },
+];
+
+export const PENDING_OTP_MESSAGE =
+  "Phone is yet to be veried, Kindly verify your number with the OTP sent to your phone";

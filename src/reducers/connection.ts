@@ -6,6 +6,8 @@ import {
   getConnections,
   getRequestConnectionStatus,
   getSingleUserAction,
+  getUserRecommendationByIndustry,
+  getUserRecommendationBySchool,
   getUsers,
   requestConnection,
 } from "../actions/connection";
@@ -14,6 +16,14 @@ export interface IConnectionState {
   getUsersStatus: IThunkAPIStatus;
   getUsersSuccess: string;
   getUsersError: string;
+
+  getUsersByIndustryStatus: IThunkAPIStatus;
+  getUsersByIndustrySuccess: string;
+  getUsersByIndustryError: string;
+
+  getUsersBySchoolStatus: IThunkAPIStatus;
+  getUsersBySchoolSuccess: string;
+  getUsersBySchoolError: string;
 
   requestConnectionStatus: IThunkAPIStatus;
   requestConnectionSuccess: string;
@@ -36,6 +46,9 @@ export interface IConnectionState {
   getConnectionError: string;
 
   users: IUserData[];
+  usersBySchool: IUserData[];
+  usersByIndustry: IUserData[];
+
   profileId: string;
   profile: IUserData | null;
 
@@ -48,7 +61,18 @@ const initialState: IConnectionState = {
   getUsersStatus: "idle",
   getUsersSuccess: "",
   getUsersError: "",
+
+  getUsersBySchoolStatus: "idle",
+  getUsersBySchoolSuccess: "",
+  getUsersBySchoolError: "",
+
+  getUsersByIndustryStatus: "idle",
+  getUsersByIndustrySuccess: "",
+  getUsersByIndustryError: "",
+
   users: [],
+  usersByIndustry: [],
+  usersBySchool: [],
   profileId: "",
   profile: null,
 
@@ -119,6 +143,39 @@ const connectionSlice = createSlice({
     builder.addCase(getUsers.rejected, (state, action) => {
       state.getUsersStatus = "failed";
       state.getUsersError = action.payload?.message as string;
+    });
+
+    builder.addCase(getUserRecommendationByIndustry.pending, (state) => {
+      state.getUsersByIndustryStatus = "loading";
+    });
+    builder.addCase(
+      getUserRecommendationByIndustry.fulfilled,
+      (state, action) => {
+        state.usersByIndustry = action.payload.data;
+        state.getUsersByIndustryStatus = "completed";
+      }
+    );
+    builder.addCase(
+      getUserRecommendationByIndustry.rejected,
+      (state, action) => {
+        state.getUsersByIndustryStatus = "failed";
+        state.getUsersByIndustryError = action.payload?.message as string;
+      }
+    );
+
+    builder.addCase(getUserRecommendationBySchool.pending, (state) => {
+      state.getUsersBySchoolStatus = "loading";
+    });
+    builder.addCase(
+      getUserRecommendationBySchool.fulfilled,
+      (state, action) => {
+        state.usersBySchool = action.payload.data;
+        state.getUsersBySchoolStatus = "completed";
+      }
+    );
+    builder.addCase(getUserRecommendationBySchool.rejected, (state, action) => {
+      state.getUsersBySchoolStatus = "failed";
+      state.getUsersBySchoolError = action.payload?.message as string;
     });
 
     builder.addCase(requestConnection.pending, (state) => {

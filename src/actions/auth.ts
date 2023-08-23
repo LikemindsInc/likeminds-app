@@ -89,6 +89,7 @@ export const signupUserActionAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
   ISignUp
 >(SIGNUP, async (agrs: ISignUp) => {
+  console.log("args> ", agrs);
   const response = await axiosClient.post<AxiosResponse<any>>(
     "/api/auth/sign-up",
     agrs
@@ -246,6 +247,37 @@ export const completeUserProfileAction = asyncThunkWrapper<
       resumeUrl = response.data?.data?.url || "";
     }
 
+    console.log("data> ", {
+      firstName: agrs.personalInformation.firstName,
+      lastName: agrs.personalInformation.lastName,
+      country: agrs.personalInformation.country,
+      city: agrs.personalInformation.city,
+      countryOfOrigin: agrs.personalInformation.countryOfOrigin,
+      resume: resumeUrl,
+      bio: agrs.personalInformation.bio,
+      experience: [
+        {
+          startDate: agrs.experience[0]?.startDate,
+          endDate: agrs.experience[0]?.endDate,
+          "stillWorkHere?": agrs.experience[0]?.stillWorkHere,
+          jobTitle: agrs.experience[0]?.jobTitle,
+          companyName: agrs.experience[0]?.companyName,
+          responsibilities: agrs.experience[0]?.responsiblities,
+        },
+      ],
+      education: [
+        {
+          startDate: agrs.eduction[0]?.startDate,
+          endDate: agrs.eduction[0]?.endDate,
+          degree: agrs.eduction[0]?.degree,
+          school: agrs.eduction[0]?.school,
+        },
+      ],
+      skills: agrs.skills,
+      certificates: [{ name: "Certificate", url: certificateFileUrl }],
+      profilePicture: profileResponseUrl,
+    });
+
     const response = await axiosClient.patch<AxiosResponse<any>>(
       "/api/auth/complete-registration",
       {
@@ -274,8 +306,8 @@ export const completeUserProfileAction = asyncThunkWrapper<
             school: agrs.eduction[0]?.school,
           },
         ],
-        skills: [],
-        certificates: [certificateFileUrl],
+        skills: agrs.skills,
+        certificates: [{ name: "Certificate", url: certificateFileUrl }],
         profilePicture: profileResponseUrl,
       }
     );

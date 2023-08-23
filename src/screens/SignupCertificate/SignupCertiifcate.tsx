@@ -15,8 +15,8 @@ import useAppDispatch from "../../hooks/useAppDispatch";
 import { ISessionState, updateCertificate } from "../../reducers/session";
 import useAppSelector from "../../hooks/useAppSelector";
 import { completeUserProfileAction } from "../../actions/auth";
-import { useToast } from "native-base";
 import BackButton from "../../components/Navigation/BackButton/BackButton";
+import { useToast } from "react-native-toast-notifications";
 
 const SignupCertificate = () => {
   const navigation = useNavigation<any>();
@@ -41,8 +41,9 @@ const SignupCertificate = () => {
     return null;
   };
   const handleOnNextPress = () => {
-    dispatch(updateCertificate(file as DocumentPicker.DocumentResult));
-    // navigation.navigate(APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN)
+    if (file) {
+      dispatch(updateCertificate(file as DocumentPicker.DocumentResult));
+    }
     dispatch(completeUserProfileAction(session.profileData));
   };
 
@@ -50,13 +51,14 @@ const SignupCertificate = () => {
     if (session.completeProfileStatus === "completed") {
       navigation.navigate(APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN);
     } else if (session.completeProfileStatus === "failed") {
-      toast.show({
-        description:
-          session.completeProfileError?.trim() === ""
-            ? "Unable to complete request. Please try again later"
-            : session.completeProfileError,
-        variant: "contained",
-      });
+      toast.show(
+        session.completeProfileError?.trim() === ""
+          ? "Unable to complete request. Please try again later"
+          : (session.completeProfileError as string),
+        {
+          type: "normal",
+        }
+      );
     }
   }, [session.completeProfileStatus]);
 
@@ -78,28 +80,33 @@ const SignupCertificate = () => {
         </Text>
       </View>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-        <View style={[GlobalStyles.mb10]}>
-          <Input editable={false} placeholder="Certificate, Award, Volunteer" />
-        </View>
         <View>
           {uploods.map((item) => (
-            <DropZone
-              type="all"
-              style={{ height: 60 }}
-              onSelect={handleOnFileSelect}
-              emptyIcon={
-                <Text
-                  style={[
-                    GlobalStyles.textPrimary,
-                    GlobalStyles.fontInterRegular,
-                    GlobalStyles.fontSize15,
-                    GlobalStyles.fontWeight400,
-                  ]}
-                >
-                  Upload a Document
-                </Text>
-              }
-            />
+            <View>
+              <View style={[GlobalStyles.mb10]}>
+                <Input
+                  editable={true}
+                  placeholder="Certificate, Award, Volunteer"
+                />
+              </View>
+              <DropZone
+                type="all"
+                style={{ height: 60 }}
+                onSelect={handleOnFileSelect}
+                emptyIcon={
+                  <Text
+                    style={[
+                      GlobalStyles.textPrimary,
+                      GlobalStyles.fontInterRegular,
+                      GlobalStyles.fontSize15,
+                      GlobalStyles.fontWeight400,
+                    ]}
+                  >
+                    Upload a Document
+                  </Text>
+                }
+              />
+            </View>
           ))}
         </View>
         <View>
@@ -111,13 +118,15 @@ const SignupCertificate = () => {
         </View>
       </ScrollView>
       <View>
-        <View style={[GlobalStyles.mb20, GlobalStyles.displayRowCenter]}>
+        {/* <View style={[GlobalStyles.mb20, GlobalStyles.displayRowCenter]}>
           <TextLink
-            onPress={() => navigation.navigate(APP_SCREEN_LIST.MAIN_SCREEN)}
+            onPress={() =>
+              navigation.navigate(APP_SCREEN_LIST.SIGNUP_SKILLS_SCREEN)
+            }
             title="Skip For Now"
             color={colors.black}
           />
-        </View>
+        </View> */}
         <Button
           loading={session.completeProfileStatus === "loading"}
           title="Continue"

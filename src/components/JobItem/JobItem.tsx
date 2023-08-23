@@ -1,4 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Linking,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Button from "../Button/Button";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import { AntDesign } from "@expo/vector-icons";
@@ -44,6 +50,22 @@ const JobItem: FC<IProps> = ({ item }) => {
         Show less
       </Text>
     );
+  };
+  const handleOnApply = async (url: string) => {
+    try {
+      url = url.startsWith("https://") ? url : `https://${url}`;
+
+      if (!url) return;
+      const supported = await Linking.canOpenURL(url);
+
+      if (supported) {
+        // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+        // by some browser in the mobile
+        await Linking.openURL(url);
+      }
+    } catch (error) {
+      console.log("Error opening Link", error);
+    }
   };
   return (
     <View
@@ -265,7 +287,7 @@ const JobItem: FC<IProps> = ({ item }) => {
             alignSelf: "flex-end",
           }}
           title="Apply"
-          onPress={() => {}}
+          onPress={() => handleOnApply(item.applicationLink)}
         />
       </View>
     </View>

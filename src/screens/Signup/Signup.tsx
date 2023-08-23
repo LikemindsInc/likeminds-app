@@ -52,33 +52,42 @@ const Signup = () => {
 
   useEffect(() => {
     if (email.trim() !== "") setErrors((state) => ({ ...state, email: null }));
-    else setErrors((state) => ({ ...state, email: "Email is required" }));
+    // else setErrors((state) => ({ ...state, email: "Email is required" }));
   }, [email]);
 
   useEffect(() => {
     if (password.trim() !== "")
       setErrors((state) => ({ ...state, password: null }));
-    else setErrors((state) => ({ ...state, password: "Password is required" }));
+    // else setErrors((state) => ({ ...state, password: "Password is required" }));
   }, [password]);
 
   useEffect(() => {
     if (phone.trim() !== "") setErrors((state) => ({ ...state, phone: null }));
-    else setErrors((state) => ({ ...state, phone: "Phone is required" }));
+    // else setErrors((state) => ({ ...state, phone: "Phone is required" }));
+  }, [phone]);
+
+  useEffect(() => {
+    if (countryCode.trim() !== "" && countryCode.trim() !== "+000")
+      setErrors((state) => ({ ...state, phone: null }));
+    // else setErrors((state) => ({ ...state, phone: "Phone is required" }));
   }, [phone]);
 
   useEffect(() => {
     if (confirmPassword.trim() !== "")
       setErrors((state) => ({ ...state, confirmPassword: null }));
-    else
-      setErrors((state) => ({
-        ...state,
-        confirmPassword: "Confirm Password is required",
-      }));
+    // else
+    //   setErrors((state) => ({
+    //     ...state,
+    //     confirmPassword: "Confirm Password is required",
+    //   }));
   }, [confirmPassword]);
 
   const handleSubmitAccount = () => {
     try {
       //handleSubmitAccount
+
+      let formattedPhone = "";
+
       if (email.trim() === "")
         return setErrors((state) => ({ ...state, email: "Email is required" }));
 
@@ -105,12 +114,17 @@ const Signup = () => {
           confirmPassword: "Confirm password and Password do not match",
         }));
 
+      if (phone.startsWith("0")) formattedPhone = phone.slice(1);
+      else if (phone.startsWith("+2340")) formattedPhone = phone.slice(5);
+      else if (phone.startsWith("+234")) formattedPhone = phone.slice(4);
+      else formattedPhone = phone;
+
       dispatch(
         signupUserActionAction({
           email,
           password,
           confirmPassword,
-          phone: `${countryCode}${phone}`,
+          phone: `${countryCode}${formattedPhone}`,
         })
       );
     } catch (error: any) {
@@ -129,6 +143,7 @@ const Signup = () => {
       toast.show(session.signingUpSuccess, { type: "normal" });
       handleNextNavigation();
       dispatch(clearSignupStatus());
+      12;
     }
   }, [session.signingUpStatus]);
 

@@ -60,12 +60,12 @@ const PeopleSearchResultCard: FC<IProps> = ({ item }) => {
             <Text
               style={[
                 GlobalStyles.fontInterMedium,
-                GlobalStyles.fontSize15,
+                GlobalStyles.fontSize13,
                 GlobalStyles.fontWeight400,
                 GlobalStyles.textCenter,
               ]}
             >
-              {item?.firstName} {item?.lastName}
+              {`${item?.firstName} ${item?.lastName}`.slice(0, 20)}
             </Text>
 
             <Text
@@ -76,7 +76,7 @@ const PeopleSearchResultCard: FC<IProps> = ({ item }) => {
                 { alignSelf: "center", color: colors.grey },
               ]}
             >
-              {item?.bio || "Data Science"}
+              {item?.bio?.slice(0, 20)}
             </Text>
             <View style={[GlobalStyles.mt10]}>
               <Button

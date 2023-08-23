@@ -26,6 +26,7 @@ import UserPostFeed from "./components/UserPostFeed";
 import UserExperience from "./components/UserExperience";
 import { useUser } from "../../hooks/userUser";
 import ReadMore from "react-native-read-more-text";
+import moment from "moment";
 
 const UserProfile = () => {
   const height = useDimension().height;
@@ -147,17 +148,20 @@ const UserProfile = () => {
           </TouchableOpacity>
         </View>
         <View style={[GlobalStyles.mb20]}>
-          <Text
-            style={[
-              GlobalStyles.fontInterRegular,
-              GlobalStyles.fontSize15,
-              GlobalStyles.textPrimary,
-              GlobalStyles.fontWeight400,
-              GlobalStyles.mb10,
-            ]}
-          >
-            {state.userInfo?.experience[0]?.jobTitle}
-          </Text>
+          {state.userInfo?.experience[0]?.jobTitle && (
+            <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize15,
+                GlobalStyles.textPrimary,
+                GlobalStyles.fontWeight400,
+                GlobalStyles.mb10,
+              ]}
+            >
+              {state.userInfo?.experience[0]?.jobTitle}
+            </Text>
+          )}
+
           <Text
             style={[
               GlobalStyles.fontInterRegular,
@@ -277,21 +281,102 @@ const UserProfile = () => {
 const FirstRoute = () => {
   const [user] = useUser();
   const filterExperience = () => {
-    return user?.experience
-      .filter(
-        (item) =>
-          item.companyName !== "" &&
-          item.responsiblities?.trim() !== "" &&
-          item.jobTitle?.trim() !== ""
-      )
-      .map((item) => ({
-        title: item.companyName,
-        description: item.jobTitle,
-      }));
+    return (
+      user?.experience
+        .filter(
+          (item) =>
+            item.companyName !== "" &&
+            item.responsiblities?.trim() !== "" &&
+            item.jobTitle?.trim() !== ""
+        )
+        .map((item) => ({
+          title: (
+            <View
+              style={{
+                justifyContent: "space-between",
+                flexDirection: "row",
+                width: "100%",
+              }}
+            >
+              <Text
+                style={[
+                  GlobalStyles.fontInterBlack,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textNavyBlue,
+                ]}
+              >
+                {item.companyName}
+              </Text>
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textGrey,
+                  GlobalStyles.fontWeight700,
+                ]}
+              >
+                {item.stillWorkHere ? (
+                  `${moment(item.startDate).format("MMM YYYY")} - PRESENT`
+                ) : (
+                  <Text>
+                    {moment(item.startDate).format("MMM YYYY")} -{" "}
+                    {moment(item.endDate).format("MMM YYYY")}
+                  </Text>
+                )}
+              </Text>
+            </View>
+          ),
+          description: (
+            <View style={[{ marginTop: -5 }]}>
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textPrimary,
+                  GlobalStyles.mb10,
+                ]}
+              >
+                {item.jobTitle}
+              </Text>
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textBlack,
+                  GlobalStyles.mb10,
+                ]}
+              >
+                {item.companyName}
+              </Text>
+
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textGrey,
+                  GlobalStyles.mb10,
+                ]}
+              >
+                {item.responsiblities}
+              </Text>
+            </View>
+          ),
+        })) || []
+    );
   };
   return (
     <View style={[GlobalStyles.mt20, GlobalStyles.mb20, { flex: 1 }]}>
-      <UserExperience data={filterExperience()} />
+      <UserExperience
+        data={[
+          ...filterExperience(),
+          {
+            title: "Skills",
+            description: user?.skills.join(","),
+          },
+
+          { title: "Certificates", description: "" },
+        ]}
+      />
     </View>
   );
 };

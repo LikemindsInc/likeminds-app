@@ -368,6 +368,7 @@ const AppRoutes = () => {
   const state = useAppSelector((state) => state.settingReducer);
   const toast = useToast();
   useEffect(() => {
+    console.log("message> ", errorReducer.message);
     if (errorReducer.message?.trim() !== "") {
       // toast.show({ description: errorReducer.message });
       toast.show(errorReducer.message, { type: "normal" });

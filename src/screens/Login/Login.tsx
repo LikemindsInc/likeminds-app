@@ -11,9 +11,9 @@ import Input from "../../components/Input/Input";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import { FC, useEffect, useState } from "react";
 import TextLink from "../../components/TextLink/TextLink";
-import { APP_SCREEN_LIST } from "../../constants";
+import { APP_SCREEN_LIST, PENDING_OTP_MESSAGE } from "../../constants";
 import useAppSelector from "../../hooks/useAppSelector";
-import { ISessionState } from "../../reducers/session";
+import { ISessionState, updatePhoneNumber } from "../../reducers/session";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import { loginUserActionAction } from "../../actions/auth";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
@@ -59,13 +59,13 @@ const Login = () => {
 
   useEffect(() => {
     if (email.trim() !== "") setErrors((state) => ({ ...state, email: null }));
-    else setErrors((state) => ({ ...state, email: "Email is required" }));
+    // else setErrors((state) => ({ ...state, email: "Email is required" }));
   }, [email]);
 
   useEffect(() => {
     if (password.trim() !== "")
       setErrors((state) => ({ ...state, password: null }));
-    else setErrors((state) => ({ ...state, password: "Password is required" }));
+    // else setErrors((state) => ({ ...state, password: "Password is required" }));
   }, [password]);
 
   const handleOnLogin = () => {
@@ -81,13 +81,28 @@ const Login = () => {
     dispatch(loginUserActionAction({ email, password }));
   };
 
+  const setting = useAppSelector((state) => state.settingReducer);
+
+  const errorReducer = useAppSelector((state) => state.errorReducer);
+
   useEffect(() => {
     if (session.signingInStatus === "completed") {
+      if (!setting.userInfo?.isVerified) {
+        dispatch(updatePhoneNumber(setting.userInfo?.phone as string));
+        navigation.navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
+
+        return;
+      }
       navigation.navigate(APP_SCREEN_LIST.MAIN_SCREEN);
     } else if (session.signingInStatus === "failed") {
-      console.log(session.signingInError);
+      console.log("error is> ", session.signingInError);
     }
   }, [session.signingInStatus]);
+
+  useEffect(() => {
+    if (errorReducer.message === PENDING_OTP_MESSAGE)
+      return navigation.navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
+  }, [errorReducer.message]);
 
   return (
     <View style={[GlobalStyles.container]}>

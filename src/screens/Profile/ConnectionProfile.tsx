@@ -34,6 +34,7 @@ import UserExperience from "./components/UserExperience";
 import { Title } from "react-native-paper";
 import ConnectionPostFeed from "./components/ConnectionPostFeed";
 import ReadMore from "react-native-read-more-text";
+import moment from "moment";
 
 const ConnectionProfile = () => {
   const height = useDimension().height;
@@ -197,7 +198,10 @@ const ConnectionProfile = () => {
           </TouchableOpacity>
         </ImageBackground>
       </View>
-      <ScrollView style={styles.contentWrapper}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.contentWrapper}
+      >
         <View
           style={[
             GlobalStyles.flewRow,
@@ -226,7 +230,7 @@ const ConnectionProfile = () => {
           <Text
             style={[
               GlobalStyles.fontInterRegular,
-              GlobalStyles.fontSize15,
+              GlobalStyles.fontSize13,
               GlobalStyles.textPrimary,
               GlobalStyles.fontWeight400,
               GlobalStyles.mb10,
@@ -237,7 +241,7 @@ const ConnectionProfile = () => {
           <Text
             style={[
               GlobalStyles.fontInterRegular,
-              GlobalStyles.fontSize15,
+              GlobalStyles.fontSize13,
               GlobalStyles.textPrimary,
               GlobalStyles.fontWeight400,
               GlobalStyles.mb10,
@@ -379,8 +383,77 @@ const FirstRoute = () => {
             item.jobTitle?.trim() !== ""
         )
         .map((item) => ({
-          title: item.companyName,
-          description: item.jobTitle,
+          title: (
+            <View
+              style={{
+                justifyContent: "space-between",
+                flexDirection: "row",
+                width: "100%",
+              }}
+            >
+              <Text
+                style={[
+                  GlobalStyles.fontInterBlack,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textNavyBlue,
+                ]}
+              >
+                {item.companyName}
+              </Text>
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textGrey,
+                  GlobalStyles.fontWeight700,
+                ]}
+              >
+                {item.stillWorkHere ? (
+                  `${moment(item.startDate).format("MMM YYYY")} - PRESENT`
+                ) : (
+                  <Text>
+                    {moment(item.startDate).format("MMM YYYY")} -{" "}
+                    {moment(item.endDate).format("MMM YYYY")}
+                  </Text>
+                )}
+              </Text>
+            </View>
+          ),
+          description: (
+            <View style={[{ marginTop: -5 }]}>
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textPrimary,
+                  GlobalStyles.mb10,
+                ]}
+              >
+                {item.jobTitle}
+              </Text>
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textBlack,
+                  GlobalStyles.mb10,
+                ]}
+              >
+                {item.companyName}
+              </Text>
+
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textGrey,
+                  GlobalStyles.mb10,
+                ]}
+              >
+                {item.responsiblities}
+              </Text>
+            </View>
+          ),
         })) || []
     );
   };
@@ -388,8 +461,19 @@ const FirstRoute = () => {
   return (
     <View style={{ flex: 1, marginTop: 20 }}>
       {filterExperience().length > 0 && (
-        <UserExperience data={filterExperience()} />
+        <UserExperience
+          data={[
+            ...filterExperience(),
+            {
+              title: "Skills",
+              description: selector.profile?.skills.join(","),
+            },
+
+            { title: "Certificates", description: "" },
+          ]}
+        />
       )}
+      {/* <UserExperience data={[{ title: "Skills", description: "" }]} /> */}
     </View>
   );
 };

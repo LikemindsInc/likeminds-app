@@ -4,7 +4,7 @@ import { FC, useCallback, useEffect } from "react";
 import { GlobalStyles } from "../../../theme/GlobalStyles";
 
 interface IProps {
-  data?: { title: string; description: string }[];
+  data?: { title: any; description: any }[];
 }
 
 const UserExperience: FC<IProps> = ({ data = [] }) => {

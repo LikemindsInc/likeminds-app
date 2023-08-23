@@ -65,13 +65,24 @@ export const PostDate = () => {
   );
 };
 
-export const Location = () => {
+export const Location: FC<IProps> = ({ bottomSheetRef }) => {
   const [selected, setSelected] = React.useState("");
+
+  const state = useAppSelector((state) => state.postReducer);
+
+  const handleOpenIndustrySelectPicker = () => {
+    if (!bottomSheetRef) return;
+
+    bottomSheetRef.current?.expand();
+  };
 
   const data = [{ key: "1", value: "Remote" }];
 
   return (
-    <TouchableOpacity style={[GlobalStyles.flewRow, styles.container]}>
+    <TouchableOpacity
+      onPress={handleOpenIndustrySelectPicker}
+      style={[GlobalStyles.flewRow, styles.container]}
+    >
       <Text
         style={[
           GlobalStyles.fontInterRegular,
@@ -79,7 +90,9 @@ export const Location = () => {
           GlobalStyles.textGrey,
         ]}
       >
-        Location
+        {state.jobLocationFilterValue && state.jobLocationFilterValue !== "All"
+          ? state.jobLocationFilterValue
+          : "Location"}
       </Text>
       <AntDesign name="caretdown" size={12} color={colors.grey} />
     </TouchableOpacity>

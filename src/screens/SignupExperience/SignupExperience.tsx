@@ -55,28 +55,28 @@ const SignupExperience = () => {
   useEffect(() => {
     if (jobTitle.trim() !== "")
       setErrors((state) => ({ ...state, jobTitle: null }));
-    else
-      setErrors((state) => ({ ...state, jobTitle: "Job title is required" }));
+    // else
+    //   setErrors((state) => ({ ...state, jobTitle: "Job title is required" }));
   }, [jobTitle]);
 
   useEffect(() => {
     if (companyName.trim() !== "")
       setErrors((state) => ({ ...state, companyName: null }));
-    else
-      setErrors((state) => ({
-        ...state,
-        companyName: "Company name is required",
-      }));
+    // else
+    //   setErrors((state) => ({
+    //     ...state,
+    //     companyName: "Company name is required",
+    //   }));
   }, [companyName]);
 
   useEffect(() => {
     if (responsibilities.trim() !== "")
       setErrors((state) => ({ ...state, responsibilities: null }));
-    else
-      setErrors((state) => ({
-        ...state,
-        responsibilities: "Please provide responsiblities",
-      }));
+    // else
+    //   setErrors((state) => ({
+    //     ...state,
+    //     responsibilities: "Please provide responsiblities",
+    //   }));
   }, [responsibilities]);
 
   const validateStartDate = () => {
@@ -153,7 +153,7 @@ const SignupExperience = () => {
     if (jobTitle.trim() === "")
       return setErrors((state) => ({
         ...state,
-        companyName: "Job title is Required",
+        jobTitle: "Job title is Required",
       }));
 
     if (startDate.trim() === "")

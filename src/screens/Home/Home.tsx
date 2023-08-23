@@ -1,4 +1,11 @@
-import { FlatList, Image, ScrollView, Text, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import HomeHeader from "../../components/Header/HomeHeader/HomeHeader";
 import LiveFeedList from "./components/LiveFeedList";
@@ -12,6 +19,7 @@ import useAppSelector from "../../hooks/useAppSelector";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { IPostReaction } from "@app-model";
 import moment from "moment";
+import { openReactionList } from "../../reducers/post_reducer";
 
 const DATA: { type: "LIVE_FEED" | "INTRO_FEED" | "STORY_FEED"; data: any[] }[] =
   [
@@ -171,10 +179,10 @@ const Home = () => {
   // };
 
   useEffect(() => {
-    if (state.postReaction.length > 0) {
+    if (state.showReactionList && state.postReaction.length > 0) {
       bottomSheetRef2.current?.expand();
     }
-  }, [state.postReaction]);
+  }, [state.postReaction, state.showReactionList]);
   return (
     <View style={[GlobalStyles.flexOne]}>
       <HomeHeader />
@@ -187,7 +195,11 @@ const Home = () => {
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
         backdropComponent={(props: any) => (
-          <BottomSheetBackdrop {...props} pressBehavior={"close"} />
+          <BottomSheetBackdrop
+            {...props}
+            pressBehavior={"close"}
+            onPress={() => dispatch(openReactionList(false))}
+          />
         )}
       >
         <View style={{ flex: 1 }}>

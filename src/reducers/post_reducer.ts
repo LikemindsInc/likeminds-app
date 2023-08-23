@@ -104,6 +104,10 @@ export interface IPostState {
   jobFilterTailorValue: string | null;
 
   postReaction: IPostReaction[];
+
+  showReactionList: boolean;
+
+  jobLocationFilterValue: string | null;
 }
 
 const initialState: IPostState = {
@@ -187,6 +191,8 @@ const initialState: IPostState = {
   postReaction: [],
 
   connectionPostFeeds: [],
+  showReactionList: false,
+  jobLocationFilterValue: "",
 };
 
 const PostSlice = createSlice({
@@ -210,6 +216,10 @@ const PostSlice = createSlice({
       state.jobFilterTailorValue = action.payload;
     },
 
+    setJobLocationFilterValue(state: IPostState, action) {
+      state.jobLocationFilterValue = action.payload;
+    },
+
     clearPostRactionStatus(state: IPostState) {
       state.reactToPostStatus = "idle";
       state.reactToPostSuccess = "";
@@ -218,6 +228,9 @@ const PostSlice = createSlice({
 
     clearSinglePostReactions(state) {
       state.postReaction = [];
+    },
+    openReactionList(state, action: PayloadAction<boolean>) {
+      state.showReactionList = action.payload;
     },
 
     clearCreateJobStatus(state: IPostState) {
@@ -421,6 +434,8 @@ export const {
   showReactionView,
   clearPostRactionStatus,
   setJobFilterTailorValue,
+  openReactionList,
+  setJobLocationFilterValue,
 } = PostSlice.actions;
 
 export default PostSlice.reducer;

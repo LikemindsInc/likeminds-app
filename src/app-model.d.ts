@@ -96,6 +96,7 @@ declare module "@app-model" {
       | DocumentPicker.DocumentResult
       | ImagePicker.ImagePickerResult
       | null;
+    skills: string[];
   }
 
   interface IVerifyOtpPaylod {
@@ -244,6 +245,8 @@ declare module "@app-model" {
     jobDescription: string;
     salary: number;
     experienceLevel: string;
+    applicationLink: string;
+    tailor: string[];
   }
 
   interface IGetJobDTO {
@@ -300,6 +303,7 @@ declare module "@app-model" {
     experienceLevel: string;
     createdAt: string;
     updatedAt: string;
+    applicationLink: string;
     user: {
       id: string;
       firstName: string | null;

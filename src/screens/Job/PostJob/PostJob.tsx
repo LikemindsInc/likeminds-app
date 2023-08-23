@@ -14,6 +14,7 @@ import {
   JOB_EXPERIENCE,
   JOB_LOCATION,
   JOB_TYPES,
+  TAILOR_JOBS,
 } from "../../../constants";
 import RadioGroup, { RadioButtonProps } from "react-native-radio-buttons-group";
 import useAppDispatch from "../../../hooks/useAppDispatch";
@@ -25,6 +26,7 @@ import {
 import { createJobAction } from "../../../actions/post";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import KeyboardDismisser from "../../../components/KeyboardDismisser/KeyboardDismisser";
+import { Checkbox } from "react-native-paper";
 
 const PostJob = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -32,6 +34,7 @@ const PostJob = () => {
   const [selectedIndustry, setSelectedIndustry] = useState("");
   const [jobType, setJobType] = useState("");
   const [jobLocation, setJobLocation] = useState(JOB_LOCATION[0].value);
+  const [tailorJob, setTailorJob] = useState<string[]>([]);
   const [jobExperience, setJobExperience] = useState("");
 
   const [companyName, setCompanyName] = useState("");
@@ -42,6 +45,8 @@ const PostJob = () => {
   const [salary, setSalary] = useState("");
   const [jobName, setJobName] = useState("");
 
+  const [applicationLink, setJobApplicationLink] = useState("");
+
   const state = useAppSelector((state: any) => state.postReducer) as IPostState;
 
   const dispatch = useAppDispatch();
@@ -51,6 +56,16 @@ const PostJob = () => {
   const radioButtons: any[] = useMemo(
     () =>
       JOB_LOCATION.map((item, i) => ({
+        id: item.value,
+        label: item.label,
+        value: item.value,
+      })),
+    []
+  );
+
+  const tailorRadioButtons: any[] = useMemo(
+    () =>
+      TAILOR_JOBS.map((item, i) => ({
         id: item.value,
         label: item.label,
         value: item.value,
@@ -75,6 +90,19 @@ const PostJob = () => {
 
   const toast = useToast();
   const naviation = useNavigation<NavigationProp<any>>();
+
+  const handleOnCheck = (item: any) => {
+    const index = tailorJob.findIndex((value) => item.value === value);
+
+    if (index === -1) setTailorJob((state) => [...state, item.value]);
+    else {
+      const oldState = [...tailorJob];
+
+      oldState.splice(index, 1);
+
+      setTailorJob(oldState);
+    }
+  };
 
   const handleOnPress = () => {
     const payload = {
@@ -111,6 +139,8 @@ const PostJob = () => {
         industry: payload.selectedIndustry,
         jobLocation: payload.jobLocation,
         jobType: payload.jobType,
+        applicationLink,
+        tailor: tailorJob,
       })
     );
   };
@@ -224,6 +254,17 @@ const PostJob = () => {
               multiline={true}
               value={jobDescription}
               onChangeText={(text) => setJobDescription(text)}
+            />
+          </View>
+          <View style={[GlobalStyles.mb20]}>
+            <Input
+              placeholder="Job Link"
+              autoCorrect={false}
+              autoCapitalize={"none"}
+              textAlignVertical="top"
+              textAlign="left"
+              value={applicationLink}
+              onChangeText={(text) => setJobApplicationLink(text)}
             />
           </View>
           <View style={[GlobalStyles.mb20]}>
@@ -353,13 +394,54 @@ const PostJob = () => {
           </View>
           <View style={[GlobalStyles.mb20]}>
             <Input
-              placeholder="Salary"
+              placeholder="Salary*"
               autoCorrect={false}
               autoCapitalize={"none"}
               keyboardType="number-pad"
               value={salary}
               onChangeText={(text) => setSalary(text)}
             />
+          </View>
+          <View style={[GlobalStyles.mb20]}>
+            <Text
+              style={[
+                GlobalStyles.fontInterMedium,
+                GlobalStyles.fontSize15,
+                GlobalStyles.fontWeight400,
+                GlobalStyles.textNavyBlue,
+                { justifyContent: "center" },
+              ]}
+            >
+              Tailor
+            </Text>
+            <View
+              style={[
+                // GlobalStyles.flewRow,
+                GlobalStyles.mt20,
+
+                // { flexWrap: "wrap", gap: 10 },
+              ]}
+            >
+              {TAILOR_JOBS.map((item, i) => (
+                <Checkbox.Item
+                  key={i}
+                  uncheckedColor={colors.grey}
+                  status={
+                    tailorJob.findIndex((value) => item.value === value) !== -1
+                      ? "checked"
+                      : "indeterminate"
+                  }
+                  label={item.label}
+                  position="leading"
+                  labelStyle={{ textAlign: "left" }}
+                  mode="ios"
+                  onPress={() => {
+                    // setChecked(!checked);
+                    handleOnCheck(item);
+                  }}
+                />
+              ))}
+            </View>
           </View>
           <View>
             <Button

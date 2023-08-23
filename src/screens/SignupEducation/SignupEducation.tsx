@@ -115,28 +115,28 @@ const SignupEducation = () => {
         startDate: "start date is required",
       }));
     dispatch(updateEducation({ school, startDate, endDate, degree }));
-    navigation.navigate(APP_SCREEN_LIST.SIGNUP_CERTIFICATE_SCREEN);
+    navigation.navigate(APP_SCREEN_LIST.SIGNUP_SKILLS_SCREEN);
     //handleOnNextPress
   };
 
   useEffect(() => {
     if (degree.trim() !== "")
       setErrors((state) => ({ ...state, degree: null }));
-    else
-      setErrors((state) => ({
-        ...state,
-        degree: "Degree is required",
-      }));
+    // else
+    //   setErrors((state) => ({
+    //     ...state,
+    //     degree: "Degree is required",
+    //   }));
   }, [degree]);
 
   useEffect(() => {
     if (degree.trim() !== "")
       setErrors((state) => ({ ...state, school: null }));
-    else
-      setErrors((state) => ({
-        ...state,
-        school: "School is required",
-      }));
+    // else
+    //   setErrors((state) => ({
+    //     ...state,
+    //     school: "School is required",
+    //   }));
   }, [school]);
 
   const handleOnSkip = () => {

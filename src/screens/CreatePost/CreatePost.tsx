@@ -82,7 +82,13 @@ const CreatePost = () => {
   return (
     <KeyboardDismisser>
       <View style={[GlobalStyles.container]}>
-        <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
+        <View
+          style={[
+            GlobalStyles.mb20,
+            GlobalStyles.mt20,
+            { flexDirection: "row", justifyContent: "space-between" },
+          ]}
+        >
           <Text
             style={[
               GlobalStyles.fontInterMedium,
@@ -92,6 +98,18 @@ const CreatePost = () => {
           >
             New Post
           </Text>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Text
+              style={[
+                GlobalStyles.fontInterMedium,
+                GlobalStyles.fontSize15,
+                GlobalStyles.fontWeight700,
+                { textTransform: "uppercase" },
+              ]}
+            >
+              x
+            </Text>
+          </TouchableOpacity>
         </View>
         <View style={[GlobalStyles.flexOne]}>
           <Input

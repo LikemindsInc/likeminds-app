@@ -98,6 +98,7 @@ const initialState: ISessionState = {
     experience: [],
     certificates: [],
     profilePicture: null,
+    skills: [],
   },
 
   otpVerificationStatus: "idle",
@@ -168,6 +169,10 @@ const sessionSlice = createSlice({
       state.verifyPhoneEmailOTPError = "";
       state.verifyPhoneEmailOTPStatus = "idle";
       state.verifyPhoneEmailOTPSuccess = "";
+    },
+
+    updateSkills(state: ISessionState, action: PayloadAction<string[]>) {
+      state.profileData.skills = action.payload;
     },
 
     updateExperience(state: ISessionState, action: PayloadAction<IExperience>) {
@@ -324,6 +329,7 @@ export const {
   storeOtpCode,
   clearOTPCode,
   clearEmailPhoneOtpVerificationStatus,
+  updateSkills,
 } = sessionSlice.actions;
 
 export default sessionSlice.reducer;

@@ -26,10 +26,19 @@ import useAppDispatch from "../../../hooks/useAppDispatch";
 import { getJobsAction } from "../../../actions/post";
 import useAppSelector from "../../../hooks/useAppSelector";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
-import { INDUSTRIES, JOB_EXPERIENCE, JOB_TYPES } from "../../../constants";
+import {
+  INDUSTRIES,
+  JOB_EXPERIENCE,
+  JOB_LOCATION,
+  JOB_TYPES,
+  TAILOR_JOBS,
+} from "../../../constants";
 import { IndustryItem, JobType } from "./PostJob";
 import Button from "../../../components/Button/Button";
-import { setJobFilterTailorValue } from "../../../reducers/post_reducer";
+import {
+  setJobFilterTailorValue,
+  setJobLocationFilterValue,
+} from "../../../reducers/post_reducer";
 import Input from "../../../components/Input/Input";
 import { Spinner } from "native-base";
 import { IGetJobDTO } from "@app-model";
@@ -41,12 +50,20 @@ export default function Jobs() {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const bottomSheetRef2 = useRef<BottomSheet>(null);
   const bottomSheetRef3 = useRef<BottomSheet>(null);
+  const bottomSheetRef4 = useRef<BottomSheet>(null);
   const [sortBy, setSortBy] = useState<"recent" | "relevant">("recent");
   const snapPoints = useMemo(() => ["50%", "60%"], []);
+
+  const [location, setLocation] = useState("");
 
   const handleOnIndustrySelect = (industry: string) => {
     dispatch(setJobFilterTailorValue(industry));
     setSelectedIndustry(industry);
+  };
+
+  const handleOnLocationSelect = (value: string) => {
+    setLocation(value);
+    dispatch(setJobLocationFilterValue(value));
   };
 
   const handleSearch = () => {
@@ -208,7 +225,7 @@ export default function Jobs() {
           <View style={[GlobalStyles.flewRow]}>
             <Tailor bottomSheetRef={bottomSheetRef} />
             <PostDate />
-            <Location />
+            <Location bottomSheetRef={bottomSheetRef4} />
             <ExperienceLevel bottomSheetRef={bottomSheetRef3} />
             <Type bottomSheetRef={bottomSheetRef2} />
             <Company />
@@ -253,14 +270,16 @@ export default function Jobs() {
             style={{ flex: 1, flexGrow: 1, flexBasis: 1 }}
           >
             <View style={[GlobalStyles.container]}>
-              {["All", ...INDUSTRIES].map((item, i) => (
-                <IndustryItem
-                  text={item}
-                  key={i}
-                  handleOnSelect={handleOnIndustrySelect}
-                  isSelected={item === selectedIndustry}
-                />
-              ))}
+              {[{ label: "All", value: "All" }, ...TAILOR_JOBS].map(
+                (item, i) => (
+                  <IndustryItem
+                    text={item.value}
+                    key={i}
+                    handleOnSelect={() => handleOnIndustrySelect(item.value)}
+                    isSelected={item.value === selectedIndustry}
+                  />
+                )
+              )}
             </View>
           </ScrollView>
           <View
@@ -342,6 +361,44 @@ export default function Jobs() {
           >
             <Button
               onPress={() => bottomSheetRef3.current?.close()}
+              title="Apply"
+            />
+          </View>
+        </View>
+      </BottomSheet>
+
+      <BottomSheet
+        ref={bottomSheetRef4}
+        index={-1}
+        snapPoints={snapPoints}
+        onChange={handleSheetChanges}
+        backdropComponent={(props: any) => (
+          <BottomSheetBackdrop {...props} pressBehavior={"close"} />
+        )}
+      >
+        <View style={{ flex: 1 }}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={{ flex: 1, flexGrow: 1, flexBasis: 1 }}
+          >
+            <View style={[GlobalStyles.container]}>
+              {[{ label: "All", value: "All" }, ...JOB_LOCATION].map(
+                (item, i) => (
+                  <IndustryItem
+                    text={item.value}
+                    key={i}
+                    handleOnSelect={() => handleOnLocationSelect(item.value)}
+                    isSelected={item.value === location}
+                  />
+                )
+              )}
+            </View>
+          </ScrollView>
+          <View
+            style={[{ marginTop: 30, paddingHorizontal: 16, marginBottom: 20 }]}
+          >
+            <Button
+              onPress={() => bottomSheetRef.current?.close()}
               title="Apply"
             />
           </View>

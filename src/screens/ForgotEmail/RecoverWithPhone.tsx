@@ -1,4 +1,4 @@
-import { Text, View, useToast } from "native-base";
+import { Text, View } from "native-base";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import Input from "../../components/Input/Input";
 import TextLink from "../../components/TextLink/TextLink";
@@ -12,6 +12,7 @@ import useAppSelector from "../../hooks/useAppSelector";
 import { ISessionState, storeOTPChannelValue } from "../../reducers/session";
 import { requestOTPPhoneAction } from "../../actions/auth";
 import BackButton from "../../components/Navigation/BackButton/BackButton";
+import { useToast } from "react-native-toast-notifications";
 
 const RecoverWithPhone = () => {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -20,24 +21,35 @@ const RecoverWithPhone = () => {
     (state: any) => state.sessionReducer
   ) as ISessionState;
   const dispatch = useAppDispatch();
+  const [countryCode, setCountryCode] = useState("");
   const toast = useToast();
   const handleOnNextPress = () => {
+    let formattedPhone = "";
+    if (countryCode.startsWith("+000") || countryCode.trim() === "")
+      return toast.show("Please select country", { type: "normal" });
     if (phone.trim() === "")
-      return toast.show({
-        description: "Please provide your phone number",
-        variant: "contained",
-      });
-    dispatch(storeOTPChannelValue(`phone_${phone}`));
-    dispatch(requestOTPPhoneAction({ phone }));
+      return toast.show("Please provide your phone number", { type: "normal" });
+
+    if (phone.startsWith("0")) formattedPhone = phone.slice(1);
+    else if (phone.startsWith("+2340")) formattedPhone = phone.slice(5);
+    else if (phone.startsWith("+234")) formattedPhone = phone.slice(4);
+    else formattedPhone = phone;
+
+    dispatch(storeOTPChannelValue(`phone_${countryCode}${formattedPhone}`));
+    dispatch(
+      requestOTPPhoneAction({ phone: `${countryCode}${formattedPhone}` })
+    );
   };
   useEffect(() => {
     if (session.requestOTPPhoneStatus === "completed") {
-      toast.show({ description: session.requestOTPEmailSuccess });
       setTimeout(() => {
         navigation.navigate(APP_SCREEN_LIST.FORGOT_PHONE_OTP_SCREEN);
       }, 200);
-    } else if (session.requestOTPPhoneStatus === "failed") {
-      toast.show({ description: session.requestOTPEmailError });
+    } else if (
+      session.requestOTPPhoneStatus === "failed" &&
+      session.requestOTPEmailError?.trim() !== ""
+    ) {
+      toast.show(session.requestOTPEmailError as string, { type: "normal" });
     }
   }, [session.requestOTPPhoneStatus]);
   return (
@@ -65,7 +77,9 @@ const RecoverWithPhone = () => {
             autoCapitalize={"none"}
             keyboardType="default"
             value={phone}
+            mode="phone-pad"
             onChangeText={(value) => setPhone(value)}
+            onCountryCodeSelect={(value) => setCountryCode(value)}
           />
         </View>
         <View style={[GlobalStyles.mb40]}>
