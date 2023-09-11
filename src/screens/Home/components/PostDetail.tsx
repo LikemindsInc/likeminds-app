@@ -41,6 +41,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import ReactionIcon from "../../../components/ReactionIcon/ReactionIcon";
 import moment from "moment";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import { Video, ResizeMode } from "expo-av";
 interface IProps {
   item: IPostFeed;
 }
@@ -290,14 +291,23 @@ const PostDetail = () => {
           <View style={{ width: "100%", height: 300 }}>
             {item.images && item.images.length > 0 ? (
               <FbGrid images={item.images} onPress={onPress} />
-            ) : (
-              <Image
-                source={require("../../../../assets/image8.png")}
-                style={styles.image}
-                resizeMethod="auto"
-                resizeMode="cover"
-              />
-            )}
+            ) : null}
+            {item.videos && item.videos.length > 0
+              ? item.videos.map((item) => (
+                  <View style={[GlobalStyles.mb20]}>
+                    <Video
+                      style={{ width: "100%", height: 300 }}
+                      source={{
+                        uri: item,
+                      }}
+                      useNativeControls
+                      resizeMode={ResizeMode.CONTAIN}
+                      isLooping
+                      shouldPlay={false}
+                    />
+                  </View>
+                ))
+              : null}
           </View>
         </View>
         <View

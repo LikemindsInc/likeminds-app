@@ -1,5 +1,6 @@
 import { createSlice, isRejected, isPending } from "@reduxjs/toolkit";
 import _ from "lodash";
+import { PURGE } from "redux-persist";
 
 export interface IGlobalErrorState {
   message: string;
@@ -18,6 +19,9 @@ const errorSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(PURGE, (state) => {
+      return state;
+    });
     builder.addMatcher(isPending, (state, action: any) => {
       // global error handle reducer
       state.message = "";

@@ -6,7 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { ToastProvider } from "react-native-toast-notifications";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import { GlobalStyles } from "./src/theme/GlobalStyles";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AppRoutes from "./src/navigation/routes";
@@ -14,6 +14,19 @@ import { NativeBaseProvider, extendTheme } from "native-base";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import KeyboardDismisser from "./src/components/KeyboardDismisser/KeyboardDismisser";
+import * as Sentry from "sentry-expo";
+import { SENTRY_DNS } from "./src/constants";
+
+// const routingInstrumentation =
+//   new Sentry.Native.ReactNavigationInstrumentation();
+
+Sentry.init({
+  dsn: SENTRY_DNS,
+  enableInExpoDevelopment: false,
+  tracesSampleRate: 1.0,
+  integrations: [],
+  debug: false, // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
+});
 
 SplashScreen.preventAutoHideAsync();
 LogBox.ignoreLogs([
@@ -24,13 +37,15 @@ LogBox.ignoreLogs([
   "Constants.platform.ios.model",
   "Each child in a list",
   "Require cycle",
+  "ImmutableStateInvariantMiddleware took",
 ]);
 
 const Stack = createNativeStackNavigator();
 
 const Drawer = createDrawerNavigator();
 
-export default function App() {
+function App() {
+  const navigation = useRef() as any;
   const [fontsLoaded] = useFonts({
     "Inter-Black": require("./assets/fonts/Inter-Black.ttf"),
     "Inter-Bold": require("./assets/fonts/Inter-Bold.ttf"),
@@ -89,8 +104,21 @@ export default function App() {
               swipeEnabled={true}
               duration={5000}
               animationDuration={250}
+              // renderType={{
+              //   custom_type: (toast) => {
+              //     if(toast.type === "")
+              //   }
+              // }}
             >
-              <NavigationContainer>
+              <NavigationContainer
+              // ref={navigation}
+              // onReady={() => {
+              //   // Register the navigation container with the instrumentation
+              //   routingInstrumentation.registerNavigationContainer(
+              //     navigation
+              //   );
+              // }}
+              >
                 <AppRoutes />
               </NavigationContainer>
             </ToastProvider>
@@ -100,6 +128,8 @@ export default function App() {
     </GestureHandlerRootView>
   );
 }
+
+export default Sentry.Native.wrap(App);
 
 const styles = StyleSheet.create({
   container: {

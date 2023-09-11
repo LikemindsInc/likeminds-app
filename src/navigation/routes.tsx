@@ -68,6 +68,7 @@ import ConnectionProfile from "../screens/Profile/ConnectionProfile";
 import Notification from "../screens/Notification/Notification";
 import { useToast } from "react-native-toast-notifications";
 import { getCurrentUserSpace } from "../actions/space";
+import { persistor } from "../store/store";
 
 const Stack = createNativeStackNavigator();
 
@@ -320,6 +321,7 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
                 console.log("CALLED");
                 dispatch(logoutUserAction());
                 dispatch(logoutAction());
+                persistor.purge();
                 navigation.navigate(APP_SCREEN_LIST.ONBOARDING_SCREEN);
               }}
               type="tertiary"
@@ -366,7 +368,6 @@ const AppRoutes = () => {
   const state = useAppSelector((state) => state.settingReducer);
   const toast = useToast();
   useEffect(() => {
-    console.log("message> ", errorReducer.message);
     if (errorReducer.message?.trim() !== "") {
       // toast.show({ description: errorReducer.message });
       toast.show(errorReducer.message, { type: "normal" });

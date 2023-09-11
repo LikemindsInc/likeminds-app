@@ -93,7 +93,7 @@ const Login = () => {
 
         return;
       }
-      // navigation.navigate(APP_SCREEN_LIST.MAIN_SCREEN);
+      navigation.navigate(APP_SCREEN_LIST.MAIN_SCREEN);
     } else if (session.signingInStatus === "failed") {
       console.log("error is> ", session.signingInError);
     }

@@ -276,7 +276,7 @@ const PersonalInformation = () => {
   );
 };
 
-const FileUploadEmptyIcon = () => {
+export const FileUploadEmptyIcon = () => {
   return (
     <View>
       <View style={[GlobalStyles.displayRowCenter]}>

@@ -1,6 +1,7 @@
 import {
   FlatList,
   Image,
+  RefreshControl,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -20,6 +21,8 @@ import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { IPostReaction } from "@app-model";
 import moment from "moment";
 import { openReactionList } from "../../reducers/post_reducer";
+import colors from "../../theme/colors";
+import { IOScrollView, InView } from "react-native-intersection-observer";
 
 const DATA: { type: "LIVE_FEED" | "INTRO_FEED" | "STORY_FEED"; data: any[] }[] =
   [
@@ -127,6 +130,7 @@ const Home = () => {
 
   const handleSheetChanges = useCallback((index: number) => {}, []);
   const height = useDimension().height;
+  const [isRefreshing, setRefresh] = useState(false);
 
   const renderProfilePicture = (item: IPostReaction) => {
     if (item.user.profilePicture && item.user.profilePicture.trim() !== "") {
@@ -142,17 +146,27 @@ const Home = () => {
   }) => {
     switch (item.type) {
       case "LIVE_FEED":
-        return <LiveFeedList />;
-      case "INTRO_FEED":
-        return null;
-      // return (
-      //   <View style={[GlobalStyles.mt20, GlobalStyles.mb20]}>
-      //     <IntroList />
-      //   </View>
-      // );
+        return (
+          <View
+            style={[
+              {
+                paddingTop: 4,
+                paddingBottom: 2,
+                paddingLeft: 16,
+                paddingRight: 16,
+                backgroundColor: colors.white,
+                marginBottom: 0,
+                marginTop: 0,
+              },
+            ]}
+          >
+            <LiveFeedList />
+          </View>
+        );
+
       case "STORY_FEED":
         return (
-          <View style={[GlobalStyles.mt20, GlobalStyles.mb20, { flex: 1 }]}>
+          <View>
             <StoryFeedList />
           </View>
         );
@@ -162,33 +176,49 @@ const Home = () => {
 
   const state = useAppSelector((state) => state.postReducer);
 
-  // useEffect(() => {
-  //   if (state.getPostFeedStatus === "completed") {
-  //     setRefresh(false);
-  //     getPostFeeds();
-  //   }
-  // }, [state.getPostFeedStatus]);
-
-  // const [isRefreshing, setRefresh] = useState(false);
-  // const getPostFeeds = useCallback(() => {
-  //   dispatch(getPostFeedAction());
-  // }, []);
-  // const handleOnRefresh = () => {
-  //   setRefresh(true);
-  //   getPostFeeds();
-  // };
-
   useEffect(() => {
     if (state.showReactionList && state.postReaction.length > 0) {
       bottomSheetRef2.current?.expand();
     }
   }, [state.postReaction, state.showReactionList]);
+  useEffect(() => {
+    if (state.getPostFeedStatus === "completed") {
+      setRefresh(false);
+    }
+  }, [state.getPostFeedStatus]);
+  const getPostFeeds = useCallback(() => {
+    dispatch(getPostFeedAction());
+  }, []);
+  const handleOnRefresh = () => {
+    setRefresh(true);
+    getPostFeeds();
+  };
   return (
     <View style={[GlobalStyles.flexOne]}>
       <HomeHeader />
-      <ScrollView style={[GlobalStyles.container, { marginRight: 0, flex: 1 }]}>
+      <IOScrollView
+        // contentContainerStyle={{ flex: 1 }}
+        style={[
+          {
+            marginRight: 0,
+            flex: 1,
+            paddingTop: 16,
+            paddingLeft: 0,
+            backgroundColor: colors.white,
+          },
+        ]}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={handleOnRefresh}
+            colors={[colors.primary]} // for android
+            tintColor={colors.primary} // for ios
+          />
+        }
+        rootMargin={{ top: 0 }}
+      >
         {DATA.map((item) => renderItems({ item }))}
-      </ScrollView>
+      </IOScrollView>
       <BottomSheet
         ref={bottomSheetRef2}
         index={-1}

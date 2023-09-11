@@ -13,7 +13,12 @@ import {
   loginUserActionAction,
   requestOTPEmailAction,
   requestOTPPhoneAction,
+  resendOTPAction,
   signupUserActionAction,
+  updateCertificateProfileAction,
+  updateEducationProfileAction,
+  updateExperienceProfileAction,
+  updateSkillsProfileAction,
   verifyOTPActionAction,
   verifyOTPOnChangePasswordAction,
 } from "../actions/auth";
@@ -25,6 +30,10 @@ export interface ISessionState {
   signingInStatus: IThunkAPIStatus;
   signingInSuccess: string;
   signingInError?: string;
+
+  resendOtpStatus: IThunkAPIStatus;
+  resendOtpSuccess: string;
+  resendOtpError?: string;
 
   requestOTPEmailStatus: IThunkAPIStatus;
   requestOTPEmailSuccess: string;
@@ -63,6 +72,10 @@ const initialState: ISessionState = {
   signingInStatus: "idle",
   signingInSuccess: "",
   signingInError: "",
+
+  resendOtpStatus: "idle",
+  resendOtpSuccess: "",
+  resendOtpError: "",
 
   requestOTPEmailStatus: "idle",
   requestOTPEmailSuccess: "",
@@ -131,6 +144,12 @@ const sessionSlice = createSlice({
       state.signingUpError = "";
     },
 
+    clearResendOtpStatus(state: ISessionState) {
+      state.requestOTPPhoneStatus = "idle";
+      state.requestOTPPhoneSuccess = "";
+      state.resendOtpError = "";
+    },
+
     clearOtpVerificationStatus(state: ISessionState) {
       state.otpVerificationStatus = "idle";
       state.otpVerificationSuccess = "";
@@ -186,8 +205,14 @@ const sessionSlice = createSlice({
       state: ISessionState,
       action: PayloadAction<FilePickerFormat>
     ) {
-      if (action.payload) state.profileData.certificates = [action.payload];
-      else state.profileData.certificates = [];
+      if (action.payload) {
+        state.profileData.certificates = [action.payload];
+      }
+    },
+    clearCompleteProfileStatus(state: ISessionState) {
+      state.completeProfileStatus = "idle";
+      state.completeProfileError = "";
+      state.completeProfileError = "";
     },
   },
   extraReducers: (builder) => {
@@ -224,6 +249,17 @@ const sessionSlice = createSlice({
       state.signingInStatus = "failed";
     });
 
+    builder.addCase(resendOTPAction.pending, (state) => {
+      state.resendOtpStatus = "loading";
+    });
+    builder.addCase(resendOTPAction.fulfilled, (state, action) => {
+      state.resendOtpStatus = "completed";
+    });
+    builder.addCase(resendOTPAction.rejected, (state, action) => {
+      state.resendOtpError = action.payload?.message as string;
+      state.resendOtpStatus = "failed";
+    });
+
     builder.addCase(signupUserActionAction.pending, (state) => {
       state.signingUpStatus = "loading";
     });
@@ -254,6 +290,67 @@ const sessionSlice = createSlice({
       state.completeProfileStatus = "completed";
     });
     builder.addCase(completeUserProfileAction.rejected, (state, action) => {
+      state.completeProfileStatus = "failed";
+      state.completeProfileError =
+        (action.payload?.message as string) || action.error.message || "";
+    });
+
+    builder.addCase(updateEducationProfileAction.pending, (state) => {
+      state.completeProfileStatus = "loading";
+    });
+    builder.addCase(updateEducationProfileAction.fulfilled, (state, action) => {
+      state.completeProfileSuccess = action.payload.message;
+      state.completeProfileStatus = "completed";
+    });
+    builder.addCase(updateEducationProfileAction.rejected, (state, action) => {
+      state.completeProfileStatus = "failed";
+      state.completeProfileError =
+        (action.payload?.message as string) || action.error.message || "";
+    });
+
+    builder.addCase(updateExperienceProfileAction.pending, (state) => {
+      state.completeProfileStatus = "loading";
+    });
+    builder.addCase(
+      updateExperienceProfileAction.fulfilled,
+      (state, action) => {
+        state.completeProfileSuccess = action.payload.message;
+        state.completeProfileStatus = "completed";
+      }
+    );
+    builder.addCase(updateExperienceProfileAction.rejected, (state, action) => {
+      state.completeProfileStatus = "failed";
+      state.completeProfileError =
+        (action.payload?.message as string) || action.error.message || "";
+    });
+
+    builder.addCase(updateCertificateProfileAction.pending, (state) => {
+      state.completeProfileStatus = "loading";
+    });
+    builder.addCase(
+      updateCertificateProfileAction.fulfilled,
+      (state, action) => {
+        state.completeProfileSuccess = action.payload.message;
+        state.completeProfileStatus = "completed";
+      }
+    );
+    builder.addCase(
+      updateCertificateProfileAction.rejected,
+      (state, action) => {
+        state.completeProfileStatus = "failed";
+        state.completeProfileError =
+          (action.payload?.message as string) || action.error.message || "";
+      }
+    );
+
+    builder.addCase(updateSkillsProfileAction.pending, (state) => {
+      state.completeProfileStatus = "loading";
+    });
+    builder.addCase(updateSkillsProfileAction.fulfilled, (state, action) => {
+      state.completeProfileSuccess = action.payload.message;
+      state.completeProfileStatus = "completed";
+    });
+    builder.addCase(updateSkillsProfileAction.rejected, (state, action) => {
       state.completeProfileStatus = "failed";
       state.completeProfileError =
         (action.payload?.message as string) || action.error.message || "";
@@ -329,6 +426,8 @@ export const {
   clearOTPCode,
   clearEmailPhoneOtpVerificationStatus,
   updateSkills,
+  clearCompleteProfileStatus,
+  clearResendOtpStatus,
 } = sessionSlice.actions;
 
 export default sessionSlice.reducer;

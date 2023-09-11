@@ -20,16 +20,18 @@ import useAppSelector from "../../hooks/useAppSelector";
 import {
   ISessionState,
   clearEmailPhoneOtpVerificationStatus,
+  clearResendOtpStatus,
   storeOtpCode,
 } from "../../reducers/session";
-import { useToast } from "native-base";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import {
+  resendOTPAction,
   verifyOTPActionAction,
   verifyOTPOnChangePasswordAction,
 } from "../../actions/auth";
 import { PURGE } from "redux-persist";
 import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
+import { useToast } from "react-native-toast-notifications";
 
 const OTPScreen = () => {
   let otpInput = useRef(null) as React.RefObject<any>;
@@ -47,8 +49,7 @@ const OTPScreen = () => {
   const [otp, setOTP] = useState("");
 
   const handleOnVerify = () => {
-    if (otp.length < 4)
-      return toast.show({ description: "Incomplete OTP", variant: "solid" });
+    if (otp.length < 4) return toast.show("Incomplete OTP");
 
     console.log("otp> ", otp);
 
@@ -68,13 +69,23 @@ const OTPScreen = () => {
   };
 
   useEffect(() => {
+    if (session.resendOtpStatus === "completed") {
+      toast.show("OTP sent successfully");
+      dispatch(clearResendOtpStatus());
+    } else if (session.resendOtpStatus === "failed") {
+      toast.show(session.resendOtpError as string, {
+        type: "error",
+        animationType: "slide-in",
+      });
+      dispatch(clearResendOtpStatus());
+    }
+  }, [session.resendOtpStatus]);
+
+  useEffect(() => {
     if (session.verifyPhoneEmailOTPStatus === "completed") {
       navigation.navigate(APP_SCREEN_LIST.CREATE_PASSWORD_SCREEN);
     } else if (session.verifyPhoneEmailOTPStatus === "failed") {
-      toast.show({
-        description: session.verifyPhoneEmailOTPError,
-        variant: "contained",
-      });
+      toast.show(session.verifyPhoneEmailOTPError as string);
     }
 
     return () => {};
@@ -126,11 +137,24 @@ const OTPScreen = () => {
             </Text>
           </View>
           <View style={[GlobalStyles.mt10]}>
-            <TextLink title="Resend Code" />
+            <TextLink
+              title="Resend Code"
+              onPress={() =>
+                dispatch(
+                  resendOTPAction({
+                    phone: session.otpChannelValue.split("_")[1],
+                    type: "FORGOT_PASSWORD",
+                  })
+                )
+              }
+            />
           </View>
         </View>
         <Button
-          loading={session.verifyPhoneEmailOTPStatus === "loading"}
+          loading={
+            session.verifyPhoneEmailOTPStatus === "loading" ||
+            session.resendOtpStatus === "loading"
+          }
           title="Verify Phone"
           onPress={handleOnVerify}
         />

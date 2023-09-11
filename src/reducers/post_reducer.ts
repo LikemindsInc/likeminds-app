@@ -25,6 +25,7 @@ import {
   reactToPostAction,
   unlikePostAction,
 } from "../actions/post";
+import { PURGE } from "redux-persist";
 
 export interface IPostState {
   createPostDTO: ICreatePostDTO;
@@ -108,6 +109,10 @@ export interface IPostState {
   showReactionList: boolean;
 
   jobLocationFilterValue: string | null;
+  jobDateFilterValue: string | null;
+
+  jobTypeFilterValue: string;
+  jobExperienceFilterValue: string;
 }
 
 const initialState: IPostState = {
@@ -193,6 +198,9 @@ const initialState: IPostState = {
   connectionPostFeeds: [],
   showReactionList: false,
   jobLocationFilterValue: "",
+  jobDateFilterValue: "",
+  jobTypeFilterValue: "",
+  jobExperienceFilterValue: "",
 };
 
 const PostSlice = createSlice({
@@ -218,6 +226,13 @@ const PostSlice = createSlice({
 
     setJobLocationFilterValue(state: IPostState, action) {
       state.jobLocationFilterValue = action.payload;
+    },
+    setJobTypeFilterValue(state: IPostState, action) {
+      state.jobTypeFilterValue = action.payload;
+    },
+
+    setJobExperienceFilterValue(state: IPostState, action) {
+      state.jobExperienceFilterValue = action.payload;
     },
 
     clearPostRactionStatus(state: IPostState) {
@@ -247,8 +262,16 @@ const PostSlice = createSlice({
     savePostDetail(state: IPostState, action: PayloadAction<IPostFeed>) {
       state.postDetail = action.payload;
     },
+    setJobDateFilterValue(state: IPostState, action: PayloadAction<string>) {
+      state.jobDateFilterValue = action.payload;
+    },
   },
   extraReducers: (builder) => {
+    builder.addCase(PURGE, (state) => {
+      state.postFeeds = [];
+      state.connectionPostFeeds = [];
+      state.postDetail = null;
+    });
     builder.addCase(createPostAction.pending, (state) => {
       state.createPostStatus = "loading";
     });
@@ -266,6 +289,28 @@ const PostSlice = createSlice({
     });
     builder.addCase(getPostFeedAction.fulfilled, (state, action) => {
       state.getPostFeedStatus = "completed";
+      // state.postFeeds = action.payload.data;
+
+      const data = [...action.payload.data];
+
+      data.forEach((item) => {
+        if (item.images) {
+          const images = [...item.images];
+
+          const ItemsToRemove: number[] = [];
+
+          item.videos = images.filter((item, i) => {
+            if (item.endsWith(".mp4")) ItemsToRemove.push(i);
+
+            return item.endsWith(".mp4");
+          });
+
+          ItemsToRemove.forEach((index) => images.splice(index, 1));
+
+          item.images = images;
+        }
+      });
+
       state.postFeeds = action.payload.data;
       state.getPostFeedSuccess = action.payload?.message;
     });
@@ -280,6 +325,26 @@ const PostSlice = createSlice({
     });
     builder.addCase(getCurrentUserFeedAction.fulfilled, (state, action) => {
       state.getCurrentUserPostStatus = "completed";
+      const data = [...action.payload.data];
+
+      data.forEach((item) => {
+        if (item.images) {
+          const images = [...item.images];
+
+          const ItemsToRemove: number[] = [];
+
+          item.videos = images.filter((item, i) => {
+            if (item.endsWith(".mp4")) ItemsToRemove.push(i);
+
+            return item.endsWith(".mp4");
+          });
+
+          ItemsToRemove.forEach((index) => images.splice(index, 1));
+
+          item.images = images;
+        }
+      });
+
       state.currentUserPostFeeds = action.payload.data;
       state.getCurrentUserPostSuccess = action.payload?.message;
     });
@@ -294,7 +359,26 @@ const PostSlice = createSlice({
     });
     builder.addCase(getConnectionPostFeedAction.fulfilled, (state, action) => {
       state.getConnectionPostFeedStatus = "completed";
-      state.connectionPostFeeds = action.payload.data;
+      const data = [...action.payload.data];
+
+      data.forEach((item) => {
+        if (item.images) {
+          const images = [...item.images];
+
+          const ItemsToRemove: number[] = [];
+
+          item.videos = images.filter((item, i) => {
+            if (item.endsWith(".mp4")) ItemsToRemove.push(i);
+
+            return item.endsWith(".mp4");
+          });
+
+          ItemsToRemove.forEach((index) => images.splice(index, 1));
+
+          item.images = images;
+        }
+      });
+      state.connectionPostFeeds = data;
       state.getConnectionPostFeedSuccess = action.payload?.message;
     });
     builder.addCase(getConnectionPostFeedAction.rejected, (state, action) => {
@@ -393,6 +477,25 @@ const PostSlice = createSlice({
     });
     builder.addCase(getPostFeedByIdAction.fulfilled, (state, action) => {
       state.getSinglePostStatus = "completed";
+      const item = { ...action.payload.data };
+
+      if (item.images) {
+        const images = [...item.images];
+
+        const ItemsToRemove: number[] = [];
+
+        item.videos = images.filter((item, i) => {
+          if (item.endsWith(".mp4")) ItemsToRemove.push(i);
+
+          return item.endsWith(".mp4");
+        });
+
+        ItemsToRemove.forEach((index) => images.splice(index, 1));
+
+        item.images = images;
+      }
+
+      state.postDetail = item;
       state.postDetail = action.payload.data;
     });
     builder.addCase(getPostFeedByIdAction.rejected, (state, action) => {
@@ -436,6 +539,9 @@ export const {
   setJobFilterTailorValue,
   openReactionList,
   setJobLocationFilterValue,
+  setJobDateFilterValue,
+  setJobExperienceFilterValue,
+  setJobTypeFilterValue,
 } = PostSlice.actions;
 
 export default PostSlice.reducer;

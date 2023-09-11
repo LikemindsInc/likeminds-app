@@ -6,28 +6,36 @@ import {
   Text,
   View,
 } from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import Input from "../../components/Input/Input";
+import { GlobalStyles } from "../../../theme/GlobalStyles";
+import Input from "../../../components/Input/Input";
 import React, { useEffect, useState } from "react";
-import Button from "../../components/Button/Button";
-import TextLink from "../../components/TextLink/TextLink";
-import colors from "../../theme/colors";
-import DatePicker from "../../components/DatePicker/DatePicker";
+import Button from "../../../components/Button/Button";
+import TextLink from "../../../components/TextLink/TextLink";
+import colors from "../../../theme/colors";
+import DatePicker from "../../../components/DatePicker/DatePicker";
 import { Checkbox } from "native-base";
-import { APP_SCREEN_LIST } from "../../constants";
+import { APP_SCREEN_LIST } from "../../../constants";
 import { useNavigation } from "@react-navigation/native";
-import useAppSelector from "../../hooks/useAppSelector";
-import { ISessionState, updateExperience } from "../../reducers/session";
-import { ISettingState } from "../../reducers/settings";
+import useAppSelector from "../../../hooks/useAppSelector";
+import {
+  ISessionState,
+  clearCompleteProfileStatus,
+  updateExperience,
+} from "../../../reducers/session";
+import { ISettingState } from "../../../reducers/settings";
 import { AntDesign } from "@expo/vector-icons";
-import DateFormatter from "../../utils/date-formatter";
-import useAppDispatch from "../../hooks/useAppDispatch";
-import BackButton from "../../components/Navigation/BackButton/BackButton";
+import DateFormatter from "../../../utils/date-formatter";
+import useAppDispatch from "../../../hooks/useAppDispatch";
+import BackButton from "../../../components/Navigation/BackButton/BackButton";
 import moment from "moment";
 import { SelectList } from "react-native-dropdown-select-list";
-import { getAllIndustriesAction } from "../../actions/auth";
+import {
+  getAllIndustriesAction,
+  updateEducationProfileAction,
+} from "../../../actions/auth";
+import { useToast } from "react-native-toast-notifications";
 
-const SignupExperience = () => {
+const ExperienceForm = () => {
   const navigation = useNavigation<any>();
   const [startDate, setStartDate] = useState(
     moment().subtract("7", "days").format("YYYY-MM-DD")
@@ -40,6 +48,26 @@ const SignupExperience = () => {
   const [responsibilities, setResponsibilities] = useState("");
 
   const settings = useAppSelector((state) => state.settingReducer);
+
+  const state = useAppSelector((state) => state.sessionReducer);
+
+  const toast = useToast();
+
+  useEffect(() => {
+    if (state.completeProfileStatus === "completed") {
+      toast.show("Experience added successfully", {
+        type: "success",
+        animationType: "slide-in",
+        placement: "top",
+      });
+    } else if (state.completeProfileStatus === "failed") {
+      toast.show(
+        state.completeProfileError ||
+          "Unable to complete action please try again"
+      );
+    }
+    dispatch(clearCompleteProfileStatus());
+  }, [state.completeProfileStatus]);
 
   useEffect(() => {
     dispatch(getAllIndustriesAction());
@@ -192,12 +220,11 @@ const SignupExperience = () => {
         industry,
       })
     );
-    navigation.navigate(APP_SCREEN_LIST.SIGNUP_EDUCATION_SCREEN);
+    setTimeout(() => {
+      dispatch(updateEducationProfileAction(state.profileData));
+    }, 300);
   };
 
-  const handleOnSkip = () => {
-    navigation.navigate(APP_SCREEN_LIST.SIGNUP_EDUCATION_SCREEN);
-  };
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -205,10 +232,7 @@ const SignupExperience = () => {
       keyboardVerticalOffset={50}
       // keyboardShouldPersistTaps={"always"}
     >
-      <View style={[GlobalStyles.container]}>
-        <View style={{ marginBottom: 20 }}>
-          <BackButton title="Experience" />
-        </View>
+      <View style={[GlobalStyles.container, { paddingHorizontal: 0 }]}>
         <View style={[GlobalStyles.mb40]}>
           <Text
             style={[
@@ -332,14 +356,11 @@ const SignupExperience = () => {
           </View>
         </ScrollView>
         <View>
-          <View style={[GlobalStyles.mb20, GlobalStyles.displayRowCenter]}>
-            <TextLink
-              title="Skip For Now"
-              onPress={handleOnSkip}
-              color={colors.black}
-            />
-          </View>
-          <Button title="Continue" onPress={handleOnNextPress} />
+          <Button
+            loading={state.completeProfileStatus === "loading"}
+            title="Save"
+            onPress={handleOnNextPress}
+          />
         </View>
       </View>
     </KeyboardAvoidingView>
@@ -359,4 +380,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignupExperience;
+export default ExperienceForm;

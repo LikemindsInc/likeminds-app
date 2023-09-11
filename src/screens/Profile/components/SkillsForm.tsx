@@ -5,21 +5,27 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import Input from "../../components/Input/Input";
+import { GlobalStyles } from "../../../theme/GlobalStyles";
+import Input from "../../../components/Input/Input";
 import React, { useEffect, useState } from "react";
-import Button from "../../components/Button/Button";
-import TextLink from "../../components/TextLink/TextLink";
-import colors from "../../theme/colors";
-import DatePicker from "../../components/DatePicker/DatePicker";
-import { APP_SCREEN_LIST } from "../../constants";
+import Button from "../../../components/Button/Button";
+import TextLink from "../../../components/TextLink/TextLink";
+import colors from "../../../theme/colors";
+import DatePicker from "../../../components/DatePicker/DatePicker";
+import { APP_SCREEN_LIST } from "../../../constants";
 import { useNavigation } from "@react-navigation/native";
-import BackButton from "../../components/Navigation/BackButton/BackButton";
-import useAppSelector from "../../hooks/useAppSelector";
+import BackButton from "../../../components/Navigation/BackButton/BackButton";
+import useAppSelector from "../../../hooks/useAppSelector";
 import { useToast } from "react-native-toast-notifications";
-import useAppDispatch from "../../hooks/useAppDispatch";
-import { completeUserProfileAction } from "../../actions/auth";
-import { updateSkills } from "../../reducers/session";
+import useAppDispatch from "../../../hooks/useAppDispatch";
+import {
+  completeUserProfileAction,
+  updateSkillsProfileAction,
+} from "../../../actions/auth";
+import {
+  clearCompleteProfileStatus,
+  updateSkills,
+} from "../../../reducers/session";
 
 const SUGGESTIONS = [
   "App Design",
@@ -31,36 +37,39 @@ const SUGGESTIONS = [
   "Wireframes",
 ];
 
-const SignupSkills = () => {
+const SkillsForm = () => {
   const navigation = useNavigation<any>();
   const session = useAppSelector((state: any) => state.sessionReducer);
   const [skills, setSkills] = useState("");
   const toast = useToast();
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
-  // useEffect(() => {
-  //   if (session.completeProfileStatus === "completed") {
-  //     navigation.navigate(APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN);
-  //   } else if (session.completeProfileStatus === "failed") {
-  //     toast.show(
-  //       session.completeProfileError?.trim() === ""
-  //         ? "Unable to complete request. Please try again later"
-  //         : session.completeProfileError,
-  //       {
-  //         type: "normal",
-  //       }
-  //     );
-  //   }
-  // }, [session.completeProfileStatus]);
 
   const dispatch = useAppDispatch();
   const handleOnNextPress = () => {
     if (skills.trim() === "")
       return toast.show("Please provide skills", { type: "normal" });
 
-    navigation.navigate(APP_SCREEN_LIST.SIGNUP_CERTIFICATE_SCREEN);
     dispatch(updateSkills(skills.split(",")));
-    // dispatch(completeUserProfileAction(session.profileData));
+    setTimeout(() => {
+      dispatch(updateSkillsProfileAction(session.profileData));
+    }, 300);
   };
+
+  useEffect(() => {
+    if (session.completeProfileStatus === "completed") {
+      toast.show("Skills added successfully", {
+        type: "success",
+        animationType: "slide-in",
+        placement: "top",
+      });
+    } else if (session.completeProfileStatus === "failed") {
+      toast.show(
+        session.completeProfileError ||
+          "Unable to complete action please try again"
+      );
+    }
+    dispatch(clearCompleteProfileStatus());
+  }, [session.completeProfileStatus]);
 
   const addSelectedSkill = (item: string) => {
     const state = [...selectedSkills];
@@ -102,10 +111,7 @@ const SignupSkills = () => {
     setSkills(newSkills);
   }, [selectedSkills]);
   return (
-    <View style={[GlobalStyles.container]}>
-      <View style={{ marginBottom: 20 }}>
-        <BackButton title="Skills" />
-      </View>
+    <View style={[GlobalStyles.container, { paddingHorizontal: 0 }]}>
       <View style={[GlobalStyles.mb40]}>
         <Text
           style={[
@@ -118,7 +124,7 @@ const SignupSkills = () => {
           Add all the technical skills and tools you are expert at
         </Text>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={[]}>
           <Input
             placeholder="Skill1, Skill2"
@@ -183,18 +189,9 @@ const SignupSkills = () => {
         </View>
       </ScrollView>
       <View>
-        <View style={[GlobalStyles.mb20, GlobalStyles.displayRowCenter]}>
-          <TextLink
-            onPress={() =>
-              navigation.navigate(APP_SCREEN_LIST.SIGNUP_CERTIFICATE_SCREEN)
-            }
-            title="Skip For Now"
-            color={colors.black}
-          />
-        </View>
         <Button
           loading={session.completeProfileStatus === "loading"}
-          title="Continue"
+          title="Save"
           onPress={handleOnNextPress}
         />
       </View>
@@ -215,4 +212,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignupSkills;
+export default SkillsForm;

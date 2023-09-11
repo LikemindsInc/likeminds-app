@@ -44,13 +44,24 @@ export const Tailor: FC<IProps> = ({ bottomSheetRef }) => {
   );
 };
 
-export const PostDate = () => {
+export const PostDate: FC<IProps> = ({ bottomSheetRef }) => {
   const [selected, setSelected] = React.useState("");
 
   const data = [{ key: "1", value: "3h ago" }];
 
+  const handleOpenIndustrySelectPicker = () => {
+    if (!bottomSheetRef) return;
+
+    bottomSheetRef.current?.expand();
+  };
+
+  const state = useAppSelector((state) => state.postReducer);
+
   return (
-    <TouchableOpacity style={[GlobalStyles.flewRow, styles.container]}>
+    <TouchableOpacity
+      onPress={handleOpenIndustrySelectPicker}
+      style={[GlobalStyles.flewRow, styles.container]}
+    >
       <Text
         style={[
           GlobalStyles.fontInterRegular,
@@ -58,7 +69,9 @@ export const PostDate = () => {
           GlobalStyles.textGrey,
         ]}
       >
-        Date Posted
+        {state.jobDateFilterValue && state.jobDateFilterValue !== "All"
+          ? state.jobDateFilterValue
+          : "Date Posted"}
       </Text>
       <AntDesign name="caretdown" size={12} color={colors.grey} />
     </TouchableOpacity>
@@ -122,6 +135,8 @@ export const ExperienceLevel: FC<IProps> = ({ bottomSheetRef }) => {
     bottomSheetRef.current?.expand();
   };
 
+  const state = useAppSelector((state) => state.postReducer);
+
   return (
     <TouchableOpacity
       onPress={handleOpenIndustrySelectPicker}
@@ -134,7 +149,10 @@ export const ExperienceLevel: FC<IProps> = ({ bottomSheetRef }) => {
           GlobalStyles.textGrey,
         ]}
       >
-        Experience Level
+        {state.jobExperienceFilterValue &&
+        state.jobExperienceFilterValue?.trim() !== "All"
+          ? state.jobExperienceFilterValue
+          : "Experience Level"}
       </Text>
       <AntDesign name="caretdown" size={12} color={colors.grey} />
     </TouchableOpacity>
@@ -169,6 +187,8 @@ export const Type: FC<IProps> = ({ bottomSheetRef }) => {
     bottomSheetRef.current?.expand();
   };
 
+  const state = useAppSelector((state) => state.postReducer);
+
   return (
     <TouchableOpacity
       onPress={handleOpenIndustrySelectPicker}
@@ -181,7 +201,9 @@ export const Type: FC<IProps> = ({ bottomSheetRef }) => {
           GlobalStyles.textGrey,
         ]}
       >
-        Type
+        {state.jobTypeFilterValue && state.jobTypeFilterValue?.trim() !== "All"
+          ? state.jobTypeFilterValue
+          : "Type"}
       </Text>
       <AntDesign name="caretdown" size={12} color={colors.grey} />
     </TouchableOpacity>

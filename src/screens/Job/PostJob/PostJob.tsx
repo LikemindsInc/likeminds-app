@@ -399,7 +399,10 @@ const PostJob = () => {
               autoCapitalize={"none"}
               keyboardType="number-pad"
               value={salary}
-              onChangeText={(text) => setSalary(text)}
+              mode="currency"
+              onChangeText={(text) => {
+                setSalary(text);
+              }}
             />
           </View>
           <View style={[GlobalStyles.mb20]}>

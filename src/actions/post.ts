@@ -32,14 +32,35 @@ const GET_SINGLE_POST_FEED = "post:GET_SINGLE_POST_FEED";
 const CREATE_JOB = "job:CREATE_JOB";
 const GET_JOBS = "job:GET_JOBS";
 
-import { Image } from "react-native-compressor";
+import { Image, Video } from "react-native-compressor";
 
 export const createPostAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
   ICreatePostDTO
 >(CREATE_POST, async (agrs: ICreatePostDTO) => {
   const imageAssets = agrs.image || [];
-  const images = [];
+  const videoAssets = agrs.videos || [];
+
+  const images: string[] = [];
+  const videos = [];
+  for (let i = 0; i < videoAssets.length; i++) {
+    const result = await Video.compress(videoAssets[i].uri, {
+      compressionMethod: "auto",
+    });
+
+    const formData = new FormData() as any;
+    formData.append("file", {
+      uri: result,
+      type: videoAssets[i].type,
+      name: videoAssets[i].fileName,
+    });
+
+    const response = await uploadFile(formData);
+
+    const videoUrl = response.data?.data?.url || "";
+
+    videos.push(videoUrl);
+  }
   for (let i = 0; i < imageAssets.length; i++) {
     const result = await Image.compress(imageAssets[i].uri, {
       maxWidth: 1000,
@@ -64,7 +85,7 @@ export const createPostAction = asyncThunkWrapper<
     "/api/post/create",
     {
       content: agrs.content,
-      images,
+      images: [...images, ...videos],
     }
   );
 
@@ -117,14 +138,22 @@ export const getJobsAction = asyncThunkWrapper<
 >(GET_JOBS, async (data: any) => {
   let url = "/api/job?page=1&limit=1000";
 
-  if (data) {
-    Object.keys(data).forEach((key) => {
-      if (!data[key] && data[key].trim() === "") return;
+  const { tailor, ...rest } = data;
 
-      url += `&${key}=${data[key]}`;
+  if (rest) {
+    Object.keys(rest).forEach((key) => {
+      if (!rest[key] && rest[key].trim() === "") return;
+
+      url += `&${key}=${rest[key]}`;
     });
   }
-  console.log(url);
+
+  if (tailor) {
+    url += `&tailor=${tailor}`;
+  }
+
+  console.log("url> ", url);
+
   const response = await axiosClient.get<AxiosResponse<any>>(url);
   return response.data;
 });

@@ -14,6 +14,7 @@ import { FC } from "react";
 import moment from "moment";
 import ReadMore from "react-native-read-more-text";
 import Util from "../../utils";
+import Converter from "../../utils/Converters";
 
 interface IProps {
   item: IJobDTO;
@@ -54,6 +55,8 @@ const JobItem: FC<IProps> = ({ item }) => {
   const handleOnApply = async (url: string) => {
     try {
       url = url.startsWith("https://") ? url : `https://${url}`;
+
+      url = url.trim();
 
       if (!url) return;
       const supported = await Linking.canOpenURL(url);
@@ -225,7 +228,7 @@ const JobItem: FC<IProps> = ({ item }) => {
             { fontWeight: "800", fontSize: 14, color: "#47D0FD" },
           ]}
         >
-          NGN {Math.ceil(item.salary / 100)}k/year
+          NGN {Converter.thousandSeparator(Math.ceil(item.salary / 100))}k/year
         </Text>
       </View>
 
@@ -254,7 +257,7 @@ const JobItem: FC<IProps> = ({ item }) => {
           { justifyContent: "space-between", width: 160 },
         ]}
       >
-        <Button
+        {/* <Button
           type="outline-primary"
           buttonStyle={{
             paddingVertical: 0,
@@ -271,7 +274,7 @@ const JobItem: FC<IProps> = ({ item }) => {
           }}
           title="Save"
           onPress={() => {}}
-        />
+        /> */}
         <Button
           buttonStyle={{
             paddingVertical: 0,

@@ -12,7 +12,7 @@ import Input from "../../components/Input/Input";
 import colors, { addOpacity } from "../../theme/colors";
 import { Entypo, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useToast } from "native-base";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
@@ -21,12 +21,18 @@ import { createPostAction } from "../../actions/post";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { APP_SCREEN_LIST } from "../../constants";
 import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
+import { Video, ResizeMode } from "expo-av";
 
 const CreatePost = () => {
   const [images, setImages] = useState<ImagePicker.ImagePickerAsset[]>([]);
   const [content, setContent] = useState("");
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NavigationProp<any>>();
+  const video = useRef(null);
+  const [videoSelected, setVideoSelected] = useState<
+    ImagePicker.ImagePickerAsset[]
+  >([]);
+  const [status, setStatus] = useState({});
   const postState = useAppSelector(
     (state: any) => state.postReducer
   ) as IPostState;
@@ -42,7 +48,24 @@ const CreatePost = () => {
       console.log("result cancelled> ", result.canceled);
       if (!result.canceled) {
         console.log("called in here");
+        setVideoSelected([]);
         setImages([...result.assets]);
+      }
+    } catch (error) {}
+  };
+  const handleVideoSelect = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+        allowsMultipleSelection: false,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      console.log("result cancelled> ", result.canceled);
+      if (!result.canceled) {
+        console.log(result);
+        setImages([]);
+        setVideoSelected(result.assets);
       }
     } catch (error) {}
   };
@@ -53,17 +76,22 @@ const CreatePost = () => {
         variant: "contained",
       });
 
-    dispatch(createPostAction({ content, image: images }));
+    console.log("oooo>> ", { content, image: images, videos: videoSelected });
+
+    dispatch(
+      createPostAction({ content, image: images, videos: videoSelected })
+    );
   };
 
   useEffect(() => {
     if (postState.createPostStatus === "completed") {
       setContent("");
-      toast.show({
-        description: "Post creared successfully",
-        variant: "contained",
-      });
+      // toast.show({
+      //   description: "Post creared successfully",
+      //   variant: "contained",
+      // });
       setImages([]);
+      setVideoSelected([]);
       navigation.navigate(APP_SCREEN_LIST.HOME_SCREEN);
       dispatch(clearCreatePostStatus());
     } else if (postState.createPostStatus === "failed") {
@@ -128,6 +156,9 @@ const CreatePost = () => {
             >
               <FontAwesome5 name="toolbox" size={24} color={colors.navyBlue} />
             </TouchableOpacity>
+            <TouchableOpacity onPress={handleVideoSelect}>
+              <Entypo name="video-camera" size={24} color={colors.navyBlue} />
+            </TouchableOpacity>
             <TouchableOpacity onPress={handleMediaSelect}>
               <FontAwesome name="photo" size={24} color={colors.navyBlue} />
             </TouchableOpacity>
@@ -149,6 +180,21 @@ const CreatePost = () => {
                 );
               })}
             </View>
+            {images.length > 0 ? null : videoSelected.length > 0 ? (
+              <View>
+                <Video
+                  ref={video}
+                  style={{ width: 150, height: 150 }}
+                  source={{
+                    uri: videoSelected[0].uri,
+                  }}
+                  useNativeControls
+                  resizeMode={ResizeMode.CONTAIN}
+                  isLooping
+                  onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+                />
+              </View>
+            ) : null}
           </ScrollView>
         </View>
         <Button

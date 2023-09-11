@@ -11,6 +11,7 @@ import { AxiosResponse } from "axios";
 export const GET_USERS = "users:GET_USERS";
 export const GET_USERS_BY_SCHOOL = "users:GET_USERS_BY_SCHOOL";
 export const GET_USERS_BY_INDUSTRY = "users:GET_USERS_BY_INDUSTRY";
+export const GET_USERS_BY_SUGGESTIONS = "users:GET_USERS_BY_SUGGESTIONS";
 export const REQUESTS_CONNECTIONS = "connection:REQUESTS_CONNECTIONS";
 export const CONNECTION_STATUS = "connection:CONNECTION_STATUS";
 export const GET_CONNECTION_REQUESTS = "connection:GET_CONNECTION_REQUESTS";
@@ -60,6 +61,23 @@ export const getUserRecommendationByIndustry = asyncThunkWrapper<
   if (txData) {
     Object.keys(txData).forEach((key: any) => {
       if (!txData[key] && txData[key].trim() === "") return;
+
+      url += `&${key}=${txData[key]}`;
+    });
+  }
+  const response = await axiosClient.get<AxiosResponse<any>>(url);
+  return response.data;
+});
+
+export const getUsersBySuggestion = asyncThunkWrapper<
+  ApiResponseSuccess<IUserData[]>,
+  ISearchDTO | void
+>(GET_USERS_BY_SUGGESTIONS, async (data: ISearchDTO | void) => {
+  let url = "/api/users/suggestions?page=1&limit=1000";
+  const txData = { search: data?.search } as any;
+  if (txData) {
+    Object.keys(txData).forEach((key: any) => {
+      if (!txData[key] && txData[key]?.trim() === "") return;
 
       url += `&${key}=${txData[key]}`;
     });

@@ -150,7 +150,7 @@ const CommentRowItem: FC<Props> = ({ item }) => {
               >
                 {item.reactionCount} {item.reactionCount > 1 ? "likes" : "like"}
               </Text>
-              <TouchableOpacity onPress={handleCommentOnComment}>
+              {/* <TouchableOpacity onPress={handleCommentOnComment}>
                 <Text
                   style={[
                     GlobalStyles.fontInterMedium,
@@ -161,7 +161,7 @@ const CommentRowItem: FC<Props> = ({ item }) => {
                 >
                   Reply
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             {shouldCommentOnComment && (
               <Input

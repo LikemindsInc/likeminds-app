@@ -161,6 +161,7 @@ export const INDUSTRIES = [
 ];
 
 export const JOB_TYPES = [
+  { label: "All", value: "All" },
   { label: "Part Time", value: "part-time" },
   { label: "Full Time", value: "full-time" },
   { label: "Internship", value: "internship" },
@@ -169,6 +170,7 @@ export const JOB_TYPES = [
 ];
 
 export const JOB_EXPERIENCE = [
+  { label: "All", value: "All" },
   { label: "Student", value: "student" },
   { label: "Entry Level", value: "entry-level" },
   { label: "Mid Level", value: "mid-level" },
@@ -183,6 +185,13 @@ export const JOB_LOCATION = [
   { label: "Hybrid", value: "hybrid" },
 ];
 
+export const JOB_DATE = [
+  { label: "Any Time", value: "anytime" },
+  { label: "One Day Ago", value: "oneday" },
+  { label: "One Week Ago", value: "week" },
+  { label: "One Month Ago", value: "month" },
+];
+
 export const TAILOR_JOBS = [
   { label: "Sponsoring Companies", value: "Sponsoring Companies" },
   { label: "DI&E Hires", value: "DI&E Hires" },
@@ -192,3 +201,17 @@ export const TAILOR_JOBS = [
 
 export const PENDING_OTP_MESSAGE =
   "Phone is yet to be veried, Kindly verify your number with the OTP sent to your phone";
+
+export const SENTRY_DNS =
+  "https://3f39a318ea28f52d3e77b88aaed35422@o4505852414787584.ingest.sentry.io/4505858577465344";
+
+export const SCHOOL_DEGREES = [
+  "Bsc",
+  "Msc",
+  "Phd",
+  "Hnd",
+  "Ond",
+  "A-Levels",
+  "Diploma",
+  "Etc",
+];

@@ -85,7 +85,8 @@ const PeopleSearchResultCard: FC<IProps> = ({ item }) => {
                   justifyContent: "center",
                   alignItems: "center",
                 }}
-                title="Connect"
+                title="View"
+                onPress={handleOnProfilePress}
               />
             </View>
           </View>

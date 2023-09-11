@@ -17,6 +17,10 @@ class Converter {
 
     return new Blob([ia], { type: mimeString });
   }
+
+  static thousandSeparator(amount: number) {
+    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
 }
 
 export default Converter;

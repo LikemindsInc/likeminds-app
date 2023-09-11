@@ -27,7 +27,8 @@ const UserExperience: FC<IProps> = ({ data = [] }) => {
         { marginTop: -10 },
       ]}
       //   columnFormat="single-column-left"
-      listViewContainerStyle={{ marginLeft: -44 }}
+      listViewContainerStyle={{ marginLeft: -44, paddingBottom: 40 }}
+      style={{ paddingBottom: 40 }}
     />
   );
 };

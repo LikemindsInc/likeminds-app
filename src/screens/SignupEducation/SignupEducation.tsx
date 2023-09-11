@@ -14,6 +14,11 @@ import useAppDispatch from "../../hooks/useAppDispatch";
 import { updateEducation } from "../../reducers/session";
 import BackButton from "../../components/Navigation/BackButton/BackButton";
 import moment from "moment";
+import AutoCompleteInput from "../../components/AutoCompleteInput/AutoCompleteInput";
+import { getAllSchoolAction } from "../../actions/auth";
+import useAppSelector from "../../hooks/useAppSelector";
+import { ISchool } from "@app-model";
+import EducationForm from "../Profile/components/EducationForm";
 
 const SignupEducation = () => {
   const [startDate, setStartDate] = useState(
@@ -25,6 +30,18 @@ const SignupEducation = () => {
   const [degree, setDegree] = useState("");
 
   const navigation = useNavigation<any>();
+
+  const [schools, setSchools] = useState<ISchool[]>([]);
+
+  const setting = useAppSelector((state) => state.settingReducer);
+
+  useEffect(() => {
+    dispatch(getAllSchoolAction());
+  }, []);
+
+  useEffect(() => {
+    setSchools(setting.schools);
+  }, [setting.schools]);
 
   const [errors, setErrors] = useState<{
     startDate: null | string;
@@ -139,6 +156,19 @@ const SignupEducation = () => {
     //   }));
   }, [school]);
 
+  const handleOnSchoolFilter = (query: string) => {
+    if (query.trim() === "") setSchools(setting.schools);
+    else {
+      const data = setting.schools.filter((item) =>
+        item.name.toLowerCase().startsWith(query.toLowerCase().trim())
+      );
+
+      setSchools(data);
+    }
+
+    setSchool(query);
+  };
+
   const handleOnSkip = () => {
     navigation.navigate(APP_SCREEN_LIST.SIGNUP_CERTIFICATE_SCREEN);
   };
@@ -147,67 +177,7 @@ const SignupEducation = () => {
       <View style={{ marginBottom: 20 }}>
         <BackButton title="Education" />
       </View>
-      <View style={[GlobalStyles.mb40]}>
-        <Text
-          style={[
-            GlobalStyles.fontInterRegular,
-            GlobalStyles.fontSize13,
-            GlobalStyles.fontWeight700,
-            GlobalStyles.textGrey,
-          ]}
-        >
-          Tell us about your most recent educational achievement
-        </Text>
-      </View>
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-        <View style={[styles.inputDouble]}>
-          <DatePicker
-            value={startDate}
-            onDateChange={(text) =>
-              setStartDate(DateFormatter.format(text, "YYYY-MM-DD"))
-            }
-            placeholder="Start Date"
-            style={styles.inputFlex}
-            errorMessage={errors.startDate}
-          />
-          <DatePicker
-            value={endDate}
-            onChangeText={(text) =>
-              setEndDate(DateFormatter.format(text, "YYYY-MM-DD"))
-            }
-            placeholder="End Date"
-            style={styles.inputFlex}
-            errorMessage={errors.endDate}
-          />
-        </View>
-
-        <View style={[GlobalStyles.mb10]}>
-          <Input
-            onChangeText={(text) => setDegree(text)}
-            value={degree}
-            placeholder="Degree/Graduation Title"
-            errorMessage={errors.degree}
-          />
-        </View>
-        <View style={[GlobalStyles.mb10]}>
-          <Input
-            onChangeText={(text) => setSchool(text)}
-            value={school}
-            placeholder="School"
-            errorMessage={errors.school}
-          />
-        </View>
-      </ScrollView>
-      <View>
-        <View style={[GlobalStyles.mb20, GlobalStyles.displayRowCenter]}>
-          <TextLink
-            title="Skip For Now"
-            onPress={handleOnSkip}
-            color={colors.black}
-          />
-        </View>
-        <Button title="Continue" onPress={handleOnNextPress} />
-      </View>
+      <EducationForm />
     </View>
   );
 };

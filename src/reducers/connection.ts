@@ -9,8 +9,10 @@ import {
   getUserRecommendationByIndustry,
   getUserRecommendationBySchool,
   getUsers,
+  getUsersBySuggestion,
   requestConnection,
 } from "../actions/connection";
+import { PURGE } from "redux-persist";
 
 export interface IConnectionState {
   getUsersStatus: IThunkAPIStatus;
@@ -20,6 +22,10 @@ export interface IConnectionState {
   getUsersByIndustryStatus: IThunkAPIStatus;
   getUsersByIndustrySuccess: string;
   getUsersByIndustryError: string;
+
+  getUserSuggestedStatus: IThunkAPIStatus;
+  getUserSuggestedSuccess: string;
+  getUserSuggestedError: string;
 
   getUsersBySchoolStatus: IThunkAPIStatus;
   getUsersBySchoolSuccess: string;
@@ -49,6 +55,8 @@ export interface IConnectionState {
   usersBySchool: IUserData[];
   usersByIndustry: IUserData[];
 
+  usersBySuggestions: IUserData[];
+
   profileId: string;
   profile: IUserData | null;
 
@@ -69,6 +77,10 @@ const initialState: IConnectionState = {
   getUsersByIndustryStatus: "idle",
   getUsersByIndustrySuccess: "",
   getUsersByIndustryError: "",
+
+  getUserSuggestedStatus: "idle",
+  getUserSuggestedSuccess: "",
+  getUserSuggestedError: "",
 
   users: [],
   usersByIndustry: [],
@@ -99,6 +111,7 @@ const initialState: IConnectionState = {
   connectionStatus: null,
 
   connectionRequests: [],
+  usersBySuggestions: [],
 };
 
 const connectionSlice = createSlice({
@@ -133,6 +146,9 @@ const connectionSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(PURGE, (state) => {
+      return state;
+    });
     builder.addCase(getUsers.pending, (state) => {
       state.getUsersStatus = "loading";
     });
@@ -200,6 +216,19 @@ const connectionSlice = createSlice({
       state.getConnectionStatus = "failed";
       state.getConnectionError = action.payload?.message as string;
       state.connectionStatus = null;
+    });
+
+    builder.addCase(getUsersBySuggestion.pending, (state) => {
+      state.getUserSuggestedStatus = "loading";
+    });
+    builder.addCase(getUsersBySuggestion.fulfilled, (state, action) => {
+      state.getUserSuggestedStatus = "completed";
+      state.usersBySuggestions = action.payload.data;
+    });
+    builder.addCase(getUsersBySuggestion.rejected, (state, action) => {
+      state.getUserSuggestedStatus = "failed";
+      state.getUserSuggestedError = action.payload?.message as string;
+      state.usersBySuggestions = [];
     });
 
     builder.addCase(getConnections.pending, (state) => {

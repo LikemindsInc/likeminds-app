@@ -73,6 +73,19 @@ declare module "@app-model" {
     jobTitle: string;
     companyName: string;
     responsibilities: string;
+    industry: string;
+  }
+
+  interface ISchool {
+    id: string;
+    name: string;
+  }
+
+  interface Industry {
+    id: string;
+    name: string;
+    createdAt: string;
+    updatedAt: string;
   }
 
   interface IEducation {
@@ -176,12 +189,19 @@ declare module "@app-model" {
   interface ICreatePostDTO {
     content: string;
     image?: ImagePicker.ImagePickerAsset[];
+    videos?: ImagePicker.ImagePickerAsset[];
+  }
+
+  interface ResendOTPDTO {
+    phone: string;
+    type: "SIGNUP" | "FORGOT_PASSWORD";
   }
 
   interface IPostFeed {
     id: string;
     content: string;
     images: string[];
+    videos?: string[];
     files: any[];
     likedBy: string[];
     comments: any[];
@@ -252,14 +272,19 @@ declare module "@app-model" {
     tailor: string[];
   }
 
+  export type IPostedDate = "anytime" | "oneday" | "week" | "month";
+
   interface IGetJobDTO {
     experienceLevel?: string;
-    postedDate?: "anytime" | "oneday" | "week" | "month";
+    postedDate?: IPostedDate;
     sort?: "recent" | "relevant";
     search?: string;
     companyName?: string;
     page?: number;
     size?: number;
+    tailor?: string;
+    location?: string;
+    jobType?: string;
   }
 
   interface ISearchDTO {

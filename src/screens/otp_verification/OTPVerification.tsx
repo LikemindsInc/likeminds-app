@@ -17,9 +17,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import OTPTextInput from "react-native-otp-textinput";
 import useAppSelector from "../../hooks/useAppSelector";
-import { ISessionState } from "../../reducers/session";
+import { ISessionState, clearResendOtpStatus } from "../../reducers/session";
 import useAppDispatch from "../../hooks/useAppDispatch";
-import { verifyOTPActionAction } from "../../actions/auth";
+import { resendOTPAction, verifyOTPActionAction } from "../../actions/auth";
 import { PURGE } from "redux-persist";
 import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
 import { useToast } from "react-native-toast-notifications";
@@ -106,6 +106,19 @@ const OTPVerification = () => {
     return () => {};
   }, [session.otpVerificationStatus]);
 
+  useEffect(() => {
+    if (session.resendOtpStatus === "completed") {
+      toast.show("OTP sent successfully");
+      dispatch(clearResendOtpStatus());
+    } else if (session.resendOtpStatus === "failed") {
+      toast.show(session.resendOtpError as string, {
+        type: "error",
+        animationType: "slide-in",
+      });
+      dispatch(clearResendOtpStatus());
+    }
+  }, [session.resendOtpStatus]);
+
   return (
     <KeyboardDismisser style={{ flex: 1 }}>
       <View style={[GlobalStyles.container]}>
@@ -180,11 +193,24 @@ const OTPVerification = () => {
             </Text>
           </View>
           <View style={[GlobalStyles.mt10]}>
-            <TextLink title="Resend Code" />
+            <TextLink
+              title="Resend Code"
+              onPress={() =>
+                dispatch(
+                  resendOTPAction({
+                    phone: session.otpChannelValue.split("_")[1],
+                    type: "FORGOT_PASSWORD",
+                  })
+                )
+              }
+            />
           </View>
         </View>
         <Button
-          loading={session.otpVerificationStatus === "loading"}
+          loading={
+            session.otpVerificationStatus === "loading" ||
+            session.resendOtpStatus === "loading"
+          }
           title="Verify"
           onPress={handleOnVerify}
         />

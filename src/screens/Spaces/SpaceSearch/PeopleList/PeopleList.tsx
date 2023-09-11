@@ -15,6 +15,7 @@ import { getProfile } from "../../../../reducers/connection";
 import {
   getUserRecommendationByIndustry,
   getUserRecommendationBySchool,
+  getUsersBySuggestion,
 } from "../../../../actions/connection";
 
 const PeopleList: FC<any> = ({ item }) => {
@@ -33,6 +34,7 @@ const PeopleList: FC<any> = ({ item }) => {
   useEffect(() => {
     dispatch(getUserRecommendationByIndustry({ search: "" }));
     dispatch(getUserRecommendationBySchool({ search: "" }));
+    dispatch(getUsersBySuggestion());
   }, []);
 
   return (
@@ -40,125 +42,137 @@ const PeopleList: FC<any> = ({ item }) => {
       showsVerticalScrollIndicator={false}
       style={{ marginTop: 8, marginLeft: 10 }}
     >
-      <View style={[GlobalStyles.mb10]}>
-        <View style={[GlobalStyles.mt10]}>
-          <Text
-            style={[
-              GlobalStyles.fontInterMedium,
-              GlobalStyles.fontSize13,
-              GlobalStyles.textNavyBlue,
-            ]}
-          >
-            From School
-          </Text>
+      {state.users.length > 0 ? (
+        <View style={[GlobalStyles.mb20]}>
+          <View style={[GlobalStyles.mt10]}>
+            <Text
+              style={[
+                GlobalStyles.fontInterMedium,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textNavyBlue,
+              ]}
+            >
+              Search for
+            </Text>
+          </View>
+          <View style={[GlobalStyles.mt20]}>
+            {state.users.length === 0 ? (
+              <View style={{ alignItems: "center" }}>
+                <Image
+                  source={require("../../../../../assets/folder.png")}
+                  style={{ width: 100, height: 100 }}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                />
+              </View>
+            ) : (
+              <View>
+                {state.users.map((item) => (
+                  <Suggestion data={item} key={item.id} />
+                ))}
+              </View>
+            )}
+          </View>
         </View>
-        <View style={{ marginLeft: 5 }}>
-          {state.usersByIndustry.length > 0 ? (
-            <FlatList
-              data={state.usersBySchool}
-              keyExtractor={(item) => item.id}
-              numColumns={1}
-              horizontal
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-              renderItem={({ item }) => <PeopleSearchResultCard item={item} />}
-            />
-          ) : (
-            <View style={{ alignItems: "center", marginVertical: 20 }}>
-              {/* <Image
-                source={require("../../../../../assets/folder.png")}
-                style={{ width: 100, height: 100 }}
-                resizeMethod="resize"
-                resizeMode="contain"
-              /> */}
-              <Text
-                style={[
-                  GlobalStyles.fontInterRegular,
-                  GlobalStyles.fontSize13,
-                  GlobalStyles.textNavyBlue,
-                ]}
-              >
-                No record(s) found
-              </Text>
-            </View>
-          )}
-        </View>
-      </View>
-      <View style={[GlobalStyles.mb20]}>
-        <View style={[GlobalStyles.mt10]}>
-          <Text
-            style={[
-              GlobalStyles.fontInterMedium,
-              GlobalStyles.fontSize13,
-              GlobalStyles.textNavyBlue,
-            ]}
-          >
-            From Industries
-          </Text>
-        </View>
-        <View style={{ marginLeft: 5 }}>
-          {state.usersByIndustry.length > 0 ? (
-            <FlatList
-              data={state.usersByIndustry}
-              keyExtractor={(item) => item.id}
-              numColumns={1}
-              horizontal
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-              renderItem={({ item }) => <PeopleSearchResultCard item={item} />}
-            />
-          ) : (
-            <View style={{ alignItems: "center", marginVertical: 20 }}>
-              {/* <Image
-                source={require("../../../../../assets/folder.png")}
-                style={{ width: 100, height: 100 }}
-                resizeMethod="resize"
-                resizeMode="contain"
-              /> */}
-              <Text
-                style={[
-                  GlobalStyles.fontInterRegular,
-                  GlobalStyles.fontSize13,
-                  GlobalStyles.textNavyBlue,
-                ]}
-              >
-                No record(s) found
-              </Text>
-            </View>
-          )}
-        </View>
-      </View>
-      <View style={[GlobalStyles.mb20]}>
-        <View style={[GlobalStyles.mt10]}>
-          <Text
-            style={[
-              GlobalStyles.fontInterMedium,
-              GlobalStyles.fontSize13,
-              GlobalStyles.textNavyBlue,
-            ]}
-          >
-            Suggestions
-          </Text>
-        </View>
-        <View style={[GlobalStyles.mt20]}>
-          {state.users.length === 0 ? (
-            <View style={{ alignItems: "center" }}>
-              <Image
-                source={require("../../../../../assets/folder.png")}
-                style={{ width: 100, height: 100 }}
-                resizeMethod="resize"
-                resizeMode="contain"
-              />
-            </View>
-          ) : (
+      ) : (
+        <View>
+          <View>
             <View>
-              {state.users.map((item) => (
-                <Suggestion data={item} key={item.id} />
-              ))}
+              {state.usersBySchool.length > 0 ? (
+                <View style={[GlobalStyles.mb10]}>
+                  <View style={[GlobalStyles.mt10]}>
+                    <Text
+                      style={[
+                        GlobalStyles.fontInterMedium,
+                        GlobalStyles.fontSize13,
+                        GlobalStyles.textNavyBlue,
+                      ]}
+                    >
+                      From School
+                    </Text>
+                  </View>
+                  <View style={{ marginLeft: 5 }}>
+                    <FlatList
+                      data={state.usersBySchool}
+                      keyExtractor={(item) => item.id}
+                      numColumns={1}
+                      horizontal
+                      showsVerticalScrollIndicator={false}
+                      showsHorizontalScrollIndicator={false}
+                      renderItem={({ item }) => (
+                        <PeopleSearchResultCard item={item} />
+                      )}
+                    />
+                  </View>
+                </View>
+              ) : null}
             </View>
-          )}
+          </View>
+          <View>
+            <View>
+              {state.usersByIndustry.length > 0 ? (
+                <View style={[GlobalStyles.mb20]}>
+                  <View style={[GlobalStyles.mt10]}>
+                    <Text
+                      style={[
+                        GlobalStyles.fontInterMedium,
+                        GlobalStyles.fontSize13,
+                        GlobalStyles.textNavyBlue,
+                      ]}
+                    >
+                      From Industries
+                    </Text>
+                  </View>
+                  <View style={{ marginLeft: 5 }}>
+                    <FlatList
+                      data={state.usersByIndustry}
+                      keyExtractor={(item) => item.id}
+                      numColumns={1}
+                      horizontal
+                      showsVerticalScrollIndicator={false}
+                      showsHorizontalScrollIndicator={false}
+                      renderItem={({ item }) => (
+                        <PeopleSearchResultCard item={item} />
+                      )}
+                    />
+                  </View>
+                </View>
+              ) : null}
+            </View>
+          </View>
+          <View style={[GlobalStyles.mb20]}>
+            <View style={[GlobalStyles.mt10]}>
+              <Text
+                style={[
+                  GlobalStyles.fontInterMedium,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textNavyBlue,
+                ]}
+              >
+                Suggestions
+              </Text>
+            </View>
+            <View style={[GlobalStyles.mt20]}>
+              {state.usersBySuggestions.length === 0 ? (
+                <View style={{ alignItems: "center" }}>
+                  <Image
+                    source={require("../../../../../assets/folder.png")}
+                    style={{ width: 100, height: 100 }}
+                    resizeMethod="resize"
+                    resizeMode="contain"
+                  />
+                </View>
+              ) : (
+                <View>
+                  {state.usersBySuggestions.slice(0, 10).map((item) => (
+                    <Suggestion data={item} key={item.id} />
+                  ))}
+                </View>
+              )}
+            </View>
+          </View>
         </View>
-      </View>
+      )}
     </ScrollView>
   );
 };
@@ -202,7 +216,7 @@ const Suggestion: FC<IProps> = (props) => {
               GlobalStyles.textNavyBlue,
             ]}
           >
-            {props.data.firstName} {props.data.lastName}
+            {props?.data?.firstName} {props?.data?.lastName}
           </Text>
           <View style={{ marginTop: 5 }}>
             <Text
@@ -212,13 +226,13 @@ const Suggestion: FC<IProps> = (props) => {
                 GlobalStyles.textGrey,
               ]}
             >
-              {props.data.experience[0].jobTitle || props.data.skills[0]}
+              {props?.data?.experience[0]?.jobTitle || props?.data?.skills[0]}
             </Text>
           </View>
         </View>
         <Button
           style={{ paddingVertical: 8, paddingHorizontal: 8 }}
-          title="Connect"
+          title="View"
           onPress={handleOnProfilePress}
         />
       </View>

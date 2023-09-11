@@ -1,27 +1,33 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import Input from "../../components/Input/Input";
+import { GlobalStyles } from "../../../theme/GlobalStyles";
+import Input from "../../../components/Input/Input";
 import React, { useEffect, useState } from "react";
-import Button from "../../components/Button/Button";
-import TextLink from "../../components/TextLink/TextLink";
-import colors from "../../theme/colors";
-import DatePicker from "../../components/DatePicker/DatePicker";
-import DropZone from "../../components/DropZone/DropZone";
-import { APP_SCREEN_LIST } from "../../constants";
+import Button from "../../../components/Button/Button";
+import TextLink from "../../../components/TextLink/TextLink";
+import colors from "../../../theme/colors";
+import DatePicker from "../../../components/DatePicker/DatePicker";
+import DropZone from "../../../components/DropZone/DropZone";
+import { APP_SCREEN_LIST } from "../../../constants";
 import { useNavigation } from "@react-navigation/native";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
-import useAppDispatch from "../../hooks/useAppDispatch";
-import { ISessionState, updateCertificate } from "../../reducers/session";
-import useAppSelector from "../../hooks/useAppSelector";
-import { completeUserProfileAction } from "../../actions/auth";
-import BackButton from "../../components/Navigation/BackButton/BackButton";
+import useAppDispatch from "../../../hooks/useAppDispatch";
+import {
+  ISessionState,
+  clearCompleteProfileStatus,
+  updateCertificate,
+} from "../../../reducers/session";
+import useAppSelector from "../../../hooks/useAppSelector";
+import {
+  completeUserProfileAction,
+  updateCertificateProfileAction,
+} from "../../../actions/auth";
+import BackButton from "../../../components/Navigation/BackButton/BackButton";
 import { useToast } from "react-native-toast-notifications";
 import { FilePickerFormat } from "@app-model";
-import { FileUploadEmptyIcon } from "../personal_inforamtion/PersonalInformation";
-import { CertificateUploadEmptyIcon } from "../Profile/components/CertificateForm";
+import { AntDesign } from "@expo/vector-icons";
 
-const SignupCertificate = () => {
+const CertificateForm = () => {
   const navigation = useNavigation<any>();
 
   const dispatch = useAppDispatch();
@@ -45,31 +51,32 @@ const SignupCertificate = () => {
   };
   const handleOnNextPress = () => {
     if (file) {
+      console.log("file> ", file);
       dispatch(updateCertificate(file as FilePickerFormat));
+      setTimeout(() => {
+        dispatch(updateCertificateProfileAction(session.profileData));
+      }, 500);
     }
-    dispatch(completeUserProfileAction(session.profileData));
   };
 
   useEffect(() => {
     if (session.completeProfileStatus === "completed") {
-      navigation.navigate(APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN);
+      toast.show("Certificate added successfully", {
+        type: "success",
+        animationType: "slide-in",
+        placement: "top",
+      });
     } else if (session.completeProfileStatus === "failed") {
       toast.show(
-        session.completeProfileError?.trim() === ""
-          ? "Unable to complete request. Please try again later"
-          : (session.completeProfileError as string),
-        {
-          type: "normal",
-        }
+        session.completeProfileError ||
+          "Unable to complete action please try again"
       );
     }
+    dispatch(clearCompleteProfileStatus());
   }, [session.completeProfileStatus]);
 
   return (
-    <View style={[GlobalStyles.container]}>
-      <View style={{ marginBottom: 20 }}>
-        <BackButton title="Certificate" />
-      </View>
+    <View style={[GlobalStyles.container, { paddingHorizontal: 0 }]}>
       <View style={[GlobalStyles.mb40]}>
         <Text
           style={[
@@ -129,6 +136,38 @@ const SignupCertificate = () => {
   );
 };
 
+export const CertificateUploadEmptyIcon = () => {
+  return (
+    <View>
+      <View style={[GlobalStyles.displayRowCenter]}>
+        <AntDesign name="clouduploado" size={24} color={colors.primary} />
+      </View>
+      <View style={[GlobalStyles.displayRow]}>
+        <Text
+          style={[
+            GlobalStyles.fontSize13,
+            GlobalStyles.fontInterRegular,
+            GlobalStyles.textNavyBlue,
+            GlobalStyles.fontWeight400,
+          ]}
+        >
+          Certificate
+        </Text>
+        <Text
+          style={[
+            GlobalStyles.fontSize13,
+            GlobalStyles.fontInterRegular,
+            GlobalStyles.textGrey,
+            GlobalStyles.fontWeight400,
+          ]}
+        >
+          (Optional)
+        </Text>
+      </View>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -142,4 +181,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignupCertificate;
+export default CertificateForm;
