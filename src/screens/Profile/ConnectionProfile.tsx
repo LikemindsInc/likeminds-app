@@ -28,6 +28,7 @@ import {
   getRequestConnectionStatus,
   getSingleUserAction,
   requestConnection,
+  undoConnectionRequest,
 } from "../../actions/connection";
 import { useToast } from "react-native-toast-notifications";
 import { clearRequestConnection } from "../../reducers/connection";
@@ -50,21 +51,6 @@ const ConnectionProfile = () => {
 
   const selector = useAppSelector((state) => state.connectionReducer);
 
-  const toast = useToast();
-
-  useEffect(() => {
-    if (selector.requestConnectionStatus === "completed") {
-      toast.show("Connection sent successfully", {
-        placement: "top",
-        type: "normal",
-        animationType: "slide-in",
-      });
-      getStatus();
-    }
-
-    dispatch(clearRequestConnection());
-  }, [selector.requestConnectionStatus]);
-
   const getStatus = useCallback(() => {
     if (!selector.profile?.id) return;
     dispatch(getRequestConnectionStatus(selector.profile?.id as string));
@@ -79,9 +65,21 @@ const ConnectionProfile = () => {
     getUserProfile();
   }, [getStatus]);
 
+  const handleUndoConnectionRequest = () => {
+    if (!selector.connectionRequestId) return;
+
+    dispatch(undoConnectionRequest(selector.connectionRequestId));
+  };
+
   const handleConnectToUser = () => {
     dispatch(requestConnection(selector.profile?.id as string));
   };
+
+  useEffect(() => {
+    if (selector.undoConnectionStatus === "completed") {
+      dispatch(getRequestConnectionStatus(selector.profile?.id as string));
+    }
+  }, [selector.undoConnectionStatus]);
 
   const getButtonType = () => {
     if (!selector.connectionStatus) return "primary";
@@ -147,6 +145,39 @@ const ConnectionProfile = () => {
       >
         Show less
       </Text>
+    );
+  };
+
+  const renderConnectionButton = () => {
+    if (selector.requestConnectionStatus === "loading")
+      return (
+        <Button
+          loading={selector.requestConnectionStatus === "loading"}
+          disabled={requestButtonDisabled()}
+          containerStyle={{ flex: 1 }}
+          type={getButtonType()}
+          title={getText()}
+        />
+      );
+    if (selector.connectionStatus === "pending") {
+      return (
+        <Button
+          onPress={handleUndoConnectionRequest}
+          containerStyle={{ flex: 1 }}
+          type={"tertiary"}
+          title={getText()}
+          loading={selector.undoConnectionStatus === "loading"}
+        />
+      );
+    }
+    return (
+      <Button
+        onPress={handleConnectToUser}
+        containerStyle={{ flex: 1 }}
+        type={getButtonType()}
+        title={getText()}
+        loading={selector.getConnectionStatus === "loading"}
+      />
     );
   };
 
@@ -347,14 +378,7 @@ const ConnectionProfile = () => {
             </View>
           </View>
           <View style={[GlobalStyles.flewRow, GlobalStyles.mb30, { gap: 20 }]}>
-            <Button
-              loading={selector.requestConnectionStatus === "loading"}
-              disabled={requestButtonDisabled()}
-              onPress={handleConnectToUser}
-              containerStyle={{ flex: 1 }}
-              type={getButtonType()}
-              title={getText()}
-            />
+            {renderConnectionButton()}
             <Button type="cancel" containerStyle={{ flex: 1 }} title="Chat" />
           </View>
           <View style={{ height: 600 }}>

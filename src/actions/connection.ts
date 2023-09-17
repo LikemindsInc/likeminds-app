@@ -14,6 +14,7 @@ export const GET_USERS_BY_INDUSTRY = "users:GET_USERS_BY_INDUSTRY";
 export const GET_USERS_BY_SUGGESTIONS = "users:GET_USERS_BY_SUGGESTIONS";
 export const REQUESTS_CONNECTIONS = "connection:REQUESTS_CONNECTIONS";
 export const CONNECTION_STATUS = "connection:CONNECTION_STATUS";
+export const UNDO_CONNECTION_REQUEST = "connection:UNDO_CONNECTION_REQUEST";
 export const GET_CONNECTION_REQUESTS = "connection:GET_CONNECTION_REQUESTS";
 export const GET_SINGLE_USER = "connection:GET_SINGLE_USER";
 export const RESPOND_TO_CONNECTION = "connection:RESPOND_TO_CONNECTION";
@@ -97,11 +98,21 @@ export const requestConnection = asyncThunkWrapper<
 });
 
 export const getRequestConnectionStatus = asyncThunkWrapper<
-  ApiResponseSuccess<{ status: string }>,
+  ApiResponseSuccess<{ status: string; id: string }>,
   string
 >(CONNECTION_STATUS, async (data) => {
   const response = await axiosClient.get<AxiosResponse<any>>(
     `/api/connect/status/${data}`
+  );
+  return response.data;
+});
+
+export const undoConnectionRequest = asyncThunkWrapper<
+  ApiResponseSuccess<any>,
+  string
+>(UNDO_CONNECTION_REQUEST, async (data) => {
+  const response = await axiosClient.patch<AxiosResponse<any>>(
+    `/api/connect/${data}`
   );
   return response.data;
 });

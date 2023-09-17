@@ -11,6 +11,7 @@ import {
   getUsers,
   getUsersBySuggestion,
   requestConnection,
+  undoConnectionRequest,
 } from "../actions/connection";
 import { PURGE } from "redux-persist";
 
@@ -34,6 +35,10 @@ export interface IConnectionState {
   requestConnectionStatus: IThunkAPIStatus;
   requestConnectionSuccess: string;
   requestConnectionError: string;
+
+  undoConnectionStatus: IThunkAPIStatus;
+  undoConnectionSuccess: string;
+  undoConnectionError: string;
 
   getSingleUserStatus: IThunkAPIStatus;
   getSingleUserSuccess: string;
@@ -63,6 +68,8 @@ export interface IConnectionState {
   connectionStatus: string | null;
 
   connectionRequests: IConnectionReceivedDTO[];
+
+  connectionRequestId: string | null;
 }
 
 const initialState: IConnectionState = {
@@ -92,6 +99,10 @@ const initialState: IConnectionState = {
   requestConnectionSuccess: "",
   requestConnectionError: "",
 
+  undoConnectionStatus: "idle",
+  undoConnectionSuccess: "",
+  undoConnectionError: "",
+
   getSingleUserStatus: "idle",
   getSingleUserSuccess: "",
   getSingleUserError: "",
@@ -112,6 +123,8 @@ const initialState: IConnectionState = {
 
   connectionRequests: [],
   usersBySuggestions: [],
+
+  connectionRequestId: null,
 };
 
 const connectionSlice = createSlice({
@@ -133,6 +146,7 @@ const connectionSlice = createSlice({
 
     clearConnectionStatus(state: IConnectionState) {
       state.connectionStatus = "";
+      state.connectionRequestId = null;
     },
 
     clearConnectionsReceived(state: IConnectionState) {
@@ -211,11 +225,23 @@ const connectionSlice = createSlice({
     builder.addCase(getRequestConnectionStatus.fulfilled, (state, action) => {
       state.getConnectionStatus = "completed";
       state.connectionStatus = action.payload.data.status;
+      state.connectionRequestId = action.payload.data.id;
     });
     builder.addCase(getRequestConnectionStatus.rejected, (state, action) => {
       state.getConnectionStatus = "failed";
       state.getConnectionError = action.payload?.message as string;
       state.connectionStatus = null;
+    });
+
+    builder.addCase(undoConnectionRequest.pending, (state) => {
+      state.undoConnectionStatus = "loading";
+    });
+    builder.addCase(undoConnectionRequest.fulfilled, (state, action) => {
+      state.undoConnectionStatus = "completed";
+    });
+    builder.addCase(undoConnectionRequest.rejected, (state, action) => {
+      state.undoConnectionStatus = "failed";
+      state.undoConnectionError = action.payload?.message as string;
     });
 
     builder.addCase(getUsersBySuggestion.pending, (state) => {

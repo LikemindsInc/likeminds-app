@@ -54,9 +54,10 @@ const SpaceItem: FC<IProps> = ({ item }) => {
   return (
     <TouchableOpacity
       style={[
-        GlobalStyles.shadowBox,
         { flexDirection: "row" },
         styles.container,
+        GlobalStyles.card,
+        { paddingRight: 10, paddingTop: 10, marginBottom: 5 },
       ]}
       onPress={() => navigation.navigate(APP_SCREEN_LIST.SPACE_PROFILE_SCREEN)}
     >

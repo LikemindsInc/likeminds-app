@@ -1,5 +1,4 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import DropShadow from "react-native-drop-shadow";
 import colors from "../theme/colors";
 import Button from "../components/Button/Button";
 import { GlobalStyles } from "../theme/GlobalStyles";

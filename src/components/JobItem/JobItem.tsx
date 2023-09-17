@@ -124,7 +124,7 @@ const JobItem: FC<IProps> = ({ item }) => {
         </ReadMore>
       </View>
 
-      <View style={[GlobalStyles.flewRow, { marginBottom: 8, width: "70%" }]}>
+      <View style={[GlobalStyles.flewRow, { marginBottom: 8, width: "80%" }]}>
         <View style={{ flex: 1 }}>
           <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>
             Industry
@@ -140,7 +140,7 @@ const JobItem: FC<IProps> = ({ item }) => {
           </Text>
         </View>
 
-        <View style={{}}>
+        <View style={{ flex: 1 }}>
           <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>
             Location
           </Text>
@@ -156,7 +156,7 @@ const JobItem: FC<IProps> = ({ item }) => {
         </View>
       </View>
 
-      <View style={[GlobalStyles.flewRow, { marginBottom: 8, width: "70%" }]}>
+      <View style={[GlobalStyles.flewRow, { marginBottom: 8, width: "80%" }]}>
         <View style={{ flex: 1 }}>
           <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>
             Type
@@ -172,7 +172,7 @@ const JobItem: FC<IProps> = ({ item }) => {
           </Text>
         </View>
 
-        <View style={{}}>
+        <View style={{ flex: 1 }}>
           <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>
             Company
           </Text>
@@ -259,24 +259,6 @@ const JobItem: FC<IProps> = ({ item }) => {
           { justifyContent: "space-between", width: 160 },
         ]}
       >
-        {/* <Button
-          type="outline-primary"
-          buttonStyle={{
-            paddingVertical: 0,
-            paddingHorizontal: 0,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          style={{
-            width: "100%",
-            height: 35,
-            marginTop: 8,
-            padding: 8,
-            alignSelf: "flex-start",
-          }}
-          title="Save"
-          onPress={() => {}}
-        /> */}
         <Button
           buttonStyle={{
             paddingVertical: 0,
