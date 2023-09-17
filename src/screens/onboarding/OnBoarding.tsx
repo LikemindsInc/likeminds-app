@@ -59,6 +59,15 @@ const slides = [
     backgroundColor: "#59b2ab",
     footerText: "Bond over shared challenges and experiences",
   },
+  {
+    key: 5,
+    title: "Welcome To",
+    text: "A platform for bringing talented and diverse  communities together to support one another and grow.",
+    image: require("../../../assets/image12.png"),
+    logo: require("../../../assets/image1.png"),
+    backgroundColor: "#59b2ab",
+    footerText: "Bond over shared challenges and experiences",
+  },
 ];
 
 const OnBoarding = () => {
@@ -116,7 +125,7 @@ const OnBoarding = () => {
             style={styles.groupImage}
           />
         </View>
-        <View style={[GlobalStyles.mb40]}>
+        <View style={[GlobalStyles.mb40, GlobalStyles.mt40]}>
           <Text
             style={[
               GlobalStyles.textCenter,

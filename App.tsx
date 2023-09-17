@@ -14,19 +14,19 @@ import { NativeBaseProvider, extendTheme } from "native-base";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import KeyboardDismisser from "./src/components/KeyboardDismisser/KeyboardDismisser";
-import * as Sentry from "sentry-expo";
-import { SENTRY_DNS } from "./src/constants";
+// import * as Sentry from "sentry-expo";
+// import { SENTRY_DNS } from "./src/constants";
 
 // const routingInstrumentation =
 //   new Sentry.Native.ReactNavigationInstrumentation();
 
-Sentry.init({
-  dsn: SENTRY_DNS,
-  enableInExpoDevelopment: false,
-  tracesSampleRate: 1.0,
-  integrations: [],
-  debug: false, // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
-});
+// Sentry.init({
+//   dsn: SENTRY_DNS,
+//   enableInExpoDevelopment: false,
+//   tracesSampleRate: 1.0,
+//   integrations: [],
+//   debug: false, // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
+// });
 
 SplashScreen.preventAutoHideAsync();
 LogBox.ignoreLogs([
@@ -129,7 +129,7 @@ function App() {
   );
 }
 
-export default Sentry.Native.wrap(App);
+export default App;
 
 const styles = StyleSheet.create({
   container: {

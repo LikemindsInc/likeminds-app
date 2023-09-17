@@ -5,7 +5,7 @@ import colors from "../../../theme/colors";
 import { FC } from "react";
 
 interface IProps {
-  showExperienceModal: () => void;
+  showExperienceModal: () => void | null;
 }
 
 const renderExperienceTimelineView = ({
@@ -13,7 +13,7 @@ const renderExperienceTimelineView = ({
   title,
   actionTitle,
 }: {
-  showExperienceModal: React.Dispatch<React.SetStateAction<boolean>>;
+  showExperienceModal: React.Dispatch<React.SetStateAction<boolean>> | null;
   title?: string;
   actionTitle?: string;
 }) => {
@@ -37,7 +37,7 @@ const renderExperienceTimelineView = ({
         </Text>
       </View>
     ),
-    description: (
+    description: showExperienceModal && (
       <View style={[{ marginTop: 20, marginBottom: 10 }]}>
         <TouchableOpacity
           onPress={() => showExperienceModal(true)}

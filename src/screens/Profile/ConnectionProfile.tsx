@@ -1,6 +1,7 @@
 import {
   Animated,
   ImageBackground,
+  Linking,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -35,6 +36,7 @@ import { Title } from "react-native-paper";
 import ConnectionPostFeed from "./components/ConnectionPostFeed";
 import ReadMore from "react-native-read-more-text";
 import moment from "moment";
+import renderExperienceTimelineView from "./components/renderExperienceTimelineView";
 
 const ConnectionProfile = () => {
   const height = useDimension().height;
@@ -376,7 +378,7 @@ const FirstRoute = () => {
   }, [getUserProfile]);
 
   const filterExperience = () => {
-    return (
+    const timeline =
       selector.profile?.experience
         .filter(
           (item) =>
@@ -447,12 +449,50 @@ const FirstRoute = () => {
               </Text>
             </View>
           ),
-        })) || []
-    );
+        })) ||
+      renderExperienceTimelineView({
+        showExperienceModal: null,
+        title: "Experience",
+        actionTitle: "Add Experience",
+      });
+
+    return [
+      {
+        title: (
+          <View
+            style={{
+              justifyContent: "space-between",
+              flexDirection: "row",
+              width: "100%",
+            }}
+          >
+            <Text
+              style={[
+                GlobalStyles.fontInterBlack,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textNavyBlue,
+                GlobalStyles.mb10,
+              ]}
+            >
+              Experience
+            </Text>
+          </View>
+        ),
+
+        description: [
+          ...timeline.map((item) => (
+            <View style={{ marginBottom: 10 }}>
+              {item.title}
+              {item.description}
+            </View>
+          )),
+        ],
+      },
+    ];
   };
 
   const filterEducatio = () => {
-    return (
+    const timeline =
       selector.profile?.education.map((item) => ({
         title: (
           <View
@@ -468,9 +508,7 @@ const FirstRoute = () => {
                 GlobalStyles.fontSize13,
                 GlobalStyles.textNavyBlue,
               ]}
-            >
-              Education
-            </Text>
+            ></Text>
             <Text
               style={[
                 GlobalStyles.fontInterRegular,
@@ -512,13 +550,15 @@ const FirstRoute = () => {
             </Text>
           </View>
         ),
-      })) || []
-    );
-  };
+      })) ||
+      renderExperienceTimelineView({
+        showExperienceModal: null,
+        title: "Education",
+        actionTitle: "Add Education",
+      });
 
-  const filterCertificates = () => {
-    return (
-      selector.profile?.certificates.map((item) => ({
+    return [
+      {
         title: (
           <View
             style={{
@@ -526,25 +566,129 @@ const FirstRoute = () => {
               flexDirection: "row",
               width: "100%",
             }}
-          ></View>
-        ),
-        description: (
-          <View style={[{ marginTop: -5 }]}>
+          >
             <Text
               style={[
-                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontInterBlack,
                 GlobalStyles.fontSize13,
-                GlobalStyles.textGrey,
+                GlobalStyles.textNavyBlue,
                 GlobalStyles.mb10,
-                GlobalStyles.mt10,
               ]}
             >
-              {item.name}
+              Education
             </Text>
           </View>
         ),
-      })) || []
-    );
+
+        description: timeline.map((item) => (
+          <View style={{ marginBottom: 10 }}>{item.description}</View>
+        )),
+      },
+    ];
+  };
+
+  const handleFileDownload = async (url: string) => {
+    try {
+      if (!(url.startsWith("https") || url.startsWith("http"))) return;
+
+      url = url.startsWith("https://") ? url : `https://${url}`;
+
+      url = url.trim();
+
+      const supported = await Linking.canOpenURL(url);
+
+      if (supported) {
+        await Linking.openURL(url);
+      }
+    } catch (error) {
+      console.log("Error opening Link", error);
+    }
+  };
+
+  const filterCertificates = () => {
+    const timeline =
+      selector.profile?.certificates.map((item) => ({
+        title: (
+          <View
+            style={{
+              justifyContent: "space-between",
+              flexDirection: "row",
+              width: "100%",
+              marginBottom: 10,
+            }}
+          ></View>
+        ),
+        description: (
+          <View style={[{ marginBottom: 10 }]}>
+            <TouchableOpacity
+              style={{ flex: 1, flexDirection: "row", gap: 12 }}
+              onPress={() => handleFileDownload(item.url)}
+            >
+              <View
+                style={{
+                  backgroundColor: colors.navyBlue,
+                  width: 40,
+                  height: 40,
+                  borderRadius: 4,
+                  paddingHorizontal: 8,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={[
+                    GlobalStyles.fontInterBlack,
+                    GlobalStyles.fontSize10,
+                    { color: colors.white },
+                  ]}
+                >
+                  PDF
+                </Text>
+              </View>
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textGrey,
+                  GlobalStyles.mb10,
+                  GlobalStyles.mt10,
+                ]}
+              >
+                {item.name}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ),
+      })) || [];
+
+    return [
+      {
+        title: (
+          <View
+            style={{
+              justifyContent: "space-between",
+              flexDirection: "row",
+              width: "100%",
+            }}
+          >
+            <Text
+              style={[
+                GlobalStyles.fontInterBlack,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textNavyBlue,
+                GlobalStyles.mb10,
+              ]}
+            >
+              Certificate
+            </Text>
+          </View>
+        ),
+
+        description: timeline.map((item) => (
+          <View style={{ marginBottom: 10 }}>{item.description}</View>
+        )),
+      },
+    ];
   };
 
   return (
@@ -560,16 +704,7 @@ const FirstRoute = () => {
               description: selector.profile?.skills.join(","),
             },
 
-            {
-              title: "Certificates",
-              description: (
-                <View>
-                  {filterCertificates().map((item) => (
-                    <View>{item.description}</View>
-                  ))}
-                </View>
-              ),
-            },
+            ...filterCertificates(),
           ]}
         />
       )}

@@ -1,4 +1,4 @@
-import { IPostFeed } from "@app-model";
+import { IPostCommentFeed, IPostFeed } from "@app-model";
 import { FC, useEffect, useMemo, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
@@ -8,45 +8,45 @@ import useAppSelector from "../../hooks/useAppSelector";
 import {
   IPostState,
   clearPostRactionStatus,
+  handleShowCommentReaction,
   showReactionView,
 } from "../../reducers/post_reducer";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import {
+  getCommentReaction,
   getPostFeedAction,
-  getPostReactions,
-  reactToPostAction,
-  unReactToPost,
+  reactToCommentAction,
+  removeCommentReaction,
 } from "../../actions/post";
 import { useToast } from "native-base";
 
 interface Props {
-  post: IPostFeed;
-  handleLikeReactionOnPost: (post: IPostFeed) => void;
-  handleOnReactionActivate: (post: IPostFeed) => void;
-  isLiked: boolean;
+  post: IPostCommentFeed;
+
+  isLiked?: boolean;
   isComment?: boolean;
-  commentId?: string;
+  id?: string;
 }
 
-const ReactionIcon: FC<Props> = ({
-  post,
-  handleLikeReactionOnPost,
-  handleOnReactionActivate,
-  isLiked,
-}) => {
+const CommentReactionIcon: FC<Props> = ({ post, isLiked }) => {
   const dispatch = useAppDispatch();
   const state = useAppSelector((state: any) => state.postReducer) as IPostState;
 
   const [likedIcon, setLikeIcon] = useState<any>(null);
 
   const handleShowReactionView = () => {
-    dispatch(showReactionView({ show: true, post }));
+    dispatch(handleShowCommentReaction({ show: true, post }));
   };
 
   const REACTIONS = useMemo(() => ["💡", "👏", "😄", "💝", "❤️"], []);
 
   useEffect(() => {
-    dispatch(getPostReactions(post.id));
+    dispatch(
+      getCommentReaction({
+        postId: post.postId,
+        commentId: post.id as string,
+      })
+    );
   }, []);
 
   const toast = useToast();
@@ -54,38 +54,48 @@ const ReactionIcon: FC<Props> = ({
   const data = useAppSelector((state) => state.settingReducer);
 
   useEffect(() => {
-    if (state.postReaction.length > 0) {
-      const item = state.postReaction.findLast(
+    if (state.commentReactions.length > 0) {
+      const item = state.commentReactions.findLast(
         (item) => item.user.id === data.userInfo?.id && item.postId === post.id
       );
 
       if (item) {
-        // console.log(item.reaction);
         setLikeIcon(item.reaction);
       }
     }
   }, [state.postReaction]);
 
   useEffect(() => {
-    if (state.reactToPostStatus === "completed") {
-    } else if (state.reactToPostStatus === "failed") {
+    if (state.reactToCommentStatus === "completed") {
+    } else if (state.reactToCommentStatus === "failed") {
       toast.show({
-        description: state.reactToPostError,
+        description: state.reactToCommentError,
         variant: "contained",
       });
     }
     dispatch(clearPostRactionStatus());
-  }, [state.reactToPostStatus]);
+  }, [state.reactToCommentStatus]);
 
   const handleReactions = (reaction: string) => {
     if (likedIcon === reaction) {
       setLikeIcon(null);
-      dispatch(unReactToPost(post.id));
+      dispatch(
+        removeCommentReaction({
+          postId: post.postId,
+          commentId: post.id as string,
+        })
+      );
     } else {
       setLikeIcon(reaction);
-      dispatch(reactToPostAction({ postId: post.id, reaction }));
+      dispatch(
+        reactToCommentAction({
+          postId: post.postId,
+          reaction,
+          commentId: post.id as string,
+        })
+      );
     }
-    dispatch(showReactionView({ show: false, post: null }));
+    dispatch(handleShowCommentReaction({ show: false, post: null }));
 
     dispatch(getPostFeedAction());
   };
@@ -93,13 +103,11 @@ const ReactionIcon: FC<Props> = ({
   return (
     <View style={styles.containerStyle}>
       <TouchableOpacity
-        // onLongPress={handleShowReactionView}
         onPress={() => {
-          if (state.showReactionView)
-            dispatch(showReactionView({ show: false, post: null }));
+          if (state.showCommentReactionView)
+            dispatch(handleShowCommentReaction({ show: false, post: null }));
           else {
             handleShowReactionView();
-            // handleLikeReactionOnPost(post);
           }
         }}
       >
@@ -109,15 +117,16 @@ const ReactionIcon: FC<Props> = ({
           <AntDesign name={"hearto"} size={24} color={colors.navyBlue} />
         )}
       </TouchableOpacity>
-      {state.showReactionView && state.postReacted?.id === post.id && (
-        <View style={[GlobalStyles.shadowBox, styles.reactionWrapper]}>
-          {REACTIONS.map((item, i) => (
-            <TouchableOpacity key={i} onPress={() => handleReactions(item)}>
-              <Text>{item}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      )}
+      {state.showCommentReactionView &&
+        state.commentReacted?.id === post.id && (
+          <View style={[GlobalStyles.shadowBox, styles.reactionWrapper]}>
+            {REACTIONS.map((item, i) => (
+              <TouchableOpacity key={i} onPress={() => handleReactions(item)}>
+                <Text>{item}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
     </View>
   );
 };
@@ -143,4 +152,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReactionIcon;
+export default CommentReactionIcon;

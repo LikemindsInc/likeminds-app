@@ -58,7 +58,6 @@ const SkillsForm = () => {
   useEffect(() => {
     if (session.completeProfileStatus === "completed") {
       toast.show("Skills added successfully", {
-        type: "success",
         animationType: "slide-in",
         placement: "top",
       });
@@ -110,6 +109,17 @@ const SkillsForm = () => {
 
     setSkills(newSkills);
   }, [selectedSkills]);
+
+  useEffect(() => {
+    const skillsList = skills.split(",").map((item) => item.toLowerCase());
+    const i2 = [...selectedSkills];
+
+    const i3 = selectedSkills.filter((item) =>
+      skillsList.includes(item.toLowerCase())
+    );
+
+    setSelectedSkills(i3);
+  }, [skills]);
   return (
     <View style={[GlobalStyles.container, { paddingHorizontal: 0 }]}>
       <View style={[GlobalStyles.mb40]}>

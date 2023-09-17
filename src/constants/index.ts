@@ -116,6 +116,7 @@ export enum APP_SCREEN_LIST {
   SPACE_PROFILE_SCREEN = "SPACE_PROFILE_SCREEN",
   CONNECTION_PROFILE_SCREEN = "CONNECTION_PROFILE_SCREEN",
   NOTIFICATION_SCREEN = "NOTIFICATION_SCREEN",
+  JOB_FILTER_SCREEN = "JOB_FILTER_SCREEN",
 
   POST_DETAIL = "POST_DETAIL",
 }
@@ -161,7 +162,6 @@ export const INDUSTRIES = [
 ];
 
 export const JOB_TYPES = [
-  { label: "All", value: "All" },
   { label: "Part Time", value: "part-time" },
   { label: "Full Time", value: "full-time" },
   { label: "Internship", value: "internship" },
@@ -170,7 +170,6 @@ export const JOB_TYPES = [
 ];
 
 export const JOB_EXPERIENCE = [
-  { label: "All", value: "All" },
   { label: "Student", value: "student" },
   { label: "Entry Level", value: "entry-level" },
   { label: "Mid Level", value: "mid-level" },
@@ -214,4 +213,19 @@ export const SCHOOL_DEGREES = [
   "A-Levels",
   "Diploma",
   "Etc",
+];
+
+export const PASSWORD_REGEX =
+  /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+export const MINIMUM_PASSWORD_LENGTH_REGEX = /^.{8}$/;
+export const CONTAINS_UPPERCASE_PASSWORD_REGEX = /^.*[A-Z].*$/;
+export const CONTAINS_LOWERCASE_PASSWORD_REGEX = /^.*[a-z].*$/;
+export const CONTAINS_DIGIT_PASSWORD_REGEX = /.*\d.*/;
+export const CONTAINS_WORD_PASSWORD_REGEX = /^.*[\W_].*$/;
+
+export const UNHANDLED_GLOBAL_ERRORS = [
+  "Email or Password is Incorrect",
+  "Email or password is incorrect",
+  "AxiosError: Request failed with status code 401",
 ];

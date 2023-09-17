@@ -3,7 +3,7 @@ import { APP_BASE_URL } from "../constants";
 import { store } from "../store/store";
 import { ISettingState } from "../reducers/settings";
 import { refreshTokenAction } from "../actions/auth";
-import * as Sentry from "sentry-expo";
+// import * as Sentry from "sentry-expo";
 
 // axios.defaults.withCredentials = true;
 axios.defaults.baseURL = APP_BASE_URL;
@@ -62,7 +62,7 @@ axiosClient.interceptors.response.use(
       return;
     }
 
-    Sentry.Native.captureException(error);
+    // Sentry.Native.captureException(error);
     // reportError(error?.response?.data as Error);
     return Promise.reject(error);
   }

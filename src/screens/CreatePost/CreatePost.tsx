@@ -12,13 +12,17 @@ import Input from "../../components/Input/Input";
 import colors, { addOpacity } from "../../theme/colors";
 import { Entypo, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useToast } from "native-base";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
 import { IPostState, clearCreatePostStatus } from "../../reducers/post_reducer";
 import { createPostAction } from "../../actions/post";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import {
+  NavigationProp,
+  useFocusEffect,
+  useNavigation,
+} from "@react-navigation/native";
 import { APP_SCREEN_LIST } from "../../constants";
 import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
 import { Video, ResizeMode } from "expo-av";
@@ -45,11 +49,9 @@ const CreatePost = () => {
         aspect: [4, 3],
         quality: 1,
       });
-      console.log("result cancelled> ", result.canceled);
       if (!result.canceled) {
-        console.log("called in here");
         setVideoSelected([]);
-        setImages([...result.assets]);
+        setImages([...images, ...result.assets].splice(0, 10));
       }
     } catch (error) {}
   };
@@ -70,16 +72,18 @@ const CreatePost = () => {
     } catch (error) {}
   };
   const handleCreatePost = () => {
-    if (content.trim() === "")
-      return toast.show({
-        description: "Please provide your post content",
-        variant: "contained",
-      });
-
-    console.log("oooo>> ", { content, image: images, videos: videoSelected });
+    // if (content.trim() === "")
+    //   return toast.show({
+    //     description: "Please provide your post content",
+    //     variant: "contained",
+    //   });
 
     dispatch(
-      createPostAction({ content, image: images, videos: videoSelected })
+      createPostAction({
+        content: content.trim(),
+        image: images,
+        videos: videoSelected,
+      })
     );
   };
 
@@ -103,10 +107,17 @@ const CreatePost = () => {
   }, [postState.createPostStatus]);
 
   useEffect(() => {
+    navigation.addListener("blur", clearState);
     return () => {
-      setImages([]);
+      navigation.removeListener("blur", clearState);
     };
   }, []);
+
+  const clearState = () => {
+    setImages([]);
+    setVideoSelected([]);
+  };
+
   return (
     <KeyboardDismisser>
       <View style={[GlobalStyles.container]}>
@@ -126,7 +137,12 @@ const CreatePost = () => {
           >
             New Post
           </Text>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+              clearState();
+            }}
+          >
             <Text
               style={[
                 GlobalStyles.fontInterMedium,

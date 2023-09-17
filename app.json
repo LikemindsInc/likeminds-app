@@ -1,16 +1,5 @@
 {
   "expo": {
-    "hooks": {
-      "postPublish": [
-        {
-          "file": "sentry-expo/upload-sourcemaps",
-          "config": {
-            "organization": "$(SENTRY_ORG)",
-            "project": "$(SENTRY_PROJECT)"
-          }
-        }
-      ]
-    },
     "plugins": [
       "react-native-compressor",
       [
@@ -30,8 +19,7 @@
         {
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
         }
-      ],
-      "sentry-expo"
+      ]
     ],
     "name": "likemindsAppTest",
     "slug": "likeminds",

@@ -37,7 +37,7 @@ const Spaces = () => {
     }
   }, [state.getSpaceListStatus]);
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, paddingHorizontal: 16 }}>
       <View style={[GlobalStyles.mt20, GlobalStyles.mb20]}>
         <Text
           style={[

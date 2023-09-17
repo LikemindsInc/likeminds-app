@@ -32,6 +32,7 @@ import { SelectList } from "react-native-dropdown-select-list";
 import {
   getAllIndustriesAction,
   updateEducationProfileAction,
+  updateExperienceProfileAction,
 } from "../../../actions/auth";
 import { useToast } from "react-native-toast-notifications";
 
@@ -56,7 +57,6 @@ const ExperienceForm = () => {
   useEffect(() => {
     if (state.completeProfileStatus === "completed") {
       toast.show("Experience added successfully", {
-        type: "success",
         animationType: "slide-in",
         placement: "top",
       });
@@ -221,7 +221,7 @@ const ExperienceForm = () => {
       })
     );
     setTimeout(() => {
-      dispatch(updateEducationProfileAction(state.profileData));
+      dispatch(updateExperienceProfileAction(state.profileData));
     }, 300);
   };
 

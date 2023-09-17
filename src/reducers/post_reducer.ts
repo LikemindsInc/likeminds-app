@@ -14,6 +14,7 @@ import {
   commentOnPostAction,
   createJobAction,
   createPostAction,
+  getCommentReaction,
   getCommentsOnPostAction,
   getConnectionPostFeedAction,
   getCurrentUserFeedAction,
@@ -22,8 +23,11 @@ import {
   getPostFeedByIdAction,
   getPostReactions,
   likePostAction,
+  reactToCommentAction,
   reactToPostAction,
+  removeCommentReaction,
   unlikePostAction,
+  unReactToPost,
 } from "../actions/post";
 import { PURGE } from "redux-persist";
 
@@ -81,6 +85,18 @@ export interface IPostState {
   reactToPostSuccess: string;
   reactToPostError: string;
 
+  reactToCommentStatus: IThunkAPIStatus;
+  reactToCommentSuccess: string;
+  reactToCommentError: string;
+
+  removeCommentReactionStatus: IThunkAPIStatus;
+  removeCommentReactionSuccess: string;
+  removeCommentReactionError: string;
+
+  getCommentReactionStatus: IThunkAPIStatus;
+  getCommentReactionSuccess: string;
+  getCommentReactionError: string;
+
   postFeeds: IPostFeed[];
 
   currentUserPostFeeds: IPostFeed[];
@@ -106,6 +122,8 @@ export interface IPostState {
 
   postReaction: IPostReaction[];
 
+  commentReactions: IPostReaction[];
+
   showReactionList: boolean;
 
   jobLocationFilterValue: string | null;
@@ -113,6 +131,8 @@ export interface IPostState {
 
   jobTypeFilterValue: string;
   jobExperienceFilterValue: string;
+  showCommentReactionView: boolean;
+  commentReacted: IPostCommentFeed | null;
 }
 
 const initialState: IPostState = {
@@ -135,6 +155,20 @@ const initialState: IPostState = {
   getPostReactionStatus: "idle",
   getPostReactionSuccess: "",
   getPostReactionPostError: "",
+
+  reactToCommentStatus: "idle",
+  reactToCommentSuccess: "",
+  reactToCommentError: "",
+
+  removeCommentReactionStatus: "idle",
+  removeCommentReactionSuccess: "",
+  removeCommentReactionError: "",
+
+  getCommentReactionStatus: "idle",
+  getCommentReactionSuccess: "",
+  getCommentReactionError: "",
+
+  commentReactions: [],
 
   likePostStatus: "idle",
   likePostSuccess: "",
@@ -201,6 +235,8 @@ const initialState: IPostState = {
   jobDateFilterValue: "",
   jobTypeFilterValue: "",
   jobExperienceFilterValue: "",
+  showCommentReactionView: false,
+  commentReacted: null,
 };
 
 const PostSlice = createSlice({
@@ -213,6 +249,13 @@ const PostSlice = createSlice({
     ) {
       state.showReactionView = action.payload.show;
       state.postReacted = action.payload.post;
+    },
+    handleShowCommentReaction(
+      state: IPostState,
+      action: PayloadAction<{ post: IPostCommentFeed | null; show: boolean }>
+    ) {
+      state.showCommentReactionView = action.payload.show;
+      state.commentReacted = action.payload.post;
     },
     clearCreatePostStatus(state: IPostState) {
       state.createPostStatus = "idle";
@@ -282,6 +325,16 @@ const PostSlice = createSlice({
     builder.addCase(createPostAction.rejected, (state, action) => {
       state.createPostStatus = "failed";
       state.createPostError = action.payload?.message as string;
+    });
+
+    builder.addCase(unReactToPost.pending, (state) => {
+      state.reactToPostStatus = "loading";
+    });
+    builder.addCase(unReactToPost.fulfilled, (state, action) => {
+      state.reactToPostStatus = "completed";
+    });
+    builder.addCase(unReactToPost.rejected, (state, action) => {
+      state.reactToPostStatus = "failed";
     });
 
     builder.addCase(getPostFeedAction.pending, (state) => {
@@ -397,6 +450,36 @@ const PostSlice = createSlice({
     builder.addCase(createJobAction.rejected, (state, action) => {
       state.createJobStatus = "failed";
       state.createJobError = action.payload?.message as string;
+    });
+
+    builder.addCase(removeCommentReaction.pending, (state) => {
+      state.reactToCommentStatus = "loading";
+    });
+    builder.addCase(removeCommentReaction.fulfilled, (state, action) => {
+      state.reactToCommentStatus = "completed";
+    });
+    builder.addCase(removeCommentReaction.rejected, (state, action) => {
+      state.reactToCommentStatus = "failed";
+    });
+
+    builder.addCase(getCommentReaction.pending, (state) => {
+      state.getCommentReactionStatus = "loading";
+    });
+    builder.addCase(getCommentReaction.fulfilled, (state, action) => {
+      state.getCommentReactionStatus = "completed";
+    });
+    builder.addCase(getCommentReaction.rejected, (state, action) => {
+      state.getCommentReactionStatus = "failed";
+    });
+
+    builder.addCase(reactToCommentAction.pending, (state) => {
+      state.reactToCommentStatus = "loading";
+    });
+    builder.addCase(reactToCommentAction.fulfilled, (state, action) => {
+      state.reactToCommentStatus = "completed";
+    });
+    builder.addCase(reactToCommentAction.rejected, (state, action) => {
+      state.reactToCommentStatus = "failed";
     });
 
     builder.addCase(likePostAction.pending, (state) => {
@@ -542,6 +625,7 @@ export const {
   setJobDateFilterValue,
   setJobExperienceFilterValue,
   setJobTypeFilterValue,
+  handleShowCommentReaction,
 } = PostSlice.actions;
 
 export default PostSlice.reducer;

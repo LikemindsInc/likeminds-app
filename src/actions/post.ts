@@ -29,8 +29,12 @@ const GET_POST_FEED_REACTIONS = "post:GET_POST_FEED_REACTIONS";
 
 const GET_POST_FEED = "post:GET_POST_FEED";
 const GET_SINGLE_POST_FEED = "post:GET_SINGLE_POST_FEED";
+const UNREACT_TO_POST = "post:UNREACT_TO_POST";
 const CREATE_JOB = "job:CREATE_JOB";
 const GET_JOBS = "job:GET_JOBS";
+const GET_COMMENT_REACTIONS = "comment:GET_COMMENT_REACTIONS";
+const REACT_TO_COMMENT = "comment:REACT_TO_COMMENT";
+const REMOVE_COMMENT_REACTION = "comment:REMOVE_COMMENT_REACTION";
 
 import { Image, Video } from "react-native-compressor";
 
@@ -112,6 +116,38 @@ export const getPostReactions = asyncThunkWrapper<
   return response.data;
 });
 
+export const getCommentReaction = asyncThunkWrapper<
+  ApiResponseSuccess<IPostReaction[]>,
+  { postId: string; commentId: string }
+>(GET_COMMENT_REACTIONS, async (data) => {
+  const response = await axiosClient.get<AxiosResponse<any>>(
+    `/api/comment/reaction/${data.postId}/${data.commentId}`
+  );
+
+  return response.data;
+});
+
+export const reactToCommentAction = asyncThunkWrapper<
+  ApiResponseSuccess<IPostReaction[]>,
+  { postId: string; commentId: string; reaction: string }
+>(REACT_TO_COMMENT, async (data) => {
+  const response = await axiosClient.post<AxiosResponse<any>>(
+    `/api/comment/reaction/${data.postId}/${data.commentId}`,
+    { reaction: data.reaction }
+  );
+  return response.data;
+});
+
+export const removeCommentReaction = asyncThunkWrapper<
+  ApiResponseSuccess<IPostReaction[]>,
+  { postId: string; commentId: string }
+>(REMOVE_COMMENT_REACTION, async (data) => {
+  const response = await axiosClient.delete<AxiosResponse<any>>(
+    `/api/comment/reaction/${data.postId}/${data.commentId}`
+  );
+  return response.data;
+});
+
 export const getCurrentUserFeedAction = asyncThunkWrapper<
   ApiResponseSuccess<IPostFeed[]>,
   void
@@ -173,6 +209,16 @@ export const getPostFeedByIdAction = asyncThunkWrapper<
 >(GET_SINGLE_POST_FEED, async (postId) => {
   const response = await axiosClient.get<AxiosResponse<any>>(
     `/api/post/feeds/${postId}`
+  );
+  return response.data;
+});
+
+export const unReactToPost = asyncThunkWrapper<
+  ApiResponseSuccess<IPostFeed>,
+  string
+>(UNREACT_TO_POST, async (postId) => {
+  const response = await axiosClient.delete<AxiosResponse<any>>(
+    `/api/post/reaction/${postId}`
   );
   return response.data;
 });

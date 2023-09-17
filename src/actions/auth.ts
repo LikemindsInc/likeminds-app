@@ -215,15 +215,16 @@ export const updateEducationProfileAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
   IUserProfileData
 >(COMPLETE_EDUCATION_PROFILE, async (agrs: IUserProfileData) => {
+  const education = store.getState().sessionReducer.profileData.education;
   const response = await axiosClient.patch<AxiosResponse<any>>(
     "/api/auth/complete-registration",
     {
       education: [
         {
-          startDate: agrs.education[0]?.startDate,
-          endDate: agrs.education[0]?.endDate,
-          degree: agrs.education[0]?.degree,
-          school: agrs.education[0]?.school,
+          startDate: education[0].startDate,
+          endDate: education[0].endDate,
+          degree: education[0].degree,
+          school: education[0].school,
         },
       ],
     }
@@ -236,18 +237,19 @@ export const updateExperienceProfileAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
   IUserProfileData
 >(COMPLETE_EXPERIENCE_PROFILE, async (agrs: IUserProfileData) => {
+  const experiences = store.getState().sessionReducer.profileData.experience;
   const response = await axiosClient.patch<AxiosResponse<any>>(
     "/api/auth/complete-registration",
     {
       experience: [
         {
-          startDate: agrs.experience[0]?.startDate,
-          endDate: agrs.experience[0]?.endDate,
-          stillWorkHere: agrs.experience[0]?.stillWorkHere,
-          jobTitle: agrs.experience[0]?.jobTitle,
-          companyName: agrs.experience[0]?.companyName,
-          responsibilities: agrs.experience[0]?.responsibilities,
-          industry: agrs.experience[0]?.industry,
+          startDate: experiences[0]?.startDate,
+          endDate: experiences[0]?.endDate,
+          stillWorkHere: experiences[0]?.stillWorkHere,
+          jobTitle: experiences[0]?.jobTitle,
+          companyName: experiences[0]?.companyName,
+          responsibilities: experiences[0]?.responsibilities,
+          industry: experiences[0]?.industry,
         },
       ],
     }
@@ -260,10 +262,11 @@ export const updateSkillsProfileAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
   IUserProfileData
 >(COMPLETE_SKILLS_PROFILE, async (agrs: IUserProfileData) => {
+  const skills = store.getState().sessionReducer.profileData.skills;
   const response = await axiosClient.patch<AxiosResponse<any>>(
     "/api/auth/complete-registration",
     {
-      skills: agrs.skills,
+      skills: skills,
     }
   );
 
@@ -283,15 +286,15 @@ export const updateCertificateProfileAction = asyncThunkWrapper<
   for (const item of certificateFile) {
     const formData = new FormData() as any;
     formData.append("file", {
-      uri: item.uri,
-      type: item.type,
-      name: item.name,
+      uri: item.file.uri,
+      type: item.file.type,
+      name: item.file.name,
     });
 
     const response = await uploadFile(formData);
     certificateFileUrl = response.data?.data?.url || "";
 
-    certificates.push({ name: "Certificate", url: certificateFileUrl });
+    certificates.push({ name: item.name, url: certificateFileUrl });
   }
 
   const response = await axiosClient.patch<AxiosResponse<any>>(
@@ -354,15 +357,15 @@ export const completeUserProfileAction = asyncThunkWrapper<
   for (const item of certificateFile) {
     const formData = new FormData() as any;
     formData.append("file", {
-      uri: item.uri,
-      type: item.type,
-      name: item.name,
+      uri: item.file.uri,
+      type: item.file.type,
+      name: item.file.name,
     });
 
     const response = await uploadFile(formData);
     certificateFileUrl = response.data?.data?.url || "";
 
-    certificates.push({ name: "Certificate", url: certificateFileUrl });
+    certificates.push({ name: item.name, url: certificateFileUrl });
   }
 
   if (resumeFile && resumeFile.uri) {

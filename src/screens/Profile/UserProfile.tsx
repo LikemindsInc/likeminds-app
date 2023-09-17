@@ -1,6 +1,7 @@
 import {
   Animated,
   ImageBackground,
+  Linking,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -15,7 +16,7 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native";
 import Button from "../../components/Button/Button";
 import { TabView, SceneMap } from "react-native-tab-view";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StatusBar } from "react-native";
 import { Box, Pressable, useColorModeValue } from "native-base";
 import useAppSelector from "../../hooks/useAppSelector";
@@ -33,6 +34,8 @@ import ExperienceForm from "./components/ExperienceForm";
 import SkillsForm from "./components/SkillsForm";
 import CertificateForm from "./components/CertificateForm";
 import renderExperienceTimelineView from "./components/renderExperienceTimelineView";
+import useAppDispatch from "../../hooks/useAppDispatch";
+import { getCurrentUserAction } from "../../actions/auth";
 
 const UserProfile = () => {
   const height = useDimension().height;
@@ -149,8 +152,7 @@ const UserProfile = () => {
                   GlobalStyles.textNavyBlue,
                 ]}
               >
-                {state.userInfo?.firstName}
-                {state.userInfo?.lastName}
+                {state.userInfo?.firstName} {state.userInfo?.lastName}
               </Text>
             </View>
             <TouchableOpacity>
@@ -297,191 +299,82 @@ const FirstRoute = () => {
   const [showCerticatesModal, setshowCerticatesModal] = useState(false);
   const filterExperience = () => {
     const filtered = (user?.experience || []).filter(
-      (item) => item.companyName.trim() !== ""
+      (item) => item.companyName && item.companyName.trim() !== ""
     );
-    return filtered.length > 0
-      ? filtered.map((item) => ({
-          title: (
-            <View
-              style={{
-                justifyContent: "space-between",
-                flexDirection: "row",
-                width: "100%",
-              }}
-            >
-              <Text
-                style={[
-                  GlobalStyles.fontInterBlack,
-                  GlobalStyles.fontSize13,
-                  GlobalStyles.textNavyBlue,
-                ]}
+    const timeline =
+      filtered.length > 0
+        ? filtered.map((item) => ({
+            title: (
+              <View
+                style={{
+                  justifyContent: "space-between",
+                  flexDirection: "row",
+                  width: "100%",
+                }}
               >
-                {item.companyName}
-              </Text>
-              <Text
-                style={[
-                  GlobalStyles.fontInterRegular,
-                  GlobalStyles.fontSize13,
-                  GlobalStyles.textGrey,
-                  GlobalStyles.fontWeight700,
-                ]}
-              >
-                {item.stillWorkHere ? (
-                  `${moment(item.startDate).format("MMM YYYY")} - PRESENT`
-                ) : (
-                  <Text>
-                    {moment(item.startDate).format("MMM YYYY")} -{" "}
-                    {moment(item.endDate).format("MMM YYYY")}
-                  </Text>
-                )}
-              </Text>
-            </View>
-          ),
-          description: (
-            <View style={[{ marginTop: -5 }]}>
-              <Text
-                style={[
-                  GlobalStyles.fontInterRegular,
-                  GlobalStyles.fontSize13,
-                  GlobalStyles.textPrimary,
-                  GlobalStyles.mb10,
-                  GlobalStyles.mt10,
-                ]}
-              >
-                {item.jobTitle}
-              </Text>
-
-              <Text
-                style={[
-                  GlobalStyles.fontInterRegular,
-                  GlobalStyles.fontSize13,
-                  GlobalStyles.textGrey,
-                  GlobalStyles.mb10,
-                ]}
-              >
-                {item.responsibilities}
-              </Text>
-              <TouchableOpacity
-                onPress={() => setShowExprienceModal(true)}
-                style={{ flexDirection: "row", gap: 8 }}
-              >
-                <AntDesign name="plus" size={16} color={colors.primary} />
                 <Text
                   style={[
-                    GlobalStyles.fontSize13,
                     GlobalStyles.fontInterRegular,
+                    GlobalStyles.fontSize13,
                     GlobalStyles.textPrimary,
-                    GlobalStyles.fontWeight400,
+                    GlobalStyles.mb10,
                   ]}
                 >
-                  Add Experience
+                  {item.jobTitle}
                 </Text>
-              </TouchableOpacity>
-            </View>
-          ),
-        }))
-      : renderExperienceTimelineView({
-          showExperienceModal: setShowExprienceModal,
-          title: "Experience",
-          actionTitle: "Add Experience",
-        });
-  };
 
-  console.log("user education> ", user?.education);
-  const filterEducatio = () => {
-    return user?.education && user.education.length > 0
-      ? user?.education.map((item) => ({
-          title: (
-            <View
-              style={{
-                justifyContent: "space-between",
-                flexDirection: "row",
-                width: "100%",
-              }}
-            >
-              <Text
-                style={[
-                  GlobalStyles.fontInterBlack,
-                  GlobalStyles.fontSize13,
-                  GlobalStyles.textNavyBlue,
-                ]}
-              >
-                Education
-              </Text>
-              <Text
-                style={[
-                  GlobalStyles.fontInterRegular,
-                  GlobalStyles.fontSize13,
-                  GlobalStyles.textGrey,
-                  GlobalStyles.fontWeight700,
-                ]}
-              >
-                <Text>
-                  {moment(item.startDate).format("MMM YYYY")} -{" "}
-                  {moment(item.endDate).format("MMM YYYY")}
+                <Text
+                  style={[
+                    GlobalStyles.fontInterRegular,
+                    GlobalStyles.fontSize13,
+                    GlobalStyles.textGrey,
+                    GlobalStyles.fontWeight700,
+                  ]}
+                >
+                  {item.stillWorkHere ? (
+                    `${moment(item.startDate).format("MMM YYYY")} - PRESENT`
+                  ) : (
+                    <Text>
+                      {moment(item.startDate).format("MMM YYYY")} -{" "}
+                      {moment(item.endDate).format("MMM YYYY")}
+                    </Text>
+                  )}
                 </Text>
-              </Text>
-            </View>
-          ),
-          description: (
-            <View style={[{ marginTop: -5 }]}>
-              <View style={{ marginBottom: 20 }}>
-                {item.degree.trim() !== "" && (
-                  <Text
-                    style={[
-                      GlobalStyles.fontInterRegular,
-                      GlobalStyles.fontSize13,
-                      GlobalStyles.textPrimary,
-                      GlobalStyles.mb10,
-                      GlobalStyles.mt10,
-                    ]}
-                  >
-                    {item.degree}
-                  </Text>
-                )}
-
-                {item.school.trim() !== "" && (
-                  <Text
-                    style={[
-                      GlobalStyles.fontInterRegular,
-                      GlobalStyles.fontSize13,
-                      GlobalStyles.textGrey,
-                      GlobalStyles.mb10,
-                    ]}
-                  >
-                    {item.school}
-                  </Text>
-                )}
               </View>
-              <TouchableOpacity
-                onPress={() => setShowEducationModal(true)}
-                style={{ flexDirection: "row", gap: 8 }}
-              >
-                <AntDesign name="plus" size={16} color={colors.primary} />
+            ),
+            description: (
+              <View style={[{ marginTop: -5 }]}>
                 <Text
                   style={[
+                    GlobalStyles.fontInterBlack,
                     GlobalStyles.fontSize13,
-                    GlobalStyles.fontInterRegular,
-                    GlobalStyles.textPrimary,
-                    GlobalStyles.fontWeight400,
+                    GlobalStyles.textNavyBlue,
+                    GlobalStyles.mb10,
                   ]}
                 >
-                  Add Education
+                  {item.companyName}
                 </Text>
-              </TouchableOpacity>
-            </View>
-          ),
-        }))
-      : renderExperienceTimelineView({
-          showExperienceModal: setShowEducationModal,
-          title: "Education",
-          actionTitle: "Add Education",
-        });
-  };
+                <Text
+                  style={[
+                    GlobalStyles.fontInterRegular,
+                    GlobalStyles.fontSize13,
+                    GlobalStyles.textGrey,
+                    GlobalStyles.mb10,
+                  ]}
+                >
+                  {item.responsibilities}
+                </Text>
+              </View>
+            ),
+          }))
+        : renderExperienceTimelineView({
+            showExperienceModal: setShowExprienceModal,
+            title: "Experience",
+            actionTitle: "Add Experience",
+          });
 
-  const filterCertificates = () => {
-    return (
-      user?.certificates.map((item) => ({
+    return [
+      {
         title: (
           <View
             style={{
@@ -489,44 +382,326 @@ const FirstRoute = () => {
               flexDirection: "row",
               width: "100%",
             }}
+          >
+            <Text
+              style={[
+                GlobalStyles.fontInterBlack,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textNavyBlue,
+                GlobalStyles.mb10,
+              ]}
+            >
+              Experience
+            </Text>
+          </View>
+        ),
+
+        description: [
+          ...timeline.map((item) => (
+            <View style={{ marginBottom: 10 }}>
+              {item.title}
+              {item.description}
+            </View>
+          )),
+          <TouchableOpacity
+            onPress={() => setShowExprienceModal(true)}
+            style={{ flexDirection: "row", gap: 8 }}
+          >
+            <AntDesign name="plus" size={16} color={colors.primary} />
+            <Text
+              style={[
+                GlobalStyles.fontSize13,
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.textPrimary,
+                GlobalStyles.fontWeight400,
+              ]}
+            >
+              Add Experience
+            </Text>
+          </TouchableOpacity>,
+        ],
+      },
+    ];
+  };
+
+  const session = useAppSelector((state) => state.sessionReducer);
+
+  useEffect(() => {
+    if (
+      session.completeProfileStatus === "completed" ||
+      session.completeProfileStatus === "failed"
+    ) {
+      setShowEducationModal(false);
+      setShowExprienceModal(false);
+      setshowCerticatesModal(false);
+      setShowSkillsModal(false);
+    }
+  }, [session.completeProfileStatus]);
+  const filterEducatio = () => {
+    const timeline =
+      user?.education && user.education.length > 0
+        ? user?.education.map((item) => ({
+            title: (
+              <View
+                style={{
+                  justifyContent: "space-between",
+                  flexDirection: "row",
+                  width: "100%",
+                }}
+              >
+                <Text
+                  style={[
+                    GlobalStyles.fontInterBlack,
+                    GlobalStyles.fontSize13,
+                    GlobalStyles.textNavyBlue,
+                  ]}
+                >
+                  Education
+                </Text>
+              </View>
+            ),
+            description: (
+              <View style={[{ marginTop: -5 }]}>
+                <View style={{ marginBottom: 20 }}>
+                  {item.degree.trim() !== "" && (
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Text
+                        style={[
+                          GlobalStyles.fontInterRegular,
+                          GlobalStyles.fontSize13,
+                          GlobalStyles.textPrimary,
+                          GlobalStyles.mb10,
+                          GlobalStyles.mt10,
+                        ]}
+                      >
+                        {item.degree}
+                      </Text>
+                      <Text
+                        style={[
+                          GlobalStyles.fontInterRegular,
+                          GlobalStyles.fontSize13,
+                          GlobalStyles.textGrey,
+                          GlobalStyles.fontWeight700,
+                        ]}
+                      >
+                        <Text>
+                          {moment(item.startDate).format("MMM YYYY")} -{" "}
+                          {moment(item.endDate).format("MMM YYYY")}
+                        </Text>
+                      </Text>
+                    </View>
+                  )}
+
+                  {item.school.trim() !== "" && (
+                    <Text
+                      style={[
+                        GlobalStyles.fontInterRegular,
+                        GlobalStyles.fontSize13,
+                        GlobalStyles.textGrey,
+                        GlobalStyles.mb10,
+                      ]}
+                    >
+                      {item.school}
+                    </Text>
+                  )}
+                </View>
+              </View>
+            ),
+          }))
+        : renderExperienceTimelineView({
+            showExperienceModal: setShowEducationModal,
+            title: "Education",
+            actionTitle: "Add Education",
+          });
+
+    return [
+      {
+        title: (
+          <View
+            style={{
+              justifyContent: "space-between",
+              flexDirection: "row",
+              width: "100%",
+            }}
+          >
+            <Text
+              style={[
+                GlobalStyles.fontInterBlack,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textNavyBlue,
+                GlobalStyles.mb10,
+              ]}
+            >
+              Education
+            </Text>
+          </View>
+        ),
+
+        description: [
+          ...timeline.map((item) => (
+            <View style={{ marginBottom: 10 }}>{item.description}</View>
+          )),
+          <TouchableOpacity
+            onPress={() => setShowEducationModal(true)}
+            style={{ flexDirection: "row", gap: 8 }}
+          >
+            <AntDesign name="plus" size={16} color={colors.primary} />
+            <Text
+              style={[
+                GlobalStyles.fontSize13,
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.textPrimary,
+                GlobalStyles.fontWeight400,
+              ]}
+            >
+              Add Education
+            </Text>
+          </TouchableOpacity>,
+        ],
+      },
+    ];
+  };
+
+  const handleFileDownload = async (url: string) => {
+    try {
+      if (!(url.startsWith("https") || url.startsWith("http"))) return;
+
+      url = url.startsWith("https://") ? url : `https://${url}`;
+
+      url = url.trim();
+
+      const supported = await Linking.canOpenURL(url);
+
+      if (supported) {
+        await Linking.openURL(url);
+      }
+    } catch (error) {
+      console.log("Error opening Link", error);
+    }
+  };
+
+  const filterCertificates = () => {
+    const timeline =
+      user?.certificates.map((item) => ({
+        title: (
+          <View
+            style={{
+              justifyContent: "space-between",
+              flexDirection: "row",
+              width: "100%",
+              marginBottom: 10,
+            }}
           ></View>
         ),
         description: (
-          <View style={[{ marginTop: -5 }]}>
-            <Text
-              style={[
-                GlobalStyles.fontInterRegular,
-                GlobalStyles.fontSize13,
-                GlobalStyles.textGrey,
-                GlobalStyles.mb10,
-                GlobalStyles.mt10,
-              ]}
-            >
-              {item.name}
-            </Text>
+          <View style={[{ marginBottom: 10 }]}>
             <TouchableOpacity
-              onPress={() => setshowCerticatesModal(true)}
-              style={{ flexDirection: "row", gap: 8 }}
+              style={{ flex: 1, flexDirection: "row", gap: 12 }}
+              onPress={() => handleFileDownload(item.url)}
             >
-              <AntDesign name="plus" size={16} color={colors.primary} />
+              <View
+                style={{
+                  backgroundColor: colors.navyBlue,
+                  width: 40,
+                  height: 40,
+                  borderRadius: 4,
+                  paddingHorizontal: 8,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={[
+                    GlobalStyles.fontInterBlack,
+                    GlobalStyles.fontSize10,
+                    { color: colors.white },
+                  ]}
+                >
+                  PDF
+                </Text>
+              </View>
               <Text
                 style={[
-                  GlobalStyles.fontSize13,
                   GlobalStyles.fontInterRegular,
-                  GlobalStyles.textPrimary,
-                  GlobalStyles.fontWeight400,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textGrey,
+                  GlobalStyles.mb10,
+                  GlobalStyles.mt10,
                 ]}
               >
-                Add Certificate
+                {item.name}
               </Text>
             </TouchableOpacity>
           </View>
         ),
-      })) || []
-    );
+      })) || [];
+
+    return [
+      {
+        title: (
+          <View
+            style={{
+              justifyContent: "space-between",
+              flexDirection: "row",
+              width: "100%",
+            }}
+          >
+            <Text
+              style={[
+                GlobalStyles.fontInterBlack,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textNavyBlue,
+                GlobalStyles.mb10,
+              ]}
+            >
+              Certificate
+            </Text>
+          </View>
+        ),
+
+        description: [
+          ...timeline.map((item) => (
+            <View style={{ marginBottom: 10 }}>{item.description}</View>
+          )),
+          <TouchableOpacity
+            onPress={() => setshowCerticatesModal(true)}
+            style={{ flexDirection: "row", gap: 8 }}
+          >
+            <AntDesign name="plus" size={16} color={colors.primary} />
+            <Text
+              style={[
+                GlobalStyles.fontSize13,
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.textPrimary,
+                GlobalStyles.fontWeight400,
+              ]}
+            >
+              Add Ceritificate
+            </Text>
+          </TouchableOpacity>,
+        ],
+      },
+    ];
   };
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(getCurrentUserAction());
+  }, [
+    showCerticatesModal,
+    showExperienceModal,
+    showEducationModal,
+    showSkillsModal,
+  ]);
+
   return (
-    <View style={[GlobalStyles.mt20, { flex: 1, marginBottom: 50 }]}>
+    <View
+      style={[GlobalStyles.mt20, { flex: 1, marginBottom: 0, flexGrow: 1 }]}
+    >
       <UserExperience
         data={[
           ...filterExperience(),
@@ -565,22 +740,7 @@ const FirstRoute = () => {
             ),
           },
 
-          user?.certificates && user.certificates.length > 0
-            ? {
-                title: "Certificates",
-                description: (
-                  <View>
-                    {filterCertificates().map((item) => (
-                      <View>{item.description}</View>
-                    ))}
-                  </View>
-                ),
-              }
-            : renderExperienceTimelineView({
-                showExperienceModal: setshowCerticatesModal,
-                title: "Certificates",
-                actionTitle: "Add Certificate",
-              })[0],
+          ...filterCertificates(),
         ]}
       />
       <AppModal

@@ -1,5 +1,12 @@
 import { FC, useEffect, useState } from "react";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useToast } from "native-base";
 import useAppDispatch from "../../../../hooks/useAppDispatch";
 import useAppSelector from "../../../../hooks/useAppSelector";
@@ -18,7 +25,7 @@ import {
   getUsersBySuggestion,
 } from "../../../../actions/connection";
 
-const PeopleList: FC<any> = ({ item }) => {
+const PeopleList: FC<any> = ({ item, searchText = "" }) => {
   const navigation = useNavigation<NavigationProp<any>>();
   const dispatch = useAppDispatch();
 
@@ -42,19 +49,8 @@ const PeopleList: FC<any> = ({ item }) => {
       showsVerticalScrollIndicator={false}
       style={{ marginTop: 8, marginLeft: 10 }}
     >
-      {state.users.length > 0 ? (
+      {searchText.length > 0 ? (
         <View style={[GlobalStyles.mb20]}>
-          <View style={[GlobalStyles.mt10]}>
-            <Text
-              style={[
-                GlobalStyles.fontInterMedium,
-                GlobalStyles.fontSize13,
-                GlobalStyles.textNavyBlue,
-              ]}
-            >
-              Search for
-            </Text>
-          </View>
           <View style={[GlobalStyles.mt20]}>
             {state.users.length === 0 ? (
               <View style={{ alignItems: "center" }}>
@@ -66,7 +62,18 @@ const PeopleList: FC<any> = ({ item }) => {
                 />
               </View>
             ) : (
-              <View>
+              <View style={{ paddingHorizontal: 16 }}>
+                <View style={[GlobalStyles.mt10]}>
+                  <Text
+                    style={[
+                      GlobalStyles.fontInterMedium,
+                      GlobalStyles.fontSize13,
+                      GlobalStyles.textNavyBlue,
+                    ]}
+                  >
+                    Search for
+                  </Text>
+                </View>
                 {state.users.map((item) => (
                   <Suggestion data={item} key={item.id} />
                 ))}
@@ -91,7 +98,7 @@ const PeopleList: FC<any> = ({ item }) => {
                       From School
                     </Text>
                   </View>
-                  <View style={{ marginLeft: 5 }}>
+                  <View style={{ marginLeft: 10 }}>
                     <FlatList
                       data={state.usersBySchool}
                       keyExtractor={(item) => item.id}
@@ -140,7 +147,7 @@ const PeopleList: FC<any> = ({ item }) => {
               ) : null}
             </View>
           </View>
-          <View style={[GlobalStyles.mb20]}>
+          <View style={[GlobalStyles.mb20, { paddingHorizontal: 16 }]}>
             <View style={[GlobalStyles.mt10]}>
               <Text
                 style={[
@@ -165,7 +172,7 @@ const PeopleList: FC<any> = ({ item }) => {
               ) : (
                 <View>
                   {state.usersBySuggestions.slice(0, 10).map((item) => (
-                    <Suggestion data={item} key={item.id} />
+                    <Suggestion showViewButton data={item} key={item.id} />
                   ))}
                 </View>
               )}
@@ -179,6 +186,7 @@ const PeopleList: FC<any> = ({ item }) => {
 
 interface IProps {
   data: IUserData;
+  showViewButton?: boolean;
 }
 
 const Suggestion: FC<IProps> = (props) => {
@@ -208,7 +216,7 @@ const Suggestion: FC<IProps> = (props) => {
           justifyContent: "space-between",
         }}
       >
-        <View>
+        <TouchableOpacity onPress={handleOnProfilePress}>
           <Text
             style={[
               GlobalStyles.fontSize13,
@@ -229,12 +237,19 @@ const Suggestion: FC<IProps> = (props) => {
               {props?.data?.experience[0]?.jobTitle || props?.data?.skills[0]}
             </Text>
           </View>
-        </View>
-        <Button
-          style={{ paddingVertical: 8, paddingHorizontal: 8 }}
-          title="View"
-          onPress={handleOnProfilePress}
-        />
+        </TouchableOpacity>
+        {props.showViewButton && (
+          <Button
+            style={{
+              paddingVertical: 4,
+              paddingHorizontal: 10,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            title="View"
+            onPress={handleOnProfilePress}
+          />
+        )}
       </View>
     </View>
   );
@@ -244,6 +259,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     marginBottom: 20,
+    alignItems: "center",
     gap: 12,
   },
 });

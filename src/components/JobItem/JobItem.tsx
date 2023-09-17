@@ -119,12 +119,12 @@ const JobItem: FC<IProps> = ({ item }) => {
               GlobalStyles.fontWeight400,
             ]}
           >
-            {item.jobDescription}
+            {item.jobDescription.trim()}
           </Text>
         </ReadMore>
       </View>
 
-      <View style={[GlobalStyles.flewRow, { marginBottom: 8 }]}>
+      <View style={[GlobalStyles.flewRow, { marginBottom: 8, width: "70%" }]}>
         <View style={{ flex: 1 }}>
           <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>
             Industry
@@ -140,7 +140,7 @@ const JobItem: FC<IProps> = ({ item }) => {
           </Text>
         </View>
 
-        <View style={{ marginRight: 8, flex: 0 }}>
+        <View style={{}}>
           <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>
             Location
           </Text>
@@ -156,7 +156,7 @@ const JobItem: FC<IProps> = ({ item }) => {
         </View>
       </View>
 
-      <View style={[GlobalStyles.flewRow, { marginBottom: 8 }]}>
+      <View style={[GlobalStyles.flewRow, { marginBottom: 8, width: "70%" }]}>
         <View style={{ flex: 1 }}>
           <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>
             Type
@@ -172,7 +172,7 @@ const JobItem: FC<IProps> = ({ item }) => {
           </Text>
         </View>
 
-        <View style={{ marginRight: 8, flex: 0 }}>
+        <View style={{}}>
           <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>
             Company
           </Text>
@@ -214,7 +214,7 @@ const JobItem: FC<IProps> = ({ item }) => {
             { fontWeight: "800" },
           ]}
         >
-          Sponsoring Companies, DI&E Hires
+          {item?.tailor?.join(",")}
         </Text>
       </View>
 
@@ -228,18 +228,20 @@ const JobItem: FC<IProps> = ({ item }) => {
             { fontWeight: "800", fontSize: 14, color: "#47D0FD" },
           ]}
         >
-          NGN {Converter.thousandSeparator(Math.ceil(item.salary / 100))}k/year
+          NGN {Converter.formatNumber(item.salary)}/year
         </Text>
       </View>
 
       <View>
         <Text
           style={[
-            GlobalStyles.fontInterRegular,
             { fontSize: 12, fontWeight: "800" },
+            GlobalStyles.textNavyBlue,
+            GlobalStyles.fontInterBlack,
+            { fontWeight: "800" },
           ]}
         >
-          About {item.companyName}
+          About {item.companyName.trim()}
         </Text>
         <Text
           style={[
@@ -247,7 +249,7 @@ const JobItem: FC<IProps> = ({ item }) => {
             { fontSize: 12, fontWeight: "300" },
           ]}
         >
-          {item.companyDescription}
+          {item.companyDescription.trim()}
         </Text>
       </View>
 

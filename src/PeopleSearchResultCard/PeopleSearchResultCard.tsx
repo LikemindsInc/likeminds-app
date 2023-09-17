@@ -24,39 +24,29 @@ const PeopleSearchResultCard: FC<IProps> = ({ item }) => {
   return (
     <TouchableOpacity
       onPress={handleOnProfilePress}
-      style={{ marginRight: 10, flex: 1 }}
+      style={{
+        marginRight: 10,
+        flex: 1,
+        marginLeft: 5,
+        marginTop: 10,
+        marginBottom: 10,
+      }}
     >
-      <DropShadow
-        style={{
-          shadowColor: "#284453",
-          shadowOffset: {
-            width: 0,
-            height: 0,
-          },
-          shadowOpacity: 0.2,
-          shadowRadius: 5,
-          backgroundColor: colors.white,
-          borderWidth: 1,
-          borderColor: colors.white,
-
-          borderRadius: 10,
-          marginVertical: 10,
-        }}
-      >
-        <View>
-          <View style={{ marginTop: 18, alignItems: "center" }}>
-            <Image
-              source={
-                item?.profilePicture && item?.profilePicture.trim() !== ""
-                  ? { uri: item?.profilePicture }
-                  : require("../../assets/image10.png")
-              }
-              resizeMethod="auto"
-              resizeMode="cover"
-              style={styles.profilePhoto}
-            />
-          </View>
-          <View style={styles.contentWrapper}>
+      <View style={styles.card}>
+        <View style={{ marginTop: 18, alignItems: "center" }}>
+          <Image
+            source={
+              item?.profilePicture && item?.profilePicture.trim() !== ""
+                ? { uri: item?.profilePicture }
+                : require("../../assets/image10.png")
+            }
+            resizeMethod="auto"
+            resizeMode="cover"
+            style={styles.profilePhoto}
+          />
+        </View>
+        <View style={[styles.contentWrapper, GlobalStyles.flexOne]}>
+          <View style={{ flex: 1 }}>
             <Text
               style={[
                 GlobalStyles.fontInterMedium,
@@ -65,7 +55,9 @@ const PeopleSearchResultCard: FC<IProps> = ({ item }) => {
                 GlobalStyles.textCenter,
               ]}
             >
-              {`${item?.firstName} ${item?.lastName}`.slice(0, 20)}
+              {`${item?.firstName} ${item?.lastName}`.length > 14
+                ? `${`${item?.firstName} ${item?.lastName}`.slice(0, 10)}...`
+                : `${item?.firstName} ${item?.lastName}`}
             </Text>
 
             <Text
@@ -78,20 +70,20 @@ const PeopleSearchResultCard: FC<IProps> = ({ item }) => {
             >
               {item?.bio?.slice(0, 20)}
             </Text>
-            <View style={[GlobalStyles.mt10]}>
-              <Button
-                buttonStyle={{
-                  paddingVertical: 10,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-                title="View"
-                onPress={handleOnProfilePress}
-              />
-            </View>
+          </View>
+          <View style={[GlobalStyles.mt10, { justifyContent: "flex-end" }]}>
+            <Button
+              buttonStyle={{
+                paddingVertical: 4,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              title="View"
+              onPress={handleOnProfilePress}
+            />
           </View>
         </View>
-      </DropShadow>
+      </View>
     </TouchableOpacity>
   );
 };
@@ -119,6 +111,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "500",
     color: "#88969D",
+  },
+  card: {
+    shadowColor: "gray", // Shadow color
+    shadowOffset: { width: 0, height: 2 }, // Shadow offset
+    shadowOpacity: 0.5, // Shadow opacity
+    shadowRadius: 4, // Shadow radius
+    elevation: 5, // Android elevation (simulates shadow)
+    height: 200,
+    width: 160,
+    backgroundColor: colors.white,
+    borderRadius: 8,
   },
 });
 

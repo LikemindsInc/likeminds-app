@@ -81,7 +81,6 @@ const EducationForm = () => {
   useEffect(() => {
     if (state.completeProfileStatus === "completed") {
       toast.show("Education added successfully", {
-        type: "success",
         animationType: "slide-in",
         placement: "top",
       });
@@ -235,14 +234,6 @@ const EducationForm = () => {
           />
         </View>
 
-        {/* <View style={[GlobalStyles.mb10]}>
-          <Input
-            onChangeText={(text) => setDegree(text)}
-            value={degree}
-            placeholder="Degree/Graduation Title"
-            errorMessage={errors.degree}
-          />
-        </View> */}
         <View style={[GlobalStyles.mb30]}>
           <SelectList
             boxStyles={{
@@ -263,7 +254,7 @@ const EducationForm = () => {
               key: item,
               value: item,
             }))}
-            placeholder="Industry"
+            placeholder="Choose Degree"
             fontFamily="Inter-Regular"
             arrowicon={
               <AntDesign name="caretdown" size={20} color={colors.primary} />
@@ -276,12 +267,6 @@ const EducationForm = () => {
             onChangeText={handleOnSchoolFilter}
             value={school}
           />
-          {/* <Input
-            onChangeText={(text) => setSchool(text)}
-            value={school}
-            placeholder="School"
-            errorMessage={errors.school}
-          /> */}
         </View>
       </ScrollView>
       <View>

@@ -13,6 +13,7 @@ import { GlobalStyles } from "../../theme/GlobalStyles";
 import { TouchableOpacity } from "react-native";
 import { CountryPicker } from "react-native-country-codes-picker";
 import Converter from "../../utils/Converters";
+import { EvilIcons } from "@expo/vector-icons";
 
 export interface ITextInputProps extends TextInputProps {
   inputRef?: React.RefObject<TextInput> | undefined;
@@ -208,7 +209,12 @@ const Input: FC<ITextInputProps> = (props) => {
         {props.suffixElement && props.suffixElement}
       </TouchableOpacity>
       {props.errorMessage && (
-        <View style={[GlobalStyles.pl4]}>
+        <View style={[{ flexDirection: "row", gap: 4, alignItems: "center" }]}>
+          <EvilIcons
+            name="exclamation"
+            size={20}
+            color={GlobalStyles.textRed.color}
+          />
           <Text
             style={[
               GlobalStyles.textRed,

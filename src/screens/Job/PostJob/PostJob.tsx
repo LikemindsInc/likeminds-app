@@ -296,14 +296,16 @@ const PostJob = () => {
                 { flexWrap: "wrap", gap: 10 },
               ]}
             >
-              {JOB_TYPES.map((item, i) => (
-                <JobType
-                  isSelected={item.value === jobType}
-                  onPress={() => handleOnJobTypeSelect(item.value)}
-                  text={item.label}
-                  key={i}
-                />
-              ))}
+              {JOB_TYPES.filter((item) => item.label !== "All").map(
+                (item, i) => (
+                  <JobType
+                    isSelected={item.value === jobType}
+                    onPress={() => handleOnJobTypeSelect(item.value)}
+                    text={item.label}
+                    key={i}
+                  />
+                )
+              )}
             </View>
           </View>
           <View style={[GlobalStyles.mb20]}>
@@ -340,6 +342,7 @@ const PostJob = () => {
                 onPress={setJobLocation}
                 selectedId={jobLocation}
                 layout="row"
+                color={colors.primary}
               />
             </View>
           </View>
@@ -382,14 +385,16 @@ const PostJob = () => {
                 { flexWrap: "wrap", gap: 10 },
               ]}
             >
-              {JOB_EXPERIENCE.map((item, i) => (
-                <JobType
-                  isSelected={item.value === jobExperience}
-                  onPress={() => setJobExperience(item.value)}
-                  text={item.label}
-                  key={i}
-                />
-              ))}
+              {JOB_EXPERIENCE.filter((item) => item.label !== "All").map(
+                (item, i) => (
+                  <JobType
+                    isSelected={item.value === jobExperience}
+                    onPress={() => setJobExperience(item.value)}
+                    text={item.label}
+                    key={i}
+                  />
+                )
+              )}
             </View>
           </View>
           <View style={[GlobalStyles.mb20]}>

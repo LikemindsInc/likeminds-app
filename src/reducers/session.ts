@@ -203,16 +203,23 @@ const sessionSlice = createSlice({
     },
     updateCertificate(
       state: ISessionState,
-      action: PayloadAction<FilePickerFormat>
+      action: PayloadAction<{ name: string; file: FilePickerFormat }>
     ) {
       if (action.payload) {
-        state.profileData.certificates = [action.payload];
+        state.profileData.certificates = [
+          ...state.profileData.certificates,
+          { name: action.payload.name, file: action.payload.file },
+        ];
       }
     },
     clearCompleteProfileStatus(state: ISessionState) {
       state.completeProfileStatus = "idle";
       state.completeProfileError = "";
       state.completeProfileError = "";
+    },
+
+    clearChangePasswordError(state: ISessionState) {
+      state.changePasswordOTpError = "";
     },
   },
   extraReducers: (builder) => {
@@ -226,6 +233,24 @@ const sessionSlice = createSlice({
       state.otpVerificationStatus = "idle";
       state.otpVerificationSuccess = "";
       state.otpVerificationError = "";
+
+      state.profileData = {
+        phoneNumber: "",
+        personalInformation: {
+          firstName: "",
+          lastName: "",
+          country: "",
+          countryOfOrigin: "",
+          resume: null,
+          bio: "",
+          city: "",
+        },
+        education: [],
+        experience: [],
+        certificates: [],
+        profilePicture: null,
+        skills: [],
+      };
     });
     builder.addCase(REHYDRATE, (state) => {
       state.signingInStatus = "idle";
@@ -276,6 +301,7 @@ const sessionSlice = createSlice({
     });
     builder.addCase(verifyOTPActionAction.fulfilled, (state, action) => {
       state.otpVerificationSuccess = action.payload.message;
+      console.log(action.payload);
       state.otpVerificationStatus = "completed";
     });
     builder.addCase(verifyOTPActionAction.rejected, (state, action) => {
@@ -428,6 +454,7 @@ export const {
   updateSkills,
   clearCompleteProfileStatus,
   clearResendOtpStatus,
+  clearChangePasswordError,
 } = sessionSlice.actions;
 
 export default sessionSlice.reducer;

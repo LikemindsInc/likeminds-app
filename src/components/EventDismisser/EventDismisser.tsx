@@ -3,11 +3,9 @@ import { TouchableWithoutFeedback } from "react-native";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import { showReactionView } from "../../reducers/post_reducer";
 
-const KeyboardDismisser = (props: any) => {
+const EventDismisser = (props: any) => {
   const dispatch = useAppDispatch();
   const handleCloseKeyboard = () => {
-    Keyboard.dismiss();
-    console.log("called to close");
     dispatch(showReactionView({ show: false, post: null }));
   };
   return (
@@ -22,9 +20,7 @@ const KeyboardDismisser = (props: any) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: {},
 });
 
-export default KeyboardDismisser;
+export default EventDismisser;

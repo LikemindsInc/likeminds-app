@@ -23,6 +23,7 @@ import moment from "moment";
 import { openReactionList } from "../../reducers/post_reducer";
 import colors from "../../theme/colors";
 import { IOScrollView, InView } from "react-native-intersection-observer";
+import EventDismisser from "../../components/EventDismisser/EventDismisser";
 
 const DATA: { type: "LIVE_FEED" | "INTRO_FEED" | "STORY_FEED"; data: any[] }[] =
   [
@@ -176,6 +177,8 @@ const Home = () => {
 
   const state = useAppSelector((state) => state.postReducer);
 
+  const session = useAppSelector((state) => state.settingReducer);
+
   useEffect(() => {
     if (state.showReactionList && state.postReaction.length > 0) {
       bottomSheetRef2.current?.expand();
@@ -196,29 +199,31 @@ const Home = () => {
   return (
     <View style={[GlobalStyles.flexOne]}>
       <HomeHeader />
-      <IOScrollView
-        // contentContainerStyle={{ flex: 1 }}
-        style={[
-          {
-            marginRight: 0,
-            flex: 1,
-            paddingTop: 16,
-            paddingLeft: 0,
-            backgroundColor: colors.white,
-          },
-        ]}
-        refreshControl={
-          <RefreshControl
-            refreshing={isRefreshing}
-            onRefresh={handleOnRefresh}
-            colors={[colors.primary]} // for android
-            tintColor={colors.primary} // for ios
-          />
-        }
-        rootMargin={{ top: 0 }}
-      >
-        {DATA.map((item) => renderItems({ item }))}
-      </IOScrollView>
+      <EventDismisser>
+        <IOScrollView
+          // contentContainerStyle={{ flex: 1 }}
+          style={[
+            {
+              marginRight: 0,
+              flex: 1,
+              paddingTop: 16,
+              paddingLeft: 0,
+              backgroundColor: colors.white,
+            },
+          ]}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={handleOnRefresh}
+              colors={[colors.primary]} // for android
+              tintColor={colors.primary} // for ios
+            />
+          }
+          rootMargin={{ top: 0 }}
+        >
+          {DATA.map((item) => renderItems({ item }))}
+        </IOScrollView>
+      </EventDismisser>
       <BottomSheet
         ref={bottomSheetRef2}
         index={-1}

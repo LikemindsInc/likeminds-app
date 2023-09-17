@@ -121,10 +121,10 @@ const Signup = () => {
 
       dispatch(
         signupUserActionAction({
-          email,
-          password,
-          confirmPassword,
-          phone: `${countryCode}${formattedPhone}`,
+          email: email.trim(),
+          password: password.trim(),
+          confirmPassword: confirmPassword.trim(),
+          phone: `${countryCode}${formattedPhone}`.trim(),
         })
       );
     } catch (error: any) {

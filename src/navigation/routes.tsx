@@ -10,7 +10,11 @@ import SignupEducation from "../screens/SignupEducation/SignupEducation";
 import SignupExperience from "../screens/SignupExperience/SignupExperience";
 import SignupProfilePicture from "../screens/SignupProfilePicture/SignupProfilePicture";
 import SignupSkills from "../screens/SignupSkills/SignupSkills";
-import { APP_SCREEN_LIST, DRAWER_WIDTH } from "../constants";
+import {
+  APP_SCREEN_LIST,
+  DRAWER_WIDTH,
+  UNHANDLED_GLOBAL_ERRORS,
+} from "../constants";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -69,6 +73,7 @@ import Notification from "../screens/Notification/Notification";
 import { useToast } from "react-native-toast-notifications";
 import { getCurrentUserSpace } from "../actions/space";
 import { persistor } from "../store/store";
+import JobFilter from "../screens/Job/JobFilter";
 
 const Stack = createNativeStackNavigator();
 
@@ -171,7 +176,9 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
       ? DRAWER_WIDTH
       : useWindowDimensions().width * 0.5;
 
-  const handleNavigation = (linkTo: string) => {};
+  const handleNavigation = (linkTo: string) => {
+    navigation.navigate(linkTo);
+  };
 
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NavigationProp<any>>();
@@ -228,7 +235,7 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
                   marginBottom: 40,
                 },
               ]}
-              onPress={(e) => handleNavigation("")}
+              onPress={(e) => handleNavigation(APP_SCREEN_LIST.MAIN_SCREEN)}
             >
               <Feather Medical name="home" size={20} color={colors.primary} />
               <Text
@@ -251,7 +258,9 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
                   marginBottom: 40,
                 },
               ]}
-              onPress={(e) => handleNavigation("")}
+              onPress={(e) =>
+                handleNavigation(APP_SCREEN_LIST.USER_PROFILE_SCREEN)
+              }
             >
               <Feather
                 Medical
@@ -278,7 +287,9 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
                   marginBottom: 40,
                 },
               ]}
-              onPress={(e) => handleNavigation("")}
+              onPress={(e) =>
+                handleNavigation(APP_SCREEN_LIST.USER_PROFILE_SCREEN)
+              }
             >
               <AntDesign name="user" size={24} color={colors.primary} />
               <Text
@@ -300,7 +311,9 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
                   marginBottom: 40,
                 },
               ]}
-              onPress={(e) => handleNavigation("")}
+              onPress={(e) =>
+                handleNavigation(APP_SCREEN_LIST.USER_PROFILE_SCREEN)
+              }
             >
               <AntDesign name="calendar" size={24} color={colors.primary} />
               <Text
@@ -370,8 +383,12 @@ const AppRoutes = () => {
   useEffect(() => {
     if (errorReducer.message?.trim() !== "") {
       // toast.show({ description: errorReducer.message });
-      toast.show(errorReducer.message, { type: "normal" });
-      dispatch(clearNetworkError());
+      if (UNHANDLED_GLOBAL_ERRORS.includes(errorReducer.message)) {
+        return;
+      } else {
+        toast.show(errorReducer.message, { type: "normal" });
+        dispatch(clearNetworkError());
+      }
     }
   }, [errorReducer.message]);
 
@@ -402,6 +419,11 @@ const AppRoutes = () => {
       <Stack.Screen
         name={APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN}
         component={OTPVerification}
+      />
+
+      <Stack.Screen
+        name={APP_SCREEN_LIST.JOB_FILTER_SCREEN}
+        component={JobFilter}
       />
 
       <Stack.Screen

@@ -17,6 +17,8 @@ import useAppDispatch from "../../../hooks/useAppDispatch";
 import { commentOnCommentAction } from "../../../actions/post";
 import useAppSelector from "../../../hooks/useAppSelector";
 import { IPostState } from "../../../reducers/post_reducer";
+import ReactionIcon from "../../../components/ReactionIcon/ReactionIcon";
+import CommentReactionIcon from "../../../components/ReactionIcon/CommentReactionIcon";
 
 interface Props {
   item: IPostCommentFeed;
@@ -174,9 +176,10 @@ const CommentRowItem: FC<Props> = ({ item }) => {
               />
             )}
           </View>
-          <TouchableOpacity>
+          <CommentReactionIcon post={item} />
+          {/* <TouchableOpacity>
             <AntDesign name={"hearto"} size={14} color={colors.navyBlue} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     </View>

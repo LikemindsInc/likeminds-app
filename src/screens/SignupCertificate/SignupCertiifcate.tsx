@@ -28,6 +28,8 @@ const SignupCertificate = () => {
 
   const toast = useToast();
 
+  const [name, setName] = useState("");
+
   const [uploods, setUploads] = useState([{}]);
 
   const session = useAppSelector(
@@ -45,7 +47,9 @@ const SignupCertificate = () => {
   };
   const handleOnNextPress = () => {
     if (file) {
-      dispatch(updateCertificate(file as FilePickerFormat));
+      dispatch(
+        updateCertificate({ name: name, file: file as FilePickerFormat })
+      );
     }
     dispatch(completeUserProfileAction(session.profileData));
   };
@@ -64,6 +68,11 @@ const SignupCertificate = () => {
       );
     }
   }, [session.completeProfileStatus]);
+
+  const handleOnSkip = () => {
+    dispatch(completeUserProfileAction(session.profileData));
+    navigation.navigate(APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN);
+  };
 
   return (
     <View style={[GlobalStyles.container]}>
@@ -90,6 +99,8 @@ const SignupCertificate = () => {
                 <Input
                   editable={true}
                   placeholder="Certificate, Award, Volunteer"
+                  value={name}
+                  onChangeText={(value) => setName(value)}
                 />
               </View>
               <DropZone
@@ -110,15 +121,13 @@ const SignupCertificate = () => {
         </View>
       </ScrollView>
       <View>
-        {/* <View style={[GlobalStyles.mb20, GlobalStyles.displayRowCenter]}>
+        <View style={[GlobalStyles.mb20, GlobalStyles.displayRowCenter]}>
           <TextLink
-            onPress={() =>
-              navigation.navigate(APP_SCREEN_LIST.SIGNUP_SKILLS_SCREEN)
-            }
+            onPress={handleOnSkip}
             title="Skip For Now"
             color={colors.black}
           />
-        </View> */}
+        </View>
         <Button
           loading={session.completeProfileStatus === "loading"}
           title="Continue"

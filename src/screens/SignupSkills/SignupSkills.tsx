@@ -37,28 +37,15 @@ const SignupSkills = () => {
   const [skills, setSkills] = useState("");
   const toast = useToast();
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
-  // useEffect(() => {
-  //   if (session.completeProfileStatus === "completed") {
-  //     navigation.navigate(APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN);
-  //   } else if (session.completeProfileStatus === "failed") {
-  //     toast.show(
-  //       session.completeProfileError?.trim() === ""
-  //         ? "Unable to complete request. Please try again later"
-  //         : session.completeProfileError,
-  //       {
-  //         type: "normal",
-  //       }
-  //     );
-  //   }
-  // }, [session.completeProfileStatus]);
+  const [skillsValue, setSkillsValue] = useState("");
 
   const dispatch = useAppDispatch();
   const handleOnNextPress = () => {
-    if (skills.trim() === "")
+    if (skillsValue.trim() === "")
       return toast.show("Please provide skills", { type: "normal" });
 
     navigation.navigate(APP_SCREEN_LIST.SIGNUP_CERTIFICATE_SCREEN);
-    dispatch(updateSkills(skills.split(",")));
+    dispatch(updateSkills(skillsValue.split(",")));
     // dispatch(completeUserProfileAction(session.profileData));
   };
 
@@ -95,12 +82,37 @@ const SignupSkills = () => {
       .map((item) => item.trim())
       .filter((item) => item !== "," && item.trim() !== "");
 
-    const set = new Set(filtered);
+    const set = new Set([
+      ...skills
+        .split(",")
+        .map((item) => item.trim())
+        .filter((item) => item !== ""),
+      ...filtered.map((item) => item.trim()).filter((item) => item !== ""),
+    ]);
 
-    const newSkills = Array.from(set).join(", ");
+    console.log("set> ", set);
 
-    setSkills(newSkills);
+    let newSkills = Array.from(set).join(", ");
+
+    // newSkills += ",";
+
+    setSkillsValue(newSkills);
   }, [selectedSkills]);
+
+  useEffect(() => {
+    const skillsList = skills
+      .split(",")
+      .map((item) => item.toLowerCase().trim());
+    const i2 = [...selectedSkills];
+
+    const i3 = i2.filter((item) =>
+      skillsList.includes(item.toLowerCase().trim())
+    );
+
+    console.log("skilss> ", skills);
+    if (!skills.endsWith(",")) setSelectedSkills(i3);
+    setSkillsValue(skills);
+  }, [skills]);
   return (
     <View style={[GlobalStyles.container]}>
       <View style={{ marginBottom: 20 }}>
@@ -122,7 +134,7 @@ const SignupSkills = () => {
         <View style={[]}>
           <Input
             placeholder="Skill1, Skill2"
-            value={skills}
+            value={skillsValue}
             onChangeText={(value) => setSkills(value)}
             inputViewStyle={{ marginBottom: 5 }}
           />

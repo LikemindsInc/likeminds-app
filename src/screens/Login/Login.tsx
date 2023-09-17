@@ -21,6 +21,7 @@ import { Keyboard } from "react-native";
 import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
 import BackButton from "../../components/Navigation/BackButton/BackButton";
 import { err } from "react-native-svg/lib/typescript/xml";
+import { clearNetworkError } from "../../reducers/errorHanlder";
 
 const IconButton: FC<{ image: any }> = ({ image }) => {
   return (
@@ -55,7 +56,7 @@ const Login = () => {
 
   useEffect(() => {
     setErrors({ email: null, password: null });
-  }, []);
+  }, [email, password]);
 
   useEffect(() => {
     if (email.trim() !== "") setErrors((state) => ({ ...state, email: null }));
@@ -78,12 +79,18 @@ const Login = () => {
         password: "Password is Required",
       }));
 
-    dispatch(loginUserActionAction({ email, password }));
+    dispatch(
+      loginUserActionAction({ email: email.trim(), password: password.trim() })
+    );
   };
 
   const setting = useAppSelector((state) => state.settingReducer);
 
   const errorReducer = useAppSelector((state) => state.errorReducer);
+
+  useEffect(() => {
+    dispatch(clearNetworkError());
+  }, [email, password]);
 
   useEffect(() => {
     if (session.signingInStatus === "completed") {
@@ -95,9 +102,12 @@ const Login = () => {
       }
       navigation.navigate(APP_SCREEN_LIST.MAIN_SCREEN);
     } else if (session.signingInStatus === "failed") {
-      console.log("error is> ", session.signingInError);
     }
   }, [session.signingInStatus]);
+
+  useEffect(() => {
+    setErrors((state) => ({ ...state, password: errorReducer.message }));
+  }, [errorReducer.message]);
 
   useEffect(() => {
     if (errorReducer.message === PENDING_OTP_MESSAGE) return;

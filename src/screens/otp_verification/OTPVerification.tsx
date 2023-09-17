@@ -189,7 +189,7 @@ const OTPVerification = () => {
                 GlobalStyles.fontWeight400,
               ]}
             >
-              Not received code yet?
+              Not received code yet??
             </Text>
           </View>
           <View style={[GlobalStyles.mt10]}>
@@ -198,8 +198,8 @@ const OTPVerification = () => {
               onPress={() =>
                 dispatch(
                   resendOTPAction({
-                    phone: session.otpChannelValue.split("_")[1],
-                    type: "FORGOT_PASSWORD",
+                    phone: session.profileData.phoneNumber,
+                    type: "SIGNUP",
                   })
                 )
               }

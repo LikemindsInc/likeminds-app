@@ -349,7 +349,6 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
                 GlobalStyles.fontSize15,
                 GlobalStyles.fontWeight700,
                 GlobalStyles.pl4,
-                GlobalStyles.mb20,
               ]}
             >
               {item?.user?.firstName} {item?.user?.lastName}
@@ -432,15 +431,17 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
               {item.reactionCount} Reactions
             </Text>
           </TouchableOpacity>
-          <Text
-            style={[
-              GlobalStyles.fontInterMedium,
-              GlobalStyles.fontSize10,
-              GlobalStyles.fontWeight700,
-            ]}
-          >
-            {item.commentCount} comments
-          </Text>
+          <TouchableOpacity onPress={handleLoadComments}>
+            <Text
+              style={[
+                GlobalStyles.fontInterMedium,
+                GlobalStyles.fontSize10,
+                GlobalStyles.fontWeight700,
+              ]}
+            >
+              {item.commentCount} comments
+            </Text>
+          </TouchableOpacity>
           {/* <Text
               style={[
                 GlobalStyles.fontInterMedium,

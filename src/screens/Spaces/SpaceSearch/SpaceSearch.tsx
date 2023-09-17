@@ -51,9 +51,14 @@ const SpaceSearch = () => {
   }, [searchText]);
 
   return (
-    <View style={[GlobalStyles.container]}>
+    <View
+      style={[
+        GlobalStyles.container,
+        { paddingHorizontal: 0, paddingBottom: 0 },
+      ]}
+    >
       <View style={[GlobalStyles.flewRow]}>
-        <View style={[GlobalStyles.flexOne]}>
+        <View style={[GlobalStyles.flexOne, { paddingHorizontal: 16 }]}>
           <Input
             inputRef={ref}
             contentContainerStyle={{ marginBottom: 0 }}
@@ -69,19 +74,18 @@ const SpaceSearch = () => {
           <Feather name="sliders" size={24} color={colors.grey} />
         </TouchableOpacity> */}
       </View>
-      <View style={[GlobalStyles.mt20, { flex: 1 }]}>
-        <SpacePeopleTabView />
+      <View style={[GlobalStyles.mt20, { flex: 1, paddingHorizontal: 0 }]}>
+        <SpacePeopleTabView searchText={searchText} />
       </View>
     </View>
   );
 };
 
-const renderScene = SceneMap({
-  space: Spaces,
-  people: PeopleList,
-});
+interface ISpaceSearchProps {
+  searchText?: string;
+}
 
-function SpacePeopleTabView() {
+function SpacePeopleTabView({ searchText }: ISpaceSearchProps) {
   const layout = useWindowDimensions();
 
   const [index, setIndex] = useState(0);
@@ -89,6 +93,15 @@ function SpacePeopleTabView() {
     { key: "space", title: "Spaces" },
     { key: "people", title: "People" },
   ]);
+
+  const renderScene = SceneMap({
+    space: Spaces,
+    people: () => (
+      <View>
+        <PeopleList searchText={searchText} />
+      </View>
+    ),
+  });
 
   const renderTabBar = (props: any) => {
     const inputRange = props.navigationState.routes.map((x: any, i: any) => i);

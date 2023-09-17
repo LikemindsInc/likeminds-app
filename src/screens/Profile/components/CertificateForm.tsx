@@ -32,6 +32,8 @@ const CertificateForm = () => {
 
   const dispatch = useAppDispatch();
 
+  const [name, setName] = useState("");
+
   const toast = useToast();
 
   const [uploods, setUploads] = useState([{}]);
@@ -52,7 +54,9 @@ const CertificateForm = () => {
   const handleOnNextPress = () => {
     if (file) {
       console.log("file> ", file);
-      dispatch(updateCertificate(file as FilePickerFormat));
+      dispatch(
+        updateCertificate({ file: file as FilePickerFormat, name: name })
+      );
       setTimeout(() => {
         dispatch(updateCertificateProfileAction(session.profileData));
       }, 500);
@@ -62,7 +66,6 @@ const CertificateForm = () => {
   useEffect(() => {
     if (session.completeProfileStatus === "completed") {
       toast.show("Certificate added successfully", {
-        type: "success",
         animationType: "slide-in",
         placement: "top",
       });
@@ -97,6 +100,8 @@ const CertificateForm = () => {
                 <Input
                   editable={true}
                   placeholder="Certificate, Award, Volunteer"
+                  value={name}
+                  onChangeText={(value) => setName(value)}
                 />
               </View>
               <DropZone
@@ -108,24 +113,8 @@ const CertificateForm = () => {
             </View>
           ))}
         </View>
-        <View>
-          <Button
-            type="outline-primary"
-            title="Add Another"
-            onPress={() => setUploads((state) => [...state, {}])}
-          />
-        </View>
       </ScrollView>
       <View>
-        {/* <View style={[GlobalStyles.mb20, GlobalStyles.displayRowCenter]}>
-          <TextLink
-            onPress={() =>
-              navigation.navigate(APP_SCREEN_LIST.SIGNUP_SKILLS_SCREEN)
-            }
-            title="Skip For Now"
-            color={colors.black}
-          />
-        </View> */}
         <Button
           loading={session.completeProfileStatus === "loading"}
           title="Continue"

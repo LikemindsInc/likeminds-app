@@ -103,14 +103,14 @@ const EmptyPostContent = () => {
   const navigation = useNavigation<NavigationProp<any>>();
   return (
     <View style={{ flex: 1, height: 0.8 * height }}>
-      <View style={{ flex: 3, alignItems: "center", justifyContent: "center" }}>
+      <View style={{ flex: 2, alignItems: "center", justifyContent: "center" }}>
         <Text
           style={[
             GlobalStyles.fontSize16,
             GlobalStyles.fontWeight400,
             GlobalStyles.textGrey,
             GlobalStyles.fontInterRegular,
-            { textAlign: "center", color: `#000${addOpacity(60)}` },
+            { textAlign: "center", color: `#000` },
           ]}
         >
           No content yet. Get started by posting something.

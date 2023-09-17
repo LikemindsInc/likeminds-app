@@ -7,7 +7,7 @@ import TextLink from "../../components/TextLink/TextLink";
 import colors from "../../theme/colors";
 import DatePicker from "../../components/DatePicker/DatePicker";
 import { Checkbox } from "native-base";
-import { APP_SCREEN_LIST } from "../../constants";
+import { APP_SCREEN_LIST, SCHOOL_DEGREES } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
 import DateFormatter from "../../utils/date-formatter";
 import useAppDispatch from "../../hooks/useAppDispatch";
@@ -18,7 +18,8 @@ import AutoCompleteInput from "../../components/AutoCompleteInput/AutoCompleteIn
 import { getAllSchoolAction } from "../../actions/auth";
 import useAppSelector from "../../hooks/useAppSelector";
 import { ISchool } from "@app-model";
-import EducationForm from "../Profile/components/EducationForm";
+import { SelectList } from "react-native-dropdown-select-list";
+import { AntDesign } from "@expo/vector-icons";
 
 const SignupEducation = () => {
   const [startDate, setStartDate] = useState(
@@ -170,14 +171,99 @@ const SignupEducation = () => {
   };
 
   const handleOnSkip = () => {
-    navigation.navigate(APP_SCREEN_LIST.SIGNUP_CERTIFICATE_SCREEN);
+    navigation.navigate(APP_SCREEN_LIST.SIGNUP_SKILLS_SCREEN);
+    dispatch(updateEducation({ school, startDate, endDate, degree }));
   };
   return (
     <View style={[GlobalStyles.container]}>
       <View style={{ marginBottom: 20 }}>
         <BackButton title="Education" />
       </View>
-      <EducationForm />
+      <View style={[GlobalStyles.mb40]}>
+        <Text
+          style={[
+            GlobalStyles.fontInterRegular,
+            GlobalStyles.fontSize13,
+            GlobalStyles.fontWeight700,
+            GlobalStyles.textGrey,
+          ]}
+        >
+          Tell us about your most recent educational achievement
+        </Text>
+      </View>
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+        <View style={[styles.inputDouble]}>
+          <DatePicker
+            value={startDate}
+            onDateChange={(text) =>
+              setStartDate(DateFormatter.format(text, "YYYY-MM-DD"))
+            }
+            placeholder="Start Date"
+            style={styles.inputFlex}
+            errorMessage={errors.startDate}
+          />
+          <DatePicker
+            value={endDate}
+            onChangeText={(text) =>
+              setEndDate(DateFormatter.format(text, "YYYY-MM-DD"))
+            }
+            placeholder="End Date"
+            style={styles.inputFlex}
+            errorMessage={errors.endDate}
+          />
+        </View>
+
+        <View style={[GlobalStyles.mb30]}>
+          <SelectList
+            boxStyles={{
+              borderWidth: 0,
+              backgroundColor: colors.white,
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 20,
+            }}
+            save="key"
+            setSelected={(val: string) => setDegree(val)}
+            data={SCHOOL_DEGREES.map((item) => ({
+              key: item,
+              value: item,
+            }))}
+            placeholder="Choose Degree"
+            fontFamily="Inter-Regular"
+            arrowicon={
+              <AntDesign name="caretdown" size={20} color={colors.primary} />
+            }
+          />
+        </View>
+        <View style={[GlobalStyles.mb10]}>
+          <AutoCompleteInput
+            data={(schools || []).map((item) => item.name)}
+            onChangeText={handleOnSchoolFilter}
+            value={school}
+          />
+          {/* <Input
+            onChangeText={(text) => setSchool(text)}
+            value={school}
+            placeholder="School"
+            errorMessage={errors.school}
+          /> */}
+        </View>
+      </ScrollView>
+      <View>
+        <View style={[GlobalStyles.mb20, GlobalStyles.displayRowCenter]}>
+          <TextLink
+            title="Skip For Now"
+            onPress={handleOnSkip}
+            color={colors.black}
+          />
+        </View>
+        <Button title="Continue" onPress={handleOnNextPress} />
+      </View>
     </View>
   );
 };
