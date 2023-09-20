@@ -1,4 +1,12 @@
-import { FlatList, Image, ScrollView, Text, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  RefreshControl,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import HomeHeader from "../../components/Header/HomeHeader/HomeHeader";
 import LiveFeedList from "./components/LiveFeedList";
@@ -12,6 +20,13 @@ import useAppSelector from "../../hooks/useAppSelector";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { IPostReaction } from "@app-model";
 import moment from "moment";
+import { openReactionList } from "../../reducers/post_reducer";
+import colors from "../../theme/colors";
+import { IOScrollView, InView } from "react-native-intersection-observer";
+import EventDismisser from "../../components/EventDismisser/EventDismisser";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { getProfile } from "../../reducers/connection";
+import { APP_SCREEN_LIST } from "../../constants";
 
 const DATA: { type: "LIVE_FEED" | "INTRO_FEED" | "STORY_FEED"; data: any[] }[] =
   [
@@ -21,7 +36,7 @@ const DATA: { type: "LIVE_FEED" | "INTRO_FEED" | "STORY_FEED"; data: any[] }[] =
         {
           id: 90,
           isUserProfile: true,
-          image: require("../../../assets/image3.png"),
+          image: require("../../../assets/imageAvatar.jpeg"),
           isLive: false,
           userName: "My Story",
         },
@@ -46,7 +61,7 @@ const DATA: { type: "LIVE_FEED" | "INTRO_FEED" | "STORY_FEED"; data: any[] }[] =
         {
           id: 4,
           userName: "Avesta UX Hub",
-          image: require("../../../assets/image3.png"),
+          image: require("../../../assets/imageAvatar.jpeg"),
           isLive: false,
         },
         {
@@ -82,7 +97,7 @@ const DATA: { type: "LIVE_FEED" | "INTRO_FEED" | "STORY_FEED"; data: any[] }[] =
         {
           id: 10,
           userName: "Avesta UX Hub",
-          image: require("../../../assets/image3.png"),
+          image: require("../../../assets/imageAvatar.jpeg"),
           isLive: false,
         },
       ],
@@ -118,13 +133,14 @@ const Home = () => {
   const snapPoints = useMemo(() => ["50%", "60%"], []);
 
   const handleSheetChanges = useCallback((index: number) => {}, []);
-  const height = useDimension().height;
+
+  const [isRefreshing, setRefresh] = useState(false);
 
   const renderProfilePicture = (item: IPostReaction) => {
     if (item.user.profilePicture && item.user.profilePicture.trim() !== "") {
       return { uri: item.user.profilePicture };
     }
-    return require("../../../assets/image3.png");
+    return require("../../../assets/imageAvatar.jpeg");
   };
 
   const renderItems = ({
@@ -134,17 +150,27 @@ const Home = () => {
   }) => {
     switch (item.type) {
       case "LIVE_FEED":
-        return <LiveFeedList />;
-      case "INTRO_FEED":
-        return null;
-      // return (
-      //   <View style={[GlobalStyles.mt20, GlobalStyles.mb20]}>
-      //     <IntroList />
-      //   </View>
-      // );
+        return (
+          <View
+            style={[
+              {
+                paddingTop: 4,
+                paddingBottom: 2,
+                paddingLeft: 16,
+                paddingRight: 16,
+                backgroundColor: colors.white,
+                marginBottom: 0,
+                marginTop: 0,
+              },
+            ]}
+          >
+            <LiveFeedList />
+          </View>
+        );
+
       case "STORY_FEED":
         return (
-          <View style={[GlobalStyles.mt20, GlobalStyles.mb20, { flex: 1 }]}>
+          <View>
             <StoryFeedList />
           </View>
         );
@@ -154,41 +180,77 @@ const Home = () => {
 
   const state = useAppSelector((state) => state.postReducer);
 
-  // useEffect(() => {
-  //   if (state.getPostFeedStatus === "completed") {
-  //     setRefresh(false);
-  //     getPostFeeds();
-  //   }
-  // }, [state.getPostFeedStatus]);
-
-  // const [isRefreshing, setRefresh] = useState(false);
-  // const getPostFeeds = useCallback(() => {
-  //   dispatch(getPostFeedAction());
-  // }, []);
-  // const handleOnRefresh = () => {
-  //   setRefresh(true);
-  //   getPostFeeds();
-  // };
+  const session = useAppSelector((state) => state.settingReducer);
 
   useEffect(() => {
-    if (state.postReaction.length > 0) {
+    if (state.showReactionList && state.postReaction.length > 0) {
       bottomSheetRef2.current?.expand();
     }
-  }, [state.postReaction]);
+  }, [state.postReaction, state.showReactionList]);
+  useEffect(() => {
+    if (state.getPostFeedStatus === "completed") {
+      setRefresh(false);
+    }
+  }, [state.getPostFeedStatus]);
+  const getPostFeeds = useCallback(() => {
+    dispatch(getPostFeedAction());
+  }, []);
+  const handleOnRefresh = () => {
+    setRefresh(true);
+    getPostFeeds();
+  };
+  const navigation = useNavigation<NavigationProp<any>>();
+  const handleNavigationToProfileScreen = (profileId: string) => {
+    bottomSheetRef2.current?.close();
+    dispatch(openReactionList(false));
+    if (profileId === session?.userInfo?.id) {
+      return navigation.navigate(APP_SCREEN_LIST.USER_PROFILE_SCREEN);
+    }
+
+    dispatch(getProfile(profileId));
+    navigation.navigate(APP_SCREEN_LIST.CONNECTION_PROFILE_SCREEN);
+  };
   return (
     <View style={[GlobalStyles.flexOne]}>
       <HomeHeader />
-      <ScrollView style={[GlobalStyles.container, { marginRight: 0, flex: 1 }]}>
-        {DATA.map((item) => renderItems({ item }))}
-      </ScrollView>
+      <EventDismisser>
+        <IOScrollView
+          // contentContainerStyle={{ flex: 1 }}
+          style={[
+            {
+              marginRight: 0,
+              flex: 1,
+              paddingTop: 16,
+              paddingLeft: 0,
+              backgroundColor: colors.white,
+            },
+          ]}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={handleOnRefresh}
+              colors={[colors.primary]} // for android
+              tintColor={colors.primary} // for ios
+            />
+          }
+          rootMargin={{ top: 0 }}
+        >
+          {DATA.map((item) => renderItems({ item }))}
+        </IOScrollView>
+      </EventDismisser>
       <BottomSheet
         ref={bottomSheetRef2}
         index={-1}
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
         backdropComponent={(props: any) => (
-          <BottomSheetBackdrop {...props} pressBehavior={"close"} />
+          <BottomSheetBackdrop
+            {...props}
+            pressBehavior={"close"}
+            onPress={() => dispatch(openReactionList(false))}
+          />
         )}
+        enablePanDownToClose
       >
         <View style={{ flex: 1 }}>
           <ScrollView
@@ -197,7 +259,7 @@ const Home = () => {
           >
             <View style={[GlobalStyles.container, { backgroundColor: "#fff" }]}>
               {state.postReaction.map((item) => (
-                <View
+                <TouchableOpacity
                   style={{
                     flexDirection: "row",
                     marginBottom: 20,
@@ -205,7 +267,12 @@ const Home = () => {
                   }}
                   key={item.id}
                 >
-                  <View style={{ flex: 1, flexDirection: "row", gap: 10 }}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      handleNavigationToProfileScreen(item.user.id)
+                    }
+                    style={{ flex: 1, flexDirection: "row", gap: 10 }}
+                  >
                     <View>
                       <Image
                         source={renderProfilePicture(item)}
@@ -234,11 +301,11 @@ const Home = () => {
                         {moment(item.createdAt).fromNow()}
                       </Text>
                     </View>
-                  </View>
+                  </TouchableOpacity>
                   <View>
                     <Text>{item.reaction}</Text>
                   </View>
-                </View>
+                </TouchableOpacity>
               ))}
             </View>
           </ScrollView>

@@ -1,4 +1,11 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import Input from "../../components/Input/Input";
 import React, { useEffect, useState } from "react";
@@ -12,10 +19,13 @@ import { useNavigation } from "@react-navigation/native";
 import useAppSelector from "../../hooks/useAppSelector";
 import { ISessionState, updateExperience } from "../../reducers/session";
 import { ISettingState } from "../../reducers/settings";
+import { AntDesign } from "@expo/vector-icons";
 import DateFormatter from "../../utils/date-formatter";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import BackButton from "../../components/Navigation/BackButton/BackButton";
 import moment from "moment";
+import { SelectList } from "react-native-dropdown-select-list";
+import { getAllIndustriesAction } from "../../actions/auth";
 
 const SignupExperience = () => {
   const navigation = useNavigation<any>();
@@ -26,7 +36,14 @@ const SignupExperience = () => {
   const [stillWorkHere, setStillWorkHere] = useState(false);
   const [jobTitle, setJobTitle] = useState("");
   const [companyName, setCompanyName] = useState("");
+  const [industry, setIndustry] = useState("");
   const [responsibilities, setResponsibilities] = useState("");
+
+  const settings = useAppSelector((state) => state.settingReducer);
+
+  useEffect(() => {
+    dispatch(getAllIndustriesAction());
+  }, []);
 
   const [errors, setErrors] = useState<{
     startDate: null | string;
@@ -34,12 +51,14 @@ const SignupExperience = () => {
     companyName: string | null;
     jobTitle: string | null;
     responsibilities: string | null;
+    industry: string | null;
   }>({
     startDate: null,
     endDate: null,
     companyName: null,
     jobTitle: null,
     responsibilities: null,
+    industry: null,
   });
 
   useEffect(() => {
@@ -49,34 +68,35 @@ const SignupExperience = () => {
       companyName: null,
       jobTitle: null,
       responsibilities: null,
+      industry: null,
     });
   }, []);
 
   useEffect(() => {
     if (jobTitle.trim() !== "")
       setErrors((state) => ({ ...state, jobTitle: null }));
-    else
-      setErrors((state) => ({ ...state, jobTitle: "Job title is required" }));
+    // else
+    //   setErrors((state) => ({ ...state, jobTitle: "Job title is required" }));
   }, [jobTitle]);
 
   useEffect(() => {
     if (companyName.trim() !== "")
       setErrors((state) => ({ ...state, companyName: null }));
-    else
-      setErrors((state) => ({
-        ...state,
-        companyName: "Company name is required",
-      }));
+    // else
+    //   setErrors((state) => ({
+    //     ...state,
+    //     companyName: "Company name is required",
+    //   }));
   }, [companyName]);
 
   useEffect(() => {
     if (responsibilities.trim() !== "")
       setErrors((state) => ({ ...state, responsibilities: null }));
-    else
-      setErrors((state) => ({
-        ...state,
-        responsibilities: "Please provide responsiblities",
-      }));
+    // else
+    //   setErrors((state) => ({
+    //     ...state,
+    //     responsibilities: "Please provide responsiblities",
+    //   }));
   }, [responsibilities]);
 
   const validateStartDate = () => {
@@ -153,7 +173,7 @@ const SignupExperience = () => {
     if (jobTitle.trim() === "")
       return setErrors((state) => ({
         ...state,
-        companyName: "Job title is Required",
+        jobTitle: "Job title is Required",
       }));
 
     if (startDate.trim() === "")
@@ -168,7 +188,8 @@ const SignupExperience = () => {
         endDate,
         jobTitle,
         companyName,
-        responsiblities: responsibilities,
+        responsibilities: responsibilities,
+        industry,
       })
     );
     navigation.navigate(APP_SCREEN_LIST.SIGNUP_EDUCATION_SCREEN);
@@ -178,105 +199,150 @@ const SignupExperience = () => {
     navigation.navigate(APP_SCREEN_LIST.SIGNUP_EDUCATION_SCREEN);
   };
   return (
-    <View style={[GlobalStyles.container]}>
-      <View style={{ marginBottom: 20 }}>
-        <BackButton title="Experience" />
-      </View>
-      <View style={[GlobalStyles.mb40]}>
-        <Text
-          style={[
-            GlobalStyles.fontInterRegular,
-            GlobalStyles.fontSize13,
-            GlobalStyles.fontWeight700,
-            GlobalStyles.textGrey,
-          ]}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={50}
+      // keyboardShouldPersistTaps={"always"}
+    >
+      <View style={[GlobalStyles.container]}>
+        <View style={{ marginBottom: 20 }}>
+          <BackButton title="Experience" />
+        </View>
+        <View style={[GlobalStyles.mb40]}>
+          <Text
+            style={[
+              GlobalStyles.fontInterRegular,
+              GlobalStyles.fontSize13,
+              GlobalStyles.fontWeight700,
+              GlobalStyles.textGrey,
+            ]}
+          >
+            Add a work experience, you may skip if you don’t have any
+          </Text>
+        </View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={styles.container}
         >
-          Add a work experience, you may skip if you don’t have any
-        </Text>
-      </View>
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-        <View style={[styles.inputDouble]}>
-          <DatePicker
-            onDateChange={(date) =>
-              setStartDate(DateFormatter.format(date, "YYYY-MM-DD"))
-            }
-            placeholder="Start Date"
-            style={styles.inputFlex}
-            errorMessage={errors.startDate}
-          />
-          {!stillWorkHere && (
+          <View style={[styles.inputDouble]}>
             <DatePicker
               onDateChange={(date) =>
-                setEndDate(DateFormatter.format(date, "YYYY-MM-DD"))
+                setStartDate(DateFormatter.format(date, "YYYY-MM-DD"))
               }
-              placeholder="End Date"
+              placeholder="Start Date"
               style={styles.inputFlex}
-              errorMessage={errors.endDate}
+              errorMessage={errors.startDate}
             />
-          )}
-        </View>
-        <View
-          style={[
-            GlobalStyles.mb20,
-            GlobalStyles.displayRow,
-            { alignItems: "center" },
-          ]}
-        >
-          <Checkbox
-            value="STILL_WORK_HERE"
-            accessibilityLabel="choose numbers"
-            onChange={(value) => setStillWorkHere((state) => !state)}
-          />
-          <View style={{ paddingLeft: 8 }}>
-            <Text
-              style={[
-                GlobalStyles.fontInterRegular,
-                GlobalStyles.textGrey,
-                GlobalStyles.fontSize15,
-              ]}
-            >
-              I still work here
-            </Text>
+            {!stillWorkHere && (
+              <DatePicker
+                onDateChange={(date) =>
+                  setEndDate(DateFormatter.format(date, "YYYY-MM-DD"))
+                }
+                placeholder="End Date"
+                style={styles.inputFlex}
+                errorMessage={errors.endDate}
+              />
+            )}
           </View>
-        </View>
-        <View style={[GlobalStyles.mb10]}>
+          <View
+            style={[
+              GlobalStyles.mb20,
+              GlobalStyles.displayRow,
+              { alignItems: "center" },
+            ]}
+          >
+            <Checkbox
+              value="STILL_WORK_HERE"
+              accessibilityLabel="choose numbers"
+              onChange={(value) => setStillWorkHere((state) => !state)}
+            />
+            <View style={{ paddingLeft: 8 }}>
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.textGrey,
+                  GlobalStyles.fontSize15,
+                ]}
+              >
+                I still work here
+              </Text>
+            </View>
+          </View>
+          <View style={[GlobalStyles.mb10]}>
+            <Input
+              value={jobTitle}
+              onChangeText={(text) => setJobTitle(text)}
+              placeholder="Job Title"
+              errorMessage={errors.jobTitle}
+            />
+          </View>
+          <View style={[GlobalStyles.mb10]}>
+            <Input
+              value={companyName}
+              onChangeText={(text) => setCompanyName(text)}
+              placeholder="Company Name"
+              errorMessage={errors.companyName}
+            />
+          </View>
+          {/* <View style={[GlobalStyles.mb10]}>
           <Input
-            value={jobTitle}
-            onChangeText={(text) => setJobTitle(text)}
-            placeholder="Job Title"
-            errorMessage={errors.jobTitle}
+            value={industry}
+            onChangeText={(text) => setIndustry(text)}
+            placeholder="Industry"
+            errorMessage={errors.industry}
           />
+        </View> */}
+          <View style={[GlobalStyles.mb30]}>
+            <SelectList
+              boxStyles={{
+                borderWidth: 0,
+                backgroundColor: colors.white,
+                shadowColor: "#000",
+                shadowOffset: {
+                  width: 0,
+                  height: 2,
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 3.84,
+                elevation: 20,
+              }}
+              save="key"
+              setSelected={(val: string) => setIndustry(val)}
+              data={(settings.industries || []).map((item) => ({
+                key: item.name,
+                value: item.name,
+              }))}
+              placeholder="Industry"
+              fontFamily="Inter-Regular"
+              arrowicon={
+                <AntDesign name="caretdown" size={20} color={colors.primary} />
+              }
+            />
+          </View>
+          <View style={[GlobalStyles.mb10]}>
+            <Input
+              value={responsibilities}
+              onChangeText={(text) => setResponsibilities(text)}
+              placeholder="Responsibilities"
+              multiline
+              errorMessage={errors.responsibilities}
+              inputContainer={{ height: 100, paddingVertical: 8 }}
+            />
+          </View>
+        </ScrollView>
+        <View>
+          <View style={[GlobalStyles.mb20, GlobalStyles.displayRowCenter]}>
+            <TextLink
+              title="Skip For Now"
+              onPress={handleOnSkip}
+              color={colors.black}
+            />
+          </View>
+          <Button title="Continue" onPress={handleOnNextPress} />
         </View>
-        <View style={[GlobalStyles.mb10]}>
-          <Input
-            value={companyName}
-            onChangeText={(text) => setCompanyName(text)}
-            placeholder="Company Name"
-            errorMessage={errors.companyName}
-          />
-        </View>
-        <View style={[GlobalStyles.mb10]}>
-          <Input
-            value={responsibilities}
-            onChangeText={(text) => setResponsibilities(text)}
-            placeholder="Responsibilities"
-            multiline
-            errorMessage={errors.responsibilities}
-            inputContainer={{ height: 100, paddingVertical: 8 }}
-          />
-        </View>
-      </ScrollView>
-      <View>
-        <View style={[GlobalStyles.mb20, GlobalStyles.displayRowCenter]}>
-          <TextLink
-            title="Skip For Now"
-            onPress={handleOnSkip}
-            color={colors.black}
-          />
-        </View>
-        <Button title="Continue" onPress={handleOnNextPress} />
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

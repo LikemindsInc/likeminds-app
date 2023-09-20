@@ -116,6 +116,7 @@ export enum APP_SCREEN_LIST {
   SPACE_PROFILE_SCREEN = "SPACE_PROFILE_SCREEN",
   CONNECTION_PROFILE_SCREEN = "CONNECTION_PROFILE_SCREEN",
   NOTIFICATION_SCREEN = "NOTIFICATION_SCREEN",
+  JOB_FILTER_SCREEN = "JOB_FILTER_SCREEN",
 
   POST_DETAIL = "POST_DETAIL",
 }
@@ -181,4 +182,50 @@ export const JOB_LOCATION = [
   { label: "On Site", value: "on-Site" },
   { label: "Remote", value: "remote" },
   { label: "Hybrid", value: "hybrid" },
+];
+
+export const JOB_DATE = [
+  { label: "Any Time", value: "anytime" },
+  { label: "One Day Ago", value: "oneday" },
+  { label: "One Week Ago", value: "week" },
+  { label: "One Month Ago", value: "month" },
+];
+
+export const TAILOR_JOBS = [
+  { label: "Sponsoring Companies", value: "Sponsoring Companies" },
+  { label: "DI&E Hires", value: "DI&E Hires" },
+  { label: "Disability Hires", value: "Disability Hires" },
+  { label: "Work Life Balance", value: "Work Life Balance" },
+];
+
+export const PENDING_OTP_MESSAGE =
+  "Phone is yet to be veried, Kindly verify your number with the OTP sent to your phone";
+
+export const SENTRY_DNS =
+  "https://3f39a318ea28f52d3e77b88aaed35422@o4505852414787584.ingest.sentry.io/4505858577465344";
+
+export const SCHOOL_DEGREES = [
+  "Bsc",
+  "Msc",
+  "Phd",
+  "Hnd",
+  "Ond",
+  "A-Levels",
+  "Diploma",
+  "Etc",
+];
+
+export const PASSWORD_REGEX =
+  /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+export const MINIMUM_PASSWORD_LENGTH_REGEX = /^.{8}$/;
+export const CONTAINS_UPPERCASE_PASSWORD_REGEX = /^.*[A-Z].*$/;
+export const CONTAINS_LOWERCASE_PASSWORD_REGEX = /^.*[a-z].*$/;
+export const CONTAINS_DIGIT_PASSWORD_REGEX = /.*\d.*/;
+export const CONTAINS_WORD_PASSWORD_REGEX = /^.*[\W_].*$/;
+
+export const UNHANDLED_GLOBAL_ERRORS = [
+  "Email or Password is Incorrect",
+  "Email or password is incorrect",
+  "AxiosError: Request failed with status code 401",
 ];

@@ -6,18 +6,39 @@ import {
   getConnections,
   getRequestConnectionStatus,
   getSingleUserAction,
+  getUserRecommendationByIndustry,
+  getUserRecommendationBySchool,
   getUsers,
+  getUsersBySuggestion,
   requestConnection,
+  undoConnectionRequest,
 } from "../actions/connection";
+import { PURGE } from "redux-persist";
 
 export interface IConnectionState {
   getUsersStatus: IThunkAPIStatus;
   getUsersSuccess: string;
   getUsersError: string;
 
+  getUsersByIndustryStatus: IThunkAPIStatus;
+  getUsersByIndustrySuccess: string;
+  getUsersByIndustryError: string;
+
+  getUserSuggestedStatus: IThunkAPIStatus;
+  getUserSuggestedSuccess: string;
+  getUserSuggestedError: string;
+
+  getUsersBySchoolStatus: IThunkAPIStatus;
+  getUsersBySchoolSuccess: string;
+  getUsersBySchoolError: string;
+
   requestConnectionStatus: IThunkAPIStatus;
   requestConnectionSuccess: string;
   requestConnectionError: string;
+
+  undoConnectionStatus: IThunkAPIStatus;
+  undoConnectionSuccess: string;
+  undoConnectionError: string;
 
   getSingleUserStatus: IThunkAPIStatus;
   getSingleUserSuccess: string;
@@ -36,25 +57,51 @@ export interface IConnectionState {
   getConnectionError: string;
 
   users: IUserData[];
+  usersBySchool: IUserData[];
+  usersByIndustry: IUserData[];
+
+  usersBySuggestions: IUserData[];
+
   profileId: string;
   profile: IUserData | null;
 
   connectionStatus: string | null;
 
   connectionRequests: IConnectionReceivedDTO[];
+
+  connectionRequestId: string | null;
 }
 
 const initialState: IConnectionState = {
   getUsersStatus: "idle",
   getUsersSuccess: "",
   getUsersError: "",
+
+  getUsersBySchoolStatus: "idle",
+  getUsersBySchoolSuccess: "",
+  getUsersBySchoolError: "",
+
+  getUsersByIndustryStatus: "idle",
+  getUsersByIndustrySuccess: "",
+  getUsersByIndustryError: "",
+
+  getUserSuggestedStatus: "idle",
+  getUserSuggestedSuccess: "",
+  getUserSuggestedError: "",
+
   users: [],
+  usersByIndustry: [],
+  usersBySchool: [],
   profileId: "",
   profile: null,
 
   requestConnectionStatus: "idle",
   requestConnectionSuccess: "",
   requestConnectionError: "",
+
+  undoConnectionStatus: "idle",
+  undoConnectionSuccess: "",
+  undoConnectionError: "",
 
   getSingleUserStatus: "idle",
   getSingleUserSuccess: "",
@@ -75,6 +122,9 @@ const initialState: IConnectionState = {
   connectionStatus: null,
 
   connectionRequests: [],
+  usersBySuggestions: [],
+
+  connectionRequestId: null,
 };
 
 const connectionSlice = createSlice({
@@ -96,6 +146,7 @@ const connectionSlice = createSlice({
 
     clearConnectionStatus(state: IConnectionState) {
       state.connectionStatus = "";
+      state.connectionRequestId = null;
     },
 
     clearConnectionsReceived(state: IConnectionState) {
@@ -109,6 +160,9 @@ const connectionSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(PURGE, (state) => {
+      return state;
+    });
     builder.addCase(getUsers.pending, (state) => {
       state.getUsersStatus = "loading";
     });
@@ -119,6 +173,39 @@ const connectionSlice = createSlice({
     builder.addCase(getUsers.rejected, (state, action) => {
       state.getUsersStatus = "failed";
       state.getUsersError = action.payload?.message as string;
+    });
+
+    builder.addCase(getUserRecommendationByIndustry.pending, (state) => {
+      state.getUsersByIndustryStatus = "loading";
+    });
+    builder.addCase(
+      getUserRecommendationByIndustry.fulfilled,
+      (state, action) => {
+        state.usersByIndustry = action.payload.data;
+        state.getUsersByIndustryStatus = "completed";
+      }
+    );
+    builder.addCase(
+      getUserRecommendationByIndustry.rejected,
+      (state, action) => {
+        state.getUsersByIndustryStatus = "failed";
+        state.getUsersByIndustryError = action.payload?.message as string;
+      }
+    );
+
+    builder.addCase(getUserRecommendationBySchool.pending, (state) => {
+      state.getUsersBySchoolStatus = "loading";
+    });
+    builder.addCase(
+      getUserRecommendationBySchool.fulfilled,
+      (state, action) => {
+        state.usersBySchool = action.payload.data;
+        state.getUsersBySchoolStatus = "completed";
+      }
+    );
+    builder.addCase(getUserRecommendationBySchool.rejected, (state, action) => {
+      state.getUsersBySchoolStatus = "failed";
+      state.getUsersBySchoolError = action.payload?.message as string;
     });
 
     builder.addCase(requestConnection.pending, (state) => {
@@ -138,11 +225,36 @@ const connectionSlice = createSlice({
     builder.addCase(getRequestConnectionStatus.fulfilled, (state, action) => {
       state.getConnectionStatus = "completed";
       state.connectionStatus = action.payload.data.status;
+      state.connectionRequestId = action.payload.data.id;
     });
     builder.addCase(getRequestConnectionStatus.rejected, (state, action) => {
       state.getConnectionStatus = "failed";
       state.getConnectionError = action.payload?.message as string;
       state.connectionStatus = null;
+    });
+
+    builder.addCase(undoConnectionRequest.pending, (state) => {
+      state.undoConnectionStatus = "loading";
+    });
+    builder.addCase(undoConnectionRequest.fulfilled, (state, action) => {
+      state.undoConnectionStatus = "completed";
+    });
+    builder.addCase(undoConnectionRequest.rejected, (state, action) => {
+      state.undoConnectionStatus = "failed";
+      state.undoConnectionError = action.payload?.message as string;
+    });
+
+    builder.addCase(getUsersBySuggestion.pending, (state) => {
+      state.getUserSuggestedStatus = "loading";
+    });
+    builder.addCase(getUsersBySuggestion.fulfilled, (state, action) => {
+      state.getUserSuggestedStatus = "completed";
+      state.usersBySuggestions = action.payload.data;
+    });
+    builder.addCase(getUsersBySuggestion.rejected, (state, action) => {
+      state.getUserSuggestedStatus = "failed";
+      state.getUserSuggestedError = action.payload?.message as string;
+      state.usersBySuggestions = [];
     });
 
     builder.addCase(getConnections.pending, (state) => {

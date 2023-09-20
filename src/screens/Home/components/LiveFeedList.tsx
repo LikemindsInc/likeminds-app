@@ -9,76 +9,26 @@ const DATA = [
   {
     id: 90,
     isUserProfile: true,
-    image: require("../../../../assets/image3.png"),
+    image: require("../../../../assets/imageAvatar.jpeg"),
     isLive: false,
     userName: "My Story",
   },
-  // {
-  //   id: 1,
-  //   userName: "Avesta UX Hub",
-  //   image: require("../../../../assets/image6.png"),
-  //   isLive: true,
-  // },
-  // {
-  //   id: 2,
-  //   userName: "Avesta UX Hub",
-  //   image: require("../../../../assets/image5.png"),
-  //   isLive: false,
-  // },
-  // {
-  //   id: 3,
-  //   userName: "Avesta UX Hub",
-  //   image: require("../../../../assets/image7.png"),
-  //   isLive: false,
-  // },
-  // {
-  //   id: 4,
-  //   userName: "Avesta UX Hub",
-  //   image: require("../../../../assets/image3.png"),
-  //   isLive: false,
-  // },
-  // {
-  //   id: 5,
-  //   userName: "Avesta UX Hub",
-  //   image: require("../../../../assets/image5.png"),
-  //   isLive: false,
-  // },
-  // {
-  //   id: 6,
-  //   userName: "Avesta UX Hub",
-  //   image: require("../../../../assets/image7.png"),
-  //   isLive: false,
-  // },
-  // {
-  //   id: 7,
-  //   userName: "Avesta UX Hub",
-  //   image: require("../../../../assets/image6.png"),
-  //   isLive: false,
-  // },
-  // {
-  //   id: 8,
-  //   userName: "Avesta UX Hub",
-  //   image: require("../../../../assets/image5.png"),
-  //   isLive: false,
-  // },
-  // {
-  //   id: 9,
-  //   userName: "Avesta UX Hub",
-  //   image: require("../../../../assets/image7.png"),
-  //   isLive: false,
-  // },
-  // {
-  //   id: 10,
-  //   userName: "Avesta UX Hub",
-  //   image: require("../../../../assets/image3.png"),
-  //   isLive: false,
-  // },
 ];
 
 const LiveFeedList = () => {
   const width = useDimension().width;
+
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        {
+          marginBottom: 0,
+
+          height: 80,
+          justifyContent: "center",
+        },
+      ]}
+    >
       <FlatList
         horizontal
         renderItem={(props) => <LiveFeedItem item={props.item} />}

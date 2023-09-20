@@ -1,4 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Linking,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Button from "../Button/Button";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import { AntDesign } from "@expo/vector-icons";
@@ -8,6 +14,7 @@ import { FC } from "react";
 import moment from "moment";
 import ReadMore from "react-native-read-more-text";
 import Util from "../../utils";
+import Converter from "../../utils/Converters";
 
 interface IProps {
   item: IJobDTO;
@@ -44,6 +51,24 @@ const JobItem: FC<IProps> = ({ item }) => {
         Show less
       </Text>
     );
+  };
+  const handleOnApply = async (url: string) => {
+    try {
+      url = url.startsWith("https://") ? url : `https://${url}`;
+
+      url = url.trim();
+
+      if (!url) return;
+      const supported = await Linking.canOpenURL(url);
+
+      if (supported) {
+        // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+        // by some browser in the mobile
+        await Linking.openURL(url);
+      }
+    } catch (error) {
+      console.log("Error opening Link", error);
+    }
   };
   return (
     <View
@@ -94,12 +119,12 @@ const JobItem: FC<IProps> = ({ item }) => {
               GlobalStyles.fontWeight400,
             ]}
           >
-            {item.jobDescription}
+            {item.jobDescription.trim()}
           </Text>
         </ReadMore>
       </View>
 
-      <View style={[GlobalStyles.flewRow, { marginBottom: 8 }]}>
+      <View style={[GlobalStyles.flewRow, { marginBottom: 8, width: "80%" }]}>
         <View style={{ flex: 1 }}>
           <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>
             Industry
@@ -115,7 +140,7 @@ const JobItem: FC<IProps> = ({ item }) => {
           </Text>
         </View>
 
-        <View style={{ marginRight: 8, flex: 0 }}>
+        <View style={{ flex: 1 }}>
           <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>
             Location
           </Text>
@@ -131,7 +156,7 @@ const JobItem: FC<IProps> = ({ item }) => {
         </View>
       </View>
 
-      <View style={[GlobalStyles.flewRow, { marginBottom: 8 }]}>
+      <View style={[GlobalStyles.flewRow, { marginBottom: 8, width: "80%" }]}>
         <View style={{ flex: 1 }}>
           <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>
             Type
@@ -147,7 +172,7 @@ const JobItem: FC<IProps> = ({ item }) => {
           </Text>
         </View>
 
-        <View style={{ marginRight: 8, flex: 0 }}>
+        <View style={{ flex: 1 }}>
           <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>
             Company
           </Text>
@@ -189,7 +214,7 @@ const JobItem: FC<IProps> = ({ item }) => {
             { fontWeight: "800" },
           ]}
         >
-          Sponsoring Companies, DI&E Hires
+          {item?.tailor?.join(",")}
         </Text>
       </View>
 
@@ -203,18 +228,20 @@ const JobItem: FC<IProps> = ({ item }) => {
             { fontWeight: "800", fontSize: 14, color: "#47D0FD" },
           ]}
         >
-          NGN {Math.ceil(item.salary / 100)}k/year
+          NGN {Converter.formatNumber(item.salary)}/year
         </Text>
       </View>
 
       <View>
         <Text
           style={[
-            GlobalStyles.fontInterRegular,
             { fontSize: 12, fontWeight: "800" },
+            GlobalStyles.textNavyBlue,
+            GlobalStyles.fontInterBlack,
+            { fontWeight: "800" },
           ]}
         >
-          About {item.companyName}
+          About {item.companyName.trim()}
         </Text>
         <Text
           style={[
@@ -222,7 +249,7 @@ const JobItem: FC<IProps> = ({ item }) => {
             { fontSize: 12, fontWeight: "300" },
           ]}
         >
-          {item.companyDescription}
+          {item.companyDescription.trim()}
         </Text>
       </View>
 
@@ -232,24 +259,6 @@ const JobItem: FC<IProps> = ({ item }) => {
           { justifyContent: "space-between", width: 160 },
         ]}
       >
-        <Button
-          type="outline-primary"
-          buttonStyle={{
-            paddingVertical: 0,
-            paddingHorizontal: 0,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          style={{
-            width: "100%",
-            height: 35,
-            marginTop: 8,
-            padding: 8,
-            alignSelf: "flex-start",
-          }}
-          title="Save"
-          onPress={() => {}}
-        />
         <Button
           buttonStyle={{
             paddingVertical: 0,
@@ -265,7 +274,7 @@ const JobItem: FC<IProps> = ({ item }) => {
             alignSelf: "flex-end",
           }}
           title="Apply"
-          onPress={() => {}}
+          onPress={() => handleOnApply(item.applicationLink)}
         />
       </View>
     </View>

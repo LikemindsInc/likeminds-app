@@ -29,17 +29,42 @@ const GET_POST_FEED_REACTIONS = "post:GET_POST_FEED_REACTIONS";
 
 const GET_POST_FEED = "post:GET_POST_FEED";
 const GET_SINGLE_POST_FEED = "post:GET_SINGLE_POST_FEED";
+const UNREACT_TO_POST = "post:UNREACT_TO_POST";
 const CREATE_JOB = "job:CREATE_JOB";
 const GET_JOBS = "job:GET_JOBS";
+const GET_COMMENT_REACTIONS = "comment:GET_COMMENT_REACTIONS";
+const REACT_TO_COMMENT = "comment:REACT_TO_COMMENT";
+const REMOVE_COMMENT_REACTION = "comment:REMOVE_COMMENT_REACTION";
 
-import { Image } from "react-native-compressor";
+import { Image, Video } from "react-native-compressor";
 
 export const createPostAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
   ICreatePostDTO
 >(CREATE_POST, async (agrs: ICreatePostDTO) => {
   const imageAssets = agrs.image || [];
-  const images = [];
+  const videoAssets = agrs.videos || [];
+
+  const images: string[] = [];
+  const videos = [];
+  for (let i = 0; i < videoAssets.length; i++) {
+    const result = await Video.compress(videoAssets[i].uri, {
+      compressionMethod: "auto",
+    });
+
+    const formData = new FormData() as any;
+    formData.append("file", {
+      uri: result,
+      type: videoAssets[i].type,
+      name: videoAssets[i].fileName,
+    });
+
+    const response = await uploadFile(formData);
+
+    const videoUrl = response.data?.data?.url || "";
+
+    videos.push(videoUrl);
+  }
   for (let i = 0; i < imageAssets.length; i++) {
     const result = await Image.compress(imageAssets[i].uri, {
       maxWidth: 1000,
@@ -64,7 +89,7 @@ export const createPostAction = asyncThunkWrapper<
     "/api/post/create",
     {
       content: agrs.content,
-      images,
+      images: [...images, ...videos],
     }
   );
 
@@ -76,7 +101,7 @@ export const getPostFeedAction = asyncThunkWrapper<
   void
 >(GET_POST_FEED, async () => {
   const response = await axiosClient.get<AxiosResponse<any>>(
-    "/api/post/feeds?page=1&limit=1000"
+    "/api/post/feeds?page=1&limit=50"
   );
   return response.data;
 });
@@ -87,6 +112,38 @@ export const getPostReactions = asyncThunkWrapper<
 >(GET_POST_FEED_REACTIONS, async (id) => {
   const response = await axiosClient.get<AxiosResponse<any>>(
     `/api/post/reaction/${id}`
+  );
+  return response.data;
+});
+
+export const getCommentReaction = asyncThunkWrapper<
+  ApiResponseSuccess<IPostReaction[]>,
+  { postId: string; commentId: string }
+>(GET_COMMENT_REACTIONS, async (data) => {
+  const response = await axiosClient.get<AxiosResponse<any>>(
+    `/api/comment/reaction/${data.postId}/${data.commentId}`
+  );
+
+  return response.data;
+});
+
+export const reactToCommentAction = asyncThunkWrapper<
+  ApiResponseSuccess<IPostReaction[]>,
+  { postId: string; commentId: string; reaction: string }
+>(REACT_TO_COMMENT, async (data) => {
+  const response = await axiosClient.post<AxiosResponse<any>>(
+    `/api/comment/reaction/${data.postId}/${data.commentId}`,
+    { reaction: data.reaction }
+  );
+  return response.data;
+});
+
+export const removeCommentReaction = asyncThunkWrapper<
+  ApiResponseSuccess<IPostReaction[]>,
+  { postId: string; commentId: string }
+>(REMOVE_COMMENT_REACTION, async (data) => {
+  const response = await axiosClient.delete<AxiosResponse<any>>(
+    `/api/comment/reaction/${data.postId}/${data.commentId}`
   );
   return response.data;
 });
@@ -117,14 +174,22 @@ export const getJobsAction = asyncThunkWrapper<
 >(GET_JOBS, async (data: any) => {
   let url = "/api/job?page=1&limit=1000";
 
-  if (data) {
-    Object.keys(data).forEach((key) => {
-      if (!data[key] && data[key].trim() === "") return;
+  const { tailor, ...rest } = data;
 
-      url += `&${key}=${data[key]}`;
+  if (rest) {
+    Object.keys(rest).forEach((key) => {
+      if (!rest[key] && rest[key].trim() === "") return;
+
+      url += `&${key}=${rest[key]}`;
     });
   }
-  console.log(url);
+
+  if (tailor) {
+    url += `&tailor=${tailor}`;
+  }
+
+  console.log("url> ", url);
+
   const response = await axiosClient.get<AxiosResponse<any>>(url);
   return response.data;
 });
@@ -144,6 +209,16 @@ export const getPostFeedByIdAction = asyncThunkWrapper<
 >(GET_SINGLE_POST_FEED, async (postId) => {
   const response = await axiosClient.get<AxiosResponse<any>>(
     `/api/post/feeds/${postId}`
+  );
+  return response.data;
+});
+
+export const unReactToPost = asyncThunkWrapper<
+  ApiResponseSuccess<IPostFeed>,
+  string
+>(UNREACT_TO_POST, async (postId) => {
+  const response = await axiosClient.delete<AxiosResponse<any>>(
+    `/api/post/reaction/${postId}`
   );
   return response.data;
 });

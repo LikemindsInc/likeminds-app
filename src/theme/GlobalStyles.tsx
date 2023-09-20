@@ -12,7 +12,6 @@ export const GlobalStyles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    
   },
   textCenter: {
     textAlign: "center",
@@ -178,6 +177,14 @@ export const GlobalStyles = StyleSheet.create({
   },
   menuContainer: {},
   menuItemsCard: {},
+  card: {
+    shadowColor: "gray", // Shadow color
+    shadowOffset: { width: 0, height: 2 }, // Shadow offset
+    shadowOpacity: 0.5, // Shadow opacity
+    shadowRadius: 4, // Shadow radius
+    elevation: 5, // Android elevation (simulates shadow)
+    borderRadius: 8,
+  },
   circleContainer: {},
   drawerContainer: {
     paddingHorizontal: 25,

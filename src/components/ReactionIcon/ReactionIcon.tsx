@@ -1,5 +1,5 @@
 import { IPostFeed } from "@app-model";
-import { FC, useEffect, useMemo } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import colors from "../../theme/colors";
@@ -11,7 +11,12 @@ import {
   showReactionView,
 } from "../../reducers/post_reducer";
 import { GlobalStyles } from "../../theme/GlobalStyles";
-import { getPostFeedAction, reactToPostAction } from "../../actions/post";
+import {
+  getPostFeedAction,
+  getPostReactions,
+  reactToPostAction,
+  unReactToPost,
+} from "../../actions/post";
 import { useToast } from "native-base";
 
 interface Props {
@@ -19,16 +24,15 @@ interface Props {
   handleLikeReactionOnPost: (post: IPostFeed) => void;
   handleOnReactionActivate: (post: IPostFeed) => void;
   isLiked: boolean;
+  isComment?: boolean;
+  commentId?: string;
 }
 
-const ReactionIcon: FC<Props> = ({
-  post,
-  handleLikeReactionOnPost,
-  handleOnReactionActivate,
-  isLiked,
-}) => {
+const ReactionIcon: FC<Props> = ({ post }) => {
   const dispatch = useAppDispatch();
   const state = useAppSelector((state: any) => state.postReducer) as IPostState;
+
+  const [likedIcon, setLikeIcon] = useState<any>(null);
 
   const handleShowReactionView = () => {
     dispatch(showReactionView({ show: true, post }));
@@ -36,40 +40,57 @@ const ReactionIcon: FC<Props> = ({
 
   const REACTIONS = useMemo(() => ["💡", "👏", "😄", "💝", "❤️"], []);
 
+  useEffect(() => {
+    dispatch(getPostReactions(post.id));
+  }, []);
+
   const toast = useToast();
 
+  const data = useAppSelector((state) => state.settingReducer);
+
   useEffect(() => {
-    if (state.reactToPostStatus === "completed") {
-    } else if (state.reactToPostStatus === "failed") {
-      toast.show({
-        description: state.reactToPostError,
-        variant: "contained",
-      });
+    if (state.postReaction.length > 0) {
+      const item = state.postReaction.findLast(
+        (item) => item.user.id === data.userInfo?.id && item.postId === post.id
+      );
+
+      if (item) {
+        // console.log(item.reaction);
+        setLikeIcon(item.reaction);
+      }
     }
-    dispatch(clearPostRactionStatus());
-  }, [state.reactToPostStatus]);
+  }, [state.postReaction]);
 
   const handleReactions = (reaction: string) => {
-    dispatch(reactToPostAction({ postId: post.id, reaction }));
-    dispatch(getPostFeedAction());
+    if (likedIcon === reaction) {
+      setLikeIcon(null);
+      dispatch(unReactToPost(post.id));
+    } else {
+      setLikeIcon(reaction);
+      dispatch(reactToPostAction({ postId: post.id, reaction }));
+    }
     dispatch(showReactionView({ show: false, post: null }));
+    dispatch(getPostFeedAction());
   };
 
   return (
     <View style={styles.containerStyle}>
       <TouchableOpacity
-        onLongPress={handleShowReactionView}
+        // onLongPress={handleShowReactionView}
         onPress={() => {
           if (state.showReactionView)
             dispatch(showReactionView({ show: false, post: null }));
-          else handleLikeReactionOnPost(post);
+          else {
+            handleShowReactionView();
+            // handleLikeReactionOnPost(post);
+          }
         }}
       >
-        <AntDesign
-          name={isLiked ? "heart" : "hearto"}
-          size={24}
-          color={isLiked ? colors.red : colors.navyBlue}
-        />
+        {likedIcon ? (
+          <Text style={{ fontSize: 22 }}>{likedIcon}</Text>
+        ) : (
+          <AntDesign name={"hearto"} size={24} color={colors.navyBlue} />
+        )}
       </TouchableOpacity>
       {state.showReactionView && state.postReacted?.id === post.id && (
         <View style={[GlobalStyles.shadowBox, styles.reactionWrapper]}>

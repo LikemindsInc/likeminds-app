@@ -69,25 +69,25 @@ const PersonalInformation = () => {
   useEffect(() => {
     if (firstName.trim() !== "")
       setErrors((state) => ({ ...state, firstName: null }));
-    else
-      setErrors((state) => ({ ...state, firstName: "First name is required" }));
+    // else
+    //   setErrors((state) => ({ ...state, firstName: "First name is required" }));
   }, [firstName]);
 
   useEffect(() => {
     if (lastName.trim() !== "")
       setErrors((state) => ({ ...state, lastName: null }));
-    else
-      setErrors((state) => ({ ...state, lastName: "Last name is required" }));
+    // else
+    //   setErrors((state) => ({ ...state, lastName: "Last name is required" }));
   }, [lastName]);
 
   useEffect(() => {
     if (bio.trim() !== "") setErrors((state) => ({ ...state, bio: null }));
-    else setErrors((state) => ({ ...state, bio: "Bio is required" }));
+    // else setErrors((state) => ({ ...state, bio: "Bio is required" }));
   }, [bio]);
 
   useEffect(() => {
     if (city.trim() !== "") setErrors((state) => ({ ...state, city: null }));
-    else setErrors((state) => ({ ...state, city: "City is required" }));
+    // else setErrors((state) => ({ ...state, city: "City is required" }));
   }, [city]);
 
   const [resume, setResume] = useState<
@@ -276,7 +276,7 @@ const PersonalInformation = () => {
   );
 };
 
-const FileUploadEmptyIcon = () => {
+export const FileUploadEmptyIcon = () => {
   return (
     <View>
       <View style={[GlobalStyles.displayRowCenter]}>

@@ -12,6 +12,8 @@ import {
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import { TouchableOpacity } from "react-native";
 import { CountryPicker } from "react-native-country-codes-picker";
+import Converter from "../../utils/Converters";
+import { EvilIcons } from "@expo/vector-icons";
 
 export interface ITextInputProps extends TextInputProps {
   inputRef?: React.RefObject<TextInput> | undefined;
@@ -28,7 +30,7 @@ export interface ITextInputProps extends TextInputProps {
   prefixIcon?: JSX.Element;
   suffixElement?: JSX.Element;
   inputContainer?: ViewStyle;
-  mode?: "phone-pad";
+  mode?: "phone-pad" | "currency";
   onCountryCodeSelect?: (value: string) => void;
   errorMessage?: string | null;
 }
@@ -113,6 +115,73 @@ const Input: FC<ITextInputProps> = (props) => {
       </View>
     );
   }
+  if (props.mode && props.mode === "currency") {
+    return (
+      <View style={[styles.inputWrapper, props.inputViewStyle]}>
+        <TouchableOpacity
+          style={[
+            styles.input,
+            { flexDirection: "row", width: "100%", alignItems: "center" },
+            props.contentContainerStyle,
+            props.inputViewStyle,
+          ]}
+          onPress={props.onPress}
+        >
+          <TouchableOpacity
+            style={{
+              marginRight: 10,
+              height: "100%",
+              justifyContent: "center",
+            }}
+          >
+            <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize10,
+                GlobalStyles.textGrey,
+                GlobalStyles.fontWeight400,
+              ]}
+            >
+              NGN {" | "}
+            </Text>
+          </TouchableOpacity>
+          <TextInput
+            returnKeyType="done"
+            {...props}
+            ref={props.inputRef}
+            style={[
+              { flex: 1, height: "100%" },
+              GlobalStyles.inputStyle,
+              props.inputStyle,
+            ]}
+            value={Converter.thousandSeparator(
+              Number(props.value?.trim() === "" ? 0 : props.value?.trim())
+            )}
+            onChangeText={(value) =>
+              props.onChangeText &&
+              props.onChangeText(value.split(",").join(""))
+            }
+          />
+          {props.suffixElement && props.suffixElement}
+        </TouchableOpacity>
+
+        {props.errorMessage && (
+          <View style={[GlobalStyles.pl4]}>
+            <Text
+              style={[
+                GlobalStyles.textRed,
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize10,
+                GlobalStyles.fontWeight700,
+              ]}
+            >
+              {props.errorMessage}
+            </Text>
+          </View>
+        )}
+      </View>
+    );
+  }
   return (
     <View style={[styles.inputWrapper, props.inputViewStyle]}>
       <TouchableOpacity
@@ -128,7 +197,9 @@ const Input: FC<ITextInputProps> = (props) => {
           <View style={{ paddingRight: 8 }}>{props.prefixIcon}</View>
         )}
         <TextInput
-          returnKeyType="done"
+          returnKeyType={
+            props.multiline ? "default" : props.returnKeyType || "done"
+          }
           {...props}
           ref={props.inputRef}
           style={[
@@ -140,7 +211,12 @@ const Input: FC<ITextInputProps> = (props) => {
         {props.suffixElement && props.suffixElement}
       </TouchableOpacity>
       {props.errorMessage && (
-        <View style={[GlobalStyles.pl4]}>
+        <View style={[{ flexDirection: "row", gap: 4, alignItems: "center" }]}>
+          <EvilIcons
+            name="exclamation"
+            size={20}
+            color={GlobalStyles.textRed.color}
+          />
           <Text
             style={[
               GlobalStyles.textRed,

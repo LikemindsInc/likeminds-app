@@ -11,9 +11,9 @@ import Input from "../../components/Input/Input";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import { FC, useEffect, useState } from "react";
 import TextLink from "../../components/TextLink/TextLink";
-import { APP_SCREEN_LIST } from "../../constants";
+import { APP_SCREEN_LIST, PENDING_OTP_MESSAGE } from "../../constants";
 import useAppSelector from "../../hooks/useAppSelector";
-import { ISessionState } from "../../reducers/session";
+import { ISessionState, updatePhoneNumber } from "../../reducers/session";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import { loginUserActionAction } from "../../actions/auth";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
@@ -21,6 +21,7 @@ import { Keyboard } from "react-native";
 import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
 import BackButton from "../../components/Navigation/BackButton/BackButton";
 import { err } from "react-native-svg/lib/typescript/xml";
+import { clearNetworkError } from "../../reducers/errorHanlder";
 
 const IconButton: FC<{ image: any }> = ({ image }) => {
   return (
@@ -55,17 +56,17 @@ const Login = () => {
 
   useEffect(() => {
     setErrors({ email: null, password: null });
-  }, []);
+  }, [email, password]);
 
   useEffect(() => {
     if (email.trim() !== "") setErrors((state) => ({ ...state, email: null }));
-    else setErrors((state) => ({ ...state, email: "Email is required" }));
+    // else setErrors((state) => ({ ...state, email: "Email is required" }));
   }, [email]);
 
   useEffect(() => {
     if (password.trim() !== "")
       setErrors((state) => ({ ...state, password: null }));
-    else setErrors((state) => ({ ...state, password: "Password is required" }));
+    // else setErrors((state) => ({ ...state, password: "Password is required" }));
   }, [password]);
 
   const handleOnLogin = () => {
@@ -78,16 +79,40 @@ const Login = () => {
         password: "Password is Required",
       }));
 
-    dispatch(loginUserActionAction({ email, password }));
+    dispatch(
+      loginUserActionAction({ email: email.trim(), password: password.trim() })
+    );
   };
+
+  const setting = useAppSelector((state) => state.settingReducer);
+
+  const errorReducer = useAppSelector((state) => state.errorReducer);
+
+  useEffect(() => {
+    dispatch(clearNetworkError());
+  }, [email, password]);
 
   useEffect(() => {
     if (session.signingInStatus === "completed") {
+      if (!setting.userInfo?.isVerified) {
+        dispatch(updatePhoneNumber(setting.userInfo?.phone as string));
+        navigation.navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
+
+        return;
+      }
       navigation.navigate(APP_SCREEN_LIST.MAIN_SCREEN);
     } else if (session.signingInStatus === "failed") {
-      console.log(session.signingInError);
     }
   }, [session.signingInStatus]);
+
+  useEffect(() => {
+    setErrors((state) => ({ ...state, password: errorReducer.message }));
+  }, [errorReducer.message]);
+
+  useEffect(() => {
+    if (errorReducer.message === PENDING_OTP_MESSAGE) return;
+    // return navigation.navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
+  }, [errorReducer.message]);
 
   return (
     <View style={[GlobalStyles.container]}>

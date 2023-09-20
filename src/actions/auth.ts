@@ -6,11 +6,14 @@ import {
   IRefreshTokenResponse,
   IRequestOTPEmail,
   IRequestOTPPhone,
+  ISchool,
   ISignUp,
   IUserData,
   IUserProfileData,
   IVerifyOtpPaylod,
   IVerifyPhoneEmailOTP,
+  Industry,
+  ResendOTPDTO,
 } from "@app-model";
 import asyncThunkWrapper from "../helpers/asyncThunkWrapper";
 import { network } from "../config/network.config";
@@ -22,7 +25,7 @@ import Converter from "../utils/Converters";
 import { DocumentResult } from "expo-document-picker";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { APP_SCREEN_LIST } from "../constants";
-import { persistor } from "../store/store";
+import { persistor, store } from "../store/store";
 import { Platform } from "react-native";
 import reportError from "../utils/reportError";
 import { Image } from "react-native-compressor";
@@ -32,6 +35,7 @@ const SIGN_IN = "authentication:SIGN_IN";
 const REFRSH_TOKEN = "authentication:REFRSH_TOKEN";
 const SIGN_OUT = "authentication:SIGN_OUT";
 const SIGNUP = "authentication:SIGNUP";
+const RESEND_OTP = "authentication:RESEND_OTP";
 const VERIFY_OTP = "authentication:VERIFY_OTP";
 const COMPLETE_PROFILE = "authentication:COMPLETE_PROFILE";
 const REQUEST_OTP_EMAIL = "authentication:REQUEST_OTP_EMAIL";
@@ -40,6 +44,13 @@ const CHANGE_PASSWORD_OTP = "authentication:CHANGE_PASSWORD_OTP";
 const VERIFY_PHONE_EMAIL_OTP = "authentication:VERIFY_PHONE_EMAIL_OTP";
 const STORE_OTP_CHANNEL_VALUE = "authentication:STORE_OTP_CHANNEL_VALUE";
 const GET_CURRENT_USER = "authentication:GET_CURRENT_USER";
+const COMPLETE_EDUCATION_PROFILE = "profile:COMPLETE_EDUCATION_PROFILE";
+const COMPLETE_EXPERIENCE_PROFILE = "profile:COMPLETE_EXPERIENCE_PROFILE";
+const COMPLETE_SKILLS_PROFILE = "profile:COMPLETE_SKILLS_PROFILE";
+const COMPLETE_CERTIFICATE_PROFILE = "profile:COMPLETE_CERTIFICATE_PROFILE";
+
+const GET_INDUSTRY = "authentication:GET_INDUSTRY";
+const GET_SCHOOLS = "authentication:GET_SCHOOLS";
 
 export const loginUserActionAction = asyncThunkWrapper<
   ApiResponseSuccess<IUserData>,
@@ -51,6 +62,36 @@ export const loginUserActionAction = asyncThunkWrapper<
   );
 
   console.log(response.data);
+
+  return response.data;
+});
+
+export const resendOTPAction = asyncThunkWrapper<
+  ApiResponseSuccess<any>,
+  ResendOTPDTO
+>(RESEND_OTP, async (agrs: ResendOTPDTO) => {
+  const response = await axiosClient.post<AxiosResponse<any>>(
+    "/api/auth/resend-otp",
+    agrs
+  );
+
+  return response.data;
+});
+
+export const getAllIndustriesAction = asyncThunkWrapper<
+  ApiResponseSuccess<Industry[]>,
+  void
+>(GET_INDUSTRY, async () => {
+  const response = await axiosClient.get<AxiosResponse<any>>("/api/industries");
+
+  return response.data;
+});
+
+export const getAllSchoolAction = asyncThunkWrapper<
+  ApiResponseSuccess<ISchool[]>,
+  void
+>(GET_SCHOOLS, async () => {
+  const response = await axiosClient.get<AxiosResponse<any>>("/api/schools");
 
   return response.data;
 });
@@ -89,6 +130,7 @@ export const signupUserActionAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
   ISignUp
 >(SIGNUP, async (agrs: ISignUp) => {
+  console.log("args> ", agrs);
   const response = await axiosClient.post<AxiosResponse<any>>(
     "/api/auth/sign-up",
     agrs
@@ -169,122 +211,241 @@ export const verifyOTPOnChangePasswordAction = asyncThunkWrapper<
   return response.data;
 });
 
+export const updateEducationProfileAction = asyncThunkWrapper<
+  ApiResponseSuccess<any>,
+  IUserProfileData
+>(COMPLETE_EDUCATION_PROFILE, async (agrs: IUserProfileData) => {
+  const education = store.getState().sessionReducer.profileData.education;
+  const response = await axiosClient.patch<AxiosResponse<any>>(
+    "/api/auth/complete-registration",
+    {
+      education: [
+        {
+          startDate: education[0].startDate,
+          endDate: education[0].endDate,
+          degree: education[0].degree,
+          school: education[0].school,
+        },
+      ],
+    }
+  );
+
+  return response.data;
+});
+
+export const updateExperienceProfileAction = asyncThunkWrapper<
+  ApiResponseSuccess<any>,
+  IUserProfileData
+>(COMPLETE_EXPERIENCE_PROFILE, async (agrs: IUserProfileData) => {
+  const experiences = store.getState().sessionReducer.profileData.experience;
+  const response = await axiosClient.patch<AxiosResponse<any>>(
+    "/api/auth/complete-registration",
+    {
+      experience: [
+        {
+          startDate: experiences[0]?.startDate,
+          endDate: experiences[0]?.endDate,
+          stillWorkHere: experiences[0]?.stillWorkHere,
+          jobTitle: experiences[0]?.jobTitle,
+          companyName: experiences[0]?.companyName,
+          responsibilities: experiences[0]?.responsibilities,
+          industry: experiences[0]?.industry,
+        },
+      ],
+    }
+  );
+
+  return response.data;
+});
+
+export const updateSkillsProfileAction = asyncThunkWrapper<
+  ApiResponseSuccess<any>,
+  IUserProfileData
+>(COMPLETE_SKILLS_PROFILE, async (agrs: IUserProfileData) => {
+  const skills = store.getState().sessionReducer.profileData.skills;
+  const response = await axiosClient.patch<AxiosResponse<any>>(
+    "/api/auth/complete-registration",
+    {
+      skills: skills,
+    }
+  );
+
+  return response.data;
+});
+
+export const updateCertificateProfileAction = asyncThunkWrapper<
+  ApiResponseSuccess<any>,
+  IUserProfileData
+>(COMPLETE_CERTIFICATE_PROFILE, async (agrs: IUserProfileData) => {
+  const certificateFile =
+    store.getState().sessionReducer.profileData.certificates;
+  let certificateFileUrl = "";
+
+  const certificates: { name: string; url: string }[] = [];
+
+  for (const item of certificateFile) {
+    const formData = new FormData() as any;
+    formData.append("file", {
+      uri: item.file.uri,
+      type: item.file.type,
+      name: item.file.name,
+    });
+
+    const response = await uploadFile(formData);
+    certificateFileUrl = response.data?.data?.url || "";
+
+    certificates.push({ name: item.name, url: certificateFileUrl });
+  }
+
+  const response = await axiosClient.patch<AxiosResponse<any>>(
+    "/api/auth/complete-registration",
+    {
+      certificates: certificates,
+    }
+  );
+
+  return response.data;
+});
+
 export const completeUserProfileAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
   IUserProfileData
 >(COMPLETE_PROFILE, async (agrs: IUserProfileData) => {
-  try {
-    console.log("args> ", agrs);
-    const profilePictureFile =
-      agrs.profilePicture as ImagePicker.ImagePickerResult;
-    const certificateFile = agrs
-      .certificates[0] as ImagePicker.ImagePickerResult;
+  const profilePictureFile =
+    agrs.profilePicture as ImagePicker.ImagePickerResult;
 
-    const resumeFile = agrs.personalInformation.resume as FilePickerFormat;
+  const resumeFile = agrs.personalInformation.resume as FilePickerFormat;
 
-    let profileResponseUrl = "";
-    let certificateFileUrl = "";
-    let resumeUrl = "";
+  const certificateFile =
+    store.getState().sessionReducer.profileData.certificates;
 
-    if (
-      profilePictureFile &&
-      profilePictureFile.assets &&
-      profilePictureFile.assets[0].uri
-    ) {
-      console.log(">>>>>>1");
-      const profileImageBlob = Converter.dataURItoBlob(
-        profilePictureFile?.assets ? profilePictureFile.assets[0].uri : ""
-      );
-      const formData = new FormData() as any;
+  let certificateFileUrl = "";
 
-      const file = new File([profileImageBlob], "file");
+  let profileResponseUrl = "";
+  let resumeUrl = "";
 
-      const result = await Image.compress(profilePictureFile.assets[0].uri, {
-        maxWidth: 1000,
-        quality: 0.8,
-      });
-
-      formData.append("file", {
-        uri: result,
-        type: profilePictureFile.assets[0].type,
-        name: profilePictureFile.assets[0].fileName,
-      });
-      const response = await uploadFile(formData);
-
-      profileResponseUrl = response.data?.data?.url || "";
-    }
-
-    if (
-      certificateFile &&
-      certificateFile.assets &&
-      certificateFile.assets[0].uri
-    ) {
-      console.log(">>>>2");
-      const certificateBlob = Converter.dataURItoBlob(
-        certificateFile?.assets ? certificateFile.assets[0].uri : ""
-      );
-      const formData = new FormData() as any;
-      formData.append("file", {
-        uri: certificateFile.assets[0].uri,
-        type: certificateFile.assets[0].type,
-        name: certificateFile.assets[0].fileName,
-      });
-
-      const response = await uploadFile(formData);
-      certificateFileUrl = response.data?.data?.url || "";
-    }
-
-    if (resumeFile && resumeFile.uri) {
-      const formData = new FormData() as any;
-      formData.append("file", {
-        uri: resumeFile.uri,
-        type: resumeFile.type,
-        name: resumeFile.name,
-      });
-
-      const response = await uploadFile(formData);
-      resumeUrl = response.data?.data?.url || "";
-    }
-
-    const response = await axiosClient.patch<AxiosResponse<any>>(
-      "/api/auth/complete-registration",
-      {
-        firstName: agrs.personalInformation.firstName,
-        lastName: agrs.personalInformation.lastName,
-        country: agrs.personalInformation.country,
-        city: agrs.personalInformation.city,
-        countryOfOrigin: agrs.personalInformation.countryOfOrigin,
-        resume: resumeUrl,
-        bio: agrs.personalInformation.bio,
-        experience: [
-          {
-            startDate: agrs.experience[0]?.startDate,
-            endDate: agrs.experience[0]?.endDate,
-            "stillWorkHere?": agrs.experience[0]?.stillWorkHere,
-            jobTitle: agrs.experience[0]?.jobTitle,
-            companyName: agrs.experience[0]?.companyName,
-            responsibilities: agrs.experience[0]?.responsiblities,
-          },
-        ],
-        education: [
-          {
-            startDate: agrs.eduction[0]?.startDate,
-            endDate: agrs.eduction[0]?.endDate,
-            degree: agrs.eduction[0]?.degree,
-            school: agrs.eduction[0]?.school,
-          },
-        ],
-        skills: [],
-        certificates: [certificateFileUrl],
-        profilePicture: profileResponseUrl,
-      }
+  if (
+    profilePictureFile &&
+    profilePictureFile.assets &&
+    profilePictureFile.assets[0].uri
+  ) {
+    console.log(">>>>>>1");
+    const profileImageBlob = Converter.dataURItoBlob(
+      profilePictureFile?.assets ? profilePictureFile.assets[0].uri : ""
     );
+    const formData = new FormData() as any;
 
-    return response.data;
-  } catch (error: any) {
-    console.log("error> ", error?.response || error);
-    throw new Error(error?.message || error);
+    const file = new File([profileImageBlob], "file");
+
+    const result = await Image.compress(profilePictureFile.assets[0].uri, {
+      maxWidth: 1000,
+      quality: 0.8,
+    });
+
+    formData.append("file", {
+      uri: result,
+      type: profilePictureFile.assets[0].type,
+      name: profilePictureFile.assets[0].fileName,
+    });
+    const response = await uploadFile(formData);
+
+    profileResponseUrl = response.data?.data?.url || "";
   }
+
+  const certificates: { name: string; url: string }[] = [];
+
+  for (const item of certificateFile) {
+    const formData = new FormData() as any;
+    formData.append("file", {
+      uri: item.file.uri,
+      type: item.file.type,
+      name: item.file.name,
+    });
+
+    const response = await uploadFile(formData);
+    certificateFileUrl = response.data?.data?.url || "";
+
+    certificates.push({ name: item.name, url: certificateFileUrl });
+  }
+
+  if (resumeFile && resumeFile.uri) {
+    const formData = new FormData() as any;
+    formData.append("file", {
+      uri: resumeFile.uri,
+      type: resumeFile.type,
+      name: resumeFile.name,
+    });
+
+    const response = await uploadFile(formData);
+    resumeUrl = response.data?.data?.url || "";
+  }
+
+  console.log("data> ", {
+    firstName: agrs.personalInformation.firstName,
+    lastName: agrs.personalInformation.lastName,
+    country: agrs.personalInformation.country,
+    city: agrs.personalInformation.city,
+    countryOfOrigin: agrs.personalInformation.countryOfOrigin,
+    resume: resumeUrl,
+    bio: agrs.personalInformation.bio,
+    experience: [
+      {
+        startDate: agrs.experience[0]?.startDate,
+        endDate: agrs.experience[0]?.endDate,
+        "stillWorkHere?": agrs.experience[0]?.stillWorkHere,
+        jobTitle: agrs.experience[0]?.jobTitle,
+        companyName: agrs.experience[0]?.companyName,
+        responsibilities: agrs.experience[0]?.responsibilities,
+      },
+    ],
+    education: [
+      {
+        startDate: agrs.education[0]?.startDate,
+        endDate: agrs.education[0]?.endDate,
+        degree: agrs.education[0]?.degree,
+        school: agrs.education[0]?.school,
+      },
+    ],
+    skills: agrs.skills,
+    certificates: certificates,
+    profilePicture: profileResponseUrl,
+  });
+
+  const response = await axiosClient.patch<AxiosResponse<any>>(
+    "/api/auth/complete-registration",
+    {
+      firstName: agrs.personalInformation.firstName,
+      lastName: agrs.personalInformation.lastName,
+      country: agrs.personalInformation.country,
+      city: agrs.personalInformation.city,
+      countryOfOrigin: agrs.personalInformation.countryOfOrigin,
+      resume: resumeUrl,
+      bio: agrs.personalInformation.bio,
+      experience: [
+        {
+          startDate: agrs.experience[0]?.startDate,
+          endDate: agrs.experience[0]?.endDate,
+          "stillWorkHere?": agrs.experience[0]?.stillWorkHere,
+          jobTitle: agrs.experience[0]?.jobTitle,
+          companyName: agrs.experience[0]?.companyName,
+          responsibilities: agrs.experience[0]?.responsibilities,
+        },
+      ],
+      education: [
+        {
+          startDate: agrs.education[0]?.startDate,
+          endDate: agrs.education[0]?.endDate,
+          degree: agrs.education[0]?.degree,
+          school: agrs.education[0]?.school,
+        },
+      ],
+      skills: agrs.skills,
+      certificates: [{ name: "Certificate", url: certificateFileUrl }],
+      profilePicture: profileResponseUrl,
+    }
+  );
+
+  return response.data;
 });
 
 export const uploadFile = async (payload: FormData) => {

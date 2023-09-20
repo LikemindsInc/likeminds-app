@@ -12,21 +12,32 @@ import Input from "../../components/Input/Input";
 import colors, { addOpacity } from "../../theme/colors";
 import { Entypo, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import { useEffect, useState } from "react";
-import { useToast } from "native-base";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
 import { IPostState, clearCreatePostStatus } from "../../reducers/post_reducer";
 import { createPostAction } from "../../actions/post";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import {
+  NavigationProp,
+  useFocusEffect,
+  useNavigation,
+} from "@react-navigation/native";
 import { APP_SCREEN_LIST } from "../../constants";
 import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
+import { Video, ResizeMode } from "expo-av";
+import { useToast } from "react-native-toast-notifications";
 
 const CreatePost = () => {
   const [images, setImages] = useState<ImagePicker.ImagePickerAsset[]>([]);
   const [content, setContent] = useState("");
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NavigationProp<any>>();
+  const video = useRef(null);
+  const [videoSelected, setVideoSelected] = useState<
+    ImagePicker.ImagePickerAsset[]
+  >([]);
+  const [status, setStatus] = useState({});
   const postState = useAppSelector(
     (state: any) => state.postReducer
   ) as IPostState;
@@ -39,50 +50,85 @@ const CreatePost = () => {
         aspect: [4, 3],
         quality: 1,
       });
+      if (!result.canceled) {
+        setVideoSelected([]);
+        setImages([...images, ...result.assets].splice(0, 10));
+      }
+    } catch (error) {}
+  };
+  const handleVideoSelect = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+        allowsMultipleSelection: false,
+        aspect: [4, 3],
+        quality: 1,
+      });
       console.log("result cancelled> ", result.canceled);
       if (!result.canceled) {
-        console.log("called in here");
-        setImages([...result.assets]);
+        console.log(result);
+        setImages([]);
+        setVideoSelected(result.assets);
       }
     } catch (error) {}
   };
   const handleCreatePost = () => {
-    if (content.trim() === "")
-      return toast.show({
-        description: "Please provide your post content",
-        variant: "contained",
-      });
+    // if (content.trim() === "")
+    //   return toast.show({
+    //     description: "Please provide your post content",
+    //     variant: "contained",
+    //   });
 
-    dispatch(createPostAction({ content, image: images }));
+    dispatch(
+      createPostAction({
+        content: content.trim(),
+        image: images,
+        videos: videoSelected,
+      })
+    );
   };
 
   useEffect(() => {
     if (postState.createPostStatus === "completed") {
       setContent("");
-      toast.show({
-        description: "Post creared successfully",
-        variant: "contained",
-      });
+      // toast.show({
+      //   description: "Post creared successfully",
+      //   variant: "contained",
+      // });
       setImages([]);
+      setVideoSelected([]);
       navigation.navigate(APP_SCREEN_LIST.HOME_SCREEN);
       dispatch(clearCreatePostStatus());
     } else if (postState.createPostStatus === "failed") {
-      toast.show({
-        description: postState.createPostError,
-        variant: "contained",
+      toast.show(postState.createPostError as string, {
+        animationType: "slide-in",
+        swipeEnabled: true,
       });
     }
   }, [postState.createPostStatus]);
 
   useEffect(() => {
+    navigation.addListener("blur", clearState);
     return () => {
-      setImages([]);
+      navigation.removeListener("blur", clearState);
     };
   }, []);
+
+  const clearState = () => {
+    setImages([]);
+    setVideoSelected([]);
+  };
+
   return (
     <KeyboardDismisser>
       <View style={[GlobalStyles.container]}>
-        <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
+        <View
+          style={[
+            GlobalStyles.mb20,
+            GlobalStyles.mt20,
+            { flexDirection: "row", justifyContent: "space-between" },
+          ]}
+        >
           <Text
             style={[
               GlobalStyles.fontInterMedium,
@@ -92,6 +138,23 @@ const CreatePost = () => {
           >
             New Post
           </Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+              clearState();
+            }}
+          >
+            <Text
+              style={[
+                GlobalStyles.fontInterMedium,
+                GlobalStyles.fontSize15,
+                GlobalStyles.fontWeight700,
+                { textTransform: "uppercase" },
+              ]}
+            >
+              x
+            </Text>
+          </TouchableOpacity>
         </View>
         <View style={[GlobalStyles.flexOne]}>
           <Input
@@ -109,6 +172,9 @@ const CreatePost = () => {
               }
             >
               <FontAwesome5 name="toolbox" size={24} color={colors.navyBlue} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleVideoSelect}>
+              <Entypo name="video-camera" size={24} color={colors.navyBlue} />
             </TouchableOpacity>
             <TouchableOpacity onPress={handleMediaSelect}>
               <FontAwesome name="photo" size={24} color={colors.navyBlue} />
@@ -131,6 +197,21 @@ const CreatePost = () => {
                 );
               })}
             </View>
+            {images.length > 0 ? null : videoSelected.length > 0 ? (
+              <View>
+                <Video
+                  ref={video}
+                  style={{ width: 150, height: 150 }}
+                  source={{
+                    uri: videoSelected[0].uri,
+                  }}
+                  useNativeControls
+                  resizeMode={ResizeMode.CONTAIN}
+                  isLooping
+                  onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+                />
+              </View>
+            ) : null}
           </ScrollView>
         </View>
         <Button

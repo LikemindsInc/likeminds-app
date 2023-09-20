@@ -1,6 +1,7 @@
 import {
   Animated,
   ImageBackground,
+  Linking,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -27,6 +28,7 @@ import {
   getRequestConnectionStatus,
   getSingleUserAction,
   requestConnection,
+  undoConnectionRequest,
 } from "../../actions/connection";
 import { useToast } from "react-native-toast-notifications";
 import { clearRequestConnection } from "../../reducers/connection";
@@ -34,6 +36,8 @@ import UserExperience from "./components/UserExperience";
 import { Title } from "react-native-paper";
 import ConnectionPostFeed from "./components/ConnectionPostFeed";
 import ReadMore from "react-native-read-more-text";
+import moment from "moment";
+import renderExperienceTimelineView from "./components/renderExperienceTimelineView";
 
 const ConnectionProfile = () => {
   const height = useDimension().height;
@@ -46,21 +50,6 @@ const ConnectionProfile = () => {
   ) as ISettingState;
 
   const selector = useAppSelector((state) => state.connectionReducer);
-
-  const toast = useToast();
-
-  useEffect(() => {
-    if (selector.requestConnectionStatus === "completed") {
-      toast.show("Connection sent successfully", {
-        placement: "top",
-        type: "normal",
-        animationType: "slide-in",
-      });
-      getStatus();
-    }
-
-    dispatch(clearRequestConnection());
-  }, [selector.requestConnectionStatus]);
 
   const getStatus = useCallback(() => {
     if (!selector.profile?.id) return;
@@ -76,9 +65,21 @@ const ConnectionProfile = () => {
     getUserProfile();
   }, [getStatus]);
 
+  const handleUndoConnectionRequest = () => {
+    if (!selector.connectionRequestId) return;
+
+    dispatch(undoConnectionRequest(selector.connectionRequestId));
+  };
+
   const handleConnectToUser = () => {
     dispatch(requestConnection(selector.profile?.id as string));
   };
+
+  useEffect(() => {
+    if (selector.undoConnectionStatus === "completed") {
+      dispatch(getRequestConnectionStatus(selector.profile?.id as string));
+    }
+  }, [selector.undoConnectionStatus]);
 
   const getButtonType = () => {
     if (!selector.connectionStatus) return "primary";
@@ -147,6 +148,39 @@ const ConnectionProfile = () => {
     );
   };
 
+  const renderConnectionButton = () => {
+    if (selector.requestConnectionStatus === "loading")
+      return (
+        <Button
+          loading={selector.requestConnectionStatus === "loading"}
+          disabled={requestButtonDisabled()}
+          containerStyle={{ flex: 1 }}
+          type={getButtonType()}
+          title={getText()}
+        />
+      );
+    if (selector.connectionStatus === "pending") {
+      return (
+        <Button
+          onPress={handleUndoConnectionRequest}
+          containerStyle={{ flex: 1 }}
+          type={"tertiary"}
+          title={getText()}
+          loading={selector.undoConnectionStatus === "loading"}
+        />
+      );
+    }
+    return (
+      <Button
+        onPress={handleConnectToUser}
+        containerStyle={{ flex: 1 }}
+        type={getButtonType()}
+        title={getText()}
+        loading={selector.getConnectionStatus === "loading"}
+      />
+    );
+  };
+
   return (
     <View
       style={[
@@ -154,204 +188,202 @@ const ConnectionProfile = () => {
         { paddingHorizontal: 0, paddingVertical: 0 },
       ]}
     >
-      <View>
-        <ImageBackground
-          resizeMode="cover"
-          source={
-            selector.profile?.profilePicture &&
-            selector.profile.profilePicture.trim() !== ""
-              ? { uri: selector.profile.profilePicture }
-              : require("../../../assets/image9.png")
-          }
-          style={[
-            styles.imageBg,
-            height * 0.4 > 240
-              ? { height: 240 }
-              : { height: height * 0.4, position: "relative" },
-          ]}
-        >
-          <View
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              height: "100%",
-              width: "100%",
-              backgroundColor: "rgba(0,0,0,0.5)",
-            }}
-          ></View>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={[styles.imageHeaderWrapper]}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        // style={styles.contentWrapper}
+      >
+        <View>
+          <ImageBackground
+            resizeMode="cover"
+            source={
+              selector.profile?.profilePicture &&
+              selector.profile.profilePicture.trim() !== ""
+                ? { uri: selector.profile.profilePicture }
+                : require("../../../assets/image9.png")
+            }
+            style={[
+              styles.imageBg,
+              height * 0.4 > 240
+                ? { height: 240 }
+                : { height: height * 0.4, position: "relative" },
+            ]}
           >
-            <AntDesign
-              name="arrowleft"
-              size={24}
+            <View
               style={{
-                textShadowColor: "rgba(0, 0, 0, 0.75)",
-                textShadowRadius: 10,
-                textShadowOffset: { width: 2, height: 2 },
-                color: colors.white,
+                position: "absolute",
+                top: 0,
+                left: 0,
+                height: "100%",
+                width: "100%",
+                backgroundColor: "rgba(0,0,0,0.5)",
               }}
-            />
-          </TouchableOpacity>
-        </ImageBackground>
-      </View>
-      <ScrollView style={styles.contentWrapper}>
-        <View
-          style={[
-            GlobalStyles.flewRow,
-            GlobalStyles.mb10,
-            { justifyContent: "space-between" },
-          ]}
-        >
-          <View>
-            <Text
-              style={[
-                GlobalStyles.fontWeight700,
-                GlobalStyles.fontInterMedium,
-                GlobalStyles.fontSize15,
-                GlobalStyles.textNavyBlue,
-              ]}
+            ></View>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={[styles.imageHeaderWrapper]}
             >
-              {selector.profile?.firstName || "John"}{" "}
-              {selector.profile?.lastName || "Doe"}
-            </Text>
-          </View>
-          <TouchableOpacity>
-            <Feather name="more-vertical" size={24} color="black" />
-          </TouchableOpacity>
+              <AntDesign
+                name="arrowleft"
+                size={24}
+                style={{
+                  textShadowColor: "rgba(0, 0, 0, 0.75)",
+                  textShadowRadius: 10,
+                  textShadowOffset: { width: 2, height: 2 },
+                  color: colors.white,
+                }}
+              />
+            </TouchableOpacity>
+          </ImageBackground>
         </View>
-        <View style={[GlobalStyles.mb20]}>
-          <Text
+        <View style={styles.contentWrapper}>
+          <View
             style={[
-              GlobalStyles.fontInterRegular,
-              GlobalStyles.fontSize15,
-              GlobalStyles.textPrimary,
-              GlobalStyles.fontWeight400,
+              GlobalStyles.flewRow,
               GlobalStyles.mb10,
+              { justifyContent: "space-between" },
             ]}
           >
-            {selector.profile?.experience[0]?.jobTitle}
-          </Text>
-          <Text
-            style={[
-              GlobalStyles.fontInterRegular,
-              GlobalStyles.fontSize15,
-              GlobalStyles.textPrimary,
-              GlobalStyles.fontWeight400,
-              GlobalStyles.mb10,
-            ]}
-          >
-            From {selector.profile?.city}
-            {selector.profile?.country}
-            {selector.profile?.countryOfOrigin}.
-          </Text>
-          <ReadMore
-            renderTruncatedFooter={_renderTruncatedFooter}
-            renderRevealedFooter={_renderRevealedFooter}
-            numberOfLines={3}
-          >
+            <View>
+              <Text
+                style={[
+                  GlobalStyles.fontWeight700,
+                  GlobalStyles.fontInterMedium,
+                  GlobalStyles.fontSize15,
+                  GlobalStyles.textNavyBlue,
+                ]}
+              >
+                {selector.profile?.firstName}
+                {selector.profile?.lastName}
+              </Text>
+            </View>
+            <TouchableOpacity>
+              <Feather name="more-vertical" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+          <View style={[GlobalStyles.mb20]}>
             <Text
               style={[
                 GlobalStyles.fontInterRegular,
                 GlobalStyles.fontSize13,
-                GlobalStyles.textGrey,
+                GlobalStyles.textPrimary,
                 GlobalStyles.fontWeight400,
                 GlobalStyles.mb10,
               ]}
             >
-              {selector.profile?.bio}
-            </Text>
-          </ReadMore>
-        </View>
-        <View style={[GlobalStyles.flewRow, GlobalStyles.mb30, { gap: 20 }]}>
-          <View style={styles.boxSummary}>
-            <Text
-              style={[
-                GlobalStyles.fontInterBlack,
-                GlobalStyles.fontSize15,
-                GlobalStyles.textPrimary,
-                GlobalStyles.fontWeight700,
-                GlobalStyles.textNavyBlue,
-              ]}
-            >
-              0
+              {selector.profile?.experience[0]?.jobTitle}
             </Text>
             <Text
               style={[
                 GlobalStyles.fontInterRegular,
-                GlobalStyles.fontSize10,
+                GlobalStyles.fontSize13,
                 GlobalStyles.textPrimary,
                 GlobalStyles.fontWeight400,
-                GlobalStyles.textGrey,
+                GlobalStyles.mb10,
               ]}
             >
-              Network
+              From {selector.profile?.city}
+              {selector.profile?.country}
+              {selector.profile?.countryOfOrigin}.
             </Text>
+            <ReadMore
+              renderTruncatedFooter={_renderTruncatedFooter}
+              renderRevealedFooter={_renderRevealedFooter}
+              numberOfLines={3}
+            >
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textGrey,
+                  GlobalStyles.fontWeight400,
+                  GlobalStyles.mb10,
+                ]}
+              >
+                {selector.profile?.bio}
+              </Text>
+            </ReadMore>
           </View>
-          <View style={styles.boxSummary}>
-            <Text
-              style={[
-                GlobalStyles.fontInterBlack,
-                GlobalStyles.fontSize15,
-                GlobalStyles.textPrimary,
-                GlobalStyles.fontWeight700,
-                GlobalStyles.textNavyBlue,
-              ]}
-            >
-              {state.userInfo?.followingCount || 0}
-            </Text>
-            <Text
-              style={[
-                GlobalStyles.fontInterRegular,
-                GlobalStyles.fontSize10,
-                GlobalStyles.textPrimary,
-                GlobalStyles.fontWeight400,
-                GlobalStyles.textGrey,
-              ]}
-            >
-              Following
-            </Text>
+          <View style={[GlobalStyles.flewRow, GlobalStyles.mb30, { gap: 20 }]}>
+            <View style={styles.boxSummary}>
+              <Text
+                style={[
+                  GlobalStyles.fontInterBlack,
+                  GlobalStyles.fontSize15,
+                  GlobalStyles.textPrimary,
+                  GlobalStyles.fontWeight700,
+                  GlobalStyles.textNavyBlue,
+                ]}
+              >
+                0
+              </Text>
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize10,
+                  GlobalStyles.textPrimary,
+                  GlobalStyles.fontWeight400,
+                  GlobalStyles.textGrey,
+                ]}
+              >
+                Network
+              </Text>
+            </View>
+            <View style={styles.boxSummary}>
+              <Text
+                style={[
+                  GlobalStyles.fontInterBlack,
+                  GlobalStyles.fontSize15,
+                  GlobalStyles.textPrimary,
+                  GlobalStyles.fontWeight700,
+                  GlobalStyles.textNavyBlue,
+                ]}
+              >
+                {state.userInfo?.followingCount || 0}
+              </Text>
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize10,
+                  GlobalStyles.textPrimary,
+                  GlobalStyles.fontWeight400,
+                  GlobalStyles.textGrey,
+                ]}
+              >
+                Following
+              </Text>
+            </View>
+            <View style={styles.boxSummary}>
+              <Text
+                style={[
+                  GlobalStyles.fontInterBlack,
+                  GlobalStyles.fontSize15,
+                  GlobalStyles.textPrimary,
+                  GlobalStyles.fontWeight700,
+                  GlobalStyles.textNavyBlue,
+                ]}
+              >
+                {state.userInfo?.postCount || 0}
+              </Text>
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize10,
+                  GlobalStyles.textPrimary,
+                  GlobalStyles.fontWeight400,
+                  GlobalStyles.textGrey,
+                ]}
+              >
+                Post
+              </Text>
+            </View>
           </View>
-          <View style={styles.boxSummary}>
-            <Text
-              style={[
-                GlobalStyles.fontInterBlack,
-                GlobalStyles.fontSize15,
-                GlobalStyles.textPrimary,
-                GlobalStyles.fontWeight700,
-                GlobalStyles.textNavyBlue,
-              ]}
-            >
-              {state.userInfo?.postCount || 0}
-            </Text>
-            <Text
-              style={[
-                GlobalStyles.fontInterRegular,
-                GlobalStyles.fontSize10,
-                GlobalStyles.textPrimary,
-                GlobalStyles.fontWeight400,
-                GlobalStyles.textGrey,
-              ]}
-            >
-              Post
-            </Text>
+          <View style={[GlobalStyles.flewRow, GlobalStyles.mb30, { gap: 20 }]}>
+            {renderConnectionButton()}
+            <Button type="cancel" containerStyle={{ flex: 1 }} title="Chat" />
           </View>
-        </View>
-        <View style={[GlobalStyles.flewRow, GlobalStyles.mb30, { gap: 20 }]}>
-          <Button
-            loading={selector.requestConnectionStatus === "loading"}
-            disabled={requestButtonDisabled()}
-            onPress={handleConnectToUser}
-            containerStyle={{ flex: 1 }}
-            type={getButtonType()}
-            title={getText()}
-          />
-          <Button type="cancel" containerStyle={{ flex: 1 }} title="Chat" />
-        </View>
-        <View style={{ height: 600 }}>
-          <TabViewExample />
+          <View style={{ height: 600 }}>
+            <TabViewExample />
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -370,25 +402,335 @@ const FirstRoute = () => {
   }, [getUserProfile]);
 
   const filterExperience = () => {
-    return (
+    const timeline =
       selector.profile?.experience
         .filter(
           (item) =>
             item.companyName !== "" &&
-            item.responsiblities?.trim() !== "" &&
+            item.responsibilities?.trim() !== "" &&
             item.jobTitle?.trim() !== ""
         )
         .map((item) => ({
-          title: item.companyName,
-          description: item.jobTitle,
-        })) || []
-    );
+          title: (
+            <View
+              style={{
+                justifyContent: "space-between",
+                flexDirection: "row",
+                width: "100%",
+              }}
+            >
+              <Text
+                style={[
+                  GlobalStyles.fontInterBlack,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textNavyBlue,
+                ]}
+              >
+                {item.companyName}
+              </Text>
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textGrey,
+                  GlobalStyles.fontWeight700,
+                ]}
+              >
+                {item.stillWorkHere ? (
+                  `${moment(item.startDate).format("MMM YYYY")} - PRESENT`
+                ) : (
+                  <Text>
+                    {moment(item.startDate).format("MMM YYYY")} -{" "}
+                    {moment(item.endDate).format("MMM YYYY")}
+                  </Text>
+                )}
+              </Text>
+            </View>
+          ),
+          description: (
+            <View style={[{ marginTop: -5 }]}>
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textPrimary,
+                  GlobalStyles.mb10,
+                  GlobalStyles.mt10,
+                ]}
+              >
+                {item.jobTitle}
+              </Text>
+
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textGrey,
+                  GlobalStyles.mb10,
+                ]}
+              >
+                {item.responsibilities}
+              </Text>
+            </View>
+          ),
+        })) ||
+      renderExperienceTimelineView({
+        showExperienceModal: null,
+        title: "Experience",
+        actionTitle: "Add Experience",
+      });
+
+    return [
+      {
+        title: (
+          <View
+            style={{
+              justifyContent: "space-between",
+              flexDirection: "row",
+              width: "100%",
+            }}
+          >
+            <Text
+              style={[
+                GlobalStyles.fontInterBlack,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textNavyBlue,
+                GlobalStyles.mb10,
+              ]}
+            >
+              Experience
+            </Text>
+          </View>
+        ),
+
+        description: [
+          ...timeline.map((item) => (
+            <View style={{ marginBottom: 10 }}>
+              {item.title}
+              {item.description}
+            </View>
+          )),
+        ],
+      },
+    ];
+  };
+
+  const filterEducatio = () => {
+    const timeline =
+      selector.profile?.education.map((item) => ({
+        title: (
+          <View
+            style={{
+              justifyContent: "space-between",
+              flexDirection: "row",
+              width: "100%",
+            }}
+          >
+            <Text
+              style={[
+                GlobalStyles.fontInterBlack,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textNavyBlue,
+              ]}
+            ></Text>
+            <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textGrey,
+                GlobalStyles.fontWeight700,
+              ]}
+            >
+              <Text>
+                {moment(item.startDate).format("MMM YYYY")} -{" "}
+                {moment(item.endDate).format("MMM YYYY")}
+              </Text>
+            </Text>
+          </View>
+        ),
+        description: (
+          <View style={[{ marginTop: -5 }]}>
+            <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textPrimary,
+                GlobalStyles.mb10,
+                GlobalStyles.mt10,
+              ]}
+            >
+              {item.degree}
+            </Text>
+
+            <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textGrey,
+                GlobalStyles.mb10,
+              ]}
+            >
+              {item.school}
+            </Text>
+          </View>
+        ),
+      })) ||
+      renderExperienceTimelineView({
+        showExperienceModal: null,
+        title: "Education",
+        actionTitle: "Add Education",
+      });
+
+    return [
+      {
+        title: (
+          <View
+            style={{
+              justifyContent: "space-between",
+              flexDirection: "row",
+              width: "100%",
+            }}
+          >
+            <Text
+              style={[
+                GlobalStyles.fontInterBlack,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textNavyBlue,
+                GlobalStyles.mb10,
+              ]}
+            >
+              Education
+            </Text>
+          </View>
+        ),
+
+        description: timeline.map((item) => (
+          <View style={{ marginBottom: 10 }}>{item.description}</View>
+        )),
+      },
+    ];
+  };
+
+  const handleFileDownload = async (url: string) => {
+    try {
+      if (!(url.startsWith("https") || url.startsWith("http"))) return;
+
+      url = url.startsWith("https://") ? url : `https://${url}`;
+
+      url = url.trim();
+
+      const supported = await Linking.canOpenURL(url);
+
+      if (supported) {
+        await Linking.openURL(url);
+      }
+    } catch (error) {
+      console.log("Error opening Link", error);
+    }
+  };
+
+  const filterCertificates = () => {
+    const timeline =
+      selector.profile?.certificates.map((item) => ({
+        title: (
+          <View
+            style={{
+              justifyContent: "space-between",
+              flexDirection: "row",
+              width: "100%",
+              marginBottom: 10,
+            }}
+          ></View>
+        ),
+        description: (
+          <View style={[{ marginBottom: 10 }]}>
+            <TouchableOpacity
+              style={{ flex: 1, flexDirection: "row", gap: 12 }}
+              onPress={() => handleFileDownload(item.url)}
+            >
+              <View
+                style={{
+                  backgroundColor: colors.navyBlue,
+                  width: 40,
+                  height: 40,
+                  borderRadius: 4,
+                  paddingHorizontal: 8,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={[
+                    GlobalStyles.fontInterBlack,
+                    GlobalStyles.fontSize10,
+                    { color: colors.white },
+                  ]}
+                >
+                  PDF
+                </Text>
+              </View>
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textGrey,
+                  GlobalStyles.mb10,
+                  GlobalStyles.mt10,
+                ]}
+              >
+                {item.name}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ),
+      })) || [];
+
+    return [
+      {
+        title: (
+          <View
+            style={{
+              justifyContent: "space-between",
+              flexDirection: "row",
+              width: "100%",
+            }}
+          >
+            <Text
+              style={[
+                GlobalStyles.fontInterBlack,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textNavyBlue,
+                GlobalStyles.mb10,
+              ]}
+            >
+              Certificate
+            </Text>
+          </View>
+        ),
+
+        description: timeline.map((item) => (
+          <View style={{ marginBottom: 10 }}>{item.description}</View>
+        )),
+      },
+    ];
   };
 
   return (
     <View style={{ flex: 1, marginTop: 20 }}>
       {filterExperience().length > 0 && (
-        <UserExperience data={filterExperience()} />
+        <UserExperience
+          data={[
+            ...filterExperience(),
+
+            ...filterEducatio(),
+            {
+              title: "Skills",
+              description: selector.profile?.skills.join(","),
+            },
+
+            ...filterCertificates(),
+          ]}
+        />
       )}
     </View>
   );

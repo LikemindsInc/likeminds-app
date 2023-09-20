@@ -209,6 +209,7 @@ const Button: FC<IButtonProps> = (props) => {
               GlobalStyles.textWhite,
               GlobalStyles.fontInterRegular,
               GlobalStyles.fontSize13,
+              { textAlign: "center" },
             ]}
           >
             {props.title}
@@ -216,7 +217,7 @@ const Button: FC<IButtonProps> = (props) => {
           {props.loading ? (
             <Spinner color={"#fff"} />
           ) : (
-            <View style={[GlobalStyles.pl4]}>{props.Icon}</View>
+            props.Icon && <View style={[GlobalStyles.pl4]}>{props.Icon}</View>
           )}
         </View>
       ) : (
@@ -236,6 +237,7 @@ const Button: FC<IButtonProps> = (props) => {
                 GlobalStyles.textWhite,
                 GlobalStyles.fontInterRegular,
                 GlobalStyles.fontSize13,
+                { textAlign: "center" },
               ]}
             >
               {props.title}
@@ -243,7 +245,7 @@ const Button: FC<IButtonProps> = (props) => {
             {props.loading ? (
               <Spinner color={"#fff"} />
             ) : (
-              <View style={[GlobalStyles.pl4]}>{props.Icon}</View>
+              props.Icon && <View style={[GlobalStyles.pl4]}>{props.Icon}</View>
             )}
           </LinearGradient>
         </TouchableOpacity>

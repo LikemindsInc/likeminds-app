@@ -16,6 +16,7 @@ import {
   getCurrentUserSpace,
   getSpaceListAction,
 } from "../actions/space";
+import { PURGE } from "redux-persist";
 
 export interface ISpaceState {
   createSpaceDTO: ICreateSpaceRequestDTO;
@@ -86,6 +87,9 @@ const SpaceSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(PURGE, (state) => {
+      return state;
+    });
     builder.addCase(createSpaceAction.pending, (state) => {
       state.createSpaceStatus = "loading";
     });

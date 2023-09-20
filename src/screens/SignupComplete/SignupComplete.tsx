@@ -73,6 +73,38 @@ const SignupComplete = () => {
         </View>
       </ScrollView>
       <View style={[GlobalStyles.mt30, GlobalStyles.mb40]}>
+        <View style={[GlobalStyles.mb40, GlobalStyles.displayRowCenter]}>
+          <Text
+            style={[
+              GlobalStyles.fontInterRegular,
+              GlobalStyles.fontWeight400,
+              GlobalStyles.textNavyBlue,
+              { textAlign: "center" },
+            ]}
+          >
+            By selecting ‘Lets Go!’ you agree to the
+            <Text
+              style={[
+                GlobalStyles.textNavyBlue,
+                GlobalStyles.fontInterBlack,
+                GlobalStyles.fontWeight700,
+              ]}
+            >
+              Terms Of Use{" "}
+            </Text>
+            and{" "}
+            <Text
+              style={[
+                GlobalStyles.textNavyBlue,
+                GlobalStyles.fontInterBlack,
+                GlobalStyles.fontWeight700,
+              ]}
+            >
+              Privacy Policy
+            </Text>{" "}
+            of Like Minds
+          </Text>
+        </View>
         <Button
           onPress={() =>
             navigation.navigate(APP_SCREEN_LIST.CREATE_SPACE_SCREEN)

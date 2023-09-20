@@ -17,6 +17,8 @@ import useAppDispatch from "../../../hooks/useAppDispatch";
 import { commentOnCommentAction } from "../../../actions/post";
 import useAppSelector from "../../../hooks/useAppSelector";
 import { IPostState } from "../../../reducers/post_reducer";
+import ReactionIcon from "../../../components/ReactionIcon/ReactionIcon";
+import CommentReactionIcon from "../../../components/ReactionIcon/CommentReactionIcon";
 
 interface Props {
   item: IPostCommentFeed;
@@ -86,7 +88,7 @@ const CommentRowItem: FC<Props> = ({ item }) => {
                 source={
                   item.user?.profilePicture
                     ? { uri: item.user.profilePicture }
-                    : require("../../../../assets/image3.png")
+                    : require("../../../../assets/imageAvatar.jpeg")
                 }
                 style={{ width: 30, height: 30, borderRadius: 15 }}
               />
@@ -148,9 +150,10 @@ const CommentRowItem: FC<Props> = ({ item }) => {
                   { color: "#284453" },
                 ]}
               >
-                {item.reactionCount} {item.reactionCount > 1 ? "likes" : "like"}
+                {item.reactionCount}{" "}
+                {item.reactionCount > 1 ? "reactions" : "reaction"}
               </Text>
-              <TouchableOpacity onPress={handleCommentOnComment}>
+              {/* <TouchableOpacity onPress={handleCommentOnComment}>
                 <Text
                   style={[
                     GlobalStyles.fontInterMedium,
@@ -161,7 +164,7 @@ const CommentRowItem: FC<Props> = ({ item }) => {
                 >
                   Reply
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             {shouldCommentOnComment && (
               <Input
@@ -174,9 +177,10 @@ const CommentRowItem: FC<Props> = ({ item }) => {
               />
             )}
           </View>
-          <TouchableOpacity>
+          <CommentReactionIcon post={item} />
+          {/* <TouchableOpacity>
             <AntDesign name={"hearto"} size={14} color={colors.navyBlue} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     </View>

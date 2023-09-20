@@ -18,7 +18,7 @@ const HomeHeader = () => {
     if (user && user.profilePicture && user.profilePicture.trim() !== "") {
       return { uri: user.profilePicture };
     }
-    return require("../../../../assets/image3.png");
+    return require("../../../../assets/imageAvatar.jpeg");
   };
   const navigation = useNavigation<DrawerNavigationProp<any>>();
   return (

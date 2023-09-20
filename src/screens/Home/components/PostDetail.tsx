@@ -27,6 +27,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import {
   IPostState,
   clearCreateCommentOnPostState,
+  openReactionList,
 } from "../../../reducers/post_reducer";
 import Input from "../../../components/Input/Input";
 import useAppDispatch from "../../../hooks/useAppDispatch";
@@ -41,6 +42,12 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import ReactionIcon from "../../../components/ReactionIcon/ReactionIcon";
 import moment from "moment";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import { Video, ResizeMode } from "expo-av";
+import EventDismisser from "../../../components/EventDismisser/EventDismisser";
+import FullScreenImageCarousel from "../../../components/FullScreenImageCarousel/FullScreenImageCarousel";
+import { getProfile } from "../../../reducers/connection";
+import { APP_SCREEN_LIST } from "../../../constants";
+
 interface IProps {
   item: IPostFeed;
 }
@@ -48,6 +55,7 @@ interface IProps {
 const PostDetail = () => {
   const bottomSheetRef2 = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["50%", "60%"], []);
+  const [showImageZoom, setShowImageZoom] = useState(false);
 
   const handleSheetChanges = useCallback((index: number) => {}, []);
   const state = useAppSelector(
@@ -80,6 +88,7 @@ const PostDetail = () => {
     // url and index of the image you have clicked alongwith onPress event.
     console.log("url> ", url);
     console.log("index> ", index);
+    setShowImageZoom(true);
   };
 
   const toast = useToast();
@@ -133,7 +142,7 @@ const PostDetail = () => {
     if (item.user.profilePicture && item.user.profilePicture.trim() !== "") {
       return { uri: item.user.profilePicture };
     }
-    return require("../../../../assets/image3.png");
+    return require("../../../../assets/imageAvatar.jpeg");
   };
 
   const handleLoadComments = () => {};
@@ -230,88 +239,120 @@ const PostDetail = () => {
 
   const handleGetPostReactions = (postId: string) => {
     dispatch(getPostReactions(postId));
+    dispatch(openReactionList(true));
   };
 
   useEffect(() => {
-    if (postState.postReaction.length > 0) {
+    if (postState.showReactionList && postState.postReaction.length > 0) {
       bottomSheetRef2.current?.expand();
     }
-  }, [postState.postReaction]);
+  }, [postState.postReaction, postState.showReactionList]);
+
+  const handleNavigationToProfileScreen = (profileId: string) => {
+    bottomSheetRef2.current?.close();
+    dispatch(openReactionList(false));
+    if (profileId === state?.userInfo?.id) {
+      return navigation.navigate(APP_SCREEN_LIST.USER_PROFILE_SCREEN);
+    }
+
+    dispatch(getProfile(profileId));
+    navigation.navigate(APP_SCREEN_LIST.CONNECTION_PROFILE_SCREEN);
+  };
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={50}
-      // keyboardShouldPersistTaps={"always"}
-    >
-      <ScrollView
-        style={[GlobalStyles.container]}
-        // contentContainerStyle={[{ flexGrow: 1 }]}
+    <EventDismisser>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={50}
+        // keyboardShouldPersistTaps={"always"}
       >
-        <TouchableOpacity
-          style={[GlobalStyles.mb20]}
-          onPress={() => navigation.goBack()}
+        <ScrollView
+          style={[GlobalStyles.container]}
+          // contentContainerStyle={[{ flexGrow: 1 }]}
         >
-          <AntDesign name="arrowleft" size={24} color={colors.primary} />
-        </TouchableOpacity>
-        <View>
-          <View style={styles.storyHeader}>
-            <TouchableOpacity
-              style={{ flexDirection: "row", alignItems: "center" }}
-            >
-              <View>
-                <Image
-                  source={
-                    item.user?.profilePicture
-                      ? { uri: item.user.profilePicture }
-                      : require("../../../../assets/image3.png")
-                  }
-                  style={{ width: 40, height: 40, borderRadius: 20 }}
-                />
-              </View>
-              <Text
-                style={[
-                  GlobalStyles.fontInterMedium,
-                  GlobalStyles.textNavyBlue,
-                  GlobalStyles.fontSize15,
-                  GlobalStyles.fontWeight700,
-                  GlobalStyles.pl4,
-                  GlobalStyles.mb20,
-                ]}
-              >
-                {item?.user?.firstName} {item?.user?.lastName}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={{ justifyContent: "center" }}>
-              <Feather name="more-horizontal" size={24} color={colors.grey} />
-            </TouchableOpacity>
-          </View>
-          <View style={{ width: "100%", height: 300 }}>
-            {item.images && item.images.length > 0 ? (
-              <FbGrid images={item.images} onPress={onPress} />
-            ) : (
-              <Image
-                source={require("../../../../assets/image8.png")}
-                style={styles.image}
-                resizeMethod="auto"
-                resizeMode="cover"
-              />
-            )}
-          </View>
-        </View>
-        <View
-          style={[
-            GlobalStyles.flewRow,
-            GlobalStyles.mt10,
-            GlobalStyles.mb10,
-            { alignItems: "center" },
-          ]}
-        >
-          <View
-            style={[GlobalStyles.flewRow, { gap: 12, alignItems: "center" }]}
+          <TouchableOpacity
+            style={[GlobalStyles.mb20]}
+            onPress={() => navigation.goBack()}
           >
-            <TouchableOpacity onPress={() => handleGetPostReactions(item.id)}>
+            <AntDesign name="arrowleft" size={24} color={colors.primary} />
+          </TouchableOpacity>
+          <View>
+            <View style={styles.storyHeader}>
+              <TouchableOpacity
+                style={{ flexDirection: "row", alignItems: "center" }}
+              >
+                <View>
+                  <Image
+                    source={
+                      item.user?.profilePicture
+                        ? { uri: item.user.profilePicture }
+                        : require("../../../../assets/imageAvatar.jpeg")
+                    }
+                    style={{ width: 40, height: 40, borderRadius: 20 }}
+                  />
+                </View>
+                <Text
+                  style={[
+                    GlobalStyles.fontInterMedium,
+                    GlobalStyles.textNavyBlue,
+                    GlobalStyles.fontSize15,
+                    GlobalStyles.fontWeight700,
+                    GlobalStyles.pl4,
+                    GlobalStyles.mb20,
+                  ]}
+                >
+                  {item?.user?.firstName} {item?.user?.lastName}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={{ justifyContent: "center" }}>
+                <Feather name="more-horizontal" size={24} color={colors.grey} />
+              </TouchableOpacity>
+            </View>
+            <View style={{ width: "100%", height: 300 }}>
+              {item.images && item.images.length > 0 ? (
+                <FbGrid images={item.images} onPress={onPress} />
+              ) : null}
+              {item.videos && item.videos.length > 0
+                ? item.videos.map((item) => (
+                    <View style={[GlobalStyles.mb20]}>
+                      <Video
+                        style={{ width: "100%", height: 300 }}
+                        source={{
+                          uri: item,
+                        }}
+                        useNativeControls
+                        resizeMode={ResizeMode.CONTAIN}
+                        isLooping
+                        shouldPlay={false}
+                      />
+                    </View>
+                  ))
+                : null}
+            </View>
+          </View>
+          <View
+            style={[
+              GlobalStyles.flewRow,
+              GlobalStyles.mt10,
+              GlobalStyles.mb10,
+              { alignItems: "center" },
+            ]}
+          >
+            <View
+              style={[GlobalStyles.flewRow, { gap: 12, alignItems: "center" }]}
+            >
+              <TouchableOpacity onPress={() => handleGetPostReactions(item.id)}>
+                <Text
+                  style={[
+                    GlobalStyles.fontInterMedium,
+                    GlobalStyles.fontSize10,
+                    GlobalStyles.fontWeight700,
+                  ]}
+                >
+                  {item.reactionCount} Reactions
+                </Text>
+              </TouchableOpacity>
               <Text
                 style={[
                   GlobalStyles.fontInterMedium,
@@ -319,137 +360,141 @@ const PostDetail = () => {
                   GlobalStyles.fontWeight700,
                 ]}
               >
-                {item.reactionCount} Reactions
+                {item.commentCount} comments
               </Text>
-            </TouchableOpacity>
-            <Text
+            </View>
+            <View
               style={[
-                GlobalStyles.fontInterMedium,
-                GlobalStyles.fontSize10,
-                GlobalStyles.fontWeight700,
+                GlobalStyles.flewRow,
+                { gap: 20, justifyContent: "flex-end", flex: 1 },
               ]}
             >
-              {item.commentCount} comments
-            </Text>
-          </View>
-          <View
-            style={[
-              GlobalStyles.flewRow,
-              { gap: 20, justifyContent: "flex-end", flex: 1 },
-            ]}
-          >
-            <TouchableOpacity>
-              <MaterialCommunityIcons
-                name="message-processing-outline"
-                size={24}
-                color={colors.navyBlue}
+              <TouchableOpacity>
+                <MaterialCommunityIcons
+                  name="message-processing-outline"
+                  size={24}
+                  color={colors.navyBlue}
+                />
+              </TouchableOpacity>
+              <ReactionIcon
+                post={item}
+                isLiked={isPostLiked}
+                handleLikeReactionOnPost={handleLikeReactionOnPost}
+                handleOnReactionActivate={() => {}}
               />
-            </TouchableOpacity>
-            <ReactionIcon
-              post={item}
-              isLiked={isPostLiked}
-              handleLikeReactionOnPost={handleLikeReactionOnPost}
-              handleOnReactionActivate={() => {}}
+            </View>
+          </View>
+          <TouchableOpacity onPress={handleLoadComments} style={{}}>
+            <ReadMore
+              renderTruncatedFooter={_renderTruncatedFooter}
+              renderRevealedFooter={_renderRevealedFooter}
+              numberOfLines={3}
+            >
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.fontWeight400,
+                ]}
+              >
+                {item.content}
+              </Text>
+            </ReadMore>
+          </TouchableOpacity>
+          <View style={{ paddingBottom: 200 }}>{renderComments()}</View>
+        </ScrollView>
+
+        <View style={styles.bottomInputStyle}>
+          <Input
+            inputViewStyle={styles.commentInputViewStyle}
+            placeholder="Comment"
+            multiline
+            suffixElement={renderSendButton()}
+            onChangeText={(value) => setComment(value)}
+            value={comment}
+            autoCorrect={false}
+            keyboardType="default"
+            returnKeyType="done"
+          />
+        </View>
+        <BottomSheet
+          ref={bottomSheetRef2}
+          index={-1}
+          snapPoints={snapPoints}
+          onChange={handleSheetChanges}
+          backdropComponent={(props: any) => (
+            <BottomSheetBackdrop {...props} pressBehavior={"close"} />
+          )}
+          enablePanDownToClose
+        >
+          <View style={{ flex: 1 }}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              style={{ flexGrow: 1, flex: 1 }}
+            >
+              <View
+                style={[GlobalStyles.container, { backgroundColor: "#fff" }]}
+              >
+                {postState.postReaction.map((item) => (
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      marginBottom: 20,
+                      justifyContent: "space-between",
+                    }}
+                    key={item.id}
+                  >
+                    <TouchableOpacity
+                      onPress={() =>
+                        handleNavigationToProfileScreen(item.user.id)
+                      }
+                      style={{ flex: 1, flexDirection: "row", gap: 10 }}
+                    >
+                      <View>
+                        <Image
+                          source={renderProfilePicture(item)}
+                          style={{ width: 30, height: 30, borderRadius: 15 }}
+                          resizeMethod="auto"
+                          resizeMode="cover"
+                        />
+                      </View>
+                      <View>
+                        <Text
+                          style={[
+                            GlobalStyles.fontInterRegular,
+                            GlobalStyles.fontSize13,
+                            GlobalStyles.textNavyBlue,
+                          ]}
+                        >
+                          {item.user?.firstName} {item.user?.lastName}
+                        </Text>
+                        <Text
+                          style={[
+                            GlobalStyles.fontInterRegular,
+                            GlobalStyles.fontSize10,
+                            GlobalStyles.textGrey,
+                          ]}
+                        >
+                          {moment(item.createdAt).fromNow()}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                    <View>
+                      <Text>{item.reaction}</Text>
+                    </View>
+                  </View>
+                ))}
+              </View>
+            </ScrollView>
+            <FullScreenImageCarousel
+              images={(item.images || []).map((item) => ({ uri: item }))}
+              isVisible={showImageZoom}
+              onRequestClose={() => setShowImageZoom(false)}
             />
           </View>
-        </View>
-        <TouchableOpacity onPress={handleLoadComments} style={{}}>
-          <ReadMore
-            renderTruncatedFooter={_renderTruncatedFooter}
-            renderRevealedFooter={_renderRevealedFooter}
-            numberOfLines={3}
-          >
-            <Text
-              style={[
-                GlobalStyles.fontInterRegular,
-                GlobalStyles.fontSize13,
-                GlobalStyles.fontWeight400,
-              ]}
-            >
-              {item.content}
-            </Text>
-          </ReadMore>
-        </TouchableOpacity>
-        <View style={{ paddingBottom: 200 }}>{renderComments()}</View>
-      </ScrollView>
-
-      <View style={styles.bottomInputStyle}>
-        <Input
-          inputViewStyle={styles.commentInputViewStyle}
-          placeholder="Comment"
-          multiline
-          suffixElement={renderSendButton()}
-          onChangeText={(value) => setComment(value)}
-          value={comment}
-          autoCorrect={false}
-          keyboardType="default"
-          returnKeyType="done"
-        />
-      </View>
-      <BottomSheet
-        ref={bottomSheetRef2}
-        index={-1}
-        snapPoints={snapPoints}
-        onChange={handleSheetChanges}
-        backdropComponent={(props: any) => (
-          <BottomSheetBackdrop {...props} pressBehavior={"close"} />
-        )}
-      >
-        <View style={{ flex: 1 }}>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            style={{ flexGrow: 1, flex: 1 }}
-          >
-            <View style={[GlobalStyles.container, { backgroundColor: "#fff" }]}>
-              {postState.postReaction.map((item) => (
-                <View
-                  style={{
-                    flexDirection: "row",
-                    marginBottom: 20,
-                    justifyContent: "space-between",
-                  }}
-                  key={item.id}
-                >
-                  <View style={{ flex: 1, flexDirection: "row", gap: 10 }}>
-                    <View>
-                      <Image
-                        source={renderProfilePicture(item)}
-                        style={{ width: 30, height: 30, borderRadius: 15 }}
-                        resizeMethod="auto"
-                        resizeMode="cover"
-                      />
-                    </View>
-                    <View>
-                      <Text
-                        style={[
-                          GlobalStyles.fontInterRegular,
-                          GlobalStyles.fontSize13,
-                          GlobalStyles.textNavyBlue,
-                        ]}
-                      >
-                        {item.user?.firstName} {item.user?.lastName}
-                      </Text>
-                      <Text
-                        style={[
-                          GlobalStyles.fontInterRegular,
-                          GlobalStyles.fontSize10,
-                          GlobalStyles.textGrey,
-                        ]}
-                      >
-                        {moment(item.createdAt).fromNow()}
-                      </Text>
-                    </View>
-                  </View>
-                  <View>
-                    <Text>{item.reaction}</Text>
-                  </View>
-                </View>
-              ))}
-            </View>
-          </ScrollView>
-        </View>
-      </BottomSheet>
-    </KeyboardAvoidingView>
+        </BottomSheet>
+      </KeyboardAvoidingView>
+    </EventDismisser>
   );
 };
 

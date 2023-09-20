@@ -1,5 +1,13 @@
 import { IFlatListProps } from "native-base/lib/typescript/components/basic/FlatList";
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  FC,
+  LegacyRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   Image,
   KeyboardAvoidingView,
@@ -18,6 +26,7 @@ import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import {
   IPostState,
   clearCreateCommentOnPostState,
+  openReactionList,
   savePostDetail,
 } from "../../reducers/post_reducer";
 import useAppDispatch from "../../hooks/useAppDispatch";
@@ -37,6 +46,10 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { APP_SCREEN_LIST } from "../../constants";
 import FbGrid from "react-native-fb-image-grid";
 import ReactionIcon from "../ReactionIcon/ReactionIcon";
+import { getProfile } from "../../reducers/connection";
+import FullScreenImageCarousel from "../FullScreenImageCarousel/FullScreenImageCarousel";
+import { Video, ResizeMode } from "expo-av";
+import { IOScrollView, InView } from "react-native-intersection-observer";
 
 interface IProps {
   item: IPostFeed;
@@ -52,6 +65,10 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
   const handleSheetChanges = useCallback((index: number) => {}, []);
 
   const dispatch = useAppDispatch();
+
+  const [showImageZoom, setShowImageZoom] = useState(false);
+
+  const videoRef = useRef(null) as any;
 
   const navigation = useNavigation<NavigationProp<any>>();
 
@@ -136,6 +153,18 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
     );
   };
 
+  const handleOnViewChange = (inView: boolean) => {
+    // if (inView) {
+    //   if (videoRef && videoRef.current) {
+    //     videoRef.current.playAsync();
+    //   }
+    // } else {
+    //   if (videoRef && videoRef.current) {
+    //     videoRef.current.pauseAsync();
+    //   }
+    // }
+  };
+
   const _renderRevealedFooter = (handlePress: any) => {
     return (
       <Text
@@ -164,7 +193,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
                 source={
                   item.user?.profilePicture
                     ? { uri: item.user.profilePicture }
-                    : require("../../../assets/image3.png")
+                    : require("../../../assets/imageAvatar.jpeg")
                 }
                 style={{ width: 30, height: 30, borderRadius: 15 }}
               />
@@ -276,12 +305,23 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
 
   const onPress = (url: any, index: any, event: any) => {
     // url and index of the image you have clicked alongwith onPress event.
-    console.log("url> ", url);
-    console.log("index> ", index);
+
+    setShowImageZoom(true);
   };
 
   const getReactionOnPost = (postId: string) => {
     dispatch(getPostReactions(postId));
+
+    dispatch(openReactionList(true));
+  };
+
+  const handleNavigationToProfileScreen = () => {
+    if (item.user.id === state?.userInfo?.id) {
+      return navigation.navigate(APP_SCREEN_LIST.USER_PROFILE_SCREEN);
+    }
+
+    dispatch(getProfile(item.user.id));
+    navigation.navigate(APP_SCREEN_LIST.CONNECTION_PROFILE_SCREEN);
   };
 
   return (
@@ -290,13 +330,14 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
         <View style={styles.storyHeader}>
           <TouchableOpacity
             style={{ flexDirection: "row", alignItems: "center" }}
+            onPress={handleNavigationToProfileScreen}
           >
             <View>
               <Image
                 source={
                   item.user?.profilePicture
                     ? { uri: item.user.profilePicture }
-                    : require("../../../assets/image3.png")
+                    : require("../../../assets/imageAvatar.jpeg")
                 }
                 style={{ width: 40, height: 40, borderRadius: 20 }}
               />
@@ -308,7 +349,6 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
                 GlobalStyles.fontSize15,
                 GlobalStyles.fontWeight700,
                 GlobalStyles.pl4,
-                GlobalStyles.mb20,
               ]}
             >
               {item?.user?.firstName} {item?.user?.lastName}
@@ -337,34 +377,49 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
 
           {renderComments()}
         </TouchableOpacity>
-        <View style={{ width: "100%", height: 300 }}>
-          {item.images && item.images.length > 0 ? (
-            // <Image
-            //   source={{ uri: item.images[0] }}
-            //   style={styles.image}
-            //   resizeMethod="auto"
-            //   resizeMode="cover"
-            // />
+
+        {item.images && item.images.length > 0 ? (
+          // <Image
+          //   source={{ uri: item.images[0] }}
+          //   style={styles.image}
+          //   resizeMethod="auto"
+          //   resizeMode="cover"
+          // />
+          <View style={{ width: "100%", height: 300 }}>
             <FbGrid images={item.images} onPress={onPress} />
-          ) : (
-            <Image
-              source={require("../../../assets/image8.png")}
-              style={styles.image}
-              resizeMethod="auto"
-              resizeMode="cover"
-            />
-          )}
-        </View>
+          </View>
+        ) : null}
+        {item.videos && item.videos.length > 0
+          ? item.videos.map((item) => (
+              <InView onChange={handleOnViewChange}>
+                <View style={[GlobalStyles.mt20]}>
+                  <Video
+                    style={{ width: "100%", height: 300 }}
+                    source={{
+                      uri: item,
+                    }}
+                    ref={videoRef}
+                    useNativeControls
+                    resizeMode={ResizeMode.CONTAIN}
+                    isLooping
+                    shouldPlay={false}
+                  />
+                </View>
+              </InView>
+            ))
+          : null}
       </View>
       <View
         style={[
-          GlobalStyles.flewRow,
           GlobalStyles.mt10,
           GlobalStyles.mb10,
-          { alignItems: "center" },
+          {
+            alignItems: "center",
+            flexDirection: "row",
+          },
         ]}
       >
-        <View style={[GlobalStyles.flewRow, { gap: 12, alignItems: "center" }]}>
+        <View style={[{ gap: 12, alignItems: "center", flexDirection: "row" }]}>
           <TouchableOpacity onPress={() => getReactionOnPost(item.id)}>
             <Text
               style={[
@@ -376,15 +431,17 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
               {item.reactionCount} Reactions
             </Text>
           </TouchableOpacity>
-          <Text
-            style={[
-              GlobalStyles.fontInterMedium,
-              GlobalStyles.fontSize10,
-              GlobalStyles.fontWeight700,
-            ]}
-          >
-            {item.commentCount} comments
-          </Text>
+          <TouchableOpacity onPress={handleLoadComments}>
+            <Text
+              style={[
+                GlobalStyles.fontInterMedium,
+                GlobalStyles.fontSize10,
+                GlobalStyles.fontWeight700,
+              ]}
+            >
+              {item.commentCount} comments
+            </Text>
+          </TouchableOpacity>
           {/* <Text
               style={[
                 GlobalStyles.fontInterMedium,
@@ -398,8 +455,13 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
         </View>
         <View
           style={[
-            GlobalStyles.flewRow,
-            { gap: 20, justifyContent: "flex-end", flex: 1 },
+            {
+              gap: 20,
+              justifyContent: "flex-end",
+              flex: 1,
+              flexDirection: "row",
+              width: "100%",
+            },
           ]}
         >
           <TouchableOpacity onPress={handleLoadComments}>
@@ -415,18 +477,13 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
             handleLikeReactionOnPost={handleLikeReactionOnPost}
             handleOnReactionActivate={() => {}}
           />
-          {/* <TouchableOpacity onPress={() => handleLikeReactionOnPost()}>
-              <AntDesign
-                name={isPostLiked ? "heart" : "hearto"}
-                size={24}
-                color={isPostLiked ? colors.red : colors.navyBlue}
-              />
-            </TouchableOpacity> */}
-          {/* <TouchableOpacity>
-              <Feather name="send" size={24} color={colors.navyBlue} />
-            </TouchableOpacity> */}
         </View>
       </View>
+      <FullScreenImageCarousel
+        images={(item.images || []).map((item) => ({ uri: item }))}
+        isVisible={showImageZoom}
+        onRequestClose={() => setShowImageZoom(false)}
+      />
     </View>
   );
 };

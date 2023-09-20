@@ -72,7 +72,20 @@ declare module "@app-model" {
     stillWorkHere: boolean;
     jobTitle: string;
     companyName: string;
-    responsiblities: string;
+    responsibilities: string;
+    industry: string;
+  }
+
+  interface ISchool {
+    id: string;
+    name: string;
+  }
+
+  interface Industry {
+    id: string;
+    name: string;
+    createdAt: string;
+    updatedAt: string;
   }
 
   interface IEducation {
@@ -87,15 +100,13 @@ declare module "@app-model" {
     phoneNumber: string;
     personalInformation: IProfileInformation;
     experience: IExperience[];
-    eduction: IEducation[];
-    certificates: (
-      | DocumentPicker.DocumentResult
-      | ImagePicker.ImagePickerResult
-    )[];
+    certificates: { file: FilePickerFormat; name: string }[];
     profilePicture:
       | DocumentPicker.DocumentResult
       | ImagePicker.ImagePickerResult
       | null;
+    skills: string[];
+    education: IEducation[];
   }
 
   interface IVerifyOtpPaylod {
@@ -136,10 +147,16 @@ declare module "@app-model" {
     countryOfOrigin: string | null;
     city: string | null;
     country: string | null;
-    certificates: string[];
+    certificates: ICertificate[];
     bio: string | null;
-    education: any[];
+    education: IEducation[];
     experience: IExperience[];
+    education: IEducation[];
+  }
+
+  interface ICertificate {
+    name: string;
+    url: string;
   }
 
   interface IRequestOTPEmail {
@@ -172,12 +189,19 @@ declare module "@app-model" {
   interface ICreatePostDTO {
     content: string;
     image?: ImagePicker.ImagePickerAsset[];
+    videos?: ImagePicker.ImagePickerAsset[];
+  }
+
+  interface ResendOTPDTO {
+    phone: string;
+    type: "SIGNUP" | "FORGOT_PASSWORD";
   }
 
   interface IPostFeed {
     id: string;
     content: string;
     images: string[];
+    videos?: string[];
     files: any[];
     likedBy: string[];
     comments: any[];
@@ -244,16 +268,23 @@ declare module "@app-model" {
     jobDescription: string;
     salary: number;
     experienceLevel: string;
+    applicationLink: string;
+    tailor: string[];
   }
+
+  export type IPostedDate = "anytime" | "oneday" | "week" | "month";
 
   interface IGetJobDTO {
     experienceLevel?: string;
-    postedDate?: "anytime" | "oneday" | "week" | "month";
+    postedDate?: IPostedDate;
     sort?: "recent" | "relevant";
     search?: string;
     companyName?: string;
     page?: number;
     size?: number;
+    tailor?: string;
+    location?: string;
+    jobType?: string;
   }
 
   interface ISearchDTO {
@@ -300,6 +331,8 @@ declare module "@app-model" {
     experienceLevel: string;
     createdAt: string;
     updatedAt: string;
+    applicationLink: string;
+    tailor: string[];
     user: {
       id: string;
       firstName: string | null;

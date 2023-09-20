@@ -15,8 +15,11 @@ import useAppDispatch from "../../hooks/useAppDispatch";
 import { ISessionState, updateCertificate } from "../../reducers/session";
 import useAppSelector from "../../hooks/useAppSelector";
 import { completeUserProfileAction } from "../../actions/auth";
-import { useToast } from "native-base";
 import BackButton from "../../components/Navigation/BackButton/BackButton";
+import { useToast } from "react-native-toast-notifications";
+import { FilePickerFormat } from "@app-model";
+import { FileUploadEmptyIcon } from "../personal_inforamtion/PersonalInformation";
+import { CertificateUploadEmptyIcon } from "../Profile/components/CertificateForm";
 
 const SignupCertificate = () => {
   const navigation = useNavigation<any>();
@@ -25,6 +28,8 @@ const SignupCertificate = () => {
 
   const toast = useToast();
 
+  const [name, setName] = useState("");
+
   const [uploods, setUploads] = useState([{}]);
 
   const session = useAppSelector(
@@ -32,17 +37,20 @@ const SignupCertificate = () => {
   ) as ISessionState;
 
   const [file, setFile] = useState<
-    DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult | null
+    FilePickerFormat | null | ImagePicker.ImagePickerResult
   >(null);
   const handleOnFileSelect = (
-    file: DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult
+    file: FilePickerFormat | ImagePicker.ImagePickerResult
   ) => {
     setFile(file);
     return null;
   };
   const handleOnNextPress = () => {
-    dispatch(updateCertificate(file as DocumentPicker.DocumentResult));
-    // navigation.navigate(APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN)
+    if (file) {
+      dispatch(
+        updateCertificate({ name: name, file: file as FilePickerFormat })
+      );
+    }
     dispatch(completeUserProfileAction(session.profileData));
   };
 
@@ -50,15 +58,22 @@ const SignupCertificate = () => {
     if (session.completeProfileStatus === "completed") {
       navigation.navigate(APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN);
     } else if (session.completeProfileStatus === "failed") {
-      toast.show({
-        description:
-          session.completeProfileError?.trim() === ""
-            ? "Unable to complete request. Please try again later"
-            : session.completeProfileError,
-        variant: "contained",
-      });
+      toast.show(
+        session.completeProfileError?.trim() === ""
+          ? "Unable to complete request. Please try again later"
+          : (session.completeProfileError as string),
+        {
+          type: "normal",
+        }
+      );
     }
   }, [session.completeProfileStatus]);
+
+  const handleOnSkip = () => {
+    // dispatch(completeUserProfileAction(session.profileData));
+    // navigation.navigate(APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN);
+    handleOnNextPress();
+  };
 
   return (
     <View style={[GlobalStyles.container]}>
@@ -78,28 +93,24 @@ const SignupCertificate = () => {
         </Text>
       </View>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-        <View style={[GlobalStyles.mb10]}>
-          <Input editable={false} placeholder="Certificate, Award, Volunteer" />
-        </View>
         <View>
           {uploods.map((item) => (
-            <DropZone
-              type="all"
-              style={{ height: 60 }}
-              onSelect={handleOnFileSelect}
-              emptyIcon={
-                <Text
-                  style={[
-                    GlobalStyles.textPrimary,
-                    GlobalStyles.fontInterRegular,
-                    GlobalStyles.fontSize15,
-                    GlobalStyles.fontWeight400,
-                  ]}
-                >
-                  Upload a Document
-                </Text>
-              }
-            />
+            <View>
+              <View style={[GlobalStyles.mb10]}>
+                <Input
+                  editable={true}
+                  placeholder="Certificate, Award, Volunteer"
+                  value={name}
+                  onChangeText={(value) => setName(value)}
+                />
+              </View>
+              <DropZone
+                type="all"
+                style={{ height: 60 }}
+                onSelect={handleOnFileSelect}
+                emptyIcon={<CertificateUploadEmptyIcon />}
+              />
+            </View>
           ))}
         </View>
         <View>
@@ -113,7 +124,7 @@ const SignupCertificate = () => {
       <View>
         <View style={[GlobalStyles.mb20, GlobalStyles.displayRowCenter]}>
           <TextLink
-            onPress={() => navigation.navigate(APP_SCREEN_LIST.MAIN_SCREEN)}
+            onPress={handleOnSkip}
             title="Skip For Now"
             color={colors.black}
           />
