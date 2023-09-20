@@ -33,7 +33,7 @@ const LiveFeedItem: FC<IProps> = ({ item }) => {
     if (user && user.profilePicture && user.profilePicture.trim() !== "") {
       return { uri: user.profilePicture };
     }
-    return require("../../../assets/image3.png");
+    return require("../../../assets/imageAvatar.jpeg");
   };
 
   if (item.isUserProfile) {

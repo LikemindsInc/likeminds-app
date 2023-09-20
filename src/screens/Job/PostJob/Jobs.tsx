@@ -378,6 +378,7 @@ export default function Jobs() {
         backdropComponent={(props: any) => (
           <BottomSheetBackdrop {...props} pressBehavior={"close"} />
         )}
+        enablePanDownToClose
       >
         <View style={{ flex: 1 }}>
           <ScrollView
@@ -414,6 +415,7 @@ export default function Jobs() {
         backdropComponent={(props: any) => (
           <BottomSheetBackdrop {...props} pressBehavior={"close"} />
         )}
+        enablePanDownToClose
       >
         <View style={{ flex: 1 }}>
           <ScrollView
@@ -452,6 +454,7 @@ export default function Jobs() {
         backdropComponent={(props: any) => (
           <BottomSheetBackdrop {...props} pressBehavior={"close"} />
         )}
+        enablePanDownToClose
       >
         <View style={{ flex: 1 }}>
           <ScrollView
@@ -488,6 +491,7 @@ export default function Jobs() {
         backdropComponent={(props: any) => (
           <BottomSheetBackdrop {...props} pressBehavior={"close"} />
         )}
+        enablePanDownToClose
       >
         <View style={{ flex: 1 }}>
           <ScrollView
@@ -524,6 +528,7 @@ export default function Jobs() {
         backdropComponent={(props: any) => (
           <BottomSheetBackdrop {...props} pressBehavior={"close"} />
         )}
+        enablePanDownToClose
       >
         <View style={{ flex: 1 }}>
           <ScrollView
@@ -533,7 +538,7 @@ export default function Jobs() {
             <View style={[GlobalStyles.container]}>
               {[...JOB_LOCATION].map((item, i) => (
                 <IndustryItem
-                  text={item.value}
+                  text={item.label}
                   key={i}
                   handleOnSelect={() => handleOnLocationSelect(item.value)}
                   isSelected={item.value === location}

@@ -45,6 +45,8 @@ import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { Video, ResizeMode } from "expo-av";
 import EventDismisser from "../../../components/EventDismisser/EventDismisser";
 import FullScreenImageCarousel from "../../../components/FullScreenImageCarousel/FullScreenImageCarousel";
+import { getProfile } from "../../../reducers/connection";
+import { APP_SCREEN_LIST } from "../../../constants";
 
 interface IProps {
   item: IPostFeed;
@@ -140,7 +142,7 @@ const PostDetail = () => {
     if (item.user.profilePicture && item.user.profilePicture.trim() !== "") {
       return { uri: item.user.profilePicture };
     }
-    return require("../../../../assets/image3.png");
+    return require("../../../../assets/imageAvatar.jpeg");
   };
 
   const handleLoadComments = () => {};
@@ -246,6 +248,17 @@ const PostDetail = () => {
     }
   }, [postState.postReaction, postState.showReactionList]);
 
+  const handleNavigationToProfileScreen = (profileId: string) => {
+    bottomSheetRef2.current?.close();
+    dispatch(openReactionList(false));
+    if (profileId === state?.userInfo?.id) {
+      return navigation.navigate(APP_SCREEN_LIST.USER_PROFILE_SCREEN);
+    }
+
+    dispatch(getProfile(profileId));
+    navigation.navigate(APP_SCREEN_LIST.CONNECTION_PROFILE_SCREEN);
+  };
+
   return (
     <EventDismisser>
       <KeyboardAvoidingView
@@ -274,7 +287,7 @@ const PostDetail = () => {
                     source={
                       item.user?.profilePicture
                         ? { uri: item.user.profilePicture }
-                        : require("../../../../assets/image3.png")
+                        : require("../../../../assets/imageAvatar.jpeg")
                     }
                     style={{ width: 40, height: 40, borderRadius: 20 }}
                   />
@@ -412,6 +425,7 @@ const PostDetail = () => {
           backdropComponent={(props: any) => (
             <BottomSheetBackdrop {...props} pressBehavior={"close"} />
           )}
+          enablePanDownToClose
         >
           <View style={{ flex: 1 }}>
             <ScrollView
@@ -430,7 +444,12 @@ const PostDetail = () => {
                     }}
                     key={item.id}
                   >
-                    <View style={{ flex: 1, flexDirection: "row", gap: 10 }}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        handleNavigationToProfileScreen(item.user.id)
+                      }
+                      style={{ flex: 1, flexDirection: "row", gap: 10 }}
+                    >
                       <View>
                         <Image
                           source={renderProfilePicture(item)}
@@ -459,7 +478,7 @@ const PostDetail = () => {
                           {moment(item.createdAt).fromNow()}
                         </Text>
                       </View>
-                    </View>
+                    </TouchableOpacity>
                     <View>
                       <Text>{item.reaction}</Text>
                     </View>

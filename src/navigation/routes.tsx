@@ -51,7 +51,11 @@ import useAppDispatch from "../hooks/useAppDispatch";
 import { PURGE } from "redux-persist";
 import { __ROOT_REDUX_STATE_KEY__ } from "../store/constants";
 import { logoutAction } from "../actions/auth";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import {
+  DrawerActions,
+  NavigationProp,
+  useNavigation,
+} from "@react-navigation/native";
 import { ISettingState, logoutUserAction } from "../reducers/settings";
 import ForgotPassword from "../screens/ForgotPassword/ForgotPassword";
 import RecoverWithPhone from "../screens/ForgotEmail/RecoverWithPhone";
@@ -176,8 +180,11 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
       ? DRAWER_WIDTH
       : useWindowDimensions().width * 0.5;
 
+  const drawerNavigation = useNavigation<DrawerNavigationProp<any>>();
+
   const handleNavigation = (linkTo: string) => {
     navigation.navigate(linkTo);
+    navigation.dispatch(DrawerActions.closeDrawer());
   };
 
   const dispatch = useAppDispatch();

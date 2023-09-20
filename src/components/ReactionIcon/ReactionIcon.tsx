@@ -28,12 +28,7 @@ interface Props {
   commentId?: string;
 }
 
-const ReactionIcon: FC<Props> = ({
-  post,
-  handleLikeReactionOnPost,
-  handleOnReactionActivate,
-  isLiked,
-}) => {
+const ReactionIcon: FC<Props> = ({ post }) => {
   const dispatch = useAppDispatch();
   const state = useAppSelector((state: any) => state.postReducer) as IPostState;
 
@@ -66,17 +61,6 @@ const ReactionIcon: FC<Props> = ({
     }
   }, [state.postReaction]);
 
-  useEffect(() => {
-    if (state.reactToPostStatus === "completed") {
-    } else if (state.reactToPostStatus === "failed") {
-      toast.show({
-        description: state.reactToPostError,
-        variant: "contained",
-      });
-    }
-    dispatch(clearPostRactionStatus());
-  }, [state.reactToPostStatus]);
-
   const handleReactions = (reaction: string) => {
     if (likedIcon === reaction) {
       setLikeIcon(null);
@@ -86,7 +70,6 @@ const ReactionIcon: FC<Props> = ({
       dispatch(reactToPostAction({ postId: post.id, reaction }));
     }
     dispatch(showReactionView({ show: false, post: null }));
-
     dispatch(getPostFeedAction());
   };
 

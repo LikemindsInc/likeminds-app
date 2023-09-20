@@ -24,6 +24,9 @@ import { openReactionList } from "../../reducers/post_reducer";
 import colors from "../../theme/colors";
 import { IOScrollView, InView } from "react-native-intersection-observer";
 import EventDismisser from "../../components/EventDismisser/EventDismisser";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { getProfile } from "../../reducers/connection";
+import { APP_SCREEN_LIST } from "../../constants";
 
 const DATA: { type: "LIVE_FEED" | "INTRO_FEED" | "STORY_FEED"; data: any[] }[] =
   [
@@ -33,7 +36,7 @@ const DATA: { type: "LIVE_FEED" | "INTRO_FEED" | "STORY_FEED"; data: any[] }[] =
         {
           id: 90,
           isUserProfile: true,
-          image: require("../../../assets/image3.png"),
+          image: require("../../../assets/imageAvatar.jpeg"),
           isLive: false,
           userName: "My Story",
         },
@@ -58,7 +61,7 @@ const DATA: { type: "LIVE_FEED" | "INTRO_FEED" | "STORY_FEED"; data: any[] }[] =
         {
           id: 4,
           userName: "Avesta UX Hub",
-          image: require("../../../assets/image3.png"),
+          image: require("../../../assets/imageAvatar.jpeg"),
           isLive: false,
         },
         {
@@ -94,7 +97,7 @@ const DATA: { type: "LIVE_FEED" | "INTRO_FEED" | "STORY_FEED"; data: any[] }[] =
         {
           id: 10,
           userName: "Avesta UX Hub",
-          image: require("../../../assets/image3.png"),
+          image: require("../../../assets/imageAvatar.jpeg"),
           isLive: false,
         },
       ],
@@ -130,14 +133,14 @@ const Home = () => {
   const snapPoints = useMemo(() => ["50%", "60%"], []);
 
   const handleSheetChanges = useCallback((index: number) => {}, []);
-  const height = useDimension().height;
+
   const [isRefreshing, setRefresh] = useState(false);
 
   const renderProfilePicture = (item: IPostReaction) => {
     if (item.user.profilePicture && item.user.profilePicture.trim() !== "") {
       return { uri: item.user.profilePicture };
     }
-    return require("../../../assets/image3.png");
+    return require("../../../assets/imageAvatar.jpeg");
   };
 
   const renderItems = ({
@@ -196,6 +199,17 @@ const Home = () => {
     setRefresh(true);
     getPostFeeds();
   };
+  const navigation = useNavigation<NavigationProp<any>>();
+  const handleNavigationToProfileScreen = (profileId: string) => {
+    bottomSheetRef2.current?.close();
+    dispatch(openReactionList(false));
+    if (profileId === session?.userInfo?.id) {
+      return navigation.navigate(APP_SCREEN_LIST.USER_PROFILE_SCREEN);
+    }
+
+    dispatch(getProfile(profileId));
+    navigation.navigate(APP_SCREEN_LIST.CONNECTION_PROFILE_SCREEN);
+  };
   return (
     <View style={[GlobalStyles.flexOne]}>
       <HomeHeader />
@@ -236,6 +250,7 @@ const Home = () => {
             onPress={() => dispatch(openReactionList(false))}
           />
         )}
+        enablePanDownToClose
       >
         <View style={{ flex: 1 }}>
           <ScrollView
@@ -244,7 +259,7 @@ const Home = () => {
           >
             <View style={[GlobalStyles.container, { backgroundColor: "#fff" }]}>
               {state.postReaction.map((item) => (
-                <View
+                <TouchableOpacity
                   style={{
                     flexDirection: "row",
                     marginBottom: 20,
@@ -252,7 +267,12 @@ const Home = () => {
                   }}
                   key={item.id}
                 >
-                  <View style={{ flex: 1, flexDirection: "row", gap: 10 }}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      handleNavigationToProfileScreen(item.user.id)
+                    }
+                    style={{ flex: 1, flexDirection: "row", gap: 10 }}
+                  >
                     <View>
                       <Image
                         source={renderProfilePicture(item)}
@@ -281,11 +301,11 @@ const Home = () => {
                         {moment(item.createdAt).fromNow()}
                       </Text>
                     </View>
-                  </View>
+                  </TouchableOpacity>
                   <View>
                     <Text>{item.reaction}</Text>
                   </View>
-                </View>
+                </TouchableOpacity>
               ))}
             </View>
           </ScrollView>

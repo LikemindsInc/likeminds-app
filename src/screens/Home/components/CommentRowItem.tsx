@@ -88,7 +88,7 @@ const CommentRowItem: FC<Props> = ({ item }) => {
                 source={
                   item.user?.profilePicture
                     ? { uri: item.user.profilePicture }
-                    : require("../../../../assets/image3.png")
+                    : require("../../../../assets/imageAvatar.jpeg")
                 }
                 style={{ width: 30, height: 30, borderRadius: 15 }}
               />
@@ -150,7 +150,8 @@ const CommentRowItem: FC<Props> = ({ item }) => {
                   { color: "#284453" },
                 ]}
               >
-                {item.reactionCount} {item.reactionCount > 1 ? "likes" : "like"}
+                {item.reactionCount}{" "}
+                {item.reactionCount > 1 ? "reactions" : "reaction"}
               </Text>
               {/* <TouchableOpacity onPress={handleCommentOnComment}>
                 <Text

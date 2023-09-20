@@ -9,7 +9,7 @@ const DATA = [
   {
     id: 90,
     isUserProfile: true,
-    image: require("../../../../assets/image3.png"),
+    image: require("../../../../assets/imageAvatar.jpeg"),
     isLive: false,
     userName: "My Story",
   },

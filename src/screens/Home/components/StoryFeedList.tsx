@@ -76,7 +76,12 @@ const StoryFeedList = () => {
     );
 
   return (
-    <View style={[GlobalStyles.container, { flex: 1, flexGrow: 1 }]}>
+    <View
+      style={[
+        GlobalStyles.container,
+        { flex: 1, flexGrow: 1, paddingHorizontal: 16 },
+      ]}
+    >
       <FlatList
         showsVerticalScrollIndicator={false}
         renderItem={(props) => <StoryFeedItem item={props.item} />}
@@ -85,14 +90,6 @@ const StoryFeedList = () => {
         style={{ flexGrow: 1 }}
         ref={flatLisRef}
         // refreshing={isRefreshing}
-        refreshControl={
-          <RefreshControl
-            refreshing={isRefreshing}
-            onRefresh={handleOnRefresh}
-            colors={[colors.primary]} // for android
-            tintColor={colors.primary} // for ios
-          />
-        }
       />
     </View>
   );

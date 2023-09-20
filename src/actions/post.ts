@@ -101,7 +101,7 @@ export const getPostFeedAction = asyncThunkWrapper<
   void
 >(GET_POST_FEED, async () => {
   const response = await axiosClient.get<AxiosResponse<any>>(
-    "/api/post/feeds?page=1&limit=1000"
+    "/api/post/feeds?page=1&limit=50"
   );
   return response.data;
 });

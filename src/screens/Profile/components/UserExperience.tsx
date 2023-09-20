@@ -28,7 +28,10 @@ const UserExperience: FC<IProps> = ({ data = [] }) => {
         { marginTop: -10 },
       ]}
       //   columnFormat="single-column-left"
-      listViewContainerStyle={{ marginLeft: -44, paddingBottom: 0 }}
+      listViewContainerStyle={{
+        marginLeft: -44,
+        paddingBottom: 0,
+      }}
       style={{ paddingBottom: 0 }}
       options={{
         horizontal: false,
@@ -37,6 +40,7 @@ const UserExperience: FC<IProps> = ({ data = [] }) => {
         scrollEnabled: true,
         bounces: false,
         bouncesZoom: false,
+        style: {},
       }}
     />
   );

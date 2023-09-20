@@ -70,8 +70,9 @@ const SignupCertificate = () => {
   }, [session.completeProfileStatus]);
 
   const handleOnSkip = () => {
-    dispatch(completeUserProfileAction(session.profileData));
-    navigation.navigate(APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN);
+    // dispatch(completeUserProfileAction(session.profileData));
+    // navigation.navigate(APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN);
+    handleOnNextPress();
   };
 
   return (

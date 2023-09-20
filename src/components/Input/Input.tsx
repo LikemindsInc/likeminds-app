@@ -197,7 +197,9 @@ const Input: FC<ITextInputProps> = (props) => {
           <View style={{ paddingRight: 8 }}>{props.prefixIcon}</View>
         )}
         <TextInput
-          returnKeyType={props.returnKeyType || "done"}
+          returnKeyType={
+            props.multiline ? "default" : props.returnKeyType || "done"
+          }
           {...props}
           ref={props.inputRef}
           style={[

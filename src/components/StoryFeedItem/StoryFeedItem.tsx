@@ -193,7 +193,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
                 source={
                   item.user?.profilePicture
                     ? { uri: item.user.profilePicture }
-                    : require("../../../assets/image3.png")
+                    : require("../../../assets/imageAvatar.jpeg")
                 }
                 style={{ width: 30, height: 30, borderRadius: 15 }}
               />
@@ -337,7 +337,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
                 source={
                   item.user?.profilePicture
                     ? { uri: item.user.profilePicture }
-                    : require("../../../assets/image3.png")
+                    : require("../../../assets/imageAvatar.jpeg")
                 }
                 style={{ width: 40, height: 40, borderRadius: 20 }}
               />

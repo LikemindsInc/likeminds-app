@@ -367,11 +367,7 @@ const FirstRoute = () => {
               </View>
             ),
           }))
-        : renderExperienceTimelineView({
-            showExperienceModal: setShowExprienceModal,
-            title: "Experience",
-            actionTitle: "Add Experience",
-          });
+        : [];
 
     return [
       {
@@ -462,7 +458,7 @@ const FirstRoute = () => {
             ),
             description: (
               <View style={[{ marginTop: -5 }]}>
-                <View style={{ marginBottom: 20 }}>
+                <View style={{ marginBottom: 10 }}>
                   {item.degree.trim() !== "" && (
                     <View
                       style={{
@@ -513,11 +509,7 @@ const FirstRoute = () => {
               </View>
             ),
           }))
-        : renderExperienceTimelineView({
-            showExperienceModal: setShowEducationModal,
-            title: "Education",
-            actionTitle: "Add Education",
-          });
+        : [];
 
     return [
       {

@@ -13,7 +13,7 @@ import colors, { addOpacity } from "../../theme/colors";
 import { Entypo, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useToast } from "native-base";
+
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
 import { IPostState, clearCreatePostStatus } from "../../reducers/post_reducer";
@@ -26,6 +26,7 @@ import {
 import { APP_SCREEN_LIST } from "../../constants";
 import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
 import { Video, ResizeMode } from "expo-av";
+import { useToast } from "react-native-toast-notifications";
 
 const CreatePost = () => {
   const [images, setImages] = useState<ImagePicker.ImagePickerAsset[]>([]);
@@ -99,9 +100,9 @@ const CreatePost = () => {
       navigation.navigate(APP_SCREEN_LIST.HOME_SCREEN);
       dispatch(clearCreatePostStatus());
     } else if (postState.createPostStatus === "failed") {
-      toast.show({
-        description: postState.createPostError,
-        variant: "contained",
+      toast.show(postState.createPostError as string, {
+        animationType: "slide-in",
+        swipeEnabled: true,
       });
     }
   }, [postState.createPostStatus]);
