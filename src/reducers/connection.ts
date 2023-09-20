@@ -158,6 +158,10 @@ const connectionSlice = createSlice({
       state.connectionRespondError = "";
       state.connectionRespondSuccess = "";
     },
+    clearConnectionProfileData(state: IConnectionState) {
+      state.profile = null;
+      state.profileId = "";
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(PURGE, (state) => {
@@ -306,6 +310,7 @@ export const {
   clearConnectionStatus,
   clearConnectionRespondStatus,
   clearConnectionsReceived,
+  clearConnectionProfileData,
 } = connectionSlice.actions;
 
 export default connectionSlice.reducer;
