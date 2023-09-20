@@ -60,6 +60,7 @@ const ConnectionProfile = () => {
   }, [selector.profile?.id]);
 
   const getUserProfile = useCallback(() => {
+    if (selector.profileId.trim() === "") return;
     dispatch(getSingleUserAction(selector.profileId));
   }, [selector.profileId]);
 
