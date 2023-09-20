@@ -31,7 +31,10 @@ import {
   undoConnectionRequest,
 } from "../../actions/connection";
 import { useToast } from "react-native-toast-notifications";
-import { clearRequestConnection } from "../../reducers/connection";
+import {
+  clearConnectionProfileData,
+  clearRequestConnection,
+} from "../../reducers/connection";
 import UserExperience from "./components/UserExperience";
 import { Title } from "react-native-paper";
 import ConnectionPostFeed from "./components/ConnectionPostFeed";
@@ -148,6 +151,12 @@ const ConnectionProfile = () => {
     );
   };
 
+  useEffect(() => {
+    if (selector.requestConnectionStatus === "completed") {
+      dispatch(getRequestConnectionStatus(selector.profile?.id as string));
+    }
+  }, [selector.requestConnectionStatus]);
+
   const renderConnectionButton = () => {
     if (selector.requestConnectionStatus === "loading")
       return (
@@ -181,6 +190,10 @@ const ConnectionProfile = () => {
     );
   };
 
+  const handleBackNavigation = () => {
+    dispatch(clearConnectionProfileData());
+    navigation.goBack();
+  };
   return (
     <View
       style={[
@@ -219,7 +232,7 @@ const ConnectionProfile = () => {
               }}
             ></View>
             <TouchableOpacity
-              onPress={() => navigation.goBack()}
+              onPress={handleBackNavigation}
               style={[styles.imageHeaderWrapper]}
             >
               <AntDesign
