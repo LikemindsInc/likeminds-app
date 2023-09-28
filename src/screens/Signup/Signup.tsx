@@ -1,12 +1,14 @@
-import { Keyboard, View } from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
+import { useEffect, useState } from "react";
+import { View } from "react-native";
 import { Text } from "react-native";
+import { useFormik } from "formik";
+import { useToast } from "react-native-toast-notifications";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { GlobalStyles } from "../../theme/GlobalStyles";
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
 import TextLink from "../../components/TextLink/TextLink";
 import { APP_SCREEN_LIST } from "../../constants";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
 import reportError from "../../utils/reportError";
 // import { err } from "react-native-svg/lib/typescript/xml";
 import useAppDispatch from "../../hooks/useAppDispatch";
@@ -18,8 +20,6 @@ import {
 } from "../../reducers/session";
 import { signupUserActionAction } from "../../actions/auth";
 import BackButton from "../../components/Navigation/BackButton/BackButton";
-import { useToast } from "react-native-toast-notifications";
-import { useFormik } from "formik";
 import { initialSignupValues, signupValidator } from "./validator";
 
 const Signup = () => {
@@ -191,7 +191,8 @@ const Signup = () => {
 					placeholder="8163113450"
 					autoCorrect={false}
 					autoCapitalize={"none"}
-					keyboardType="default"
+					keyboardType="phone-pad"
+					maxLength={10}
 					value={values.phone}
 					onBlur={handleBlur("phone")}
 					onChangeText={handleChange("phone")}
