@@ -81,12 +81,10 @@ const Login = () => {
         </Text>
       </View>
 
-      <View style={{
-        marginBottom: 20,
-      }}>
-         <Text style={{
-          color: 'red'
-         }}>{errorReducer.message}</Text>
+      <View style={[GlobalStyles.mb20]}>
+         <Text style={[
+          GlobalStyles.textRed
+         ]}>{errorReducer.message}</Text>
       </View>
 
       <View>
