@@ -218,11 +218,15 @@ export const SCHOOL_DEGREES = [
 export const PASSWORD_REGEX =
   /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
+  export const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
 export const MINIMUM_PASSWORD_LENGTH_REGEX = /^.{8}$/;
 export const CONTAINS_UPPERCASE_PASSWORD_REGEX = /^.*[A-Z].*$/;
 export const CONTAINS_LOWERCASE_PASSWORD_REGEX = /^.*[a-z].*$/;
 export const CONTAINS_DIGIT_PASSWORD_REGEX = /.*\d.*/;
 export const CONTAINS_WORD_PASSWORD_REGEX = /^.*[\W_].*$/;
+
+export const PHONE_NUMBER_REGEX = /[0-9]/
 
 export const UNHANDLED_GLOBAL_ERRORS = [
   "Email or Password is Incorrect",
