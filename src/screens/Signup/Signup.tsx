@@ -28,7 +28,6 @@ const Signup = () => {
 	const session = useAppSelector(
 		(state: any) => state.sessionReducer
 	) as ISessionState;
-	const [countryCode, setCountryCode] = useState("");
 	const errorReducer = useAppSelector((state) => state.errorReducer);
 	
 
