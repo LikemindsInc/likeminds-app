@@ -393,8 +393,8 @@ const AppRoutes = () => {
       if (UNHANDLED_GLOBAL_ERRORS.includes(errorReducer.message)) {
         return;
       } else {
-        toast.show(errorReducer.message, { type: "normal" });
-        dispatch(clearNetworkError());
+        // toast.show(errorReducer.message, { type: "normal" });
+        // dispatch(clearNetworkError());
       }
     }
   }, [errorReducer.message]);
