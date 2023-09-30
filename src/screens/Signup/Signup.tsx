@@ -29,96 +29,21 @@ const Signup = () => {
 		(state: any) => state.sessionReducer
 	) as ISessionState;
 	const [countryCode, setCountryCode] = useState("");
-	// const [email, setEmail] = useState("");
-	// const [phone, setPhone] = useState("");
-
-	// const [password, setPassword] = useState("");
-	// const [confirmPassword, setConfirmPassword] = useState("");
-
-	// const [errors, setErrors] = useState<{
-	//   email: null | string;
-	//   password: null | string;
-	//   phone: null | string;
-	//   confirmPassword: null | string;
-	// }>({ email: null, password: null, confirmPassword: null, phone: null });
-
-	// useEffect(() => {
-	//   setErrors({
-	//     email: null,
-	//     password: null,
-	//     confirmPassword: null,
-	//     phone: null,
-	//   });
-	// }, []);
-
-	// useEffect(() => {
-	//   if (email.trim() !== "") setErrors((state) => ({ ...state, email: null }));
-	//   // else setErrors((state) => ({ ...state, email: "Email is required" }));
-	// }, [email]);
-
-	// useEffect(() => {
-	//   if (password.trim() !== "")
-	//     setErrors((state) => ({ ...state, password: null }));
-	//   // else setErrors((state) => ({ ...state, password: "Password is required" }));
-	// }, [password]);
-
-	// useEffect(() => {
-	//   if (phone.trim() !== "") setErrors((state) => ({ ...state, phone: null }));
-	//   // else setErrors((state) => ({ ...state, phone: "Phone is required" }));
-	// }, [phone]);
-
-	// useEffect(() => {
-	//   if (countryCode.trim() !== "" && countryCode.trim() !== "+000")
-	//     setErrors((state) => ({ ...state, phone: null }));
-	//   // else setErrors((state) => ({ ...state, phone: "Phone is required" }));
-	// }, [phone]);
-
-	// useEffect(() => {
-	//   if (confirmPassword.trim() !== "")
-	//     setErrors((state) => ({ ...state, confirmPassword: null }));
-	//   // else
-	//   //   setErrors((state) => ({
-	//   //     ...state,
-	//   //     confirmPassword: "Confirm Password is required",
-	//   //   }));
-	// }, [confirmPassword]);
+	const errorReducer = useAppSelector((state) => state.errorReducer);
+	
 
 	const handleSubmitAccount = () => {
+		if(!values.countryCode){
+			setFieldError('phone', 'Country code is required')
+			return 
+		}
 		try {
-			//handleSubmitAccount
-			// let formattedPhone = "";
-			// if (email.trim() === "")
-			//   return setErrors((state) => ({ ...state, email: "Email is required" }));
-			// if (countryCode.startsWith("+000") || countryCode.trim() === "")
-			//   return setErrors((state) => ({
-			//     ...state,
-			//     phone: "Please select country code",
-			//   }));
-			// if (phone.trim() === "")
-			//   return setErrors((state) => ({
-			//     ...state,
-			//     phone: "Phone number is required",
-			//   }));
-			// if (password.trim() === "")
-			//   return setErrors((state) => ({
-			//     ...state,
-			//     password: "Password is required",
-			//   }));
-			// if (password !== confirmPassword)
-			//   return setErrors((state) => ({
-			//     ...state,
-			//     confirmPassword: "Confirm password and Password do not match",
-			//   }));
-			// if (phone.startsWith("0")) formattedPhone = phone.slice(1);
-			// else if (phone.startsWith("+2340")) formattedPhone = phone.slice(5);
-			// else if (phone.startsWith("+234")) formattedPhone = phone.slice(4);
-			// else formattedPhone = phone;
 			dispatch(
 				signupUserActionAction({
 					email: values.email.trim(),
 					password: values.password.trim(),
 					confirmPassword: values.confirmPassword.trim(),
-					phone: `${countryCode}${values.phone}`.trim(),
+					phone: `${values.countryCode}${values.phone}`.trim(),
 				})
 			);
 		} catch (error: any) {
@@ -132,8 +57,10 @@ const Signup = () => {
 		values,
 		handleChange,
 		handleSubmit,
+		setFieldValue,
 		touched,
 		handleBlur,
+		setFieldError
 	} = useFormik({
 		initialValues: initialSignupValues,
 		validationSchema: signupValidator,
@@ -149,7 +76,7 @@ const Signup = () => {
 			session.signingUpStatus === "completed" &&
 			session.signingUpSuccess !== ""
 		) {
-			dispatch(updatePhoneNumber(`${countryCode}${values.phone}`));
+			dispatch(updatePhoneNumber(`${values.countryCode}${values.phone}`));
 			toast.show(session.signingUpSuccess, { type: "normal" });
 			handleNextNavigation();
 			dispatch(clearSignupStatus());
@@ -158,6 +85,13 @@ const Signup = () => {
 	}, [session.signingUpStatus]);
 
 	const navigation = useNavigation<NavigationProp<any>>();
+
+	// handle numbers only no text
+	const handlePhoneTextChange = (newText: string) => {
+		const numericText = newText.replace(/[^0-9]/g, '')
+		setFieldValue('phone', numericText);
+	}
+
 	return (
 		<View style={[GlobalStyles.container]}>
 			<View style={{ marginBottom: 20 }}>
@@ -175,6 +109,20 @@ const Signup = () => {
 					Enter the following information to create a new account
 				</Text>
 			</View>
+			{errorReducer.message ? (
+				<View style={[GlobalStyles.mb20]}>
+					<Text
+						style={[
+							GlobalStyles.fontInterRegular,
+							GlobalStyles.fontSize13,
+							GlobalStyles.textRed,
+						]}
+					>
+						{errorReducer.message}
+					</Text>
+				</View>
+			) : null}
+
 			<View style={[GlobalStyles.mb20]}>
 				<Input
 					placeholder="Email Address"
@@ -191,15 +139,15 @@ const Signup = () => {
 					placeholder="8163113450"
 					autoCorrect={false}
 					autoCapitalize={"none"}
-					keyboardType="phone-pad"
+					keyboardType="numeric"
 					maxLength={10}
 					value={values.phone}
 					onBlur={handleBlur("phone")}
-					onChangeText={handleChange("phone")}
+					onChangeText={(value) => handlePhoneTextChange(value)}
 					returnKeyType="done"
 					mode="phone-pad"
 					errorMessage={touched.phone ? errors.phone : null}
-					onCountryCodeSelect={(value) => setCountryCode(value)}
+					onCountryCodeSelect={(value) => setFieldValue('countryCode', value)}
 				/>
 				<Input
 					placeholder="Password"

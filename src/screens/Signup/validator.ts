@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { EMAIL_REGEX, PASSWORD_REGEX, PHONE_NUMBER_REGEX } from "../../constants";
+import { EMAIL_REGEX, PASSWORD_REGEX } from "../../constants";
 
 export const signupValidator = yup.object().shape({
 	email: yup
@@ -20,12 +20,16 @@ export const signupValidator = yup.object().shape({
 		),
 	confirmPassword: yup
 		.string()
+		.required("Confirm Password is required")
 		.oneOf([yup.ref("password")], "Passwords must match"),
 	phone: yup
 		.string()
 		.required("Phone is a required field")
 		.test('len', 'Phone must be 10 characters long', value => value.length === 10)
-		.matches(PHONE_NUMBER_REGEX, 'Phone should be a valid number')		
+		.matches(/^\d*$/, 'Phone should be a valid number'),		
+	countryCode: yup
+		.string()
+	
 });
 
 export const initialSignupValues = {
@@ -33,4 +37,5 @@ export const initialSignupValues = {
 	phone: "",
 	password: "",
 	confirmPassword: "",
+	countryCode: "",
 };
