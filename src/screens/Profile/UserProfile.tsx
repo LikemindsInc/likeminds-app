@@ -297,7 +297,7 @@ const FirstRoute = () => {
   const [showEducationModal, setShowEducationModal] = useState(false);
   const [showSkillsModal, setShowSkillsModal] = useState(false);
   const [showCerticatesModal, setshowCerticatesModal] = useState(false);
-  const filterExperience = () => {
+  const getExperienceTimeLine = () => {
     const filtered = (user?.experience || []).filter(
       (item) => item.companyName && item.companyName.trim() !== ""
     );
@@ -316,8 +316,9 @@ const FirstRoute = () => {
                   style={[
                     GlobalStyles.fontInterRegular,
                     GlobalStyles.fontSize13,
-                    GlobalStyles.textPrimary,
+                    GlobalStyles.textPurple,
                     GlobalStyles.mb10,
+                    GlobalStyles.fontWeight700,
                   ]}
                 >
                   {item.jobTitle}
@@ -346,7 +347,7 @@ const FirstRoute = () => {
               <View style={[{ marginTop: -5 }]}>
                 <Text
                   style={[
-                    GlobalStyles.fontInterBlack,
+                    GlobalStyles.fontInterRegular,
                     GlobalStyles.fontSize13,
                     GlobalStyles.textNavyBlue,
                     GlobalStyles.mb10,
@@ -381,7 +382,7 @@ const FirstRoute = () => {
           >
             <Text
               style={[
-                GlobalStyles.fontInterBlack,
+                GlobalStyles.fontInterMedium,
                 GlobalStyles.fontSize13,
                 GlobalStyles.textNavyBlue,
                 GlobalStyles.mb10,
@@ -433,7 +434,7 @@ const FirstRoute = () => {
       setShowSkillsModal(false);
     }
   }, [session.completeProfileStatus]);
-  const filterEducatio = () => {
+  const getEducationTimeLine = () => {
     const timeline =
       user?.education && user.education.length > 0
         ? user?.education.map((item) => ({
@@ -447,9 +448,10 @@ const FirstRoute = () => {
               >
                 <Text
                   style={[
-                    GlobalStyles.fontInterBlack,
+                    GlobalStyles.fontInterMedium,
                     GlobalStyles.fontSize13,
                     GlobalStyles.textNavyBlue,
+                    GlobalStyles.mb10,
                   ]}
                 >
                   Education
@@ -470,9 +472,9 @@ const FirstRoute = () => {
                         style={[
                           GlobalStyles.fontInterRegular,
                           GlobalStyles.fontSize13,
-                          GlobalStyles.textPrimary,
+                          GlobalStyles.textPurple,
                           GlobalStyles.mb10,
-                          GlobalStyles.mt10,
+                          GlobalStyles.fontWeight700,
                         ]}
                       >
                         {item.degree}
@@ -498,7 +500,7 @@ const FirstRoute = () => {
                       style={[
                         GlobalStyles.fontInterRegular,
                         GlobalStyles.fontSize13,
-                        GlobalStyles.textGrey,
+                        GlobalStyles.textNavyBlue,
                         GlobalStyles.mb10,
                       ]}
                     >
@@ -523,7 +525,7 @@ const FirstRoute = () => {
           >
             <Text
               style={[
-                GlobalStyles.fontInterBlack,
+                GlobalStyles.fontInterMedium,
                 GlobalStyles.fontSize13,
                 GlobalStyles.textNavyBlue,
                 GlobalStyles.mb10,
@@ -577,7 +579,7 @@ const FirstRoute = () => {
     }
   };
 
-  const filterCertificates = () => {
+  const getCertifcateTimeLine = () => {
     const timeline =
       user?.certificates.map((item) => ({
         title: (
@@ -645,7 +647,7 @@ const FirstRoute = () => {
           >
             <Text
               style={[
-                GlobalStyles.fontInterBlack,
+                GlobalStyles.fontInterMedium,
                 GlobalStyles.fontSize13,
                 GlobalStyles.textNavyBlue,
                 GlobalStyles.mb10,
@@ -696,10 +698,29 @@ const FirstRoute = () => {
     >
       <UserExperience
         data={[
-          ...filterExperience(),
-          ...filterEducatio(),
+          ...getExperienceTimeLine(),
+          ...getEducationTimeLine(),
           {
-            title: "Skills",
+            title: (
+              <View
+                style={{
+                  justifyContent: "space-between",
+                  flexDirection: "row",
+                  width: "100%",
+                }}
+              >
+                <Text
+                  style={[
+                    GlobalStyles.fontInterMedium,
+                    GlobalStyles.fontSize13,
+                    GlobalStyles.textNavyBlue,
+                    GlobalStyles.mb10,
+                  ]}
+                >
+                  Skills
+                </Text>
+              </View>
+            ),
             description: (
               <View>
                 <Text
@@ -708,13 +729,14 @@ const FirstRoute = () => {
                     GlobalStyles.fontSize13,
                     GlobalStyles.textGrey,
                     GlobalStyles.mb10,
+                    GlobalStyles.mt10,
                   ]}
                 >
                   {user?.skills.join(",")}
                 </Text>
                 <TouchableOpacity
                   onPress={() => setShowSkillsModal(true)}
-                  style={{ flexDirection: "row", gap: 8 }}
+                  style={{ flexDirection: "row", gap: 8, marginBottom: 10 }}
                 >
                   <AntDesign name="plus" size={16} color={colors.primary} />
                   <Text
@@ -732,7 +754,7 @@ const FirstRoute = () => {
             ),
           },
 
-          ...filterCertificates(),
+          ...getCertifcateTimeLine(),
         ]}
       />
       <AppModal
@@ -802,8 +824,9 @@ function TabViewExample() {
           });
           const color =
             index === i
-              ? useColorModeValue("#000", "#e5e5e5")
-              : useColorModeValue("#1f2937", "#a1a1aa");
+              ? useColorModeValue(colors.navyBlue, "#000")
+              : useColorModeValue(colors.grey, "#000");
+
           const borderColor =
             index === i
               ? "#284453"

@@ -50,6 +50,7 @@ import { getProfile } from "../../reducers/connection";
 import FullScreenImageCarousel from "../FullScreenImageCarousel/FullScreenImageCarousel";
 import { Video, ResizeMode } from "expo-av";
 import { IOScrollView, InView } from "react-native-intersection-observer";
+import VideoPlayer from "expo-video-player";
 
 interface IProps {
   item: IPostFeed;
@@ -393,17 +394,37 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
           ? item.videos.map((item) => (
               <InView onChange={handleOnViewChange}>
                 <View style={[GlobalStyles.mt20]}>
-                  <Video
-                    style={{ width: "100%", height: 300 }}
+                  <VideoPlayer
+                    videoProps={{
+                      shouldPlay: false,
+                      resizeMode: ResizeMode.CONTAIN,
+                      // ❗ source is required https://docs.expo.io/versions/latest/sdk/video/#props
+                      source: {
+                        uri: item,
+                      },
+                      style: {
+                        width: "100%",
+                        height: 300,
+                        borderRadius: 16,
+                      },
+                      useNativeControls: true,
+                      isLooping: false,
+                    }}
+                    autoHidePlayer={false}
+                    defaultControlsVisible={true}
+                    style={{ height: 300 }}
+                  />
+                  {/* <Video
+                    style={{ width: "100%", height: 300, borderRadius: 16 }}
                     source={{
                       uri: item,
                     }}
                     ref={videoRef}
-                    useNativeControls
+                    useNativeControls={true}
                     resizeMode={ResizeMode.CONTAIN}
-                    isLooping
+                    isLooping={false}
                     shouldPlay={false}
-                  />
+                  /> */}
                 </View>
               </InView>
             ))

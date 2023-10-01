@@ -32,6 +32,7 @@ import {
 import { PURGE } from "redux-persist";
 import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
 import { useToast } from "react-native-toast-notifications";
+import { clearNetworkError } from "../../reducers/errorHanlder";
 
 const OTPScreen = () => {
   let otpInput = useRef(null) as React.RefObject<any>;
@@ -48,10 +49,10 @@ const OTPScreen = () => {
 
   const [otp, setOTP] = useState("");
 
+  const error = useAppSelector((state) => state.errorReducer);
+
   const handleOnVerify = () => {
     if (otp.length < 4) return toast.show("Incomplete OTP");
-
-    console.log("otp> ", otp);
 
     dispatch(clearEmailPhoneOtpVerificationStatus());
 
@@ -70,25 +71,32 @@ const OTPScreen = () => {
 
   useEffect(() => {
     if (session.resendOtpStatus === "completed") {
-      toast.show("OTP sent successfully");
+      // toast.show("OTP sent successfully");
       dispatch(clearResendOtpStatus());
+      dispatch(clearNetworkError());
     } else if (session.resendOtpStatus === "failed") {
-      toast.show(session.resendOtpError as string, {
-        type: "error",
-        animationType: "slide-in",
-      });
-      dispatch(clearResendOtpStatus());
+      // toast.show(session.resendOtpError as string, {
+      //   type: "error",
+      //   animationType: "slide-in",
+      // });
+      setTimeout(() => {
+        dispatch(clearResendOtpStatus());
+        dispatch(clearNetworkError());
+      }, 2500);
     }
   }, [session.resendOtpStatus]);
 
   useEffect(() => {
     if (session.verifyPhoneEmailOTPStatus === "completed") {
+      dispatch(clearEmailPhoneOtpVerificationStatus());
+      dispatch(clearNetworkError());
       navigation.navigate(APP_SCREEN_LIST.CREATE_PASSWORD_SCREEN);
     } else if (session.verifyPhoneEmailOTPStatus === "failed") {
-      toast.show(session.verifyPhoneEmailOTPError as string);
+      setTimeout(() => {
+        dispatch(clearEmailPhoneOtpVerificationStatus());
+        dispatch(clearNetworkError());
+      }, 2500);
     }
-
-    return () => {};
   }, [session.verifyPhoneEmailOTPStatus]);
 
   return (
@@ -96,7 +104,20 @@ const OTPScreen = () => {
       <View style={[GlobalStyles.container]}>
         <View style={[styles.container]}>
           <BackButton title="Verification" iconColor={colors.primary} />
-          <View style={[GlobalStyles.mb40, GlobalStyles.mt30]}>
+          <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
+            <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+                GlobalStyles.fontWeight700,
+                GlobalStyles.textGrey,
+                GlobalStyles.textRed,
+              ]}
+            >
+              {session.verifyPhoneEmailOTPError || error.message}
+            </Text>
+          </View>
+          <View style={[GlobalStyles.mb40]}>
             <Text
               style={[
                 GlobalStyles.fontInterRegular,

@@ -32,6 +32,7 @@ import {
 import { PURGE } from "redux-persist";
 import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
 import { useToast } from "react-native-toast-notifications";
+import { clearNetworkError } from "../../reducers/errorHanlder";
 
 const OTPEmailScreen = () => {
   let otpInput = useRef(null) as React.RefObject<any>;
@@ -44,6 +45,8 @@ const OTPEmailScreen = () => {
     (state: any) => state.sessionReducer
   ) as ISessionState;
 
+  const error = useAppSelector((state) => state.errorReducer);
+
   const navigation = useNavigation<NavigationProp<any>>();
 
   const [otp, setOTP] = useState("");
@@ -54,6 +57,7 @@ const OTPEmailScreen = () => {
         type: "variant",
         animationType: "slide-in",
       });
+    dispatch(clearNetworkError());
     dispatch(clearEmailPhoneOtpVerificationStatus());
     dispatch(storeOtpCode(otp));
     dispatch(
@@ -71,11 +75,13 @@ const OTPEmailScreen = () => {
   useEffect(() => {
     if (session.verifyPhoneEmailOTPStatus === "completed") {
       navigation.navigate(APP_SCREEN_LIST.CREATE_PASSWORD_SCREEN);
+      dispatch(clearNetworkError());
+      dispatch(clearEmailPhoneOtpVerificationStatus());
     } else if (session.verifyPhoneEmailOTPStatus === "failed") {
-      toast.show(session.verifyPhoneEmailOTPError as string, {
-        type: "variant",
-        animationType: "slide-in",
-      });
+      setTimeout(() => {
+        dispatch(clearEmailPhoneOtpVerificationStatus());
+        dispatch(clearNetworkError());
+      }, 2500);
     }
 
     return () => {};
@@ -99,7 +105,20 @@ const OTPEmailScreen = () => {
       <View style={[GlobalStyles.container]}>
         <View style={[styles.container]}>
           <BackButton title="Verification" iconColor={colors.primary} />
-          <View style={[GlobalStyles.mb40, GlobalStyles.mt30]}>
+          <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
+            <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+                GlobalStyles.fontWeight700,
+                GlobalStyles.textGrey,
+                GlobalStyles.textRed,
+              ]}
+            >
+              {session.verifyPhoneEmailOTPError || error.message}
+            </Text>
+          </View>
+          <View style={[GlobalStyles.mb40]}>
             <Text
               style={[
                 GlobalStyles.fontInterRegular,

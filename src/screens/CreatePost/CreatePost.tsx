@@ -27,6 +27,7 @@ import { APP_SCREEN_LIST } from "../../constants";
 import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
 import { Video, ResizeMode } from "expo-av";
 import { useToast } from "react-native-toast-notifications";
+import { clearNetworkError } from "../../reducers/errorHanlder";
 
 const CreatePost = () => {
   const [images, setImages] = useState<ImagePicker.ImagePickerAsset[]>([]);
@@ -64,7 +65,6 @@ const CreatePost = () => {
         aspect: [4, 3],
         quality: 1,
       });
-      console.log("result cancelled> ", result.canceled);
       if (!result.canceled) {
         console.log(result);
         setImages([]);
@@ -104,6 +104,10 @@ const CreatePost = () => {
         animationType: "slide-in",
         swipeEnabled: true,
       });
+      setTimeout(() => {
+        dispatch(clearNetworkError());
+        dispatch(clearCreatePostStatus());
+      }, 2500);
     }
   }, [postState.createPostStatus]);
 
@@ -116,7 +120,9 @@ const CreatePost = () => {
 
   const clearState = () => {
     setImages([]);
+    setContent("");
     setVideoSelected([]);
+    dispatch(clearCreatePostStatus());
   };
 
   return (
