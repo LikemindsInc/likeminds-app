@@ -6,6 +6,7 @@ const colors = {
   black: "#000",
   red: "#E13D3D",
   navyBlue: "#284453",
+  purple: "#b175ff",
 };
 
 export const addOpacity = (p: number) => {

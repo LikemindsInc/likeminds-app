@@ -85,9 +85,7 @@ const AppModal: FC<IProps> = (props) => {
               }}
             ></View>
           </View>
-          <View style={[{ flex: 1, backgroundColor: "red" }]}>
-            {props.children}
-          </View>
+          <View style={[{ flex: 1 }]}>{props.children}</View>
         </View>
       </View>
     </Modal>

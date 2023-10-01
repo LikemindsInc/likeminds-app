@@ -1,4 +1,4 @@
-import { Text, View, useToast } from "native-base";
+import { Text, View } from "native-base";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import Input from "../../components/Input/Input";
 import TextLink from "../../components/TextLink/TextLink";
@@ -12,6 +12,7 @@ import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
 import { ISessionState, storeOTPChannelValue } from "../../reducers/session";
 import BackButton from "../../components/Navigation/BackButton/BackButton";
+import { useToast } from "react-native-toast-notifications";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -22,29 +23,30 @@ const ForgotPassword = () => {
   ) as ISessionState;
   const toast = useToast();
   const handleOnNextPress = () => {
-    if (email.trim() === "")
-      return toast.show({
-        description: "Please provide your email address",
-        variant: "contained",
-      });
+    if (email.trim() === "") return;
+    //  toast.show("Please provide your email address",{
+    //   animationType: "slide-in"
+    // });
     dispatch(storeOTPChannelValue(`email_${email}`));
     dispatch(requestOTPEmailAction({ email }));
   };
   useEffect(() => {
     if (session.requestOTPEmailStatus === "completed") {
-      toast.show({ description: session.requestOTPEmailSuccess });
-      setTimeout(() => {
-        navigation.navigate(APP_SCREEN_LIST.FORGOT_EMAIL_OTP_SCREEN);
-      }, 200);
+      //  toast.show(session.requestOTPEmailSuccess as string, {
+      //    animationType: "slide-in",
+      //  });
+      navigation.navigate(APP_SCREEN_LIST.FORGOT_EMAIL_OTP_SCREEN);
     } else if (session.requestOTPEmailStatus === "failed") {
-      toast.show({ description: session.requestOTPEmailError });
+      // toast.show(session.requestOTPEmailError as string, {
+      //   animationType: "slide-in",
+      // });
     }
   }, [session.requestOTPEmailStatus]);
   return (
     <View style={[GlobalStyles.container]}>
       <View style={styles.container}>
         <View style={{ marginBottom: 20 }}>
-          <BackButton title="Fogort Password" />
+          <BackButton title="Forgot Password" />
         </View>
         <View style={[GlobalStyles.mb40]}>
           <Text

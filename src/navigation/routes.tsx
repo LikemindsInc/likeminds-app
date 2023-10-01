@@ -391,6 +391,7 @@ const AppRoutes = () => {
     if (errorReducer.message?.trim() !== "") {
       // toast.show({ description: errorReducer.message });
       if (UNHANDLED_GLOBAL_ERRORS.includes(errorReducer.message)) {
+        dispatch(clearNetworkError());
         return;
       } else {
         // toast.show(errorReducer.message, { type: "normal" });

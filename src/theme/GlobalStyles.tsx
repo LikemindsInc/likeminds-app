@@ -31,6 +31,9 @@ export const GlobalStyles = StyleSheet.create({
   textBlack: {
     color: colors.black,
   },
+  textPurple: {
+    color: colors.purple,
+  },
   subHeading: {
     fontSize: font.size.font20,
   },

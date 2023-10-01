@@ -10,39 +10,41 @@ interface IProps {
 
 const UserExperience: FC<IProps> = ({ data = [] }) => {
   return (
-    <Timeline
-      data={data}
-      isUsingFlatlist={true}
-      lineColor={colors.navyBlue}
-      circleColor={colors.navyBlue}
-      descriptionStyle={[
-        GlobalStyles.fontInterRegular,
-        GlobalStyles.fontSize13,
-        { color: colors.grey },
-      ]}
-      renderFullLine
-      titleStyle={[
-        GlobalStyles.fontInterBlack,
-        GlobalStyles.fontSize15,
-        GlobalStyles.textNavyBlue,
-        { marginTop: -10 },
-      ]}
-      //   columnFormat="single-column-left"
-      listViewContainerStyle={{
-        marginLeft: -44,
-        paddingBottom: 0,
-      }}
-      style={{ paddingBottom: 0 }}
-      options={{
-        horizontal: false,
-        showsHorizontalScrollIndicator: false,
-        showsVerticalScrollIndicator: false,
-        scrollEnabled: true,
-        bounces: false,
-        bouncesZoom: false,
-        style: {},
-      }}
-    />
+    <View style={{ flex: 1 }}>
+      <Timeline
+        data={data}
+        isUsingFlatlist={true}
+        lineColor={colors.navyBlue}
+        circleColor={colors.navyBlue}
+        descriptionStyle={[
+          GlobalStyles.fontInterRegular,
+          GlobalStyles.fontSize13,
+          { color: colors.grey },
+        ]}
+        renderFullLine
+        titleStyle={[
+          GlobalStyles.fontInterBlack,
+          GlobalStyles.fontSize15,
+          GlobalStyles.textNavyBlue,
+          { marginTop: -10 },
+        ]}
+        //   columnFormat="single-column-left"
+        listViewContainerStyle={{
+          marginLeft: -44,
+          paddingBottom: 0,
+        }}
+        style={{ paddingBottom: 0 }}
+        options={{
+          horizontal: false,
+          showsHorizontalScrollIndicator: false,
+          showsVerticalScrollIndicator: false,
+          scrollEnabled: false,
+          bounces: false,
+          bouncesZoom: false,
+          style: {},
+        }}
+      />
+    </View>
   );
 };
 

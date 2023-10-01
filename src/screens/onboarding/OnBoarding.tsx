@@ -1,5 +1,12 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Animated,
+} from "react-native";
 import AppIntroSlider from "react-native-app-intro-slider";
 import font from "../../theme/font";
 import { GlobalStyles } from "../../theme/GlobalStyles";
@@ -10,7 +17,7 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { APP_SCREEN_LIST, INavigationProps } from "../../constants";
 import useAppSelector from "../../hooks/useAppSelector";
 import { ISettingState } from "../../reducers/settings";
-import { useEffect } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 interface ISliderProps {
   key: number;
@@ -72,14 +79,37 @@ const slides = [
 
 const OnBoarding = () => {
   const navigation = useNavigation<NavigationProp<any>>();
+  const bounceValue = useRef(new Animated.Value(0)).current;
   const setting = useAppSelector(
     (state: any) => state.settingReducer
   ) as ISettingState;
+
+  const startBounceAnimation = () => {
+    // Configure the animation
+    Animated.spring(bounceValue, {
+      toValue: 1,
+      friction: 5,
+      tension: 45,
+      useNativeDriver: false,
+    }).start(); // Start the animation
+  };
 
   useEffect(() => {
     if (setting.userInfo)
       return navigation.navigate(APP_SCREEN_LIST.MAIN_SCREEN);
   }, []);
+
+  useEffect(() => {
+    startBounceAnimation();
+  }, []);
+
+  const animatedStyle = useMemo(
+    () => ({
+      transform: [{ scale: bounceValue }],
+    }),
+    [bounceValue]
+  );
+
   const _renderItem = ({ item }: any) => {
     return (
       <View>
@@ -117,14 +147,24 @@ const OnBoarding = () => {
             {item.text}
           </Text>
         </View>
-        <View style={[GlobalStyles.alignHorizontalCenter, GlobalStyles.mb20]}>
+
+        <View style={{ alignItems: "center" }}>
+          <Animated.Image
+            style={[styles.groupImage, animatedStyle]}
+            source={item.image}
+            resizeMethod="auto"
+            resizeMode="contain"
+          />
+        </View>
+        {/* <View style={[GlobalStyles.alignHorizontalCenter, GlobalStyles.mb20]}>
           <Image
             source={item.image}
             resizeMethod="auto"
             resizeMode="contain"
             style={styles.groupImage}
           />
-        </View>
+           </View> 
+        </Animated.View> */}
         <View style={[GlobalStyles.mb40, GlobalStyles.mt40]}>
           <Text
             style={[
@@ -140,6 +180,11 @@ const OnBoarding = () => {
         </View>
       </View>
     );
+  };
+
+  const handleNext = () => {
+    bounceValue.setValue(0);
+    startBounceAnimation();
   };
 
   const DoneButton = () => (
@@ -181,6 +226,7 @@ const OnBoarding = () => {
         renderDoneButton={DoneButton}
         onDone={handleOnDone}
         scrollEnabled
+        onSlideChange={(a) => handleNext()}
       />
       <StatusBar style="dark" />
     </View>

@@ -23,7 +23,6 @@ export function useUser() {
   }, [state.getCurrentUserStatus]);
 
   useEffect(() => {
-    console.log("why are you called bhere");
     getUser();
   }, []);
 

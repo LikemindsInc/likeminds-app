@@ -16,6 +16,7 @@ import { useToast } from "react-native-toast-notifications";
 
 const RecoverWithPhone = () => {
   const navigation = useNavigation<NavigationProp<any>>();
+  const [errorMessage, setErrorMessage] = useState<string | null>("");
   const [phone, setPhone] = useState("");
   const session = useAppSelector(
     (state: any) => state.sessionReducer
@@ -26,14 +27,17 @@ const RecoverWithPhone = () => {
   const handleOnNextPress = () => {
     let formattedPhone = "";
     if (countryCode.startsWith("+000") || countryCode.trim() === "")
-      return toast.show("Please select country", { type: "normal" });
+      return setErrorMessage("Please select country");
+
     if (phone.trim() === "")
-      return toast.show("Please provide your phone number", { type: "normal" });
+      return setErrorMessage("Please provide your phone number");
 
     if (phone.startsWith("0")) formattedPhone = phone.slice(1);
     else if (phone.startsWith("+2340")) formattedPhone = phone.slice(5);
     else if (phone.startsWith("+234")) formattedPhone = phone.slice(4);
     else formattedPhone = phone;
+
+    setErrorMessage(null);
 
     dispatch(storeOTPChannelValue(`phone_${countryCode}${formattedPhone}`));
     dispatch(
@@ -42,14 +46,12 @@ const RecoverWithPhone = () => {
   };
   useEffect(() => {
     if (session.requestOTPPhoneStatus === "completed") {
-      setTimeout(() => {
-        navigation.navigate(APP_SCREEN_LIST.FORGOT_PHONE_OTP_SCREEN);
-      }, 200);
+      navigation.navigate(APP_SCREEN_LIST.FORGOT_PHONE_OTP_SCREEN);
     } else if (
       session.requestOTPPhoneStatus === "failed" &&
       session.requestOTPEmailError?.trim() !== ""
     ) {
-      toast.show(session.requestOTPEmailError as string, { type: "normal" });
+      // toast.show(session.requestOTPEmailError as string, { type: "normal" });
     }
   }, [session.requestOTPPhoneStatus]);
   return (
@@ -80,6 +82,7 @@ const RecoverWithPhone = () => {
             mode="phone-pad"
             onChangeText={(value) => setPhone(value)}
             onCountryCodeSelect={(value) => setCountryCode(value)}
+            errorMessage={errorMessage}
           />
         </View>
         <View style={[GlobalStyles.mb40]}>
