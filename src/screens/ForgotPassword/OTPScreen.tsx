@@ -1,8 +1,5 @@
 import {
-  NativeSyntheticEvent,
   StyleSheet,
-  TextInput,
-  TextInputKeyPressEventData,
   View,
 } from "react-native";
 import { GlobalStyles } from "../../theme/GlobalStyles";
@@ -10,10 +7,9 @@ import BackButton from "../../components/Navigation/BackButton/BackButton";
 import colors from "../../theme/colors";
 import { Text } from "react-native";
 import Button from "../../components/Button/Button";
-import Input from "../../components/Input/Input";
 import TextLink from "../../components/TextLink/TextLink";
 import { APP_SCREEN_LIST, __ROOT_REDUX_STATE_KEY__ } from "../../constants";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import OTPTextInput from "react-native-otp-textinput";
 import useAppSelector from "../../hooks/useAppSelector";
@@ -26,20 +22,15 @@ import {
 import useAppDispatch from "../../hooks/useAppDispatch";
 import {
   resendOTPAction,
-  verifyOTPActionAction,
   verifyOTPOnChangePasswordAction,
 } from "../../actions/auth";
-import { PURGE } from "redux-persist";
 import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
-import { useToast } from "react-native-toast-notifications";
 import { clearNetworkError } from "../../reducers/errorHanlder";
 
 const OTPEmailScreen = () => {
-  let otpInput = useRef(null) as React.RefObject<any>;
-
-  const toast = useToast();
 
   const dispatch = useAppDispatch();
+  const [information, setInformation] = useState('')
 
   const session = useAppSelector(
     (state: any) => state.sessionReducer
@@ -52,11 +43,10 @@ const OTPEmailScreen = () => {
   const [otp, setOTP] = useState("");
 
   const handleOnVerify = () => {
+    setInformation('')
+   
     if (otp.length < 4)
-      return toast.show("Incomplete OTP", {
-        type: "variant",
-        animationType: "slide-in",
-      });
+      return setInformation("Incomplete OTP");
     dispatch(clearNetworkError());
     dispatch(clearEmailPhoneOtpVerificationStatus());
     dispatch(storeOtpCode(otp));
@@ -69,7 +59,8 @@ const OTPEmailScreen = () => {
   };
 
   const handleTextChange = (text: string) => {
-    setOTP(text);
+    const numericText = text.replace(/[^0-9]/g, '')
+    setOTP(numericText);
   };
 
   useEffect(() => {
@@ -88,25 +79,42 @@ const OTPEmailScreen = () => {
   }, [session.verifyPhoneEmailOTPStatus]);
 
   useEffect(() => {
+    setInformation('')
     if (session.resendOtpStatus === "completed") {
-      toast.show("OTP sent successfully");
+      setInformation('OTP sent successfully')
       dispatch(clearResendOtpStatus());
     } else if (session.resendOtpStatus === "failed") {
-      toast.show(session.resendOtpError as string, {
-        type: "error",
-        animationType: "slide-in",
-      });
+      setInformation('')
       dispatch(clearResendOtpStatus());
     }
   }, [session.resendOtpStatus]);
+
+  const email = session && Object.keys(session).length > 0 ? session?.otpChannelValue.split('_')[1]: 'your email'
+
 
   return (
     <KeyboardDismisser style={{ flex: 1 }}>
       <View style={[GlobalStyles.container]}>
         <View style={[styles.container]}>
           <BackButton title="Verification" iconColor={colors.primary} />
-          <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
+          <View style={[GlobalStyles.mb20, GlobalStyles.mt20]} />
+          <View style={[GlobalStyles.mb40]}>
             <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+                GlobalStyles.fontWeight700,
+                GlobalStyles.textGrey,
+              ]}
+            >
+              Enter the 4 digit code sent to <Text style={[
+                GlobalStyles.fontWeight700,
+                GlobalStyles.textBlack
+              ]}>{email}</Text>
+            </Text>
+          </View>
+          { error.message ? (<View style={[GlobalStyles.mb20, GlobalStyles.mt10]}>
+          <Text
               style={[
                 GlobalStyles.fontInterRegular,
                 GlobalStyles.fontSize13,
@@ -117,20 +125,18 @@ const OTPEmailScreen = () => {
             >
               {session.verifyPhoneEmailOTPError || error.message}
             </Text>
-          </View>
-          <View style={[GlobalStyles.mb40]}>
-            <Text
-              style={[
-                GlobalStyles.fontInterRegular,
+            </View>): null}
+          
+          {information ? (
+						<View style={[GlobalStyles.mb20, GlobalStyles.mt10]}>
+							<Text style={[
+                {color: colors.primary},
                 GlobalStyles.fontSize13,
-                GlobalStyles.fontWeight700,
-                GlobalStyles.textGrey,
-              ]}
-            >
-              Enter the 4 digit code sent to your email to verify it’s really
-              you.
-            </Text>
-          </View>
+                GlobalStyles.fontWeight600
+              ]}>{information}</Text>
+						</View>
+          ): null }
+			
           <View>
             <OTPTextInput
               textInputStyle={{
