@@ -1,25 +1,23 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
+import * as ImagePicker from "expo-image-picker";
+import BackButton from "../../components/Navigation/BackButton/BackButton";
+import Button from "../../components/Button/Button";
+import colors from "../../theme/colors";
+import DropZone from "../../components/DropZone/DropZone";
 import Input from "../../components/Input/Input";
 import React, { useEffect, useState } from "react";
-import Button from "../../components/Button/Button";
 import TextLink from "../../components/TextLink/TextLink";
-import colors from "../../theme/colors";
-import DatePicker from "../../components/DatePicker/DatePicker";
-import DropZone from "../../components/DropZone/DropZone";
-import { APP_SCREEN_LIST } from "../../constants";
-import { useNavigation } from "@react-navigation/native";
-import * as DocumentPicker from "expo-document-picker";
-import * as ImagePicker from "expo-image-picker";
 import useAppDispatch from "../../hooks/useAppDispatch";
-import { ISessionState, updateCertificate } from "../../reducers/session";
 import useAppSelector from "../../hooks/useAppSelector";
+import { APP_SCREEN_LIST } from "../../constants";
+import { CertificateUploadEmptyIcon } from "../Profile/components/CertificateForm";
 import { completeUserProfileAction } from "../../actions/auth";
-import BackButton from "../../components/Navigation/BackButton/BackButton";
-import { useToast } from "react-native-toast-notifications";
 import { FilePickerFormat } from "@app-model";
 import { FileUploadEmptyIcon } from "../personal_inforamtion/PersonalInformation";
-import { CertificateUploadEmptyIcon } from "../Profile/components/CertificateForm";
+import { GlobalStyles } from "../../theme/GlobalStyles";
+import { ISessionState, updateCertificate } from "../../reducers/session";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { useToast } from "react-native-toast-notifications";
 
 const SignupCertificate = () => {
   const navigation = useNavigation<any>();

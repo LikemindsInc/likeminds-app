@@ -360,6 +360,8 @@ export const completeUserProfileAction = asyncThunkWrapper<
     certificates.push({ name: item.name, url: certificateFileUrl });
   }
 
+  console.log("certificate> ", certificates);
+
   if (resumeFile && resumeFile.uri) {
     const formData = new FormData() as any;
     formData.append("file", {

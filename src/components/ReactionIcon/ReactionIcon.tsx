@@ -21,14 +21,14 @@ import { useToast } from "native-base";
 
 interface Props {
   post: IPostFeed;
-  handleLikeReactionOnPost: (post: IPostFeed) => void;
+  handleLikeReactionOnPost: (isLiked: boolean) => void;
   handleOnReactionActivate: (post: IPostFeed) => void;
   isLiked: boolean;
   isComment?: boolean;
   commentId?: string;
 }
 
-const ReactionIcon: FC<Props> = ({ post }) => {
+const ReactionIcon: FC<Props> = ({ post, handleLikeReactionOnPost }) => {
   const dispatch = useAppDispatch();
   const state = useAppSelector((state: any) => state.postReducer) as IPostState;
 
@@ -65,9 +65,11 @@ const ReactionIcon: FC<Props> = ({ post }) => {
     if (likedIcon === reaction) {
       setLikeIcon(null);
       dispatch(unReactToPost(post.id));
+      handleLikeReactionOnPost(false);
     } else {
       setLikeIcon(reaction);
       dispatch(reactToPostAction({ postId: post.id, reaction }));
+      handleLikeReactionOnPost(true);
     }
     dispatch(showReactionView({ show: false, post: null }));
     dispatch(getPostFeedAction());

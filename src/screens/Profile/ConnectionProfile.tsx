@@ -411,6 +411,8 @@ const FirstRoute = () => {
     dispatch(getSingleUserAction(selector.profileId));
   }, [selector.profileId]);
 
+  const width = useDimension().width;
+
   useEffect(() => {
     getUserProfile();
   }, [getUserProfile]);
@@ -435,7 +437,7 @@ const FirstRoute = () => {
             >
               <Text
                 style={[
-                  GlobalStyles.fontInterBlack,
+                  GlobalStyles.fontInterMedium,
                   GlobalStyles.fontSize13,
                   GlobalStyles.textNavyBlue,
                 ]}
@@ -470,6 +472,9 @@ const FirstRoute = () => {
                   GlobalStyles.textPrimary,
                   GlobalStyles.mb10,
                   GlobalStyles.mt10,
+                  {
+                    maxWidth: 0.45 * width,
+                  },
                 ]}
               >
                 {item.jobTitle}
@@ -542,39 +547,49 @@ const FirstRoute = () => {
           >
             <Text
               style={[
-                GlobalStyles.fontInterBlack,
+                GlobalStyles.fontInterMedium,
                 GlobalStyles.fontSize13,
                 GlobalStyles.textNavyBlue,
               ]}
             ></Text>
-            <Text
-              style={[
-                GlobalStyles.fontInterRegular,
-                GlobalStyles.fontSize13,
-                GlobalStyles.textGrey,
-                GlobalStyles.fontWeight700,
-              ]}
-            >
-              <Text>
-                {moment(item.startDate).format("MMM YYYY")} -{" "}
-                {moment(item.endDate).format("MMM YYYY")}
-              </Text>
-            </Text>
           </View>
         ),
         description: (
           <View style={[{ marginTop: -5 }]}>
-            <Text
-              style={[
-                GlobalStyles.fontInterRegular,
-                GlobalStyles.fontSize13,
-                GlobalStyles.textPrimary,
-                GlobalStyles.mb10,
-                GlobalStyles.mt10,
-              ]}
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginTop: 10,
+                marginBottom: 20,
+              }}
             >
-              {item.degree}
-            </Text>
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textPrimary,
+                  {
+                    maxWidth: 0.45 * width,
+                  },
+                ]}
+              >
+                {item.degree}
+              </Text>
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textGrey,
+                  GlobalStyles.fontWeight700,
+                ]}
+              >
+                <Text>
+                  {moment(item.startDate).format("MMM YYYY")} -{" "}
+                  {moment(item.endDate).format("MMM YYYY")}
+                </Text>
+              </Text>
+            </View>
 
             <Text
               style={[
@@ -723,7 +738,9 @@ const FirstRoute = () => {
         ),
 
         description: timeline.map((item) => (
-          <View style={{ marginBottom: 10 }}>{item.description}</View>
+          <View style={{ marginBottom: 10, marginTop: 10 }}>
+            {item.description}
+          </View>
         )),
       },
     ];
@@ -739,7 +756,19 @@ const FirstRoute = () => {
             ...filterEducatio(),
             {
               title: "Skills",
-              description: selector.profile?.skills.join(","),
+              description: (
+                <View style={{ marginBottom: 20, paddingTop: 20 }}>
+                  <Text
+                    style={[
+                      GlobalStyles.fontInterRegular,
+                      GlobalStyles.fontSize13,
+                      GlobalStyles.textNavyBlue,
+                    ]}
+                  >
+                    {selector.profile?.skills.join(",")}
+                  </Text>
+                </View>
+              ),
             },
 
             ...filterCertificates(),

@@ -24,6 +24,8 @@ import {
   getUserRecommendationBySchool,
   getUsersBySuggestion,
 } from "../../../../actions/connection";
+import { AntDesign } from "@expo/vector-icons";
+import colors from "../../../../theme/colors";
 
 const PeopleList: FC<any> = ({ item, searchText = "" }) => {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -44,6 +46,59 @@ const PeopleList: FC<any> = ({ item, searchText = "" }) => {
     dispatch(getUsersBySuggestion());
   }, []);
 
+  const renderEmptySearchResult = () => {
+    return (
+      <View style={{ paddingHorizontal: 16 }}>
+        <View style={[GlobalStyles.mb10]}>
+          <Text
+            style={[
+              GlobalStyles.fontInterRegular,
+              GlobalStyles.fontSize13,
+              GlobalStyles.textNavyBlue,
+            ]}
+          >
+            Search results
+          </Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 8,
+            alignItems: "center",
+            marginBottom: 20,
+          }}
+        >
+          <AntDesign name="search1" size={24} color={colors.primary} />
+          <Text
+            style={[
+              GlobalStyles.fontInterRegular,
+              GlobalStyles.fontSize13,
+              GlobalStyles.textNavyBlue,
+            ]}
+          >
+            {searchText}
+          </Text>
+        </View>
+        <View
+          style={{
+            marginBottom: 20,
+          }}
+        >
+          <Text
+            style={[
+              GlobalStyles.fontInterRegular,
+              GlobalStyles.fontSize13,
+              GlobalStyles.textNavyBlue,
+            ]}
+          >
+            There is no user with above name. Please check your spellings and
+            search again
+          </Text>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -53,25 +108,18 @@ const PeopleList: FC<any> = ({ item, searchText = "" }) => {
         <View style={[GlobalStyles.mb20]}>
           <View style={[GlobalStyles.mt20]}>
             {state.users.length === 0 ? (
-              <View style={{ alignItems: "center" }}>
-                <Image
-                  source={require("../../../../../assets/folder.png")}
-                  style={{ width: 100, height: 100 }}
-                  resizeMethod="resize"
-                  resizeMode="contain"
-                />
-              </View>
+              renderEmptySearchResult()
             ) : (
               <View style={{ paddingHorizontal: 16 }}>
-                <View style={[GlobalStyles.mt10]}>
+                <View style={[GlobalStyles.mb20]}>
                   <Text
                     style={[
-                      GlobalStyles.fontInterMedium,
+                      GlobalStyles.fontInterRegular,
                       GlobalStyles.fontSize13,
                       GlobalStyles.textNavyBlue,
                     ]}
                   >
-                    Search for
+                    Search results
                   </Text>
                 </View>
                 {state.users.map((item) => (

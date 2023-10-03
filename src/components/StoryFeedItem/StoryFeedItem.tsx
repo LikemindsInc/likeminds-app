@@ -91,6 +91,8 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
 
   const toast = useToast();
 
+  const [reactionCount, setReactionCount] = useState(item.reactionCount);
+
   useEffect(() => {
     isPostLikedByUser();
   }, [isPostLikedByUser]);
@@ -123,13 +125,11 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
     }
   }, [postState.getCommentOnPostStatus]);
 
-  const handleLikeReactionOnPost = () => {
-    if (isPostLiked) {
-      dispatch(unlikePostAction(item.id));
-      setLiked(false);
+  const handleLikeReactionOnPost = (isLiked: boolean) => {
+    if (isLiked) {
+      setReactionCount((state) => state + 1);
     } else {
-      dispatch(likePostAction(item.id));
-      setLiked(true);
+      setReactionCount((state) => state - 1);
     }
   };
 
@@ -380,12 +380,6 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
         </TouchableOpacity>
 
         {item.images && item.images.length > 0 ? (
-          // <Image
-          //   source={{ uri: item.images[0] }}
-          //   style={styles.image}
-          //   resizeMethod="auto"
-          //   resizeMode="cover"
-          // />
           <View style={{ width: "100%", height: 300 }}>
             <FbGrid images={item.images} onPress={onPress} />
           </View>
@@ -449,7 +443,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
                 GlobalStyles.fontWeight700,
               ]}
             >
-              {item.reactionCount} Reactions
+              {reactionCount} Reactions
             </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleLoadComments}>
@@ -463,16 +457,6 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
               {item.commentCount} comments
             </Text>
           </TouchableOpacity>
-          {/* <Text
-              style={[
-                GlobalStyles.fontInterMedium,
-                GlobalStyles.fontSize10,
-                GlobalStyles.fontWeight700,
-                GlobalStyles.textNavyBlue,
-              ]}
-            >
-              {item.commentCount} shares
-            </Text> */}
         </View>
         <View
           style={[
