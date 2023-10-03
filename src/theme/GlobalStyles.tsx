@@ -55,6 +55,9 @@ export const GlobalStyles = StyleSheet.create({
   fontWeight400: {
     fontWeight: "400",
   },
+  fontWeight600: {
+    fontWeight: "600",
+  },
   fontWeight700: {
     fontWeight: "700",
   },

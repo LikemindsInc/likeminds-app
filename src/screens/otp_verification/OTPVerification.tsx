@@ -10,24 +10,22 @@ import BackButton from "../../components/Navigation/BackButton/BackButton";
 import colors from "../../theme/colors";
 import { Text } from "react-native";
 import Button from "../../components/Button/Button";
-import Input from "../../components/Input/Input";
+// import Input from "../../components/Input/Input";
 import TextLink from "../../components/TextLink/TextLink";
 import { APP_SCREEN_LIST, __ROOT_REDUX_STATE_KEY__ } from "../../constants";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import OTPTextInput from "react-native-otp-textinput";
 import useAppSelector from "../../hooks/useAppSelector";
 import { ISessionState, clearResendOtpStatus } from "../../reducers/session";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import { resendOTPAction, verifyOTPActionAction } from "../../actions/auth";
-import { PURGE } from "redux-persist";
 import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
-import { useToast } from "react-native-toast-notifications";
+import { clearNetworkError } from "../../reducers/errorHanlder";
 
 const OTPVerification = () => {
-  let otpInput = useRef(null) as React.RefObject<any>;
-
-  const toast = useToast();
+  const errorReducer = useAppSelector((state) => state.errorReducer);
+  const [information, setInformation] = useState("");
 
   const dispatch = useAppDispatch();
 
@@ -38,53 +36,14 @@ const OTPVerification = () => {
   const ref1 = React.createRef<TextInput>();
   const ref2 = React.createRef<TextInput>();
   const ref3 = React.createRef<TextInput>();
-  const ref4 = React.createRef<TextInput>();
 
   const navigation = useNavigation<any>();
-
   const [otp, setOTP] = useState("");
 
-  const onKeyPress = (
-    e: NativeSyntheticEvent<TextInputKeyPressEventData>,
-    input: string
-  ) => {
-    if (["Backspace"].includes(e.nativeEvent.key)) {
-      console.log("key? ", e.nativeEvent.key);
-      switch (input) {
-        case "input2":
-          return ref1.current?.focus();
-
-        case "input3":
-          return ref2.current?.focus();
-        case "input4":
-          return ref3.current?.focus();
-      }
-      return;
-    }
-    if (
-      !["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(
-        e.nativeEvent.key
-      )
-    )
-      e.preventDefault();
-  };
-
-  const handleOnChange = (value: string, input: string) => {
-    if (value.trim() !== "" && input === "input1") {
-      ref2.current?.focus();
-    }
-
-    if (value.trim() !== "" && input === "input2") {
-      ref3.current?.focus();
-    }
-
-    if (value.trim() !== "" && input === "input3") {
-      ref4.current?.focus();
-    }
-  };
-
   const handleOnVerify = () => {
-    if (otp.length < 4) return toast.show("Incomplete OTP", { type: "normal" });
+    setInformation("");
+    dispatch(clearNetworkError());
+    if (otp.length < 4) return setInformation("Incomplete OTP");
 
     dispatch(
       verifyOTPActionAction({
@@ -107,14 +66,12 @@ const OTPVerification = () => {
   }, [session.otpVerificationStatus]);
 
   useEffect(() => {
+    setInformation("");
     if (session.resendOtpStatus === "completed") {
-      // toast.show("OTP sent successfully");
+      setInformation("OTP sent successfully");
       dispatch(clearResendOtpStatus());
     } else if (session.resendOtpStatus === "failed") {
-      // toast.show(session.resendOtpError as string, {
-      //   type: "error",
-      //   animationType: "slide-in",
-      // });
+      setInformation("");
       dispatch(clearResendOtpStatus());
     }
   }, [session.resendOtpStatus]);
@@ -136,6 +93,32 @@ const OTPVerification = () => {
               Enter the 4 digit verification code sent to your phone number
             </Text>
           </View>
+          {errorReducer?.message ? (
+            <View style={[GlobalStyles.mb20, GlobalStyles.mt10]}>
+              <Text
+                style={[
+                  GlobalStyles.textRed,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.fontWeight600,
+                ]}
+              >
+                {errorReducer.message}
+              </Text>
+            </View>
+          ) : null}
+          {information ? (
+            <View style={[GlobalStyles.mb20, GlobalStyles.mt10]}>
+              <Text
+                style={[
+                  { color: colors.primary },
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.fontWeight600,
+                ]}
+              >
+                {information}
+              </Text>
+            </View>
+          ) : null}
           <View>
             <OTPTextInput
               textInputStyle={{
@@ -144,42 +127,12 @@ const OTPVerification = () => {
                 backgroundColor: "#F3F5F7",
                 borderColor: "#F3F5F7",
               }}
-              ref={(e: any) => (otpInput = e)}
               autoFocus
               tintColor={colors.primary}
               handleTextChange={handleTextChange}
             />
           </View>
-          {/* <View style={[styles.inputWrapper]}>
-          <Input
-            textAlign="center"
-            onKeyPress={(e) => onKeyPress(e, "input1")}
-            inputRef={ref1}
-            style={styles.input}
-            onChangeText={(text) => handleOnChange(text, "input1")}
-          />
-          <Input
-            onKeyPress={(e) => onKeyPress(e, "input2")}
-            textAlign="center"
-            inputRef={ref2}
-            style={styles.input}
-            onChangeText={(text) => handleOnChange(text, "input2")}
-          />
-          <Input
-            onKeyPress={(e) => onKeyPress(e, "input3")}
-            textAlign="center"
-            inputRef={ref3}
-            onChangeText={(text) => handleOnChange(text, "input3")}
-            style={styles.input}
-          />
-          <Input
-            onKeyPress={(e) => onKeyPress(e, "input4")}
-            textAlign="center"
-            inputRef={ref4}
-            onChangeText={(text) => handleOnChange(text, "input4")}
-            style={styles.input}
-          />
-        </View> */}
+
           <View style={[GlobalStyles.mt20]}>
             <Text
               style={[
