@@ -27,6 +27,7 @@ import EventDismisser from "../../components/EventDismisser/EventDismisser";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { getProfile } from "../../reducers/connection";
 import { APP_SCREEN_LIST } from "../../constants";
+import ReactionsViewModal from "../../components/ReactionsViewModal/ReactionsViewModal";
 
 const DATA: { type: "LIVE_FEED" | "INTRO_FEED" | "STORY_FEED"; data: any[] }[] =
   [
@@ -238,79 +239,6 @@ const Home = () => {
           {DATA.map((item) => renderItems({ item }))}
         </IOScrollView>
       </EventDismisser>
-      <BottomSheet
-        ref={bottomSheetRef2}
-        index={-1}
-        snapPoints={snapPoints}
-        onChange={handleSheetChanges}
-        backdropComponent={(props: any) => (
-          <BottomSheetBackdrop
-            {...props}
-            pressBehavior={"close"}
-            onPress={() => dispatch(openReactionList(false))}
-          />
-        )}
-        enablePanDownToClose
-      >
-        <View style={{ flex: 1 }}>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            style={{ flexGrow: 1, flex: 1 }}
-          >
-            <View style={[GlobalStyles.container, { backgroundColor: "#fff" }]}>
-              {state.postReaction.map((item) => (
-                <TouchableOpacity
-                  style={{
-                    flexDirection: "row",
-                    marginBottom: 20,
-                    justifyContent: "space-between",
-                  }}
-                  key={item.id}
-                >
-                  <TouchableOpacity
-                    onPress={() =>
-                      handleNavigationToProfileScreen(item.user.id)
-                    }
-                    style={{ flex: 1, flexDirection: "row", gap: 10 }}
-                  >
-                    <View>
-                      <Image
-                        source={renderProfilePicture(item)}
-                        style={{ width: 30, height: 30, borderRadius: 15 }}
-                        resizeMethod="auto"
-                        resizeMode="cover"
-                      />
-                    </View>
-                    <View>
-                      <Text
-                        style={[
-                          GlobalStyles.fontInterRegular,
-                          GlobalStyles.fontSize13,
-                          GlobalStyles.textNavyBlue,
-                        ]}
-                      >
-                        {item.user?.firstName} {item.user?.lastName}
-                      </Text>
-                      <Text
-                        style={[
-                          GlobalStyles.fontInterRegular,
-                          GlobalStyles.fontSize10,
-                          GlobalStyles.textGrey,
-                        ]}
-                      >
-                        {moment(item.createdAt).fromNow()}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                  <View>
-                    <Text>{item.reaction}</Text>
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </ScrollView>
-        </View>
-      </BottomSheet>
     </View>
   );
 };

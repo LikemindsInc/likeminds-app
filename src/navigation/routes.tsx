@@ -78,6 +78,7 @@ import { useToast } from "react-native-toast-notifications";
 import { getCurrentUserSpace } from "../actions/space";
 import { persistor } from "../store/store";
 import JobFilter from "../screens/Job/JobFilter";
+import ReactionsViewModal from "../components/ReactionsViewModal/ReactionsViewModal";
 
 const Stack = createNativeStackNavigator();
 
@@ -124,50 +125,55 @@ const AppHome = () => {
   }, [setting.userInfo]);
 
   return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarActiveTintColor: "#009AEE",
-        tabBarInactiveTintColor: "#88969D",
-        tabBarLabelStyle: { fontFamily: "Inter-Regular", display: "none" },
-        tabBarIcon: ({ focused, color, size }) => {
-          switch (route.name) {
-            case APP_SCREEN_LIST.HOME_SCREEN:
-              return <Feather name="home" size={size} color={color} />;
-            case APP_SCREEN_LIST.SPACE_SEARCH_SCREEN:
-              return <AntDesign name="search1" size={size} color={color} />;
-            case APP_SCREEN_LIST.POST_ICON_TAB:
-              return <AntDesign name="plus" size={size} color={color} />;
-            case APP_SCREEN_LIST.TOOLBOX_ICON_TAB:
-              return (
-                <MaterialCommunityIcons
-                  name="toolbox-outline"
-                  size={size}
-                  color={color}
-                />
-              );
-            case APP_SCREEN_LIST.CHAT_ICON_TAB:
-              return (
-                <Ionicons
-                  name="chatbubbles-outline"
-                  size={size}
-                  color={color}
-                />
-              );
-          }
-        },
-        headerShown: false,
-      })}
-      initialRouteName={APP_SCREEN_LIST.HOME_SCREEN}
-    >
-      <Tab.Screen name={APP_SCREEN_LIST.HOME_SCREEN} component={Home} />
-      <Tab.Screen
-        name={APP_SCREEN_LIST.SPACE_SEARCH_SCREEN}
-        component={SpaceSearch}
-      />
-      <Tab.Screen name={APP_SCREEN_LIST.POST_ICON_TAB} component={CreatePost} />
-      <Tab.Screen name={APP_SCREEN_LIST.TOOLBOX_ICON_TAB} component={Jobs} />
-      <Tab.Screen name={APP_SCREEN_LIST.CHAT_ICON_TAB} component={Messages} />
-    </Tab.Navigator>
+    <View style={GlobalStyles.flexOne}>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarActiveTintColor: "#009AEE",
+          tabBarInactiveTintColor: "#88969D",
+          tabBarLabelStyle: { fontFamily: "Inter-Regular", display: "none" },
+          tabBarIcon: ({ focused, color, size }) => {
+            switch (route.name) {
+              case APP_SCREEN_LIST.HOME_SCREEN:
+                return <Feather name="home" size={size} color={color} />;
+              case APP_SCREEN_LIST.SPACE_SEARCH_SCREEN:
+                return <AntDesign name="search1" size={size} color={color} />;
+              case APP_SCREEN_LIST.POST_ICON_TAB:
+                return <AntDesign name="plus" size={size} color={color} />;
+              case APP_SCREEN_LIST.TOOLBOX_ICON_TAB:
+                return (
+                  <MaterialCommunityIcons
+                    name="toolbox-outline"
+                    size={size}
+                    color={color}
+                  />
+                );
+              case APP_SCREEN_LIST.CHAT_ICON_TAB:
+                return (
+                  <Ionicons
+                    name="chatbubbles-outline"
+                    size={size}
+                    color={color}
+                  />
+                );
+            }
+          },
+          headerShown: false,
+        })}
+        initialRouteName={APP_SCREEN_LIST.HOME_SCREEN}
+      >
+        <Tab.Screen name={APP_SCREEN_LIST.HOME_SCREEN} component={Home} />
+        <Tab.Screen
+          name={APP_SCREEN_LIST.SPACE_SEARCH_SCREEN}
+          component={SpaceSearch}
+        />
+        <Tab.Screen
+          name={APP_SCREEN_LIST.POST_ICON_TAB}
+          component={CreatePost}
+        />
+        <Tab.Screen name={APP_SCREEN_LIST.TOOLBOX_ICON_TAB} component={Jobs} />
+        <Tab.Screen name={APP_SCREEN_LIST.CHAT_ICON_TAB} component={Messages} />
+      </Tab.Navigator>
+    </View>
   );
 };
 
@@ -408,124 +414,132 @@ const AppRoutes = () => {
   ) as ISettingState;
 
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-      initialRouteName={APP_SCREEN_LIST.ONBOARDING_SCREEN}
-    >
-      <Stack.Screen
-        name={APP_SCREEN_LIST.ONBOARDING_SCREEN}
-        component={OnBoarding}
-      />
+    <View style={{ flex: 1 }}>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+        initialRouteName={APP_SCREEN_LIST.ONBOARDING_SCREEN}
+      >
+        <Stack.Screen
+          name={APP_SCREEN_LIST.ONBOARDING_SCREEN}
+          component={OnBoarding}
+        />
 
-      <Stack.Screen
-        name={APP_SCREEN_LIST.USER_SIGNUP_SCREEN}
-        component={Signup}
-      />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.USER_SIGNUP_SCREEN}
+          component={Signup}
+        />
 
-      <Stack.Screen
-        name={APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN}
-        component={OTPVerification}
-      />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN}
+          component={OTPVerification}
+        />
 
-      <Stack.Screen
-        name={APP_SCREEN_LIST.JOB_FILTER_SCREEN}
-        component={JobFilter}
-      />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.JOB_FILTER_SCREEN}
+          component={JobFilter}
+        />
 
-      <Stack.Screen
-        name={APP_SCREEN_LIST.PERSONAL_INFORAMTION_SCREEN}
-        component={PersonalInformation}
-      />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.PERSONAL_INFORAMTION_SCREEN}
+          component={PersonalInformation}
+          options={{ gestureEnabled: false }}
+        />
 
-      <Stack.Screen
-        name={APP_SCREEN_LIST.SIGNUP_EXPERIENCE_SCREEN}
-        component={SignupExperience}
-      />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.SIGNUP_EXPERIENCE_SCREEN}
+          component={SignupExperience}
+        />
 
-      <Stack.Screen
-        name={APP_SCREEN_LIST.SIGNUP_EDUCATION_SCREEN}
-        component={SignupEducation}
-      />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.SIGNUP_EDUCATION_SCREEN}
+          component={SignupEducation}
+        />
 
-      <Stack.Screen
-        name={APP_SCREEN_LIST.SIGNUP_SKILLS_SCREEN}
-        component={SignupSkills}
-      />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.SIGNUP_SKILLS_SCREEN}
+          component={SignupSkills}
+        />
 
-      <Stack.Screen
-        name={APP_SCREEN_LIST.SIGNUP_CERTIFICATE_SCREEN}
-        component={SignupCertificate}
-      />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.SIGNUP_CERTIFICATE_SCREEN}
+          component={SignupCertificate}
+        />
 
-      <Stack.Screen
-        name={APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN}
-        component={SignupComplete}
-      />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN}
+          component={SignupComplete}
+          options={{ gestureEnabled: false }}
+        />
 
-      <Stack.Screen
-        name={APP_SCREEN_LIST.SIGNUP_PROFILE_PICTURE}
-        component={SignupProfilePicture}
-      />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.SIGNUP_PROFILE_PICTURE}
+          component={SignupProfilePicture}
+        />
 
-      <Stack.Screen
-        options={{ gestureEnabled: false }}
-        name={APP_SCREEN_LIST.MAIN_SCREEN}
-        component={AppDrawer}
-      />
+        <Stack.Screen
+          options={{ gestureEnabled: false }}
+          name={APP_SCREEN_LIST.MAIN_SCREEN}
+          component={AppDrawer}
+        />
 
-      <Stack.Screen name={APP_SCREEN_LIST.LOGIN_SCREEN} component={Login} />
-      <Stack.Screen
-        name={APP_SCREEN_LIST.SPACE_PROFILE_SCREEN}
-        component={SpaceProfile}
-      />
-      <Stack.Screen
-        name={APP_SCREEN_LIST.FORGOT_PASSWORD_SCREEN}
-        component={ForgotPassword}
-      />
-      <Stack.Screen
-        name={APP_SCREEN_LIST.FORGOT_PHONE_SCREEN}
-        component={RecoverWithPhone}
-      />
-      <Stack.Screen
-        name={APP_SCREEN_LIST.FORGOT_EMAIL_OTP_SCREEN}
-        component={OTPEmailScreen}
-      />
-      <Stack.Screen
-        name={APP_SCREEN_LIST.FORGOT_PHONE_OTP_SCREEN}
-        component={OTPScreen}
-      />
-      <Stack.Screen
-        name={APP_SCREEN_LIST.CREATE_PASSWORD_SCREEN}
-        component={CreatePassword}
-      />
-      <Stack.Screen
-        name={APP_SCREEN_LIST.CREATE_SPACE_SCREEN}
-        component={CreateSpace}
-      />
-      <Stack.Screen
-        name={APP_SCREEN_LIST.CREATE_SPACE_ADD_PICTURE}
-        component={CreateSpaceAddPicture}
-      />
-      <Stack.Screen
-        name={APP_SCREEN_LIST.USER_PROFILE_SCREEN}
-        component={UserProfile}
-      />
-      <Stack.Screen
-        name={APP_SCREEN_LIST.POST_JOB_SCREEN}
-        component={PostJob}
-      />
-      <Stack.Screen
-        name={APP_SCREEN_LIST.CONNECTION_PROFILE_SCREEN}
-        component={ConnectionProfile}
-      />
-      <Stack.Screen
-        name={APP_SCREEN_LIST.NOTIFICATION_SCREEN}
-        component={Notification}
-      />
-      <Stack.Screen name={APP_SCREEN_LIST.POST_DETAIL} component={PostDetail} />
-    </Stack.Navigator>
+        <Stack.Screen name={APP_SCREEN_LIST.LOGIN_SCREEN} component={Login} />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.SPACE_PROFILE_SCREEN}
+          component={SpaceProfile}
+        />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.FORGOT_PASSWORD_SCREEN}
+          component={ForgotPassword}
+        />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.FORGOT_PHONE_SCREEN}
+          component={RecoverWithPhone}
+        />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.FORGOT_EMAIL_OTP_SCREEN}
+          component={OTPEmailScreen}
+        />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.FORGOT_PHONE_OTP_SCREEN}
+          component={OTPScreen}
+        />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.CREATE_PASSWORD_SCREEN}
+          component={CreatePassword}
+        />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.CREATE_SPACE_SCREEN}
+          component={CreateSpace}
+        />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.CREATE_SPACE_ADD_PICTURE}
+          component={CreateSpaceAddPicture}
+        />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.USER_PROFILE_SCREEN}
+          component={UserProfile}
+        />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.POST_JOB_SCREEN}
+          component={PostJob}
+        />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.CONNECTION_PROFILE_SCREEN}
+          component={ConnectionProfile}
+        />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.NOTIFICATION_SCREEN}
+          component={Notification}
+        />
+        <Stack.Screen
+          name={APP_SCREEN_LIST.POST_DETAIL}
+          component={PostDetail}
+        />
+      </Stack.Navigator>
+      <ReactionsViewModal />
+    </View>
   );
 };
 

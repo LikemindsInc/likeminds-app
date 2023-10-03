@@ -63,20 +63,20 @@ const CertificateForm = () => {
     }
   };
 
-  useEffect(() => {
-    if (session.completeProfileStatus === "completed") {
-      toast.show("Certificate added successfully", {
-        animationType: "slide-in",
-        placement: "top",
-      });
-    } else if (session.completeProfileStatus === "failed") {
-      toast.show(
-        session.completeProfileError ||
-          "Unable to complete action please try again"
-      );
-    }
-    dispatch(clearCompleteProfileStatus());
-  }, [session.completeProfileStatus]);
+  // useEffect(() => {
+  //   if (session.completeProfileStatus === "completed") {
+  //     toast.show("Certificate added successfully", {
+  //       animationType: "slide-in",
+  //       placement: "top",
+  //     });
+  //   } else if (session.completeProfileStatus === "failed") {
+  //     toast.show(
+  //       session.completeProfileError ||
+  //         "Unable to complete action please try again"
+  //     );
+  //   }
+  //   dispatch(clearCompleteProfileStatus());
+  // }, [session.completeProfileStatus]);
 
   return (
     <View style={[GlobalStyles.container, { paddingHorizontal: 0 }]}>

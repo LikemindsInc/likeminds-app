@@ -108,13 +108,13 @@ const OTPVerification = () => {
 
   useEffect(() => {
     if (session.resendOtpStatus === "completed") {
-      toast.show("OTP sent successfully");
+      // toast.show("OTP sent successfully");
       dispatch(clearResendOtpStatus());
     } else if (session.resendOtpStatus === "failed") {
-      toast.show(session.resendOtpError as string, {
-        type: "error",
-        animationType: "slide-in",
-      });
+      // toast.show(session.resendOtpError as string, {
+      //   type: "error",
+      //   animationType: "slide-in",
+      // });
       dispatch(clearResendOtpStatus());
     }
   }, [session.resendOtpStatus]);

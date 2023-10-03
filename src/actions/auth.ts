@@ -16,20 +16,12 @@ import {
   ResendOTPDTO,
 } from "@app-model";
 import asyncThunkWrapper from "../helpers/asyncThunkWrapper";
-import { network } from "../config/network.config";
 import { AxiosResponse } from "axios";
 import axiosClient, { axioxRefreshClient } from "../config/axiosClient";
 import * as ImagePicker from "expo-image-picker";
-import * as DocumentPicker from "expo-document-picker";
 import Converter from "../utils/Converters";
-import { DocumentResult } from "expo-document-picker";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { APP_SCREEN_LIST } from "../constants";
 import { persistor, store } from "../store/store";
-import { Platform } from "react-native";
-import reportError from "../utils/reportError";
 import { Image } from "react-native-compressor";
-import { err } from "react-native-svg/lib/typescript/xml";
 
 const SIGN_IN = "authentication:SIGN_IN";
 const REFRSH_TOKEN = "authentication:REFRSH_TOKEN";
