@@ -321,7 +321,7 @@ export const completeUserProfileAction = asyncThunkWrapper<
     profilePictureFile.assets &&
     profilePictureFile.assets[0].uri
   ) {
-    console.log(">>>>>>1");
+    // console.log(">>>>>>1");
     const profileImageBlob = Converter.dataURItoBlob(
       profilePictureFile?.assets ? profilePictureFile.assets[0].uri : ""
     );

@@ -63,6 +63,7 @@ const Login = () => {
   }, [session.signingInStatus]);
 
   useEffect(() => {
+    dispatch(clearNetworkError());
     if (errorReducer.message === PENDING_OTP_MESSAGE) {
       navigation.navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
       dispatch(clearNetworkError());
