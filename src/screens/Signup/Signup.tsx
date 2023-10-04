@@ -21,6 +21,7 @@ import {
 import { signupUserActionAction } from "../../actions/auth";
 import BackButton from "../../components/Navigation/BackButton/BackButton";
 import { initialSignupValues, signupValidator } from "./validator";
+import Util from "../../utils";
 
 const Signup = () => {
   const toast = useToast();
@@ -83,11 +84,11 @@ const Signup = () => {
 
   const navigation = useNavigation<NavigationProp<any>>();
 
-  // handle numbers only no text
-  const handlePhoneTextChange = (newText: string) => {
-    const numericText = newText.replace(/[^0-9]/g, "");
-    setFieldValue("phone", numericText);
-  };
+	// handle numbers only no text
+	const handlePhoneTextChange = (newText: string) => {
+		const numericText = Util.getNumber(newText)
+		setFieldValue('phone', numericText);
+	}
 
   return (
     <View style={[GlobalStyles.container]}>

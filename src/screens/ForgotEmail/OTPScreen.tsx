@@ -1,8 +1,5 @@
 import {
-  NativeSyntheticEvent,
   StyleSheet,
-  TextInput,
-  TextInputKeyPressEventData,
   View,
 } from "react-native";
 import { GlobalStyles } from "../../theme/GlobalStyles";
@@ -10,10 +7,9 @@ import BackButton from "../../components/Navigation/BackButton/BackButton";
 import colors from "../../theme/colors";
 import { Text } from "react-native";
 import Button from "../../components/Button/Button";
-import Input from "../../components/Input/Input";
 import TextLink from "../../components/TextLink/TextLink";
 import { APP_SCREEN_LIST, __ROOT_REDUX_STATE_KEY__ } from "../../constants";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import OTPTextInput from "react-native-otp-textinput";
 import useAppSelector from "../../hooks/useAppSelector";
@@ -26,18 +22,13 @@ import {
 import useAppDispatch from "../../hooks/useAppDispatch";
 import {
   resendOTPAction,
-  verifyOTPActionAction,
   verifyOTPOnChangePasswordAction,
 } from "../../actions/auth";
-import { PURGE } from "redux-persist";
 import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
-import { useToast } from "react-native-toast-notifications";
 import { clearNetworkError } from "../../reducers/errorHanlder";
 
 const OTPScreen = () => {
-  let otpInput = useRef(null) as React.RefObject<any>;
-
-  const toast = useToast();
+const [information, setInformation] = useState('')
 
   const dispatch = useAppDispatch();
 
@@ -52,7 +43,9 @@ const OTPScreen = () => {
   const error = useAppSelector((state) => state.errorReducer);
 
   const handleOnVerify = () => {
-    if (otp.length < 4) return toast.show("Incomplete OTP");
+    setInformation('')
+    console.log("handleOnVerify")
+    if (otp.length < 4) return setInformation("Incomplete OTP");
 
     dispatch(clearEmailPhoneOtpVerificationStatus());
 
@@ -60,7 +53,7 @@ const OTPScreen = () => {
     dispatch(
       verifyOTPOnChangePasswordAction({
         phone: session.otpChannelValue.split("_")[1],
-        code: otp,
+        code: `${otp}`,
       })
     );
   };
@@ -70,6 +63,7 @@ const OTPScreen = () => {
   };
 
   useEffect(() => {
+    setInformation('')
     if (session.resendOtpStatus === "completed") {
       // toast.show("OTP sent successfully");
       dispatch(clearResendOtpStatus());
@@ -105,17 +99,6 @@ const OTPScreen = () => {
         <View style={[styles.container]}>
           <BackButton title="Verification" iconColor={colors.primary} />
           <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
-            <Text
-              style={[
-                GlobalStyles.fontInterRegular,
-                GlobalStyles.fontSize13,
-                GlobalStyles.fontWeight700,
-                GlobalStyles.textGrey,
-                GlobalStyles.textRed,
-              ]}
-            >
-              {session.verifyPhoneEmailOTPError || error.message}
-            </Text>
           </View>
           <View style={[GlobalStyles.mb40]}>
             <Text
@@ -130,6 +113,32 @@ const OTPScreen = () => {
               really you.
             </Text>
           </View>
+          {
+            error.message || session.verifyPhoneEmailOTPError ? ( <View style={[
+              GlobalStyles.mb20
+            ]}>
+              <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+                GlobalStyles.fontWeight700,
+                GlobalStyles.textGrey,
+                GlobalStyles.textRed,
+              ]}
+            >
+              {session.verifyPhoneEmailOTPError || error.message}
+            </Text>
+          </View>) : null
+          }
+          {information ? (
+						<View style={[GlobalStyles.mb20, GlobalStyles.mt10]}>
+							<Text style={[
+                {color: colors.primary},
+                GlobalStyles.fontSize13,
+                GlobalStyles.fontWeight600
+              ]}>{information}</Text>
+						</View>
+          ): null }
           <View>
             <OTPTextInput
               textInputStyle={{
