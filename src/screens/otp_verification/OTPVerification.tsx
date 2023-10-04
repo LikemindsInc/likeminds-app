@@ -33,9 +33,9 @@ const OTPVerification = () => {
     (state: any) => state.sessionReducer
   ) as ISessionState;
 
-  const ref1 = React.createRef<TextInput>();
-  const ref2 = React.createRef<TextInput>();
-  const ref3 = React.createRef<TextInput>();
+  // const ref1 = React.createRef<TextInput>();
+  // const ref2 = React.createRef<TextInput>();
+  // const ref3 = React.createRef<TextInput>();
 
   const navigation = useNavigation<any>();
   const [otp, setOTP] = useState("");
@@ -76,6 +76,9 @@ const OTPVerification = () => {
     }
   }, [session.resendOtpStatus]);
 
+
+  const  phone = session && session?.profileData?.phoneNumber ? session?.profileData?.phoneNumber : 'your phone number'
+
   return (
     <KeyboardDismisser style={{ flex: 1 }}>
       <View style={[GlobalStyles.container]}>
@@ -90,7 +93,10 @@ const OTPVerification = () => {
                 GlobalStyles.textGrey,
               ]}
             >
-              Enter the 4 digit verification code sent to your phone number
+              Enter the 4 digit verification code sent to <Text style={[
+                GlobalStyles.fontWeight700,
+                GlobalStyles.textBlack
+              ]}>{phone}</Text>
             </Text>
           </View>
           {errorReducer?.message ? (

@@ -23,6 +23,7 @@ import {
 } from "../../actions/auth";
 import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
 import { clearNetworkError } from "../../reducers/errorHanlder";
+import Util from "../../utils";
 
 const OTPEmailScreen = () => {
   const dispatch = useAppDispatch();
@@ -54,7 +55,7 @@ const OTPEmailScreen = () => {
   };
 
   const handleTextChange = (text: string) => {
-    const numericText = text.replace(/[^0-9]/g, "");
+    const numericText = Util.getNumber(text)
     setOTP(numericText);
   };
 
