@@ -44,7 +44,6 @@ export default axiosClient;
 axiosClient.interceptors.response.use(
   (response) => response,
   async (error: AxiosError<any>) => {
-    console.log("error> ", error.response?.data);
     if (
       error?.response?.status === 403 ||
       error?.response?.data?.statusCode === 403 ||

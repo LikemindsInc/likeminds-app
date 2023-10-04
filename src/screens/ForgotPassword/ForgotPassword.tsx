@@ -24,22 +24,14 @@ const ForgotPassword = () => {
   const toast = useToast();
   const handleOnNextPress = () => {
     if (email.trim() === "") return;
-    //  toast.show("Please provide your email address",{
-    //   animationType: "slide-in"
-    // });
+
     dispatch(storeOTPChannelValue(`email_${email}`));
     dispatch(requestOTPEmailAction({ email }));
   };
   useEffect(() => {
     if (session.requestOTPEmailStatus === "completed") {
-      //  toast.show(session.requestOTPEmailSuccess as string, {
-      //    animationType: "slide-in",
-      //  });
       navigation.navigate(APP_SCREEN_LIST.FORGOT_EMAIL_OTP_SCREEN);
     } else if (session.requestOTPEmailStatus === "failed") {
-      // toast.show(session.requestOTPEmailError as string, {
-      //   animationType: "slide-in",
-      // });
     }
   }, [session.requestOTPEmailStatus]);
   return (

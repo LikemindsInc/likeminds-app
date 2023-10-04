@@ -1,7 +1,4 @@
-import {
-  StyleSheet,
-  View,
-} from "react-native";
+import { StyleSheet, View } from "react-native";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import BackButton from "../../components/Navigation/BackButton/BackButton";
 import colors from "../../theme/colors";
@@ -28,7 +25,7 @@ import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismis
 import { clearNetworkError } from "../../reducers/errorHanlder";
 
 const OTPScreen = () => {
-const [information, setInformation] = useState('')
+  const [information, setInformation] = useState("");
 
   const dispatch = useAppDispatch();
 
@@ -43,8 +40,8 @@ const [information, setInformation] = useState('')
   const error = useAppSelector((state) => state.errorReducer);
 
   const handleOnVerify = () => {
-    setInformation('')
-    console.log("handleOnVerify")
+    setInformation("");
+    console.log("handleOnVerify");
     if (otp.length < 4) return setInformation("Incomplete OTP");
 
     dispatch(clearEmailPhoneOtpVerificationStatus());
@@ -63,7 +60,7 @@ const [information, setInformation] = useState('')
   };
 
   useEffect(() => {
-    setInformation('')
+    setInformation("");
     if (session.resendOtpStatus === "completed") {
       // toast.show("OTP sent successfully");
       dispatch(clearResendOtpStatus());
@@ -93,16 +90,18 @@ const [information, setInformation] = useState('')
     }
   }, [session.verifyPhoneEmailOTPStatus]);
 
-  const phone  = session && session?.otpChannelValue ? session?.otpChannelValue.split('_')[1] : `your phone number to verify it’s
-  really you.`
+  const phone =
+    session && session?.otpChannelValue
+      ? session?.otpChannelValue.split("_")[1]
+      : `your phone number to verify it’s
+  really you.`;
 
   return (
     <KeyboardDismisser style={[GlobalStyles.flexOne]}>
       <View style={[GlobalStyles.container]}>
         <View style={[styles.container]}>
           <BackButton title="Verification" iconColor={colors.primary} />
-          <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
-          </View>
+          <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}></View>
           <View style={[GlobalStyles.mb40]}>
             <Text
               style={[
@@ -112,38 +111,42 @@ const [information, setInformation] = useState('')
                 GlobalStyles.textGrey,
               ]}
             >
-              Enter the 4 digit code sent to <Text style={[
-                GlobalStyles.fontWeight700,
-                GlobalStyles.textBlack
-              ]}>{phone}</Text>
+              Enter the 4 digit code sent to{" "}
+              <Text
+                style={[GlobalStyles.fontWeight700, GlobalStyles.textBlack]}
+              >
+                {phone}
+              </Text>
             </Text>
           </View>
-          {
-            error.message || session.verifyPhoneEmailOTPError ? ( <View style={[
-              GlobalStyles.mb20
-            ]}>
+          {error.message || session.verifyPhoneEmailOTPError ? (
+            <View style={[GlobalStyles.mb20]}>
               <Text
-              style={[
-                GlobalStyles.fontInterRegular,
-                GlobalStyles.fontSize13,
-                GlobalStyles.fontWeight700,
-                GlobalStyles.textGrey,
-                GlobalStyles.textRed,
-              ]}
-            >
-              {session.verifyPhoneEmailOTPError || error.message}
-            </Text>
-          </View>) : null
-          }
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.fontWeight700,
+                  GlobalStyles.textGrey,
+                  GlobalStyles.textRed,
+                ]}
+              >
+                {session.verifyPhoneEmailOTPError || error.message}
+              </Text>
+            </View>
+          ) : null}
           {information ? (
-						<View style={[GlobalStyles.mb20, GlobalStyles.mt10]}>
-							<Text style={[
-                {color: colors.primary},
-                GlobalStyles.fontSize13,
-                GlobalStyles.fontWeight600
-              ]}>{information}</Text>
-						</View>
-          ): null }
+            <View style={[GlobalStyles.mb20, GlobalStyles.mt10]}>
+              <Text
+                style={[
+                  { color: colors.primary },
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.fontWeight600,
+                ]}
+              >
+                {information}
+              </Text>
+            </View>
+          ) : null}
           <View>
             <OTPTextInput
               textInputStyle={{
@@ -152,7 +155,6 @@ const [information, setInformation] = useState('')
                 backgroundColor: "#F3F5F7",
                 borderColor: "#F3F5F7",
               }}
-              ref={(e: any) => (otpInput = e)}
               autoFocus
               tintColor={colors.primary}
               handleTextChange={handleTextChange}

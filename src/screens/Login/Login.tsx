@@ -67,7 +67,6 @@ const Login = () => {
       navigation.navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
       dispatch(clearNetworkError());
     }
-    console.log("error> ", errorReducer.message);
   }, [errorReducer.message]);
 
   return (

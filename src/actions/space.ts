@@ -32,7 +32,6 @@ export const createSpaceAction = asyncThunkWrapper<
         photoUrl = response.data?.data?.url || "";
       })
       .catch((error) => {
-        console.log("error> ", error?.response || error);
         // reportError(error);
       });
   }
