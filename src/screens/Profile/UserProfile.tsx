@@ -79,6 +79,7 @@ const UserProfile = () => {
 	const initials = state?.userInfo?.email
 		? `${state?.userInfo?.email[0]}${state?.userInfo?.email[1]}`.toLocaleUpperCase()
 		: "IN";
+    
 	return (
 		<View
 			style={[
@@ -91,74 +92,75 @@ const UserProfile = () => {
 				// style={styles.contentWrapper}
 			>
 				<View>
-					<View
-						style={[
-							styles.imageBg,
-							height * 0.4 > 240
-								? { height: 240 }
-								: { height: height * 0.4, position: "relative" },
-							{
-								flex: 1,
-								width: "100%",
-								justifyContent: "center",
-								alignItems: "center",
-								position: "relative",
-                backgroundColor: "#daf3ff",
-                top: -50
-							},
-						]}
-					>
+					{initials ? (
 						<View
-							style={{
-								position: "absolute",
-								alignSelf: "flex-start",
-								top: 50,
-							}}
+							style={[
+								styles.imageBg,
+								height * 0.4 > 240
+									? { height: 240 }
+									: { height: height * 0.4, position: "relative" },
+								{
+									flex: 1,
+									width: "100%",
+									justifyContent: "center",
+									alignItems: "center",
+									position: "relative",
+									backgroundColor: "#daf3ff",
+									top: -50,
+								},
+							]}
 						>
-							<TouchableOpacity
-								onPress={() => navigation.goBack()}
-								style={[styles.imageHeaderWrapper]}
+							<View
+								style={{
+									position: "absolute",
+									alignSelf: "flex-start",
+									top: 50,
+								}}
 							>
-								<AntDesign
-									name="arrowleft"
-									size={24}
-									style={{
-										textShadowColor: "#fff",
-										textShadowRadius: 10,
-										textShadowOffset: { width: 2, height: 2 },
-										color: "#000",
-									}}
-									// color={colors.white}
-								/>
-							</TouchableOpacity>
-						</View>
+								<TouchableOpacity
+									onPress={() => navigation.goBack()}
+									style={[styles.imageHeaderWrapper]}
+								>
+									<AntDesign
+										name="arrowleft"
+										size={24}
+										style={{
+											textShadowColor: "#fff",
+											textShadowRadius: 10,
+											textShadowOffset: { width: 2, height: 2 },
+											color: "#000",
+										}}
+									/>
+								</TouchableOpacity>
+							</View>
 
-						<View style={
-              [
-                {
-                  width: 100,
-                  height: 100,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius:500,
-                  backgroundColor: '#f1f3f9'
-                }
-              ]
-            }>
-							<Text
+							<View
 								style={[
-                  GlobalStyles.fontWeight600,
-                  GlobalStyles.textNavyBlue,
-                  {
-                    fontSize: 40,
-                  }
-                ]}
+									{
+										width: 100,
+										height: 100,
+										justifyContent: "center",
+										alignItems: "center",
+										borderRadius: 500,
+										backgroundColor: "#f1f3f9",
+									},
+								]}
 							>
-								{initials}
-							</Text>
+								<Text
+									style={[
+										GlobalStyles.fontWeight600,
+										GlobalStyles.textNavyBlue,
+										{
+											fontSize: 40,
+										},
+									]}
+								>
+									{initials}
+								</Text>
+							</View>
 						</View>
+					) : null}
 
-					</View>
 					{state.userInfo?.profilePicture ? (
 						<ImageBackground
 							resizeMode="cover"

@@ -22,6 +22,7 @@ import { signupUserActionAction } from "../../actions/auth";
 import BackButton from "../../components/Navigation/BackButton/BackButton";
 import { initialSignupValues, signupValidator } from "./validator";
 import Util from "../../utils";
+import { clearNetworkError } from "../../reducers/errorHanlder";
 
 const Signup = () => {
   const toast = useToast();
@@ -89,6 +90,10 @@ const Signup = () => {
 		const numericText = Util.getNumber(newText)
 		setFieldValue('phone', numericText);
 	}
+
+  useEffect( () => {
+    dispatch(clearNetworkError());
+  }, [])
 
   return (
     <View style={[GlobalStyles.container]}>

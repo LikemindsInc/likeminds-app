@@ -20,15 +20,12 @@ import { useNavigation } from "@react-navigation/native";
 import { useToast } from "react-native-toast-notifications";
 
 const SignupCertificate = () => {
-  const navigation = useNavigation<any>();
-
-  const dispatch = useAppDispatch();
-
   const toast = useToast();
-
+  const dispatch = useAppDispatch();
   const [name, setName] = useState("");
-
+  const navigation = useNavigation<any>();
   const [uploods, setUploads] = useState([{}]);
+  const errorReducer = useAppSelector((state) => state.errorReducer);
 
   const session = useAppSelector(
     (state: any) => state.sessionReducer
@@ -37,12 +34,16 @@ const SignupCertificate = () => {
   const [file, setFile] = useState<
     FilePickerFormat | null | ImagePicker.ImagePickerResult
   >(null);
+
   const handleOnFileSelect = (
     file: FilePickerFormat | ImagePicker.ImagePickerResult
   ) => {
     setFile(file);
     return null;
   };
+
+
+
   const handleOnNextPress = () => {
     if (file) {
       dispatch(
@@ -72,6 +73,8 @@ const SignupCertificate = () => {
     // navigation.navigate(APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN);
     handleOnNextPress();
   };
+
+  console.log(errorReducer)
 
   return (
     <View style={[GlobalStyles.container]}>
