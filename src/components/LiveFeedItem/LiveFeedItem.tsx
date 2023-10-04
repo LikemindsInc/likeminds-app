@@ -3,7 +3,7 @@ import {
   ListRenderItem,
   StyleSheet,
   View,
-  Image,
+  // Image,
   TouchableOpacity,
 } from "react-native";
 import colors from "../../theme/colors";
@@ -14,6 +14,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign } from "@expo/vector-icons";
 import useAppSelector from "../../hooks/useAppSelector";
 import { useUser } from "../../hooks/userUser";
+import Image from "react-native-image-progress";
 
 interface IProps {
   item: {
@@ -42,6 +43,14 @@ const LiveFeedItem: FC<IProps> = ({ item }) => {
         <View style={styles.profileImage}>
           <Image
             source={renderProfilePicture()}
+            indicator={require("../../../assets/loader.gif")}
+            indicatorProps={{
+              size: 80,
+              borderWidth: 0,
+              color: "rgba(150, 150, 150, 1)",
+              unfilledColor: "rgba(200, 200, 200, 0.2)",
+            }}
+            imageStyle={{ width: 58, height: 58, borderRadius: 29 }}
             style={{ width: 58, height: 58, borderRadius: 29 }}
           />
           <LinearGradient

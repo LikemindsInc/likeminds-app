@@ -76,23 +76,6 @@ const EducationForm = () => {
     });
   }, []);
 
-  const toast = useToast();
-
-  // useEffect(() => {
-  //   if (state.completeProfileStatus === "completed") {
-  //     toast.show("Education added successfully", {
-  //       animationType: "slide-in",
-  //       placement: "top",
-  //     });
-  //   } else if (state.completeProfileStatus === "failed") {
-  //     toast.show(
-  //       state.completeProfileError ||
-  //         "Unable to complete action please try again"
-  //     );
-  //   }
-  //   dispatch(clearCompleteProfileStatus());
-  // }, [state.completeProfileStatus]);
-
   const validateStartDate = () => {
     if (startDate.trim() !== "") {
       if (moment().diff(startDate, "days") < 0) {
