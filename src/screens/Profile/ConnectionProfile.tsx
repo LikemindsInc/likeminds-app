@@ -33,10 +33,8 @@ import {
 import { useToast } from "react-native-toast-notifications";
 import {
   clearConnectionProfileData,
-  clearRequestConnection,
 } from "../../reducers/connection";
 import UserExperience from "./components/UserExperience";
-import { Title } from "react-native-paper";
 import ConnectionPostFeed from "./components/ConnectionPostFeed";
 import ReadMore from "react-native-read-more-text";
 import moment from "moment";
@@ -195,6 +193,11 @@ const ConnectionProfile = () => {
     dispatch(clearConnectionProfileData());
     navigation.goBack();
   };
+
+  const initials = state?.userInfo?.email
+  ? `${state?.userInfo?.email[0]}${state?.userInfo?.email[1]}`.toLocaleUpperCase()
+  : "IN";
+
   return (
     <View
       style={[
@@ -207,7 +210,75 @@ const ConnectionProfile = () => {
         // style={styles.contentWrapper}
       >
         <View>
-          <ImageBackground
+        {initials ? (
+						<View
+							style={[
+								styles.imageBg,
+								height * 0.4 > 240
+									? { height: 240 }
+									: { height: height * 0.4, position: "relative" },
+								{
+									flex: 1,
+									width: "100%",
+									justifyContent: "center",
+									alignItems: "center",
+									position: "relative",
+									backgroundColor: "#daf3ff",
+									top: -50,
+								},
+							]}
+						>
+							<View
+								style={{
+									position: "absolute",
+									alignSelf: "flex-start",
+									top: 50,
+								}}
+							>
+								<TouchableOpacity
+									onPress={() => navigation.goBack()}
+									style={[styles.imageHeaderWrapper]}
+								>
+									<AntDesign
+										name="arrowleft"
+										size={24}
+										style={{
+											textShadowColor: "#fff",
+											textShadowRadius: 10,
+											textShadowOffset: { width: 2, height: 2 },
+											color: "#000",
+										}}
+									/>
+								</TouchableOpacity>
+							</View>
+
+							<View
+								style={[
+									{
+										width: 100,
+										height: 100,
+										justifyContent: "center",
+										alignItems: "center",
+										borderRadius: 500,
+										backgroundColor: "#f1f3f9",
+									},
+								]}
+							>
+								<Text
+									style={[
+										GlobalStyles.fontWeight600,
+										GlobalStyles.textNavyBlue,
+										{
+											fontSize: 40,
+										},
+									]}
+								>
+									{initials}
+								</Text>
+							</View>
+						</View>
+					) : null}
+          {selector.profile?.profilePicture ? (<ImageBackground
             resizeMode="cover"
             source={
               selector.profile?.profilePicture &&
@@ -247,7 +318,8 @@ const ConnectionProfile = () => {
                 }}
               />
             </TouchableOpacity>
-          </ImageBackground>
+          </ImageBackground>): null}
+          
         </View>
         <View style={styles.contentWrapper}>
           <View
