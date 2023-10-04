@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import {
   Image,
   ScrollView,
@@ -7,10 +7,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useToast } from "native-base";
 import useAppDispatch from "../../../../hooks/useAppDispatch";
 import useAppSelector from "../../../../hooks/useAppSelector";
-import { ISpaceState } from "../../../../reducers/space_reducer";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { APP_SCREEN_LIST } from "../../../../constants";
 import PeopleSearchResultCard from "../../../../PeopleSearchResultCard/PeopleSearchResultCard";
@@ -31,8 +29,6 @@ const PeopleList: FC<any> = ({ item, searchText = "" }) => {
   const navigation = useNavigation<NavigationProp<any>>();
   const dispatch = useAppDispatch();
 
-  const toast = useToast();
-  const [isLoading, setLoading] = useState(false);
 
   const state = useAppSelector((state) => state.connectionReducer);
 
@@ -119,7 +115,7 @@ const PeopleList: FC<any> = ({ item, searchText = "" }) => {
                       GlobalStyles.textNavyBlue,
                     ]}
                   >
-                    Search results
+                    Search Results
                   </Text>
                 </View>
                 {state.users.map((item) => (
