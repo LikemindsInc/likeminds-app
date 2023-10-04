@@ -12,7 +12,8 @@ import useAppSelector from "../../hooks/useAppSelector";
 import { ISessionState, storeOTPChannelValue } from "../../reducers/session";
 import { requestOTPPhoneAction } from "../../actions/auth";
 import BackButton from "../../components/Navigation/BackButton/BackButton";
-import { useToast } from "react-native-toast-notifications";
+import Util from "../../utils";
+import { clearNetworkError } from "../../reducers/errorHanlder";
 
 const RecoverWithPhone = () => {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -23,27 +24,26 @@ const RecoverWithPhone = () => {
   ) as ISessionState;
   const dispatch = useAppDispatch();
   const [countryCode, setCountryCode] = useState("");
-  const toast = useToast();
+
+  const errorReducer = useAppSelector((state) => state.errorReducer);
+
   const handleOnNextPress = () => {
     let formattedPhone = "";
-    if (countryCode.startsWith("+000") || countryCode.trim() === "")
+    dispatch(clearNetworkError())
+    if (!countryCode.trim())
       return setErrorMessage("Please select country");
 
     if (phone.trim() === "")
       return setErrorMessage("Please provide your phone number");
 
-    if (phone.startsWith("0")) formattedPhone = phone.slice(1);
-    else if (phone.startsWith("+2340")) formattedPhone = phone.slice(5);
-    else if (phone.startsWith("+234")) formattedPhone = phone.slice(4);
-    else formattedPhone = phone;
-
     setErrorMessage(null);
 
     dispatch(storeOTPChannelValue(`phone_${countryCode}${formattedPhone}`));
     dispatch(
-      requestOTPPhoneAction({ phone: `${countryCode}${formattedPhone}` })
+      requestOTPPhoneAction({ phone: `${countryCode}${phone}` })
     );
   };
+
   useEffect(() => {
     if (session.requestOTPPhoneStatus === "completed") {
       navigation.navigate(APP_SCREEN_LIST.FORGOT_PHONE_OTP_SCREEN);
@@ -54,6 +54,13 @@ const RecoverWithPhone = () => {
       // toast.show(session.requestOTPEmailError as string, { type: "normal" });
     }
   }, [session.requestOTPPhoneStatus]);
+
+  const handleChange = (text: string) => {
+    if(text.length > 10) return
+    const newNumberText = Util.getNumber(text);
+    setPhone(newNumberText)
+  }
+
   return (
     <View style={[GlobalStyles.container]}>
       <View style={styles.container}>
@@ -72,6 +79,19 @@ const RecoverWithPhone = () => {
             Enter your registered phone number to reset your password
           </Text>
         </View>
+        {errorReducer.message ? (
+				<View style={[GlobalStyles.mb20]}>
+					<Text
+						style={[
+							GlobalStyles.fontInterRegular,
+							GlobalStyles.fontSize13,
+							GlobalStyles.textRed,
+						]}
+					>
+						{errorReducer.message}
+					</Text>
+				</View>
+			) : null}
         <View style={[GlobalStyles.mb20]}>
           <Input
             placeholder="Phone Number"
@@ -80,7 +100,7 @@ const RecoverWithPhone = () => {
             keyboardType="default"
             value={phone}
             mode="phone-pad"
-            onChangeText={(value) => setPhone(value)}
+            onChangeText={(value) => handleChange(value)}
             onCountryCodeSelect={(value) => setCountryCode(value)}
             errorMessage={errorMessage}
           />

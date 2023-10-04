@@ -18,6 +18,10 @@ export class Util {
       .map((item) => `${item.charAt(0).toUpperCase()}${item.slice(1)}`)
       .join(" ");
   }
+
+  static getNumber(value: string){
+    return value.replace(/[^0-9]/g, '')
+  }
 }
 
 export default Util;
