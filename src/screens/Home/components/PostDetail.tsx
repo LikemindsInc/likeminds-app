@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import {
   Image,
   KeyboardAvoidingView,
@@ -38,26 +38,18 @@ import colors from "../../../theme/colors";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import CommentRowItem from "./CommentRowItem";
 import FbGrid from "react-native-fb-image-grid";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import ReactionIcon from "../../../components/ReactionIcon/ReactionIcon";
-import moment from "moment";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { Video, ResizeMode } from "expo-av";
 import EventDismisser from "../../../components/EventDismisser/EventDismisser";
 import FullScreenImageCarousel from "../../../components/FullScreenImageCarousel/FullScreenImageCarousel";
-import { getProfile } from "../../../reducers/connection";
-import { APP_SCREEN_LIST } from "../../../constants";
 
 interface IProps {
   item: IPostFeed;
 }
 
 const PostDetail = () => {
-  const bottomSheetRef2 = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["50%", "60%"], []);
   const [showImageZoom, setShowImageZoom] = useState(false);
 
-  const handleSheetChanges = useCallback((index: number) => {}, []);
   const state = useAppSelector(
     (state: any) => state.settingReducer
   ) as ISettingState;
@@ -242,23 +234,6 @@ const PostDetail = () => {
     dispatch(openReactionList(true));
   };
 
-  useEffect(() => {
-    if (postState.showReactionList && postState.postReaction.length > 0) {
-      bottomSheetRef2.current?.expand();
-    }
-  }, [postState.postReaction, postState.showReactionList]);
-
-  const handleNavigationToProfileScreen = (profileId: string) => {
-    bottomSheetRef2.current?.close();
-    dispatch(openReactionList(false));
-    if (profileId === state?.userInfo?.id) {
-      return navigation.navigate(APP_SCREEN_LIST.USER_PROFILE_SCREEN);
-    }
-
-    dispatch(getProfile(profileId));
-    navigation.navigate(APP_SCREEN_LIST.CONNECTION_PROFILE_SCREEN);
-  };
-
   return (
     <EventDismisser>
       <KeyboardAvoidingView
@@ -417,82 +392,14 @@ const PostDetail = () => {
             returnKeyType="done"
           />
         </View>
-        <BottomSheet
-          ref={bottomSheetRef2}
-          index={-1}
-          snapPoints={snapPoints}
-          onChange={handleSheetChanges}
-          backdropComponent={(props: any) => (
-            <BottomSheetBackdrop {...props} pressBehavior={"close"} />
-          )}
-          enablePanDownToClose
-        >
-          <View style={{ flex: 1 }}>
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              style={{ flexGrow: 1, flex: 1 }}
-            >
-              <View
-                style={[GlobalStyles.container, { backgroundColor: "#fff" }]}
-              >
-                {postState.postReaction.map((item) => (
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      marginBottom: 20,
-                      justifyContent: "space-between",
-                    }}
-                    key={item.id}
-                  >
-                    <TouchableOpacity
-                      onPress={() =>
-                        handleNavigationToProfileScreen(item.user.id)
-                      }
-                      style={{ flex: 1, flexDirection: "row", gap: 10 }}
-                    >
-                      <View>
-                        <Image
-                          source={renderProfilePicture(item)}
-                          style={{ width: 30, height: 30, borderRadius: 15 }}
-                          resizeMethod="auto"
-                          resizeMode="cover"
-                        />
-                      </View>
-                      <View>
-                        <Text
-                          style={[
-                            GlobalStyles.fontInterRegular,
-                            GlobalStyles.fontSize13,
-                            GlobalStyles.textNavyBlue,
-                          ]}
-                        >
-                          {item.user?.firstName} {item.user?.lastName}
-                        </Text>
-                        <Text
-                          style={[
-                            GlobalStyles.fontInterRegular,
-                            GlobalStyles.fontSize10,
-                            GlobalStyles.textGrey,
-                          ]}
-                        >
-                          {moment(item.createdAt).fromNow()}
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                    <View>
-                      <Text>{item.reaction}</Text>
-                    </View>
-                  </View>
-                ))}
-              </View>
-            </ScrollView>
-            <FullScreenImageCarousel
-              images={(item.images || []).map((item) => ({ uri: item }))}
-              isVisible={showImageZoom}
-              onRequestClose={() => setShowImageZoom(false)}
-            />
-          </View>
-        </BottomSheet>
+
+        {showImageZoom && (
+          <FullScreenImageCarousel
+            images={(item.images || []).map((item) => ({ uri: item }))}
+            isVisible={showImageZoom}
+            onRequestClose={() => setShowImageZoom(false)}
+          />
+        )}
       </KeyboardAvoidingView>
     </EventDismisser>
   );

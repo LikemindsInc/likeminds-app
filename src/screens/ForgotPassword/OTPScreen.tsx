@@ -1,7 +1,4 @@
-import {
-  StyleSheet,
-  View,
-} from "react-native";
+import { StyleSheet, View } from "react-native";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import BackButton from "../../components/Navigation/BackButton/BackButton";
 import colors from "../../theme/colors";
@@ -28,9 +25,8 @@ import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismis
 import { clearNetworkError } from "../../reducers/errorHanlder";
 
 const OTPEmailScreen = () => {
-
   const dispatch = useAppDispatch();
-  const [information, setInformation] = useState('')
+  const [information, setInformation] = useState("");
 
   const session = useAppSelector(
     (state: any) => state.sessionReducer
@@ -43,10 +39,9 @@ const OTPEmailScreen = () => {
   const [otp, setOTP] = useState("");
 
   const handleOnVerify = () => {
-    setInformation('')
-   
-    if (otp.length < 4)
-      return setInformation("Incomplete OTP");
+    setInformation("");
+
+    if (otp.length < 4) return setInformation("Incomplete OTP");
     dispatch(clearNetworkError());
     dispatch(clearEmailPhoneOtpVerificationStatus());
     dispatch(storeOtpCode(otp));
@@ -59,7 +54,7 @@ const OTPEmailScreen = () => {
   };
 
   const handleTextChange = (text: string) => {
-    const numericText = text.replace(/[^0-9]/g, '')
+    const numericText = text.replace(/[^0-9]/g, "");
     setOTP(numericText);
   };
 
@@ -79,18 +74,20 @@ const OTPEmailScreen = () => {
   }, [session.verifyPhoneEmailOTPStatus]);
 
   useEffect(() => {
-    setInformation('')
+    setInformation("");
     if (session.resendOtpStatus === "completed") {
-      setInformation('OTP sent successfully')
+      setInformation("OTP sent successfully");
       dispatch(clearResendOtpStatus());
     } else if (session.resendOtpStatus === "failed") {
-      setInformation('')
+      setInformation("");
       dispatch(clearResendOtpStatus());
     }
   }, [session.resendOtpStatus]);
 
-  const email = session && Object.keys(session).length > 0 ? session?.otpChannelValue.split('_')[1]: 'your email'
-
+  const email =
+    session && Object.keys(session).length > 0
+      ? session?.otpChannelValue.split("_")[1]
+      : "your email";
 
   return (
     <KeyboardDismisser style={{ flex: 1 }}>
@@ -107,36 +104,44 @@ const OTPEmailScreen = () => {
                 GlobalStyles.textGrey,
               ]}
             >
-              Enter the 4 digit code sent to <Text style={[
-                GlobalStyles.fontWeight700,
-                GlobalStyles.textBlack
-              ]}>{email}</Text>
+              Enter the 4 digit code sent to{" "}
+              <Text
+                style={[GlobalStyles.fontWeight700, GlobalStyles.textBlack]}
+              >
+                {email}
+              </Text>
             </Text>
           </View>
-          { error.message ? (<View style={[GlobalStyles.mb20, GlobalStyles.mt10]}>
-          <Text
-              style={[
-                GlobalStyles.fontInterRegular,
-                GlobalStyles.fontSize13,
-                GlobalStyles.fontWeight700,
-                GlobalStyles.textGrey,
-                GlobalStyles.textRed,
-              ]}
-            >
-              {session.verifyPhoneEmailOTPError || error.message}
-            </Text>
-            </View>): null}
-          
+          {error.message ? (
+            <View style={[GlobalStyles.mb20, GlobalStyles.mt10]}>
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.fontWeight700,
+                  GlobalStyles.textGrey,
+                  GlobalStyles.textRed,
+                ]}
+              >
+                {session.verifyPhoneEmailOTPError || error.message}
+              </Text>
+            </View>
+          ) : null}
+
           {information ? (
-						<View style={[GlobalStyles.mb20, GlobalStyles.mt10]}>
-							<Text style={[
-                {color: colors.primary},
-                GlobalStyles.fontSize13,
-                GlobalStyles.fontWeight600
-              ]}>{information}</Text>
-						</View>
-          ): null }
-			
+            <View style={[GlobalStyles.mb20, GlobalStyles.mt10]}>
+              <Text
+                style={[
+                  { color: colors.primary },
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.fontWeight600,
+                ]}
+              >
+                {information}
+              </Text>
+            </View>
+          ) : null}
+
           <View>
             <OTPTextInput
               textInputStyle={{
@@ -145,7 +150,6 @@ const OTPEmailScreen = () => {
                 backgroundColor: "#F3F5F7",
                 borderColor: "#F3F5F7",
               }}
-              ref={(e: any) => (otpInput = e)}
               autoFocus
               tintColor={colors.primary}
               handleTextChange={handleTextChange}

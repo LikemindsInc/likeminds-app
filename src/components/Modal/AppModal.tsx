@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   Modal,
+  ViewStyle,
 } from "react-native";
 import TextLink from "../TextLink/TextLink";
 // import  from "react-native-modal";
@@ -18,6 +19,8 @@ interface IProps {
   visible?: boolean;
   title?: string;
   onBackDropPress?: () => void;
+  containerStyle?: ViewStyle;
+  backButton?: JSX.Element;
 }
 
 const AppModal: FC<IProps> = (props) => {
@@ -31,7 +34,7 @@ const AppModal: FC<IProps> = (props) => {
       onRequestClose={props.onBackDropPress}
       animationType="slide"
     >
-      <View style={styles.modalContainer}>
+      <View style={[styles.modalContainer, props.containerStyle]}>
         <View style={styles.modalContent}>
           <View style={{ marginBottom: 20 }}>
             <View
@@ -51,20 +54,32 @@ const AppModal: FC<IProps> = (props) => {
                 ]}
                 onPress={props.onBackDropPress}
               >
-                <Ionicons
-                  name="chevron-back"
-                  size={24}
-                  color={colors.primary}
-                />
-                <Text
-                  style={[
-                    GlobalStyles.textPrimary,
-                    GlobalStyles.fontSize13,
-                    GlobalStyles.fontInterMedium,
-                  ]}
-                >
-                  Cancel
-                </Text>
+                {props.backButton || (
+                  <View
+                    style={[
+                      {
+                        flexDirection: "row",
+                        gap: 8,
+                        alignItems: "center",
+                      },
+                    ]}
+                  >
+                    <Ionicons
+                      name="chevron-back"
+                      size={24}
+                      color={colors.primary}
+                    />
+                    <Text
+                      style={[
+                        GlobalStyles.textPrimary,
+                        GlobalStyles.fontSize13,
+                        GlobalStyles.fontInterMedium,
+                      ]}
+                    >
+                      Cancel
+                    </Text>
+                  </View>
+                )}
               </TouchableOpacity>
               <View style={{ flex: 1, marginLeft: 30 }}>
                 <Text

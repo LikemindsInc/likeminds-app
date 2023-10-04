@@ -24,8 +24,8 @@ import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismis
 import { clearNetworkError } from "../../reducers/errorHanlder";
 
 const OTPVerification = () => {
-	const errorReducer = useAppSelector((state) => state.errorReducer);
-  const [information, setInformation] =  useState('')
+  const errorReducer = useAppSelector((state) => state.errorReducer);
+  const [information, setInformation] = useState("");
 
   const dispatch = useAppDispatch();
 
@@ -40,11 +40,9 @@ const OTPVerification = () => {
   const navigation = useNavigation<any>();
   const [otp, setOTP] = useState("");
 
-
-
   const handleOnVerify = () => {
-    setInformation('')
-    dispatch(clearNetworkError())
+    setInformation("");
+    dispatch(clearNetworkError());
     if (otp.length < 4) return setInformation("Incomplete OTP");
 
     dispatch(
@@ -68,12 +66,12 @@ const OTPVerification = () => {
   }, [session.otpVerificationStatus]);
 
   useEffect(() => {
-    setInformation('')
+    setInformation("");
     if (session.resendOtpStatus === "completed") {
-      setInformation('OTP sent successfully')
+      setInformation("OTP sent successfully");
       dispatch(clearResendOtpStatus());
     } else if (session.resendOtpStatus === "failed") {
-      setInformation('')
+      setInformation("");
       dispatch(clearResendOtpStatus());
     }
   }, [session.resendOtpStatus]);
@@ -96,23 +94,31 @@ const OTPVerification = () => {
             </Text>
           </View>
           {errorReducer?.message ? (
-						<View style={[GlobalStyles.mb20, GlobalStyles.mt10]}>
-							<Text style={[
-                GlobalStyles.textRed,
-                GlobalStyles.fontSize13,
-                GlobalStyles.fontWeight600
-              ]}>{errorReducer.message}</Text>
-						</View>
-					) : null}
+            <View style={[GlobalStyles.mb20, GlobalStyles.mt10]}>
+              <Text
+                style={[
+                  GlobalStyles.textRed,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.fontWeight600,
+                ]}
+              >
+                {errorReducer.message}
+              </Text>
+            </View>
+          ) : null}
           {information ? (
-						<View style={[GlobalStyles.mb20, GlobalStyles.mt10]}>
-							<Text style={[
-                {color: colors.primary},
-                GlobalStyles.fontSize13,
-                GlobalStyles.fontWeight600
-              ]}>{information}</Text>
-						</View>
-					) : null}
+            <View style={[GlobalStyles.mb20, GlobalStyles.mt10]}>
+              <Text
+                style={[
+                  { color: colors.primary },
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.fontWeight600,
+                ]}
+              >
+                {information}
+              </Text>
+            </View>
+          ) : null}
           <View>
             <OTPTextInput
               textInputStyle={{
@@ -121,13 +127,12 @@ const OTPVerification = () => {
                 backgroundColor: "#F3F5F7",
                 borderColor: "#F3F5F7",
               }}
-              ref={(e: any) => (otpInput = e)}
               autoFocus
               tintColor={colors.primary}
               handleTextChange={handleTextChange}
             />
           </View>
-          
+
           <View style={[GlobalStyles.mt20]}>
             <Text
               style={[

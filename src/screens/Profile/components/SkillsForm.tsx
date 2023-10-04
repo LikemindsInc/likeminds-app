@@ -55,20 +55,20 @@ const SkillsForm = () => {
     }, 300);
   };
 
-  useEffect(() => {
-    if (session.completeProfileStatus === "completed") {
-      toast.show("Skills added successfully", {
-        animationType: "slide-in",
-        placement: "top",
-      });
-    } else if (session.completeProfileStatus === "failed") {
-      toast.show(
-        session.completeProfileError ||
-          "Unable to complete action please try again"
-      );
-    }
-    dispatch(clearCompleteProfileStatus());
-  }, [session.completeProfileStatus]);
+  // useEffect(() => {
+  //   if (session.completeProfileStatus === "completed") {
+  //     toast.show("Skills added successfully", {
+  //       animationType: "slide-in",
+  //       placement: "top",
+  //     });
+  //   } else if (session.completeProfileStatus === "failed") {
+  //     toast.show(
+  //       session.completeProfileError ||
+  //         "Unable to complete action please try again"
+  //     );
+  //   }
+  //   dispatch(clearCompleteProfileStatus());
+  // }, [session.completeProfileStatus]);
 
   const addSelectedSkill = (item: string) => {
     const state = [...selectedSkills];

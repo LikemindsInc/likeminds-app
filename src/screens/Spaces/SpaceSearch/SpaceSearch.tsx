@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { GlobalStyles } from "../../../theme/GlobalStyles";
 import Input from "../../../components/Input/Input";
-import { Feather, AntDesign } from "@expo/vector-icons";
+import { Feather, AntDesign, Ionicons } from "@expo/vector-icons";
 import colors from "../../../theme/colors";
 import { TabView, SceneMap } from "react-native-tab-view";
 import {
@@ -30,6 +30,8 @@ import useAppDispatch from "../../../hooks/useAppDispatch";
 import useAppSelector from "../../../hooks/useAppSelector";
 import { getUsers } from "../../../actions/connection";
 import { clearSearchedUsers } from "../../../reducers/connection";
+import AppModal from "../../../components/Modal/AppModal";
+import PeopleSearchForm from "../../../components/PeopleSearchForm/PeopleSearchForm";
 
 const SpaceSearch = () => {
   const ref = useRef<TextInput>(null) as MutableRefObject<TextInput>;
@@ -37,6 +39,8 @@ const SpaceSearch = () => {
   const [searchText, setSearchText] = useState("");
 
   const dispatch = useAppDispatch();
+
+  const [isModalVisible, setModal] = useState(false);
 
   const handleTextChange = Util.debounce((text) => {
     // Do other processing with the debounced value here
@@ -50,6 +54,10 @@ const SpaceSearch = () => {
     handleTextChange();
   }, [searchText]);
 
+  const closeModal = () => {
+    setModal(false);
+  };
+
   return (
     <View
       style={[
@@ -57,8 +65,8 @@ const SpaceSearch = () => {
         { paddingHorizontal: 0, paddingBottom: 0 },
       ]}
     >
-      <View style={[GlobalStyles.flewRow]}>
-        <View style={[GlobalStyles.flexOne, { paddingHorizontal: 16 }]}>
+      <View style={[GlobalStyles.flewRow, { paddingHorizontal: 16, gap: 8 }]}>
+        <View style={[GlobalStyles.flexOne]}>
           <Input
             inputRef={ref}
             contentContainerStyle={{ marginBottom: 0 }}
@@ -70,13 +78,29 @@ const SpaceSearch = () => {
             onChangeText={(value) => setSearchText(value)}
           />
         </View>
-        {/* <TouchableOpacity style={styles.searchButton}>
+        <TouchableOpacity
+          onPress={() => setModal(true)}
+          style={styles.searchButton}
+        >
           <Feather name="sliders" size={24} color={colors.grey} />
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
       <View style={[GlobalStyles.mt20, { flex: 1, paddingHorizontal: 0 }]}>
         <SpacePeopleTabView searchText={searchText} />
       </View>
+      <AppModal
+        onBackDropPress={closeModal}
+        visible={isModalVisible}
+        title="Select Categories"
+        containerStyle={{ height: 400 }}
+        backButton={
+          <View>
+            <Ionicons name="arrow-back" size={24} color={colors.primary} />
+          </View>
+        }
+      >
+        <PeopleSearchForm />
+      </AppModal>
     </View>
   );
 };
@@ -165,7 +189,8 @@ const styles = StyleSheet.create({
   searchButton: {
     backgroundColor: "#F3F5F7",
     paddingHorizontal: 12,
-    paddingVertical: 12,
+    height: 60,
+    // paddingVertical: 12,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",

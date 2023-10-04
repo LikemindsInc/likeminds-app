@@ -297,6 +297,7 @@ const FirstRoute = () => {
   const [showEducationModal, setShowEducationModal] = useState(false);
   const [showSkillsModal, setShowSkillsModal] = useState(false);
   const [showCerticatesModal, setshowCerticatesModal] = useState(false);
+  const width = useDimension().width;
   const getExperienceTimeLine = () => {
     const filtered = (user?.experience || []).filter(
       (item) => item.companyName && item.companyName.trim() !== ""
@@ -319,6 +320,9 @@ const FirstRoute = () => {
                     GlobalStyles.textPurple,
                     GlobalStyles.mb10,
                     GlobalStyles.fontWeight700,
+                    {
+                      maxWidth: 0.4 * width,
+                    },
                   ]}
                 >
                   {item.jobTitle}
@@ -382,10 +386,11 @@ const FirstRoute = () => {
           >
             <Text
               style={[
-                GlobalStyles.fontInterMedium,
+                GlobalStyles.fontInterBlack,
                 GlobalStyles.fontSize13,
                 GlobalStyles.textNavyBlue,
                 GlobalStyles.mb10,
+                GlobalStyles.fontWeight400,
               ]}
             >
               Experience
@@ -448,7 +453,7 @@ const FirstRoute = () => {
               >
                 <Text
                   style={[
-                    GlobalStyles.fontInterMedium,
+                    GlobalStyles.fontInterBlack,
                     GlobalStyles.fontSize13,
                     GlobalStyles.textNavyBlue,
                     GlobalStyles.mb10,
@@ -475,6 +480,9 @@ const FirstRoute = () => {
                           GlobalStyles.textPurple,
                           GlobalStyles.mb10,
                           GlobalStyles.fontWeight700,
+                          {
+                            maxWidth: 0.4 * width,
+                          },
                         ]}
                       >
                         {item.degree}
@@ -525,7 +533,7 @@ const FirstRoute = () => {
           >
             <Text
               style={[
-                GlobalStyles.fontInterMedium,
+                GlobalStyles.fontInterBlack,
                 GlobalStyles.fontSize13,
                 GlobalStyles.textNavyBlue,
                 GlobalStyles.mb10,
@@ -593,7 +601,7 @@ const FirstRoute = () => {
           ></View>
         ),
         description: (
-          <View style={[{ marginBottom: 10 }]}>
+          <View style={[{ marginBottom: 25 }]}>
             <TouchableOpacity
               style={{ flex: 1, flexDirection: "row", gap: 12 }}
               onPress={() => handleFileDownload(item.url)}
@@ -647,7 +655,7 @@ const FirstRoute = () => {
           >
             <Text
               style={[
-                GlobalStyles.fontInterMedium,
+                GlobalStyles.fontInterBlack,
                 GlobalStyles.fontSize13,
                 GlobalStyles.textNavyBlue,
                 GlobalStyles.mb10,
@@ -711,7 +719,7 @@ const FirstRoute = () => {
               >
                 <Text
                   style={[
-                    GlobalStyles.fontInterMedium,
+                    GlobalStyles.fontInterBlack,
                     GlobalStyles.fontSize13,
                     GlobalStyles.textNavyBlue,
                     GlobalStyles.mb10,
@@ -728,15 +736,19 @@ const FirstRoute = () => {
                     GlobalStyles.fontInterRegular,
                     GlobalStyles.fontSize13,
                     GlobalStyles.textGrey,
-                    GlobalStyles.mb10,
-                    GlobalStyles.mt10,
+                    GlobalStyles.mb20,
                   ]}
                 >
                   {user?.skills.join(",")}
                 </Text>
                 <TouchableOpacity
                   onPress={() => setShowSkillsModal(true)}
-                  style={{ flexDirection: "row", gap: 8, marginBottom: 10 }}
+                  style={{
+                    flexDirection: "row",
+                    gap: 8,
+                    marginBottom: 10,
+                    marginTop: 5,
+                  }}
                 >
                   <AntDesign name="plus" size={16} color={colors.primary} />
                   <Text

@@ -52,22 +52,22 @@ const ExperienceForm = () => {
 
   const state = useAppSelector((state) => state.sessionReducer);
 
-  const toast = useToast();
+  // const toast = useToast();
 
-  useEffect(() => {
-    if (state.completeProfileStatus === "completed") {
-      toast.show("Experience added successfully", {
-        animationType: "slide-in",
-        placement: "top",
-      });
-    } else if (state.completeProfileStatus === "failed") {
-      toast.show(
-        state.completeProfileError ||
-          "Unable to complete action please try again"
-      );
-    }
-    dispatch(clearCompleteProfileStatus());
-  }, [state.completeProfileStatus]);
+  // useEffect(() => {
+  //   if (state.completeProfileStatus === "completed") {
+  //     toast.show("Experience added successfully", {
+  //       animationType: "slide-in",
+  //       placement: "top",
+  //     });
+  //   } else if (state.completeProfileStatus === "failed") {
+  //     toast.show(
+  //       state.completeProfileError ||
+  //         "Unable to complete action please try again"
+  //     );
+  //   }
+  //   dispatch(clearCompleteProfileStatus());
+  // }, [state.completeProfileStatus]);
 
   useEffect(() => {
     dispatch(getAllIndustriesAction());

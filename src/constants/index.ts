@@ -169,6 +169,16 @@ export const JOB_TYPES = [
   { label: "Contract", value: "contract" },
 ];
 
+export const SUGGESTIONS = [
+  "App Design",
+  "User Experience",
+  "UX/UI",
+  "Figma",
+  "Adobe",
+  "Sketch",
+  "Wireframes",
+];
+
 export const JOB_EXPERIENCE = [
   { label: "Student", value: "student" },
   { label: "Entry Level", value: "entry-level" },

@@ -64,7 +64,7 @@ const slides = [
     image: require("../../../assets/group4.png"),
     logo: require("../../../assets/image1.png"),
     backgroundColor: "#59b2ab",
-    footerText: "Bond over shared challenges and experiences",
+    footerText: "Have open conversations",
   },
   {
     key: 5,
@@ -113,41 +113,6 @@ const OnBoarding = () => {
   const _renderItem = ({ item }: any) => {
     return (
       <View>
-        <View style={styles.welcomeTextContainer}>
-          <Text
-            style={[
-              GlobalStyles.textCenter,
-              GlobalStyles.textGrey,
-              GlobalStyles.subHeading,
-              GlobalStyles.fontInterRegular,
-              GlobalStyles.fontWeight400,
-            ]}
-          >
-            {item.title}
-          </Text>
-        </View>
-        <View style={[GlobalStyles.alignHorizontalCenter, GlobalStyles.mb20]}>
-          <Image
-            source={item.logo}
-            resizeMethod="auto"
-            resizeMode="contain"
-            style={styles.logoImage}
-          />
-        </View>
-        <View style={[GlobalStyles.mb40]}>
-          <Text
-            style={[
-              GlobalStyles.textCenter,
-              GlobalStyles.textNavyBlue,
-              GlobalStyles.fontInterRegular,
-              GlobalStyles.articleFont,
-              GlobalStyles.fontWeight400,
-            ]}
-          >
-            {item.text}
-          </Text>
-        </View>
-
         <View style={{ alignItems: "center" }}>
           <Animated.Image
             style={[styles.groupImage, animatedStyle]}
@@ -216,7 +181,44 @@ const OnBoarding = () => {
   };
 
   return (
-    <View style={GlobalStyles.container}>
+    <View style={[GlobalStyles.container, { paddingHorizontal: 0 }]}>
+      <View>
+        <View style={styles.welcomeTextContainer}>
+          <Text
+            style={[
+              GlobalStyles.textCenter,
+              GlobalStyles.textGrey,
+              GlobalStyles.subHeading,
+              GlobalStyles.fontInterRegular,
+              GlobalStyles.fontWeight400,
+            ]}
+          >
+            Welcome To
+          </Text>
+        </View>
+        <View style={[GlobalStyles.alignHorizontalCenter, GlobalStyles.mb20]}>
+          <Image
+            source={require("../../../assets/image1.png")}
+            resizeMethod="auto"
+            resizeMode="contain"
+            style={styles.logoImage}
+          />
+        </View>
+        <View style={[GlobalStyles.mb40]}>
+          <Text
+            style={[
+              GlobalStyles.textCenter,
+              GlobalStyles.textNavyBlue,
+              GlobalStyles.fontInterRegular,
+              GlobalStyles.articleFont,
+              GlobalStyles.fontWeight400,
+            ]}
+          >
+            A platform for bringing talented and diverse communities together to
+            support one another and grow.
+          </Text>
+        </View>
+      </View>
       <AppIntroSlider
         activeDotStyle={{ backgroundColor: "#284453", width: 24 }}
         bottomButton

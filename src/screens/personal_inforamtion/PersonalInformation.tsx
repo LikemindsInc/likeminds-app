@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { BackHandler, ScrollView, StyleSheet, Text, View } from "react-native";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
@@ -23,6 +23,7 @@ import * as ImagePicker from "expo-image-picker";
 import { SelectList } from "react-native-dropdown-select-list";
 import { FilePickerFormat } from "@app-model";
 import { useToast } from "react-native-toast-notifications";
+import Sanitizer from "../../utils/sanitizer";
 
 const PersonalInformation = () => {
   const settings = useAppSelector(
@@ -85,6 +86,26 @@ const PersonalInformation = () => {
     // else setErrors((state) => ({ ...state, bio: "Bio is required" }));
   }, [bio]);
 
+  const navigation = useNavigation<any>();
+
+  const handleBackPress = () => {
+    return true;
+  };
+
+  const handleBackNavigation = (e: any) => {
+    e.preventDefault();
+    // return false; // Allow navigation
+  };
+
+  useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", handleBackPress);
+    navigation.addListener("beforeRemove", handleBackNavigation);
+    return () => {
+      BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
+      navigation.removeListener("beforeRemove", handleBackNavigation);
+    };
+  }, [navigation]);
+
   useEffect(() => {
     if (city.trim() !== "") setErrors((state) => ({ ...state, city: null }));
     // else setErrors((state) => ({ ...state, city: "City is required" }));
@@ -106,8 +127,6 @@ const PersonalInformation = () => {
   };
 
   // console.log("user>", settings.userInfo);
-
-  const navigation = useNavigation<any>();
 
   const toast = useToast();
 
@@ -142,15 +161,17 @@ const PersonalInformation = () => {
       return toast.show("Please provide your country of origin");
 
     dispatch(
-      updatePersonalInformation({
-        firstName,
-        lastName,
-        city,
-        bio,
-        country,
-        countryOfOrigin,
-        resume,
-      })
+      updatePersonalInformation(
+        Sanitizer.sanitize({
+          firstName,
+          lastName,
+          city,
+          bio,
+          country,
+          countryOfOrigin,
+          resume,
+        })
+      )
     );
     navigation.navigate(APP_SCREEN_LIST.SIGNUP_PROFILE_PICTURE);
   };
