@@ -99,6 +99,9 @@ const OTPScreen = () => {
     }
   }, [session.verifyPhoneEmailOTPStatus]);
 
+  const phone  = session && session?.otpChannelValue ? session?.otpChannelValue.split('_')[1] : `your phone number to verify it’s
+  really you.`
+
   return (
     <KeyboardDismisser style={[GlobalStyles.flexOne]}>
       <View style={[GlobalStyles.container]}>
@@ -126,8 +129,10 @@ const OTPScreen = () => {
                 GlobalStyles.textGrey,
               ]}
             >
-              Enter the 4 digit code sent to your phone number to verify it’s
-              really you.
+              Enter the 4 digit code sent to <Text style={[
+                GlobalStyles.fontWeight700,
+                GlobalStyles.textBlack
+              ]}>{phone}</Text>
             </Text>
           </View>
           <View>
