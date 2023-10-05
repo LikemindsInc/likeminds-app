@@ -237,7 +237,8 @@ const Button: FC<IButtonProps> = (props) => {
                 GlobalStyles.textWhite,
                 GlobalStyles.fontInterRegular,
                 GlobalStyles.fontSize13,
-                { textAlign: "center" },
+                { textAlign: "center",
+              fontWeight: 500},
               ]}
             >
               {props.title}

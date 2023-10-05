@@ -210,7 +210,47 @@ const ConnectionProfile = () => {
         // style={styles.contentWrapper}
       >
         <View>
-        {initials ? (
+          {selector.profile?.profilePicture ? (<ImageBackground
+            resizeMode="cover"
+            source={
+              selector.profile?.profilePicture &&
+              selector.profile.profilePicture.trim() !== ""
+                ? { uri: selector.profile.profilePicture }
+                : require("../../../assets/image9.png")
+            }
+            style={[
+              styles.imageBg,
+              height * 0.4 > 240
+                ? { height: 240 }
+                : { height: height * 0.4, position: "relative" },
+            ]}
+          >
+            <View
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                height: "100%",
+                width: "100%",
+                backgroundColor: "rgba(0,0,0,0.5)",
+              }}
+            ></View>
+            <TouchableOpacity
+              onPress={handleBackNavigation}
+              style={[styles.imageHeaderWrapper]}
+            >
+              <AntDesign
+                name="arrowleft"
+                size={24}
+                style={{
+                  textShadowColor: "rgba(0, 0, 0, 0.75)",
+                  textShadowRadius: 10,
+                  textShadowOffset: { width: 2, height: 2 },
+                  color: colors.white,
+                }}
+              />
+            </TouchableOpacity>
+          </ImageBackground>): initials ? (
 						<View
 							style={[
 								styles.imageBg,
@@ -278,47 +318,6 @@ const ConnectionProfile = () => {
 							</View>
 						</View>
 					) : null}
-          {selector.profile?.profilePicture ? (<ImageBackground
-            resizeMode="cover"
-            source={
-              selector.profile?.profilePicture &&
-              selector.profile.profilePicture.trim() !== ""
-                ? { uri: selector.profile.profilePicture }
-                : require("../../../assets/image9.png")
-            }
-            style={[
-              styles.imageBg,
-              height * 0.4 > 240
-                ? { height: 240 }
-                : { height: height * 0.4, position: "relative" },
-            ]}
-          >
-            <View
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                height: "100%",
-                width: "100%",
-                backgroundColor: "rgba(0,0,0,0.5)",
-              }}
-            ></View>
-            <TouchableOpacity
-              onPress={handleBackNavigation}
-              style={[styles.imageHeaderWrapper]}
-            >
-              <AntDesign
-                name="arrowleft"
-                size={24}
-                style={{
-                  textShadowColor: "rgba(0, 0, 0, 0.75)",
-                  textShadowRadius: 10,
-                  textShadowOffset: { width: 2, height: 2 },
-                  color: colors.white,
-                }}
-              />
-            </TouchableOpacity>
-          </ImageBackground>): null}
           
         </View>
         <View style={styles.contentWrapper}>

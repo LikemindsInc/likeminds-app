@@ -92,7 +92,53 @@ const UserProfile = () => {
 				// style={styles.contentWrapper}
 			>
 				<View>
-					{initials ? (
+
+					{state.userInfo?.profilePicture ? (
+						<ImageBackground
+							resizeMode="cover"
+							source={
+								state.userInfo?.profilePicture &&
+								state.userInfo.profilePicture.trim() !== ""
+									? { uri: state.userInfo.profilePicture }
+									: require("../../../assets/image9.png")
+							}
+							style={[
+								styles.imageBg,
+								height * 0.4 > 240
+									? { height: 240 }
+									: { height: height * 0.4, position: "relative" },
+							]}
+						>
+							<View
+								style={{
+									position: "absolute",
+									top: 0,
+									left: 0,
+									height: "100%",
+									width: "100%",
+									backgroundColor: "rgba(0,0,0,0.4)",
+								}}
+							></View>
+							<View>
+								<TouchableOpacity
+									onPress={() => navigation.goBack()}
+									style={[styles.imageHeaderWrapper]}
+								>
+									<AntDesign
+										name="arrowleft"
+										size={24}
+										style={{
+											textShadowColor: "rgba(0, 0, 0, 0.75)",
+											textShadowRadius: 10,
+											textShadowOffset: { width: 2, height: 2 },
+											color: colors.white,
+										}}
+										// color={colors.white}
+									/>
+								</TouchableOpacity>
+							</View>
+						</ImageBackground>
+					) : initials ? (
 						<View
 							style={[
 								styles.imageBg,
@@ -159,53 +205,6 @@ const UserProfile = () => {
 								</Text>
 							</View>
 						</View>
-					) : null}
-
-					{state.userInfo?.profilePicture ? (
-						<ImageBackground
-							resizeMode="cover"
-							source={
-								state.userInfo?.profilePicture &&
-								state.userInfo.profilePicture.trim() !== ""
-									? { uri: state.userInfo.profilePicture }
-									: require("../../../assets/image9.png")
-							}
-							style={[
-								styles.imageBg,
-								height * 0.4 > 240
-									? { height: 240 }
-									: { height: height * 0.4, position: "relative" },
-							]}
-						>
-							<View
-								style={{
-									position: "absolute",
-									top: 0,
-									left: 0,
-									height: "100%",
-									width: "100%",
-									backgroundColor: "rgba(0,0,0,0.4)",
-								}}
-							></View>
-							<View>
-								<TouchableOpacity
-									onPress={() => navigation.goBack()}
-									style={[styles.imageHeaderWrapper]}
-								>
-									<AntDesign
-										name="arrowleft"
-										size={24}
-										style={{
-											textShadowColor: "rgba(0, 0, 0, 0.75)",
-											textShadowRadius: 10,
-											textShadowOffset: { width: 2, height: 2 },
-											color: colors.white,
-										}}
-										// color={colors.white}
-									/>
-								</TouchableOpacity>
-							</View>
-						</ImageBackground>
 					) : null}
 				</View>
 				<View style={styles.contentWrapper}>
