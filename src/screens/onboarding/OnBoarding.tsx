@@ -18,17 +18,9 @@ import { APP_SCREEN_LIST, INavigationProps } from "../../constants";
 import useAppSelector from "../../hooks/useAppSelector";
 import { ISettingState } from "../../reducers/settings";
 import { useEffect, useMemo, useRef } from "react";
+import Util from "../../utils";
 
-interface ISliderProps {
-  key: number;
-  title: string;
-  text: string;
-  image: any;
-  logo: any;
-  backgroundColor: string;
-  footerText: string;
-}
-
+const {wp} = Util.responsiveWidthHeight()
 const slides = [
   {
     key: 1,
@@ -196,7 +188,7 @@ const OnBoarding = () => {
             Welcome To
           </Text>
         </View>
-        <View style={[GlobalStyles.alignHorizontalCenter, GlobalStyles.mb20]}>
+        <View style={[GlobalStyles.alignHorizontalCenter, GlobalStyles.mb40]}>
           <Image
             source={require("../../../assets/image1.png")}
             resizeMethod="auto"
@@ -204,7 +196,9 @@ const OnBoarding = () => {
             style={styles.logoImage}
           />
         </View>
-        <View style={[GlobalStyles.mb40]}>
+        <View style={{
+          marginBottom: wp(22.68)
+        }}>
           <Text
             style={[
               GlobalStyles.textCenter,

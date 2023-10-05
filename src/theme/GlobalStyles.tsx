@@ -1,17 +1,20 @@
 import { StyleSheet } from "react-native";
 import colors from "./colors";
 import font from "./font";
+import Util from "../utils";
+
+const {wp} = Util.responsiveWidthHeight()
 
 export const GlobalStyles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 25,
-    paddingTop: 16,
-    paddingBottom: 16,
+    paddingHorizontal: wp(6.75),
+    paddingTop: wp(4.32),
+    paddingBottom: wp(4.32),
     backgroundColor: colors.white,
   },
   title: {
-    fontSize: 24,
+    fontSize: wp(6.48),
   },
   textCenter: {
     textAlign: "center",
@@ -70,36 +73,36 @@ export const GlobalStyles = StyleSheet.create({
     justifyContent: "center",
   },
   mb10: {
-    marginBottom: 10,
+    marginBottom: wp(2.7),
   },
   mt10: {
-    marginTop: 10,
+    marginTop: wp(2.7),
   },
   mb20: {
-    marginBottom: 20,
+    marginBottom: wp(5.4),
   },
   mt5: {
-    marginTop: 5,
+    marginTop: wp(1.35),
   },
   mb5: {
-    marginBottom: 5,
+    marginBottom: wp(1.35),
   },
   mt20: {
-    marginTop: 20,
+    marginTop: wp(5.4),
   },
 
   mb30: {
-    marginBottom: 30,
+    marginBottom: wp(8.1),
   },
   mt30: {
-    marginTop: 30,
+    marginTop: wp(8.1),
   },
 
   mb40: {
-    marginBottom: 40,
+    marginBottom: wp(10.8),
   },
   mt40: {
-    marginTop: 40,
+    marginTop: wp(10.8),
   },
   fontSize10: {
     fontSize: font.size.font10,
@@ -123,8 +126,8 @@ export const GlobalStyles = StyleSheet.create({
     fontSize: font.size.font24,
   },
   buttonStyle: {
-    paddingHorizontal: 22,
-    paddingVertical: 16,
+    // paddingHorizontal: 22,
+    paddingVertical: 21,
     alignItems: "center",
     borderRadius: 10,
     flexDirection: "row",
