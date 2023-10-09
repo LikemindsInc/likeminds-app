@@ -1,5 +1,5 @@
-import _ from "lodash";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import _ from 'lodash';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   ICreateJobDTO,
   ICreatePostDTO,
@@ -8,7 +8,7 @@ import {
   IPostFeed,
   IThunkAPIStatus,
   IPostReaction,
-} from "@app-model";
+} from '@app-model';
 import {
   commentOnCommentAction,
   commentOnPostAction,
@@ -28,8 +28,8 @@ import {
   removeCommentReaction,
   unlikePostAction,
   unReactToPost,
-} from "../actions/post";
-import { PURGE } from "redux-persist";
+} from '../actions/post';
+import { PURGE } from 'redux-persist';
 
 export interface IPostState {
   createPostDTO: ICreatePostDTO;
@@ -137,80 +137,80 @@ export interface IPostState {
 
 const initialState: IPostState = {
   createPostDTO: {
-    content: "",
+    content: '',
     image: [],
   },
-  createPostStatus: "idle",
-  createPostSuccess: "",
-  createPostError: "",
+  createPostStatus: 'idle',
+  createPostSuccess: '',
+  createPostError: '',
 
-  getCurrentUserPostStatus: "idle",
-  getCurrentUserPostSuccess: "",
-  getCurrentUserPostError: "",
+  getCurrentUserPostStatus: 'idle',
+  getCurrentUserPostSuccess: '',
+  getCurrentUserPostError: '',
 
-  getConnectionPostFeedStatus: "idle",
-  getConnectionPostFeedSuccess: "",
-  getConnectionPostFeedError: "",
+  getConnectionPostFeedStatus: 'idle',
+  getConnectionPostFeedSuccess: '',
+  getConnectionPostFeedError: '',
 
-  getPostReactionStatus: "idle",
-  getPostReactionSuccess: "",
-  getPostReactionPostError: "",
+  getPostReactionStatus: 'idle',
+  getPostReactionSuccess: '',
+  getPostReactionPostError: '',
 
-  reactToCommentStatus: "idle",
-  reactToCommentSuccess: "",
-  reactToCommentError: "",
+  reactToCommentStatus: 'idle',
+  reactToCommentSuccess: '',
+  reactToCommentError: '',
 
-  removeCommentReactionStatus: "idle",
-  removeCommentReactionSuccess: "",
-  removeCommentReactionError: "",
+  removeCommentReactionStatus: 'idle',
+  removeCommentReactionSuccess: '',
+  removeCommentReactionError: '',
 
-  getCommentReactionStatus: "idle",
-  getCommentReactionSuccess: "",
-  getCommentReactionError: "",
+  getCommentReactionStatus: 'idle',
+  getCommentReactionSuccess: '',
+  getCommentReactionError: '',
 
   commentReactions: [],
 
-  likePostStatus: "idle",
-  likePostSuccess: "",
-  likePostError: "",
+  likePostStatus: 'idle',
+  likePostSuccess: '',
+  likePostError: '',
 
-  commentOnPostStatus: "idle",
-  commentOnPostSuccess: "",
-  commentOnPostError: "",
+  commentOnPostStatus: 'idle',
+  commentOnPostSuccess: '',
+  commentOnPostError: '',
 
-  commentOnCommentStatus: "idle",
-  commentOnCommentSuccess: "",
-  commentOnCommentError: "",
+  commentOnCommentStatus: 'idle',
+  commentOnCommentSuccess: '',
+  commentOnCommentError: '',
 
-  getCommentOnPostStatus: "idle",
-  getCommentOnPostSuccess: "",
-  getCommentOnPostError: "",
+  getCommentOnPostStatus: 'idle',
+  getCommentOnPostSuccess: '',
+  getCommentOnPostError: '',
 
-  getSinglePostStatus: "idle",
-  getSinglePostSuccess: "",
-  getSinglePostError: "",
+  getSinglePostStatus: 'idle',
+  getSinglePostSuccess: '',
+  getSinglePostError: '',
 
-  getJobsStatus: "idle",
-  getJobsSuccess: "",
-  getJobsError: "",
+  getJobsStatus: 'idle',
+  getJobsSuccess: '',
+  getJobsError: '',
 
-  unlikePostStatus: "idle",
-  unlikePostSuccess: "",
-  unlikePostError: "",
+  unlikePostStatus: 'idle',
+  unlikePostSuccess: '',
+  unlikePostError: '',
 
-  reactToPostStatus: "idle",
-  reactToPostSuccess: "",
-  reactToPostError: "",
+  reactToPostStatus: 'idle',
+  reactToPostSuccess: '',
+  reactToPostError: '',
 
-  getPostFeedStatus: "idle",
-  getPostFeedSuccess: "",
-  getPostFeedError: "",
+  getPostFeedStatus: 'idle',
+  getPostFeedSuccess: '',
+  getPostFeedError: '',
 
   postFeeds: [],
 
-  createJobStatus: "idle",
-  createJobSuccess: "",
-  createJobError: "",
+  createJobStatus: 'idle',
+  createJobSuccess: '',
+  createJobError: '',
 
   createJobDTO: null,
 
@@ -223,7 +223,7 @@ const initialState: IPostState = {
   postReacted: null,
 
   jobs: [],
-  jobFilterTailorValue: "",
+  jobFilterTailorValue: '',
 
   currentUserPostFeeds: [],
 
@@ -231,36 +231,36 @@ const initialState: IPostState = {
 
   connectionPostFeeds: [],
   showReactionList: false,
-  jobLocationFilterValue: "",
-  jobDateFilterValue: "",
-  jobTypeFilterValue: "",
-  jobExperienceFilterValue: "",
+  jobLocationFilterValue: '',
+  jobDateFilterValue: '',
+  jobTypeFilterValue: '',
+  jobExperienceFilterValue: '',
   showCommentReactionView: false,
   commentReacted: null,
 };
 
 const PostSlice = createSlice({
-  name: "post-slice",
+  name: 'post-slice',
   initialState,
   reducers: {
     showReactionView(
       state: IPostState,
-      action: PayloadAction<{ post: IPostFeed | null; show: boolean }>
+      action: PayloadAction<{ post: IPostFeed | null; show: boolean }>,
     ) {
       state.showReactionView = action.payload.show;
       state.postReacted = action.payload.post;
     },
     handleShowCommentReaction(
       state: IPostState,
-      action: PayloadAction<{ post: IPostCommentFeed | null; show: boolean }>
+      action: PayloadAction<{ post: IPostCommentFeed | null; show: boolean }>,
     ) {
       state.showCommentReactionView = action.payload.show;
       state.commentReacted = action.payload.post;
     },
     clearCreatePostStatus(state: IPostState) {
-      state.createPostStatus = "idle";
-      state.createPostSuccess = "";
-      state.createPostError = "";
+      state.createPostStatus = 'idle';
+      state.createPostSuccess = '';
+      state.createPostError = '';
     },
 
     setJobFilterTailorValue(state: IPostState, action) {
@@ -279,9 +279,9 @@ const PostSlice = createSlice({
     },
 
     clearPostRactionStatus(state: IPostState) {
-      state.reactToPostStatus = "idle";
-      state.reactToPostSuccess = "";
-      state.reactToPostSuccess = "";
+      state.reactToPostStatus = 'idle';
+      state.reactToPostSuccess = '';
+      state.reactToPostSuccess = '';
     },
 
     clearSinglePostReactions(state) {
@@ -292,15 +292,15 @@ const PostSlice = createSlice({
     },
 
     clearCreateJobStatus(state: IPostState) {
-      state.createJobStatus = "idle";
-      state.createJobSuccess = "";
-      state.createJobError = "";
+      state.createJobStatus = 'idle';
+      state.createJobSuccess = '';
+      state.createJobError = '';
     },
 
     clearCreateCommentOnPostState(state: IPostState) {
-      state.commentOnPostStatus = "idle";
-      state.commentOnPostError = "";
-      state.commentOnPostSuccess = "";
+      state.commentOnPostStatus = 'idle';
+      state.commentOnPostError = '';
+      state.commentOnPostSuccess = '';
     },
     savePostDetail(state: IPostState, action: PayloadAction<IPostFeed>) {
       state.postDetail = action.payload;
@@ -316,32 +316,32 @@ const PostSlice = createSlice({
       state.postDetail = null;
     });
     builder.addCase(createPostAction.pending, (state) => {
-      state.createPostStatus = "loading";
+      state.createPostStatus = 'loading';
     });
     builder.addCase(createPostAction.fulfilled, (state, action) => {
       state.createPostSuccess = action.payload.message;
-      state.createPostStatus = "completed";
+      state.createPostStatus = 'completed';
     });
     builder.addCase(createPostAction.rejected, (state, action) => {
-      state.createPostStatus = "failed";
+      state.createPostStatus = 'failed';
       state.createPostError = action.payload?.message as string;
     });
 
     builder.addCase(unReactToPost.pending, (state) => {
-      state.reactToPostStatus = "loading";
+      state.reactToPostStatus = 'loading';
     });
     builder.addCase(unReactToPost.fulfilled, (state, action) => {
-      state.reactToPostStatus = "completed";
+      state.reactToPostStatus = 'completed';
     });
     builder.addCase(unReactToPost.rejected, (state, action) => {
-      state.reactToPostStatus = "failed";
+      state.reactToPostStatus = 'failed';
     });
 
     builder.addCase(getPostFeedAction.pending, (state) => {
-      state.getPostFeedStatus = "loading";
+      state.getPostFeedStatus = 'loading';
     });
     builder.addCase(getPostFeedAction.fulfilled, (state, action) => {
-      state.getPostFeedStatus = "completed";
+      state.getPostFeedStatus = 'completed';
       // state.postFeeds = action.payload.data;
 
       const data = [...action.payload.data];
@@ -353,9 +353,9 @@ const PostSlice = createSlice({
           const ItemsToRemove: number[] = [];
 
           item.videos = images.filter((item, i) => {
-            if (item.endsWith(".mp4")) ItemsToRemove.push(i);
+            if (item.endsWith('.mp4')) ItemsToRemove.push(i);
 
-            return item.endsWith(".mp4");
+            return item.endsWith('.mp4');
           });
 
           ItemsToRemove.forEach((index) => images.splice(index, 1));
@@ -368,16 +368,16 @@ const PostSlice = createSlice({
       state.getPostFeedSuccess = action.payload?.message;
     });
     builder.addCase(getPostFeedAction.rejected, (state, action) => {
-      state.getPostFeedStatus = "failed";
-      console.log("action.payload?.messag> ", action.payload?.message);
+      state.getPostFeedStatus = 'failed';
+      console.log('action.payload?.messag> ', action.payload?.message);
       state.getPostFeedError = action.payload?.message as string;
     });
 
     builder.addCase(getCurrentUserFeedAction.pending, (state) => {
-      state.getCurrentUserPostStatus = "loading";
+      state.getCurrentUserPostStatus = 'loading';
     });
     builder.addCase(getCurrentUserFeedAction.fulfilled, (state, action) => {
-      state.getCurrentUserPostStatus = "completed";
+      state.getCurrentUserPostStatus = 'completed';
       const data = [...action.payload.data];
 
       data.forEach((item) => {
@@ -387,9 +387,9 @@ const PostSlice = createSlice({
           const ItemsToRemove: number[] = [];
 
           item.videos = images.filter((item, i) => {
-            if (item.endsWith(".mp4")) ItemsToRemove.push(i);
+            if (item.endsWith('.mp4')) ItemsToRemove.push(i);
 
-            return item.endsWith(".mp4");
+            return item.endsWith('.mp4');
           });
 
           ItemsToRemove.forEach((index) => images.splice(index, 1));
@@ -402,16 +402,16 @@ const PostSlice = createSlice({
       state.getCurrentUserPostSuccess = action.payload?.message;
     });
     builder.addCase(getCurrentUserFeedAction.rejected, (state, action) => {
-      state.getCurrentUserPostStatus = "failed";
-      console.log("action.payload?.messag> ", action.payload?.message);
+      state.getCurrentUserPostStatus = 'failed';
+      console.log('action.payload?.messag> ', action.payload?.message);
       state.getCurrentUserPostError = action.payload?.message as string;
     });
 
     builder.addCase(getConnectionPostFeedAction.pending, (state) => {
-      state.getConnectionPostFeedStatus = "loading";
+      state.getConnectionPostFeedStatus = 'loading';
     });
     builder.addCase(getConnectionPostFeedAction.fulfilled, (state, action) => {
-      state.getConnectionPostFeedStatus = "completed";
+      state.getConnectionPostFeedStatus = 'completed';
       const data = [...action.payload.data];
 
       data.forEach((item) => {
@@ -421,9 +421,9 @@ const PostSlice = createSlice({
           const ItemsToRemove: number[] = [];
 
           item.videos = images.filter((item, i) => {
-            if (item.endsWith(".mp4")) ItemsToRemove.push(i);
+            if (item.endsWith('.mp4')) ItemsToRemove.push(i);
 
-            return item.endsWith(".mp4");
+            return item.endsWith('.mp4');
           });
 
           ItemsToRemove.forEach((index) => images.splice(index, 1));
@@ -435,131 +435,131 @@ const PostSlice = createSlice({
       state.getConnectionPostFeedSuccess = action.payload?.message;
     });
     builder.addCase(getConnectionPostFeedAction.rejected, (state, action) => {
-      state.getConnectionPostFeedStatus = "failed";
-      console.log("action.payload?.messag> ", action.payload?.message);
+      state.getConnectionPostFeedStatus = 'failed';
+      console.log('action.payload?.messag> ', action.payload?.message);
       state.getConnectionPostFeedError = action.payload?.message as string;
     });
 
     builder.addCase(createJobAction.pending, (state) => {
-      state.createJobStatus = "loading";
+      state.createJobStatus = 'loading';
     });
     builder.addCase(createJobAction.fulfilled, (state, action) => {
-      state.createJobStatus = "completed";
+      state.createJobStatus = 'completed';
       state.createJobSuccess = action.payload?.message;
     });
     builder.addCase(createJobAction.rejected, (state, action) => {
-      state.createJobStatus = "failed";
+      state.createJobStatus = 'failed';
       state.createJobError = action.payload?.message as string;
     });
 
     builder.addCase(removeCommentReaction.pending, (state) => {
-      state.reactToCommentStatus = "loading";
+      state.reactToCommentStatus = 'loading';
     });
     builder.addCase(removeCommentReaction.fulfilled, (state, action) => {
-      state.reactToCommentStatus = "completed";
+      state.reactToCommentStatus = 'completed';
     });
     builder.addCase(removeCommentReaction.rejected, (state, action) => {
-      state.reactToCommentStatus = "failed";
+      state.reactToCommentStatus = 'failed';
     });
 
     builder.addCase(getCommentReaction.pending, (state) => {
-      state.getCommentReactionStatus = "loading";
+      state.getCommentReactionStatus = 'loading';
     });
     builder.addCase(getCommentReaction.fulfilled, (state, action) => {
-      state.getCommentReactionStatus = "completed";
+      state.getCommentReactionStatus = 'completed';
     });
     builder.addCase(getCommentReaction.rejected, (state, action) => {
-      state.getCommentReactionStatus = "failed";
+      state.getCommentReactionStatus = 'failed';
     });
 
     builder.addCase(reactToCommentAction.pending, (state) => {
-      state.reactToCommentStatus = "loading";
+      state.reactToCommentStatus = 'loading';
     });
     builder.addCase(reactToCommentAction.fulfilled, (state, action) => {
-      state.reactToCommentStatus = "completed";
+      state.reactToCommentStatus = 'completed';
     });
     builder.addCase(reactToCommentAction.rejected, (state, action) => {
-      state.reactToCommentStatus = "failed";
+      state.reactToCommentStatus = 'failed';
     });
 
     builder.addCase(likePostAction.pending, (state) => {
-      state.likePostStatus = "loading";
+      state.likePostStatus = 'loading';
     });
     builder.addCase(likePostAction.fulfilled, (state, action) => {
-      state.likePostStatus = "completed";
+      state.likePostStatus = 'completed';
       state.likePostSuccess = action.payload?.message;
     });
     builder.addCase(likePostAction.rejected, (state, action) => {
-      state.likePostStatus = "failed";
+      state.likePostStatus = 'failed';
       state.likePostError = action.payload?.message as string;
     });
 
     builder.addCase(unlikePostAction.pending, (state) => {
-      state.unlikePostStatus = "loading";
+      state.unlikePostStatus = 'loading';
     });
     builder.addCase(unlikePostAction.fulfilled, (state, action) => {
-      state.unlikePostStatus = "completed";
+      state.unlikePostStatus = 'completed';
       state.unlikePostSuccess = action.payload?.message;
     });
     builder.addCase(unlikePostAction.rejected, (state, action) => {
-      state.unlikePostStatus = "failed";
+      state.unlikePostStatus = 'failed';
       state.unlikePostError = action.payload?.message as string;
     });
 
     builder.addCase(commentOnPostAction.pending, (state) => {
-      state.commentOnPostStatus = "loading";
+      state.commentOnPostStatus = 'loading';
     });
     builder.addCase(commentOnPostAction.fulfilled, (state, action) => {
-      state.commentOnPostStatus = "completed";
+      state.commentOnPostStatus = 'completed';
       state.commentOnPostSuccess = action.payload?.message;
     });
     builder.addCase(commentOnPostAction.rejected, (state, action) => {
-      state.commentOnPostStatus = "failed";
+      state.commentOnPostStatus = 'failed';
       state.commentOnPostError = action.payload?.message as string;
     });
 
     builder.addCase(getCommentsOnPostAction.pending, (state) => {
-      state.getCommentOnPostStatus = "loading";
+      state.getCommentOnPostStatus = 'loading';
     });
     builder.addCase(getCommentsOnPostAction.fulfilled, (state, action) => {
-      state.getCommentOnPostStatus = "completed";
+      state.getCommentOnPostStatus = 'completed';
       state.postComments = action.payload.data;
       state.getCommentOnPostSuccess = action.payload?.message;
     });
     builder.addCase(getCommentsOnPostAction.rejected, (state, action) => {
-      state.getCommentOnPostStatus = "failed";
+      state.getCommentOnPostStatus = 'failed';
       state.getCommentOnPostError = action.payload?.message as string;
     });
 
     builder.addCase(commentOnCommentAction.pending, (state) => {
-      state.commentOnCommentStatus = "loading";
+      state.commentOnCommentStatus = 'loading';
     });
     builder.addCase(commentOnCommentAction.fulfilled, (state, action) => {
-      state.commentOnCommentStatus = "completed";
+      state.commentOnCommentStatus = 'completed';
 
       state.commentOnCommentSuccess = action.payload?.message;
     });
     builder.addCase(commentOnCommentAction.rejected, (state, action) => {
-      state.commentOnCommentStatus = "failed";
+      state.commentOnCommentStatus = 'failed';
       state.commentOnCommentError = action.payload?.message as string;
     });
 
     builder.addCase(reactToPostAction.pending, (state) => {
-      state.reactToPostStatus = "loading";
+      state.reactToPostStatus = 'loading';
     });
     builder.addCase(reactToPostAction.fulfilled, (state, action) => {
-      state.reactToPostStatus = "completed";
+      state.reactToPostStatus = 'completed';
     });
     builder.addCase(reactToPostAction.rejected, (state, action) => {
-      state.reactToPostStatus = "failed";
+      state.reactToPostStatus = 'failed';
       state.reactToPostError = action.payload?.message as string;
     });
 
     builder.addCase(getPostFeedByIdAction.pending, (state) => {
-      state.getSinglePostStatus = "loading";
+      state.getSinglePostStatus = 'loading';
     });
     builder.addCase(getPostFeedByIdAction.fulfilled, (state, action) => {
-      state.getSinglePostStatus = "completed";
+      state.getSinglePostStatus = 'completed';
       const item = { ...action.payload.data };
 
       if (item.images) {
@@ -568,9 +568,9 @@ const PostSlice = createSlice({
         const ItemsToRemove: number[] = [];
 
         item.videos = images.filter((item, i) => {
-          if (item.endsWith(".mp4")) ItemsToRemove.push(i);
+          if (item.endsWith('.mp4')) ItemsToRemove.push(i);
 
-          return item.endsWith(".mp4");
+          return item.endsWith('.mp4');
         });
 
         ItemsToRemove.forEach((index) => images.splice(index, 1));
@@ -582,31 +582,31 @@ const PostSlice = createSlice({
       state.postDetail = action.payload.data;
     });
     builder.addCase(getPostFeedByIdAction.rejected, (state, action) => {
-      state.getSinglePostStatus = "failed";
+      state.getSinglePostStatus = 'failed';
       state.getSinglePostError = action.payload?.message as string;
     });
 
     builder.addCase(getJobsAction.pending, (state) => {
-      state.getJobsStatus = "loading";
+      state.getJobsStatus = 'loading';
     });
     builder.addCase(getJobsAction.fulfilled, (state, action) => {
-      state.getJobsStatus = "completed";
+      state.getJobsStatus = 'completed';
       state.jobs = action.payload.data;
     });
     builder.addCase(getJobsAction.rejected, (state, action) => {
-      state.getJobsStatus = "failed";
+      state.getJobsStatus = 'failed';
       state.getJobsError = action.payload?.message as string;
     });
 
     builder.addCase(getPostReactions.pending, (state) => {
-      state.getPostReactionStatus = "loading";
+      state.getPostReactionStatus = 'loading';
     });
     builder.addCase(getPostReactions.fulfilled, (state, action) => {
-      state.getPostReactionStatus = "completed";
+      state.getPostReactionStatus = 'completed';
       state.postReaction = action.payload.data;
     });
     builder.addCase(getPostReactions.rejected, (state, action) => {
-      state.getPostReactionStatus = "failed";
+      state.getPostReactionStatus = 'failed';
       state.getPostReactionPostError = action.payload?.message as string;
     });
   },

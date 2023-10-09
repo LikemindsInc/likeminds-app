@@ -1,12 +1,12 @@
-import React from "react";
-import { StyleSheet, View } from "react-native";
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 
-import RadioButton from "./RadioButton";
-import { RadioGroupProps } from "./types";
+import RadioButton from './RadioButton';
+import { RadioGroupProps } from './types';
 
 export const RadioGroup = ({
   containerStyle,
-  layout = "column",
+  layout = 'column',
   onPress,
   radioButtons,
   selectedId,
@@ -43,6 +43,6 @@ export const RadioGroup = ({
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
+    alignItems: 'center',
   },
 });

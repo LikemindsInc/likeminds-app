@@ -1,29 +1,29 @@
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
-import { View, ScrollView, TouchableOpacity, Image, Text } from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import moment from "moment";
-import { useCallback, useEffect, useMemo, useRef } from "react";
-import useAppDispatch from "../../hooks/useAppDispatch";
-import { openReactionList } from "../../reducers/post_reducer";
-import { IPostReaction } from "@app-model";
-import useAppSelector from "../../hooks/useAppSelector";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { APP_SCREEN_LIST } from "../../constants";
-import { getProfile } from "../../reducers/connection";
+import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
+import { View, ScrollView, TouchableOpacity, Image, Text } from 'react-native';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import moment from 'moment';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import useAppDispatch from '../../hooks/useAppDispatch';
+import { openReactionList } from '../../reducers/post_reducer';
+import { IPostReaction } from '@app-model';
+import useAppSelector from '../../hooks/useAppSelector';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { APP_SCREEN_LIST } from '../../constants';
+import { getProfile } from '../../reducers/connection';
 
 const ReactionsViewModal = () => {
   const bottomSheetRef2 = useRef<BottomSheet>(null);
   const navigation = useNavigation<NavigationProp<any>>();
-  const snapPoints = useMemo(() => ["50%", "60%"], []);
+  const snapPoints = useMemo(() => ['50%', '60%'], []);
 
   const handleSheetChanges = useCallback((index: number) => {}, []);
   const session = useAppSelector((state) => state.settingReducer);
   const dispatch = useAppDispatch();
   const renderProfilePicture = (item: IPostReaction) => {
-    if (item.user.profilePicture && item.user.profilePicture.trim() !== "") {
+    if (item.user.profilePicture && item.user.profilePicture.trim() !== '') {
       return { uri: item.user.profilePicture };
     }
-    return require("../../../assets/imageAvatar.jpeg");
+    return require('../../../assets/imageAvatar.jpeg');
   };
   const state = useAppSelector((state) => state.postReducer);
 
@@ -51,7 +51,7 @@ const ReactionsViewModal = () => {
       backdropComponent={(props: any) => (
         <BottomSheetBackdrop
           {...props}
-          pressBehavior={"close"}
+          pressBehavior={'close'}
           onPress={() => dispatch(openReactionList(false))}
         />
       )}
@@ -62,19 +62,19 @@ const ReactionsViewModal = () => {
           showsVerticalScrollIndicator={false}
           style={{ flexGrow: 1, flex: 1 }}
         >
-          <View style={[GlobalStyles.container, { backgroundColor: "#fff" }]}>
+          <View style={[GlobalStyles.container, { backgroundColor: '#fff' }]}>
             {state.postReaction.map((item) => (
               <TouchableOpacity
                 style={{
-                  flexDirection: "row",
+                  flexDirection: 'row',
                   marginBottom: 20,
-                  justifyContent: "space-between",
+                  justifyContent: 'space-between',
                 }}
                 key={item.id}
               >
                 <TouchableOpacity
                   onPress={() => handleNavigationToProfileScreen(item.user.id)}
-                  style={{ flex: 1, flexDirection: "row", gap: 10 }}
+                  style={{ flex: 1, flexDirection: 'row', gap: 10 }}
                 >
                   <View>
                     <Image

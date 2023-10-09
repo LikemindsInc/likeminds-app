@@ -1,12 +1,12 @@
-import React from "react";
-import "redux-persist";
-import { Provider as ReduxProvider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
+import React from 'react';
+import 'redux-persist';
+import { Provider as ReduxProvider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
-import { store, persistor } from "./store";
+import { store, persistor } from './store';
 
-interface IProps{
-  children: any
+interface IProps {
+  children: any;
 }
 
 const Provider: React.FC<IProps> = ({ children }) => (

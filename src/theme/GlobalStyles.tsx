@@ -1,9 +1,9 @@
-import { StyleSheet } from "react-native";
-import colors from "./colors";
-import font from "./font";
-import Util from "../utils";
+import { StyleSheet } from 'react-native';
+import colors from './colors';
+import font from './font';
+import Util from '../utils';
 
-const {wp} = Util.responsiveWidthHeight()
+const { wp } = Util.responsiveWidthHeight();
 
 export const GlobalStyles = StyleSheet.create({
   container: {
@@ -17,7 +17,7 @@ export const GlobalStyles = StyleSheet.create({
     fontSize: wp(6.48),
   },
   textCenter: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   textGrey: {
     color: colors.grey,
@@ -44,33 +44,33 @@ export const GlobalStyles = StyleSheet.create({
     fontSize: font.size.font14,
   },
   fontInterBlack: {
-    fontFamily: "Inter-Black",
+    fontFamily: 'Inter-Black',
   },
   fontInterRegular: {
-    fontFamily: "Inter-Regular",
+    fontFamily: 'Inter-Regular',
   },
   fontInterMedium: {
-    fontFamily: "Inter-Medium",
+    fontFamily: 'Inter-Medium',
   },
   fontWeight100: {
-    fontWeight: "100",
+    fontWeight: '100',
   },
   fontWeight400: {
-    fontWeight: "400",
+    fontWeight: '400',
   },
   fontWeight600: {
-    fontWeight: "600",
+    fontWeight: '600',
   },
   fontWeight700: {
-    fontWeight: "700",
+    fontWeight: '700',
   },
   alignHorizontalCenter: {
-    flexDirection: "row",
-    justifyContent: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   alignVerticalCenter: {
-    flexDirection: "column",
-    justifyContent: "center",
+    flexDirection: 'column',
+    justifyContent: 'center',
   },
   mb10: {
     marginBottom: wp(2.7),
@@ -128,10 +128,10 @@ export const GlobalStyles = StyleSheet.create({
   buttonStyle: {
     // paddingHorizontal: 22,
     paddingVertical: 21,
-    alignItems: "center",
+    alignItems: 'center',
     borderRadius: 10,
-    flexDirection: "row",
-    justifyContent: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   buttonOval: {
     borderRadius: 20,
@@ -145,8 +145,8 @@ export const GlobalStyles = StyleSheet.create({
   },
 
   flewRow: {
-    display: "flex",
-    flexDirection: "row",
+    display: 'flex',
+    flexDirection: 'row',
     gap: 20,
   },
 
@@ -155,14 +155,14 @@ export const GlobalStyles = StyleSheet.create({
   },
 
   displayRow: {
-    display: "flex",
-    flexDirection: "row",
-    width: "100%",
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
   },
   displayRowCenter: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
 
   header: {
@@ -170,14 +170,14 @@ export const GlobalStyles = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 10,
     backgroundColor: colors.white,
-    flexDirection: "row",
-    width: "100%",
+    flexDirection: 'row',
+    width: '100%',
     height: 60,
-    alignItems: "center",
+    alignItems: 'center',
   },
 
   inputStyle: {
-    fontFamily: "Inter-Regular",
+    fontFamily: 'Inter-Regular',
     fontSize: font.size.font13,
   },
   primaryButtonOnline: {
@@ -187,7 +187,7 @@ export const GlobalStyles = StyleSheet.create({
   menuContainer: {},
   menuItemsCard: {},
   card: {
-    shadowColor: "gray", // Shadow color
+    shadowColor: 'gray', // Shadow color
     shadowOffset: { width: 0, height: 2 }, // Shadow offset
     shadowOpacity: 0.5, // Shadow opacity
     shadowRadius: 4, // Shadow radius
@@ -201,7 +201,7 @@ export const GlobalStyles = StyleSheet.create({
     paddingBottom: 25,
   },
   shadowBox: {
-    shadowColor: "#88969D30",
+    shadowColor: '#88969D30',
     shadowOffset: {
       width: 0,
       height: 0,

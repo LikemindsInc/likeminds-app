@@ -1,5 +1,5 @@
-import { ResponseInterface } from "@app-model";
-import { network } from "../../config/network.config";
+import { ResponseInterface } from '@app-model';
+import { network } from '../../config/network.config';
 
 /**
  *
@@ -10,8 +10,8 @@ import { network } from "../../config/network.config";
  */
 export const login = async (payload: any): Promise<any> => {
   const response = await network.post<ResponseInterface<any>>(
-    "/api/v1/auth/login",
-    { ...payload }
+    '/api/v1/auth/login',
+    { ...payload },
   );
 
   return response;

@@ -1,7 +1,7 @@
-import { Component, FC, useEffect, useState } from "react";
-import { View, Text, Image } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import ImageView from "react-native-image-viewing";
+import { Component, FC, useEffect, useState } from 'react';
+import { View, Text, Image } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import ImageView from 'react-native-image-viewing';
 
 interface IProps {
   images: { uri: string }[];

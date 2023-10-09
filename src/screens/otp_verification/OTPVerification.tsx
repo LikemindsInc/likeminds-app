@@ -4,33 +4,36 @@ import {
   TextInput,
   TextInputKeyPressEventData,
   View,
-} from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import BackButton from "../../components/Navigation/BackButton/BackButton";
-import colors from "../../theme/colors";
-import { Text } from "react-native";
-import Button from "../../components/Button/Button";
+} from 'react-native';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import BackButton from '../../components/Navigation/BackButton/BackButton';
+import colors from '../../theme/colors';
+import { Text } from 'react-native';
+import Button from '../../components/Button/Button';
 // import Input from "../../components/Input/Input";
-import TextLink from "../../components/TextLink/TextLink";
-import { APP_SCREEN_LIST, __ROOT_REDUX_STATE_KEY__ } from "../../constants";
-import React, { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-import OTPTextInput from "react-native-otp-textinput";
-import useAppSelector from "../../hooks/useAppSelector";
-import { ISessionState, clearResendOtpStatus } from "../../reducers/session";
-import useAppDispatch from "../../hooks/useAppDispatch";
-import { resendOTPAction, verifyOTPActionAction } from "../../actions/auth";
-import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
-import { clearNetworkError } from "../../reducers/errorHanlder";
+import TextLink from '../../components/TextLink/TextLink';
+import { APP_SCREEN_LIST, __ROOT_REDUX_STATE_KEY__ } from '../../constants';
+import React, { useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import OTPTextInput from 'react-native-otp-textinput';
+import useAppSelector from '../../hooks/useAppSelector';
+import {
+  ISessionState,
+  clearResendOtpStatus,
+} from '../../reducers/userProfileSession';
+import useAppDispatch from '../../hooks/useAppDispatch';
+import { resendOTPAction, verifyOTPActionAction } from '../../actions/auth';
+import KeyboardDismisser from '../../components/KeyboardDismisser/KeyboardDismisser';
+import { clearNetworkError } from '../../reducers/errorHanlder';
 
 const OTPVerification = () => {
   const errorReducer = useAppSelector((state) => state.errorReducer);
-  const [information, setInformation] = useState("");
+  const [information, setInformation] = useState('');
 
   const dispatch = useAppDispatch();
 
   const session = useAppSelector(
-    (state: any) => state.sessionReducer
+    (state: any) => state.sessionReducer,
   ) as ISessionState;
 
   // const ref1 = React.createRef<TextInput>();
@@ -38,18 +41,18 @@ const OTPVerification = () => {
   // const ref3 = React.createRef<TextInput>();
 
   const navigation = useNavigation<any>();
-  const [otp, setOTP] = useState("");
+  const [otp, setOTP] = useState('');
 
   const handleOnVerify = () => {
-    setInformation("");
+    setInformation('');
     dispatch(clearNetworkError());
-    if (otp.length < 4) return setInformation("Incomplete OTP");
+    if (otp.length < 4) return setInformation('Incomplete OTP');
 
     dispatch(
       verifyOTPActionAction({
         phone: session.profileData.phoneNumber,
         code: otp,
-      })
+      }),
     );
   };
 
@@ -58,7 +61,7 @@ const OTPVerification = () => {
   };
 
   useEffect(() => {
-    if (session.otpVerificationStatus === "completed") {
+    if (session.otpVerificationStatus === 'completed') {
       navigation.navigate(APP_SCREEN_LIST.PERSONAL_INFORAMTION_SCREEN);
     }
 
@@ -66,18 +69,20 @@ const OTPVerification = () => {
   }, [session.otpVerificationStatus]);
 
   useEffect(() => {
-    setInformation("");
-    if (session.resendOtpStatus === "completed") {
-      setInformation("OTP sent successfully");
+    setInformation('');
+    if (session.resendOtpStatus === 'completed') {
+      setInformation('OTP sent successfully');
       dispatch(clearResendOtpStatus());
-    } else if (session.resendOtpStatus === "failed") {
-      setInformation("");
+    } else if (session.resendOtpStatus === 'failed') {
+      setInformation('');
       dispatch(clearResendOtpStatus());
     }
   }, [session.resendOtpStatus]);
 
-
-  const  phone = session && session?.profileData?.phoneNumber ? session?.profileData?.phoneNumber : 'your phone number'
+  const phone =
+    session && session?.profileData?.phoneNumber
+      ? session?.profileData?.phoneNumber
+      : 'your phone number';
 
   return (
     <KeyboardDismisser style={{ flex: 1 }}>
@@ -93,10 +98,12 @@ const OTPVerification = () => {
                 GlobalStyles.textGrey,
               ]}
             >
-              Enter the 4 digit verification code sent to <Text style={[
-                GlobalStyles.fontWeight700,
-                GlobalStyles.textBlack
-              ]}>{phone}</Text>
+              Enter the 4 digit verification code sent to{' '}
+              <Text
+                style={[GlobalStyles.fontWeight700, GlobalStyles.textBlack]}
+              >
+                {phone}
+              </Text>
             </Text>
           </View>
           {errorReducer?.message ? (
@@ -130,8 +137,8 @@ const OTPVerification = () => {
               textInputStyle={{
                 borderWidth: 4,
                 borderRadius: 8,
-                backgroundColor: "#F3F5F7",
-                borderColor: "#F3F5F7",
+                backgroundColor: '#F3F5F7',
+                borderColor: '#F3F5F7',
               }}
               autoFocus
               tintColor={colors.primary}
@@ -158,8 +165,8 @@ const OTPVerification = () => {
                 dispatch(
                   resendOTPAction({
                     phone: session.profileData.phoneNumber,
-                    type: "SIGNUP",
-                  })
+                    type: 'SIGNUP',
+                  }),
                 )
               }
             />
@@ -167,8 +174,8 @@ const OTPVerification = () => {
         </View>
         <Button
           loading={
-            session.otpVerificationStatus === "loading" ||
-            session.resendOtpStatus === "loading"
+            session.otpVerificationStatus === 'loading' ||
+            session.resendOtpStatus === 'loading'
           }
           title="Verify"
           onPress={handleOnVerify}
@@ -181,12 +188,12 @@ const OTPVerification = () => {
 const styles = StyleSheet.create({
   input: {
     width: 60,
-    textAlign: "center",
+    textAlign: 'center',
   },
   inputWrapper: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 20,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   container: {
     flex: 1,

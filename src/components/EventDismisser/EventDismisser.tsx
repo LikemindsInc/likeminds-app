@@ -1,7 +1,7 @@
-import { Keyboard, StyleSheet } from "react-native";
-import { TouchableWithoutFeedback } from "react-native";
-import useAppDispatch from "../../hooks/useAppDispatch";
-import { showReactionView } from "../../reducers/post_reducer";
+import { Keyboard, StyleSheet } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native';
+import useAppDispatch from '../../hooks/useAppDispatch';
+import { showReactionView } from '../../reducers/post_reducer';
 
 const EventDismisser = (props: any) => {
   const dispatch = useAppDispatch();

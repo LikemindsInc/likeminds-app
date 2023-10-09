@@ -1,9 +1,9 @@
-import { ApiResponseError } from "@app-model";
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { ApiResponseError } from '@app-model';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export default function asyncThunkWrapper<Returned, Args>(
   prefix: string,
-  handler: (args: Args, thunkAPI?: any) => Promise<any>
+  handler: (args: Args, thunkAPI?: any) => Promise<any>,
 ) {
   return createAsyncThunk<Returned, Args, { rejectValue: ApiResponseError }>(
     prefix,
@@ -14,6 +14,6 @@ export default function asyncThunkWrapper<Returned, Args>(
         if (e.response) return thunkAPI.rejectWithValue(e.response.data);
         return Promise.reject(e);
       }
-    }
+    },
   );
 }

@@ -1,13 +1,13 @@
-import { FlatList, useToast } from "native-base";
-import StoryFeedItem from "../../../components/StoryFeedItem/StoryFeedItem";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import useAppDispatch from "../../../hooks/useAppDispatch";
-import { getPostFeedAction } from "../../../actions/post";
-import useAppSelector from "../../../hooks/useAppSelector";
-import { IPostState } from "../../../reducers/post_reducer";
-import { ScrollView } from "react-native-gesture-handler";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
-import { GlobalStyles } from "../../../theme/GlobalStyles";
+import { FlatList, useToast } from 'native-base';
+import StoryFeedItem from '../../../components/StoryFeedItem/StoryFeedItem';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import useAppDispatch from '../../../hooks/useAppDispatch';
+import { getPostFeedAction } from '../../../actions/post';
+import useAppSelector from '../../../hooks/useAppSelector';
+import { IPostState } from '../../../reducers/post_reducer';
+import { ScrollView } from 'react-native-gesture-handler';
+import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
+import { GlobalStyles } from '../../../theme/GlobalStyles';
 import {
   Image,
   RefreshControl,
@@ -15,13 +15,13 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import useDimension from "../../../hooks/useDimension";
-import colors, { addOpacity } from "../../../theme/colors";
-import { LinearGradient } from "expo-linear-gradient";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { APP_SCREEN_LIST } from "../../../constants";
-import FullScreenImageCarousel from "../../../components/FullScreenImageCarousel/FullScreenImageCarousel";
+} from 'react-native';
+import useDimension from '../../../hooks/useDimension';
+import colors, { addOpacity } from '../../../theme/colors';
+import { LinearGradient } from 'expo-linear-gradient';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { APP_SCREEN_LIST } from '../../../constants';
+import FullScreenImageCarousel from '../../../components/FullScreenImageCarousel/FullScreenImageCarousel';
 
 const StoryFeedList = () => {
   const dispatch = useAppDispatch();
@@ -41,19 +41,19 @@ const StoryFeedList = () => {
   }, []);
 
   useEffect(() => {
-    if (state.getPostFeedStatus === "failed") {
-      console.log("error:", state.getPostFeedError);
+    if (state.getPostFeedStatus === 'failed') {
+      console.log('error:', state.getPostFeedError);
     }
   }, [state.getPostFeedStatus]);
 
   useEffect(() => {
-    if (state.createPostStatus === "completed") {
+    if (state.createPostStatus === 'completed') {
       getPostFeeds();
     }
   }, [state.createPostStatus]);
 
   useEffect(() => {
-    if (state.getPostFeedStatus === "completed") {
+    if (state.getPostFeedStatus === 'completed') {
       if (flatLisRef.current)
         flatLisRef.current.scrollToOffset({ animated: true, offset: 0 });
       setRefresh(false);
@@ -65,10 +65,10 @@ const StoryFeedList = () => {
     getPostFeeds();
   };
 
-  if (state.getPostFeedStatus === "loading" && state.postFeeds.length === 0)
+  if (state.getPostFeedStatus === 'loading' && state.postFeeds.length === 0)
     return null;
 
-  if (state.getPostFeedStatus === "completed" && state.postFeeds.length === 0)
+  if (state.getPostFeedStatus === 'completed' && state.postFeeds.length === 0)
     return (
       <View style={{ flex: 1, paddingLeft: 16, backgroundColor: colors.white }}>
         <EmptyPostContent />
@@ -100,14 +100,14 @@ const EmptyPostContent = () => {
   const navigation = useNavigation<NavigationProp<any>>();
   return (
     <View style={{ flex: 1, height: 0.8 * height }}>
-      <View style={{ flex: 2, alignItems: "center", justifyContent: "center" }}>
+      <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }}>
         <Text
           style={[
             GlobalStyles.fontSize16,
             GlobalStyles.fontWeight400,
             GlobalStyles.textGrey,
             GlobalStyles.fontInterRegular,
-            { textAlign: "center", color: `#000` },
+            { textAlign: 'center', color: `#000` },
           ]}
         >
           No content yet. Get started by posting something.
@@ -143,17 +143,17 @@ const EmptyPostContent = () => {
             <View
               style={[
                 {
-                  backgroundColor: "#F1F3FC",
+                  backgroundColor: '#F1F3FC',
                   paddingVertical: 20,
                   borderTopLeftRadius: 16,
                   borderTopRightRadius: 16,
-                  justifyContent: "center",
-                  alignItems: "center",
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 },
               ]}
             >
               <Image
-                source={require("../../../../assets/25.png")}
+                source={require('../../../../assets/25.png')}
                 style={{ width: 68, height: 64 }}
                 resizeMethod="auto"
                 resizeMode="contain"
@@ -162,18 +162,18 @@ const EmptyPostContent = () => {
             <View
               style={{
                 paddingVertical: 12,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 flex: 1,
               }}
             >
               <TouchableOpacity
                 style={[
                   {
-                    backgroundColor: "#F6F6F6",
+                    backgroundColor: '#F6F6F6',
                     paddingVertical: 8,
-                    justifyContent: "center",
-                    alignItems: "center",
+                    justifyContent: 'center',
+                    alignItems: 'center',
                     width: 132,
                     borderRadius: 20,
                     paddingHorizontal: 8,
@@ -209,17 +209,17 @@ const EmptyPostContent = () => {
             <View
               style={[
                 {
-                  backgroundColor: "#F1F3FC",
+                  backgroundColor: '#F1F3FC',
                   paddingVertical: 20,
                   borderTopLeftRadius: 16,
                   borderTopRightRadius: 16,
-                  justifyContent: "center",
-                  alignItems: "center",
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 },
               ]}
             >
               <Image
-                source={require("../../../../assets/27.png")}
+                source={require('../../../../assets/27.png')}
                 style={{ width: 68, height: 64 }}
                 resizeMethod="auto"
                 resizeMode="contain"
@@ -228,18 +228,18 @@ const EmptyPostContent = () => {
             <View
               style={{
                 paddingVertical: 12,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 flex: 1,
               }}
             >
               <TouchableOpacity
                 style={[
                   {
-                    backgroundColor: "#F6F6F6",
+                    backgroundColor: '#F6F6F6',
                     paddingVertical: 8,
-                    justifyContent: "center",
-                    alignItems: "center",
+                    justifyContent: 'center',
+                    alignItems: 'center',
                     width: 132,
                     borderRadius: 20,
                     paddingHorizontal: 8,
@@ -275,17 +275,17 @@ const EmptyPostContent = () => {
             <View
               style={[
                 {
-                  backgroundColor: "#F1F3FC",
+                  backgroundColor: '#F1F3FC',
                   paddingVertical: 20,
                   borderTopLeftRadius: 16,
                   borderTopRightRadius: 16,
-                  justifyContent: "center",
-                  alignItems: "center",
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 },
               ]}
             >
               <Image
-                source={require("../../../../assets/26.png")}
+                source={require('../../../../assets/26.png')}
                 style={{ width: 68, height: 64 }}
                 resizeMethod="auto"
                 resizeMode="contain"
@@ -294,18 +294,18 @@ const EmptyPostContent = () => {
             <View
               style={{
                 paddingVertical: 12,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 flex: 1,
               }}
             >
               <TouchableOpacity
                 style={[
                   {
-                    backgroundColor: "#F6F6F6",
+                    backgroundColor: '#F6F6F6',
                     paddingVertical: 8,
-                    justifyContent: "center",
-                    alignItems: "center",
+                    justifyContent: 'center',
+                    alignItems: 'center',
                     width: 132,
                     borderRadius: 20,
                     paddingHorizontal: 8,
@@ -335,7 +335,7 @@ const EmptyPostContent = () => {
 
 const styles = StyleSheet.create({
   card: {
-    shadowColor: "gray", // Shadow color
+    shadowColor: 'gray', // Shadow color
     shadowOffset: { width: 0, height: 2 }, // Shadow offset
     shadowOpacity: 0.5, // Shadow opacity
     shadowRadius: 4, // Shadow radius

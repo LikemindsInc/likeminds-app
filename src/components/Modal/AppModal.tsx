@@ -1,5 +1,5 @@
-import { View } from "native-base";
-import { FC } from "react";
+import { View } from 'native-base';
+import { FC } from 'react';
 import {
   ModalProps,
   StyleSheet,
@@ -7,12 +7,12 @@ import {
   TouchableOpacity,
   Modal,
   ViewStyle,
-} from "react-native";
-import TextLink from "../TextLink/TextLink";
+} from 'react-native';
+import TextLink from '../TextLink/TextLink';
 // import  from "react-native-modal";
-import { Ionicons } from "@expo/vector-icons";
-import colors from "../../theme/colors";
-import { GlobalStyles } from "../../theme/GlobalStyles";
+import { Ionicons } from '@expo/vector-icons';
+import colors from '../../theme/colors';
+import { GlobalStyles } from '../../theme/GlobalStyles';
 
 interface IProps {
   children?: JSX.Element;
@@ -39,17 +39,17 @@ const AppModal: FC<IProps> = (props) => {
           <View style={{ marginBottom: 20 }}>
             <View
               style={{
-                flexDirection: "row",
+                flexDirection: 'row',
                 paddingBottom: 10,
-                alignItems: "center",
+                alignItems: 'center',
               }}
             >
               <TouchableOpacity
                 style={[
                   {
-                    flexDirection: "row",
+                    flexDirection: 'row',
                     gap: 8,
-                    alignItems: "center",
+                    alignItems: 'center',
                   },
                 ]}
                 onPress={props.onBackDropPress}
@@ -58,9 +58,9 @@ const AppModal: FC<IProps> = (props) => {
                   <View
                     style={[
                       {
-                        flexDirection: "row",
+                        flexDirection: 'row',
                         gap: 8,
-                        alignItems: "center",
+                        alignItems: 'center',
                       },
                     ]}
                   >
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
   },
   modalContent: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     padding: 20,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,

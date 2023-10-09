@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,12 +8,12 @@ import {
   TouchableWithoutFeedback,
   View,
   ViewStyle,
-} from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import { TouchableOpacity } from "react-native";
-import { CountryPicker } from "react-native-country-codes-picker";
-import Converter from "../../utils/Converters";
-import { EvilIcons } from "@expo/vector-icons";
+} from 'react-native';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import { TouchableOpacity } from 'react-native';
+import { CountryPicker } from 'react-native-country-codes-picker';
+import Converter from '../../utils/Converters';
+import { EvilIcons } from '@expo/vector-icons';
 
 export interface ITextInputProps extends TextInputProps {
   inputRef?: React.RefObject<TextInput> | undefined;
@@ -30,22 +30,22 @@ export interface ITextInputProps extends TextInputProps {
   prefixIcon?: JSX.Element;
   suffixElement?: JSX.Element;
   inputContainer?: ViewStyle;
-  mode?: "phone-pad" | "currency";
+  mode?: 'phone-pad' | 'currency';
   onCountryCodeSelect?: (value: string) => void;
   errorMessage?: string | null;
 }
 
 const Input: FC<ITextInputProps> = (props) => {
-  const [countryCode, setCountryCode] = useState("+000");
+  const [countryCode, setCountryCode] = useState('+000');
   const [show, setShow] = useState(false);
 
-  if (props.mode && props.mode === "phone-pad") {
+  if (props.mode && props.mode === 'phone-pad') {
     return (
       <View style={[styles.inputWrapper, props.inputViewStyle]}>
         <TouchableOpacity
           style={[
             styles.input,
-            { flexDirection: "row", width: "100%", alignItems: "center" },
+            { flexDirection: 'row', width: '100%', alignItems: 'center' },
             props.contentContainerStyle,
             props.inputViewStyle,
           ]}
@@ -54,8 +54,8 @@ const Input: FC<ITextInputProps> = (props) => {
           <TouchableOpacity
             style={{
               marginRight: 10,
-              height: "100%",
-              justifyContent: "center",
+              height: '100%',
+              justifyContent: 'center',
             }}
             onPress={() => setShow(true)}
           >
@@ -67,7 +67,7 @@ const Input: FC<ITextInputProps> = (props) => {
                 GlobalStyles.fontWeight400,
               ]}
             >
-              {countryCode} {" | "}
+              {countryCode} {' | '}
             </Text>
           </TouchableOpacity>
           <TextInput
@@ -75,7 +75,7 @@ const Input: FC<ITextInputProps> = (props) => {
             {...props}
             ref={props.inputRef}
             style={[
-              { flex: 1, height: "100%" },
+              { flex: 1, height: '100%' },
               GlobalStyles.inputStyle,
               props.inputStyle,
             ]}
@@ -83,7 +83,7 @@ const Input: FC<ITextInputProps> = (props) => {
           {props.suffixElement && props.suffixElement}
         </TouchableOpacity>
         <CountryPicker
-          lang={"en"}
+          lang={'en'}
           show={show}
           style={{
             modal: {
@@ -115,13 +115,13 @@ const Input: FC<ITextInputProps> = (props) => {
       </View>
     );
   }
-  if (props.mode && props.mode === "currency") {
+  if (props.mode && props.mode === 'currency') {
     return (
       <View style={[styles.inputWrapper, props.inputViewStyle]}>
         <TouchableOpacity
           style={[
             styles.input,
-            { flexDirection: "row", width: "100%", alignItems: "center" },
+            { flexDirection: 'row', width: '100%', alignItems: 'center' },
             props.contentContainerStyle,
             props.inputViewStyle,
           ]}
@@ -130,8 +130,8 @@ const Input: FC<ITextInputProps> = (props) => {
           <TouchableOpacity
             style={{
               marginRight: 10,
-              height: "100%",
-              justifyContent: "center",
+              height: '100%',
+              justifyContent: 'center',
             }}
           >
             <Text
@@ -142,7 +142,7 @@ const Input: FC<ITextInputProps> = (props) => {
                 GlobalStyles.fontWeight400,
               ]}
             >
-              NGN {" | "}
+              NGN {' | '}
             </Text>
           </TouchableOpacity>
           <TextInput
@@ -150,16 +150,16 @@ const Input: FC<ITextInputProps> = (props) => {
             {...props}
             ref={props.inputRef}
             style={[
-              { flex: 1, height: "100%" },
+              { flex: 1, height: '100%' },
               GlobalStyles.inputStyle,
               props.inputStyle,
             ]}
             value={Converter.thousandSeparator(
-              Number(props.value?.trim() === "" ? 0 : props.value?.trim())
+              Number(props.value?.trim() === '' ? 0 : props.value?.trim()),
             )}
             onChangeText={(value) =>
               props.onChangeText &&
-              props.onChangeText(value.split(",").join(""))
+              props.onChangeText(value.split(',').join(''))
             }
           />
           {props.suffixElement && props.suffixElement}
@@ -187,7 +187,7 @@ const Input: FC<ITextInputProps> = (props) => {
       <TouchableOpacity
         style={[
           styles.input,
-          { flexDirection: "row", width: "100%", alignItems: "center" },
+          { flexDirection: 'row', width: '100%', alignItems: 'center' },
           props.contentContainerStyle,
           props.inputContainer,
         ]}
@@ -198,12 +198,12 @@ const Input: FC<ITextInputProps> = (props) => {
         )}
         <TextInput
           returnKeyType={
-            props.multiline ? "default" : props.returnKeyType || "done"
+            props.multiline ? 'default' : props.returnKeyType || 'done'
           }
           {...props}
           ref={props.inputRef}
           style={[
-            { flex: 1, height: "100%" },
+            { flex: 1, height: '100%' },
             GlobalStyles.inputStyle,
             props.inputStyle,
           ]}
@@ -211,7 +211,7 @@ const Input: FC<ITextInputProps> = (props) => {
         {props.suffixElement && props.suffixElement}
       </TouchableOpacity>
       {props.errorMessage && (
-        <View style={[{ flexDirection: "row", gap: 4, alignItems: "center" }]}>
+        <View style={[{ flexDirection: 'row', gap: 4, alignItems: 'center' }]}>
           <EvilIcons
             name="exclamation"
             size={20}
@@ -236,17 +236,17 @@ const Input: FC<ITextInputProps> = (props) => {
 const styles = StyleSheet.create({
   inputWrapper: {
     marginBottom: 20,
-    width: "100%",
+    width: '100%',
   },
   input: {
-    backgroundColor: "#F3F5F7",
+    backgroundColor: '#F3F5F7',
     height: 60,
     paddingHorizontal: 20,
     borderRadius: 10,
     marginBottom: 6,
   },
   inputStyle: {
-    width: "100%",
+    width: '100%',
   },
 });
 

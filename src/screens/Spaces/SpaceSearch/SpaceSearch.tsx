@@ -6,12 +6,12 @@ import {
   TouchableOpacity,
   View,
   useWindowDimensions,
-} from "react-native";
-import { GlobalStyles } from "../../../theme/GlobalStyles";
-import Input from "../../../components/Input/Input";
-import { Feather, AntDesign, Ionicons } from "@expo/vector-icons";
-import colors from "../../../theme/colors";
-import { TabView, SceneMap } from "react-native-tab-view";
+} from 'react-native';
+import { GlobalStyles } from '../../../theme/GlobalStyles';
+import Input from '../../../components/Input/Input';
+import { Feather, AntDesign, Ionicons } from '@expo/vector-icons';
+import colors from '../../../theme/colors';
+import { TabView, SceneMap } from 'react-native-tab-view';
 import {
   MutableRefObject,
   useCallback,
@@ -19,24 +19,24 @@ import {
   useMemo,
   useRef,
   useState,
-} from "react";
-import { Box, useColorModeValue } from "native-base";
-import { StatusBar } from "react-native";
-import Spaces from "./Spaces/Spaces";
-import PeopleList from "./PeopleList/PeopleList";
-import _ from "underscore";
-import Util from "../../../utils";
-import useAppDispatch from "../../../hooks/useAppDispatch";
-import useAppSelector from "../../../hooks/useAppSelector";
-import { getUsers } from "../../../actions/connection";
-import { clearSearchedUsers } from "../../../reducers/connection";
-import AppModal from "../../../components/Modal/AppModal";
-import PeopleSearchForm from "../../../components/PeopleSearchForm/PeopleSearchForm";
+} from 'react';
+import { Box, useColorModeValue } from 'native-base';
+import { StatusBar } from 'react-native';
+import Spaces from './Spaces/Spaces';
+import PeopleList from './PeopleList/PeopleList';
+import _ from 'underscore';
+import Util from '../../../utils';
+import useAppDispatch from '../../../hooks/useAppDispatch';
+import useAppSelector from '../../../hooks/useAppSelector';
+import { getUsers } from '../../../actions/connection';
+import { clearSearchedUsers } from '../../../reducers/connection';
+import AppModal from '../../../components/Modal/AppModal';
+import PeopleSearchForm from '../../../components/PeopleSearchForm/PeopleSearchForm';
 
 const SpaceSearch = () => {
   const ref = useRef<TextInput>(null) as MutableRefObject<TextInput>;
 
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState('');
 
   const dispatch = useAppDispatch();
 
@@ -45,7 +45,7 @@ const SpaceSearch = () => {
   const handleTextChange = Util.debounce((text) => {
     // Do other processing with the debounced value here
 
-    if (searchText.trim() === "") return dispatch(clearSearchedUsers());
+    if (searchText.trim() === '') return dispatch(clearSearchedUsers());
 
     dispatch(getUsers({ search: searchText, page: 1, size: 10000 }));
   }, 300);
@@ -114,8 +114,8 @@ function SpacePeopleTabView({ searchText }: ISpaceSearchProps) {
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    { key: "space", title: "Spaces" },
-    { key: "people", title: "People" },
+    { key: 'space', title: 'Spaces' },
+    { key: 'people', title: 'People' },
   ]);
 
   const renderScene = SceneMap({
@@ -135,17 +135,17 @@ function SpacePeopleTabView({ searchText }: ISpaceSearchProps) {
           const opacity = props.position.interpolate({
             inputRange,
             outputRange: inputRange.map((inputIndex: any) =>
-              inputIndex === i ? 1 : 0.5
+              inputIndex === i ? 1 : 0.5,
             ),
           });
           const color =
             index === i
-              ? useColorModeValue("#000", "#e5e5e5")
-              : useColorModeValue("#1f2937", "#a1a1aa");
+              ? useColorModeValue('#000', '#e5e5e5')
+              : useColorModeValue('#1f2937', '#a1a1aa');
           const borderColor =
             index === i
-              ? "#284453"
-              : useColorModeValue("coolGray.200", "gray.400");
+              ? '#284453'
+              : useColorModeValue('coolGray.200', 'gray.400');
           return (
             <Box
               borderBottomWidth="3"
@@ -187,21 +187,21 @@ function SpacePeopleTabView({ searchText }: ISpaceSearchProps) {
 
 const styles = StyleSheet.create({
   searchButton: {
-    backgroundColor: "#F3F5F7",
+    backgroundColor: '#F3F5F7',
     paddingHorizontal: 12,
     height: 60,
     // paddingVertical: 12,
     borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   tabBar: {
-    flexDirection: "row",
+    flexDirection: 'row',
     paddingTop: StatusBar.currentHeight,
   },
   tabItem: {
     flex: 1,
-    alignItems: "center",
+    alignItems: 'center',
     padding: 16,
   },
 });

@@ -1,10 +1,10 @@
-import axios, { AxiosError, AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 // import { REACT_NATIVE_DEFAULT_BASE_URI } from "@env";
 
-import { ResponseInterface } from "@app-model";
-import { APP_BASE_URL } from "../constants";
-import { store } from "../store/store";
-import { refreshTokenAction } from "../actions/auth";
+import { ResponseInterface } from '@app-model';
+import { APP_BASE_URL } from '../constants';
+import { store } from '../store/store';
+import { refreshTokenAction } from '../actions/auth';
 
 // Set config defaults when creating the instance
 export const network = axios.create({ baseURL: APP_BASE_URL });
@@ -51,7 +51,7 @@ network.interceptors.request.use(
   (error: AxiosError) => {
     reportError(error?.response?.data as Error);
     return Promise.reject(error?.response?.data as Error);
-  }
+  },
 );
 
 // Add a response interceptor
@@ -60,9 +60,9 @@ network.interceptors.response.use(
   async (error: AxiosError<any>) => {
     const originalRequest = error.config as unknown as AxiosRequestConfig<any>;
 
-    console.log("error21", error.message);
+    console.log('error21', error.message);
 
-    console.log("path>>>> ", error.request.path);
+    console.log('path>>>> ', error.request.path);
 
     if (
       error?.response?.status === 403 ||
@@ -72,11 +72,11 @@ network.interceptors.response.use(
     ) {
       //   const state = store.getState();
       //   const refresh_token = state?.session?.userData?.token;
-      console.log("youshpud be here");
+      console.log('youshpud be here');
       // store.dispatch(refreshTokenAction());
     }
 
     reportError(error?.response?.data as Error);
     return Promise.reject(error?.response?.data as Error);
-  }
+  },
 );

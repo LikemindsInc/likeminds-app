@@ -1,19 +1,20 @@
-import { FC } from "react";
+import { FC } from 'react';
 import {
   ListRenderItem,
   StyleSheet,
   View,
-  Image,
+  // Image,
   TouchableOpacity,
-} from "react-native";
-import colors from "../../theme/colors";
-import { Text } from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import font from "../../theme/font";
-import { LinearGradient } from "expo-linear-gradient";
-import { AntDesign } from "@expo/vector-icons";
-import useAppSelector from "../../hooks/useAppSelector";
-import { useUser } from "../../hooks/userUser";
+} from 'react-native';
+import colors from '../../theme/colors';
+import { Text } from 'react-native';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import font from '../../theme/font';
+import { LinearGradient } from 'expo-linear-gradient';
+import { AntDesign } from '@expo/vector-icons';
+import useAppSelector from '../../hooks/useAppSelector';
+import { useUser } from '../../hooks/userUser';
+import Image from 'react-native-image-progress';
 
 interface IProps {
   item: {
@@ -30,10 +31,10 @@ const LiveFeedItem: FC<IProps> = ({ item }) => {
 
   const [user] = useUser();
   const renderProfilePicture = () => {
-    if (user && user.profilePicture && user.profilePicture.trim() !== "") {
+    if (user && user.profilePicture && user.profilePicture.trim() !== '') {
       return { uri: user.profilePicture };
     }
-    return require("../../../assets/imageAvatar.jpeg");
+    return require('../../../assets/imageAvatar.jpeg');
   };
 
   if (item.isUserProfile) {
@@ -42,11 +43,19 @@ const LiveFeedItem: FC<IProps> = ({ item }) => {
         <View style={styles.profileImage}>
           <Image
             source={renderProfilePicture()}
+            indicator={require('../../../assets/loader.gif')}
+            indicatorProps={{
+              size: 80,
+              borderWidth: 0,
+              color: 'rgba(150, 150, 150, 1)',
+              unfilledColor: 'rgba(200, 200, 200, 0.2)',
+            }}
+            imageStyle={{ width: 58, height: 58, borderRadius: 29 }}
             style={{ width: 58, height: 58, borderRadius: 29 }}
           />
           <LinearGradient
             style={[styles.plusIcon]}
-            colors={["#00CDFE", "#009AEE"]}
+            colors={['#00CDFE', '#009AEE']}
             start={{ x: 1, y: 0 }}
             end={{ x: 0, y: 1 }}
           >
@@ -94,25 +103,25 @@ const LiveFeedItem: FC<IProps> = ({ item }) => {
 
 const styles = StyleSheet.create({
   profileImage: {
-    justifyContent: "center",
+    justifyContent: 'center',
     width: 60,
     height: 60,
     borderRadius: 30,
-    alignItems: "center",
-    position: "relative",
+    alignItems: 'center',
+    position: 'relative',
   },
   plusIcon: {
-    position: "absolute",
+    position: 'absolute',
     right: 0,
     bottom: 5,
     width: 18,
     height: 18,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 4,
   },
   container: {
-    alignItems: "center",
+    alignItems: 'center',
     marginRight: 6,
   },
   innerCircle: {
@@ -120,8 +129,8 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderWidth: 2,
     borderColor: colors.primary,
   },

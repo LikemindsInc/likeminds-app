@@ -1,30 +1,30 @@
-import { Text, View } from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import BackButton from "../../components/Navigation/BackButton/BackButton";
-import colors from "../../theme/colors";
-import DropZone from "../../components/DropZone/DropZone";
-import Button from "../../components/Button/Button";
-import * as DocumentPicker from "expo-document-picker";
-import * as ImagePicker from "expo-image-picker";
-import { useEffect, useState } from "react";
-import { APP_SCREEN_LIST } from "../../constants";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import useAppDispatch from "../../hooks/useAppDispatch";
-import { updateProfilePicture } from "../../reducers/session";
+import { Text, View } from 'react-native';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import BackButton from '../../components/Navigation/BackButton/BackButton';
+import colors from '../../theme/colors';
+import DropZone from '../../components/DropZone/DropZone';
+import Button from '../../components/Button/Button';
+import * as DocumentPicker from 'expo-document-picker';
+import * as ImagePicker from 'expo-image-picker';
+import { useEffect, useState } from 'react';
+import { APP_SCREEN_LIST } from '../../constants';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import useAppDispatch from '../../hooks/useAppDispatch';
+import { updateProfilePicture } from '../../reducers/userProfileSession';
 import {
   ISpaceState,
   clearCreateSpaceStatus,
   storeSpacePhoto,
-} from "../../reducers/space_reducer";
-import useAppSelector from "../../hooks/useAppSelector";
-import { createSpaceAction } from "../../actions/space";
-import { useToast } from "native-base";
+} from '../../reducers/space_reducer';
+import useAppSelector from '../../hooks/useAppSelector';
+import { createSpaceAction } from '../../actions/space';
+import { useToast } from 'native-base';
 
 const CreateSpaceAddPicture = () => {
   const navigation = useNavigation<NavigationProp<any>>();
   const [isDisabled, setDisabled] = useState(true);
   const space = useAppSelector(
-    (state: any) => state.spaceReducer
+    (state: any) => state.spaceReducer,
   ) as ISpaceState;
   const dispatch = useAppDispatch();
   const toast = useToast();
@@ -32,7 +32,7 @@ const CreateSpaceAddPicture = () => {
     DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult | null
   >(null);
   const handleOnFileSelect = (
-    file: DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult
+    file: DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult,
   ) => {
     setFile(file);
     return null;
@@ -51,16 +51,16 @@ const CreateSpaceAddPicture = () => {
         title: space.createSpaceDTO.title,
         description: space.createSpaceDTO.description,
         photo: file,
-      })
+      }),
     );
   };
 
   useEffect(() => {
-    if (space.createSpaceStatus === "completed") {
+    if (space.createSpaceStatus === 'completed') {
       navigation.navigate(APP_SCREEN_LIST.MAIN_SCREEN);
       dispatch(clearCreateSpaceStatus());
-    } else if (space.createSpaceStatus === "failed") {
-      toast.show({ description: space.createSpaceError, variant: "contained" });
+    } else if (space.createSpaceStatus === 'failed') {
+      toast.show({ description: space.createSpaceError, variant: 'contained' });
     }
   }, [space.createSpaceStatus]);
   return (
@@ -81,11 +81,11 @@ const CreateSpaceAddPicture = () => {
         </Text>
       </View>
       <View style={{ flex: 1 }}>
-        <DropZone style={{ height: "60%" }} onSelect={handleOnFileSelect} />
+        <DropZone style={{ height: '60%' }} onSelect={handleOnFileSelect} />
       </View>
       <Button
         disabled={isDisabled}
-        loading={space.createSpaceStatus === "loading"}
+        loading={space.createSpaceStatus === 'loading'}
         title="Complete Setup"
         onPress={handleOnNextPress}
       />

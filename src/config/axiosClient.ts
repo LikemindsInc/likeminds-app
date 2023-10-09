@@ -1,8 +1,8 @@
-import axios, { AxiosError } from "axios";
-import { APP_BASE_URL } from "../constants";
-import { store } from "../store/store";
-import { ISettingState } from "../reducers/settings";
-import { refreshTokenAction } from "../actions/auth";
+import axios, { AxiosError } from 'axios';
+import { APP_BASE_URL } from '../constants';
+import { store } from '../store/store';
+import { ISettingState } from '../reducers/settings';
+import { refreshTokenAction } from '../actions/auth';
 // import * as Sentry from "sentry-expo";
 
 // axios.defaults.withCredentials = true;
@@ -14,7 +14,7 @@ export const axioxRefreshClient = axios.create({ baseURL: APP_BASE_URL });
 
 axiosClient.interceptors.request.use((config: any) => {
   // grab current state
-  let token = "";
+  let token = '';
 
   if (store) {
     const state = (store.getState() as any).settingReducer as ISettingState;
@@ -44,7 +44,6 @@ export default axiosClient;
 axiosClient.interceptors.response.use(
   (response) => response,
   async (error: AxiosError<any>) => {
-    console.log("error> ", error.response?.data);
     if (
       error?.response?.status === 403 ||
       error?.response?.data?.statusCode === 403 ||
@@ -65,5 +64,5 @@ axiosClient.interceptors.response.use(
     // Sentry.Native.captureException(error);
     // reportError(error?.response?.data as Error);
     return Promise.reject(error);
-  }
+  },
 );

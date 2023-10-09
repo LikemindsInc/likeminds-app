@@ -4,10 +4,22 @@
   "scripts": {
     "start": "expo start --dev-client",
     "android": "expo run:android",
+    "lint": "eslint --fix App.tsx",
+    "format": "prettier -w .",
     "ios": "expo run:ios",
     "web": "expo start --web"
   },
+  "resolutions": {
+    "@types/react": "17.0.14",
+    "@types/react-dom": "17.0.14"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run format"
+    }
+  },
   "dependencies": {
+    "-": "^0.0.1",
     "@gorhom/bottom-sheet": "^4.4.7",
     "@react-native-async-storage/async-storage": "1.17.11",
     "@react-native-community/datetimepicker": "6.7.3",
@@ -19,7 +31,10 @@
     "@react-navigation/native-stack": "^6.9.12",
     "@reduxjs/toolkit": "^1.9.5",
     "@sentry/react-native": "4.15.2",
+    "D": "^1.0.0",
     "axios": "^1.4.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
     "expo": "~48.0.18",
     "expo-application": "~5.1.1",
     "expo-av": "~13.2.1",
@@ -35,6 +50,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "native-base": "^3.4.28",
+    "prettier": "^3.0.3",
     "react": "18.2.0",
     "react-native": "0.71.8",
     "react-native-app-intro-slider": "^4.0.4",
@@ -45,6 +61,7 @@
     "react-native-fb-image-grid": "^0.0.5",
     "react-native-gesture-handler": "~2.9.0",
     "react-native-image-carousel": "^0.4.6",
+    "react-native-image-progress": "^1.2.0",
     "react-native-image-viewing": "^0.2.2",
     "react-native-intersection-observer": "^0.2.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
@@ -53,6 +70,7 @@
     "react-native-pager-view": "6.1.2",
     "react-native-paper": "^5.7.2",
     "react-native-popover-view": "^5.1.7",
+    "react-native-progress": "^5.0.0",
     "react-native-radio-buttons-group": "^3.0.2",
     "react-native-read-more-text": "^1.1.2",
     "react-native-reanimated": "~2.14.4",
@@ -80,7 +98,15 @@
     "@types/react-native-read-more-text": "^1.0.1",
     "@types/react-native-snap-carousel": "^3.8.5",
     "@types/underscore": "^1.11.6",
-    "typescript": "^4.9.4"
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "eslint": "^8.0.1",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-standard-with-typescript": "^39.1.1",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
+    "eslint-plugin-promise": "^6.0.0",
+    "husky": "^8.0.3",
+    "typescript": "*"
   },
   "private": true
 }

@@ -1,10 +1,10 @@
-import { Text, View, useToast } from "native-base";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import Input from "../../components/Input/Input";
-import TextLink from "../../components/TextLink/TextLink";
-import { StyleSheet } from "react-native";
-import Button from "../../components/Button/Button";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { Text, View, useToast } from 'native-base';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import Input from '../../components/Input/Input';
+import TextLink from '../../components/TextLink/TextLink';
+import { StyleSheet } from 'react-native';
+import Button from '../../components/Button/Button';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import {
   APP_SCREEN_LIST,
   CONTAINS_DIGIT_PASSWORD_REGEX,
@@ -13,24 +13,24 @@ import {
   CONTAINS_WORD_PASSWORD_REGEX,
   MINIMUM_PASSWORD_LENGTH_REGEX,
   PASSWORD_REGEX,
-} from "../../constants";
-import useAppDispatch from "../../hooks/useAppDispatch";
-import useAppSelector from "../../hooks/useAppSelector";
+} from '../../constants';
+import useAppDispatch from '../../hooks/useAppDispatch';
+import useAppSelector from '../../hooks/useAppSelector';
 import {
   ISessionState,
   clearChangePasswordError,
-} from "../../reducers/session";
-import { useEffect, useState } from "react";
-import { changePasswordAction } from "../../actions/auth";
-import { AntDesign } from "@expo/vector-icons";
-import colors from "../../theme/colors";
+} from '../../reducers/userProfileSession';
+import { useEffect, useState } from 'react';
+import { changePasswordAction } from '../../actions/auth';
+import { AntDesign } from '@expo/vector-icons';
+import colors from '../../theme/colors';
 
 const CreatePassword = () => {
   const navigation = useNavigation<NavigationProp<any>>();
   const dispatch = useAppDispatch();
   const toast = useToast();
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [isAllPasswordCriteriaMet, setAllPasswordCriteriaMet] = useState(false);
   const [containsLowercase, setContainsLowerCase] = useState(false);
   const [containsUppercase, setContainsUpperCase] = useState(false);
@@ -47,7 +47,7 @@ const CreatePassword = () => {
   }, []);
 
   const session = useAppSelector(
-    (state: any) => state.sessionReducer
+    (state: any) => state.sessionReducer,
   ) as ISessionState;
   const isPasswordValid = () => {
     if (PASSWORD_REGEX.test(password)) {
@@ -113,7 +113,7 @@ const CreatePassword = () => {
     if (!isPasswordValid()) {
       setErrors((state) => ({
         ...state,
-        confirmPassword: "Password do not meet the requirements",
+        confirmPassword: 'Password do not meet the requirements',
       }));
 
       return;
@@ -121,26 +121,26 @@ const CreatePassword = () => {
     if (password !== confirmPassword)
       return setErrors((state) => ({
         ...state,
-        confirmPassword: "Password and Confirm Password do not match",
+        confirmPassword: 'Password and Confirm Password do not match',
       }));
-    const key = session.otpChannelValue.split("_")[0];
+    const key = session.otpChannelValue.split('_')[0];
     dispatch(
       changePasswordAction({
-        [key]: session.otpChannelValue.split("_")[1],
+        [key]: session.otpChannelValue.split('_')[1],
         newPassword: password.trim(),
         code: session.otpCode,
-      })
+      }),
     );
   };
 
   useEffect(() => {
-    if (session.changePasswordOTpStatus === "completed") {
+    if (session.changePasswordOTpStatus === 'completed') {
       toast.show({
-        description: "Password changed successfully. Please login with your",
-        variant: "contained",
+        description: 'Password changed successfully. Please login with your',
+        variant: 'contained',
       });
       navigation.navigate(APP_SCREEN_LIST.LOGIN_SCREEN);
-    } else if (session.changePasswordOTpStatus === "failed") {
+    } else if (session.changePasswordOTpStatus === 'failed') {
     }
 
     return () => {};
@@ -184,7 +184,7 @@ const CreatePassword = () => {
           <Input
             placeholder="Create password"
             autoCorrect={false}
-            autoCapitalize={"none"}
+            autoCapitalize={'none'}
             secureTextEntry
             value={password}
             onChangeText={(value) => setPassword(value)}
@@ -194,7 +194,7 @@ const CreatePassword = () => {
           <Input
             placeholder="Confirm password"
             autoCorrect={false}
-            autoCapitalize={"none"}
+            autoCapitalize={'none'}
             secureTextEntry
             value={confirmPassword}
             onChangeText={(value) => setConfirmPassword(value)}
@@ -205,7 +205,7 @@ const CreatePassword = () => {
           <Text
             style={[
               GlobalStyles.fontInterRegular,
-              { color: "#88969D" },
+              { color: '#88969D' },
               GlobalStyles.fontSize15,
               GlobalStyles.fontWeight400,
             ]}
@@ -216,7 +216,7 @@ const CreatePassword = () => {
         <View
           style={[
             GlobalStyles.mb10,
-            { flexDirection: "row", gap: 8, alignItems: "center" },
+            { flexDirection: 'row', gap: 8, alignItems: 'center' },
           ]}
         >
           <AntDesign
@@ -247,7 +247,7 @@ const CreatePassword = () => {
         <View
           style={[
             GlobalStyles.mb10,
-            { flexDirection: "row", gap: 8, alignItems: "center" },
+            { flexDirection: 'row', gap: 8, alignItems: 'center' },
           ]}
         >
           <AntDesign
@@ -278,7 +278,7 @@ const CreatePassword = () => {
         <View
           style={[
             GlobalStyles.mb10,
-            { flexDirection: "row", gap: 8, alignItems: "center" },
+            { flexDirection: 'row', gap: 8, alignItems: 'center' },
           ]}
         >
           <AntDesign
@@ -310,7 +310,7 @@ const CreatePassword = () => {
         <View
           style={[
             GlobalStyles.mb10,
-            { flexDirection: "row", gap: 8, alignItems: "center" },
+            { flexDirection: 'row', gap: 8, alignItems: 'center' },
           ]}
         >
           <AntDesign
@@ -341,7 +341,7 @@ const CreatePassword = () => {
         <View
           style={[
             GlobalStyles.mb10,
-            { flexDirection: "row", gap: 8, alignItems: "center" },
+            { flexDirection: 'row', gap: 8, alignItems: 'center' },
           ]}
         >
           <AntDesign
@@ -372,7 +372,7 @@ const CreatePassword = () => {
       </View>
       <View style={[GlobalStyles.mb10]}>
         <Button
-          loading={session.changePasswordOTpStatus === "loading"}
+          loading={session.changePasswordOTpStatus === 'loading'}
           onPress={handleOnNextPress}
           title="Change Password"
         />

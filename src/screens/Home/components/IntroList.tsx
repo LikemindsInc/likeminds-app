@@ -1,6 +1,6 @@
-import { FlatList } from "react-native";
-import IntroListItem from "../../../components/IntroListItem/IntroListItem";
-import useDimension from "../../../hooks/useDimension";
+import { FlatList } from 'react-native';
+import IntroListItem from '../../../components/IntroListItem/IntroListItem';
+import useDimension from '../../../hooks/useDimension';
 
 const DATA: any[] = [
   // {

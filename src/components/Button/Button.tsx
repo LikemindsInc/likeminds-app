@@ -1,19 +1,19 @@
-import { LinearGradient } from "expo-linear-gradient";
-import { FC } from "react";
-import { GlobalStyles } from "../../theme/GlobalStyles";
+import { LinearGradient } from 'expo-linear-gradient';
+import { FC } from 'react';
+import { GlobalStyles } from '../../theme/GlobalStyles';
 import {
   Text,
   View,
   TouchableOpacity,
   ButtonProps,
   ViewStyle,
-} from "react-native";
-import { Spinner } from "native-base";
-import colors from "../../theme/colors";
+} from 'react-native';
+import { Spinner } from 'native-base';
+import colors from '../../theme/colors';
 
 interface IButtonProps extends ButtonProps {
   Icon?: JSX.Element;
-  type?: "secondary" | "primary" | "outline-primary" | "cancel" | "tertiary";
+  type?: 'secondary' | 'primary' | 'outline-primary' | 'cancel' | 'tertiary';
   style?: ViewStyle;
   loading?: boolean;
   containerStyle?: ViewStyle;
@@ -21,7 +21,7 @@ interface IButtonProps extends ButtonProps {
 }
 
 const Button: FC<IButtonProps> = (props) => {
-  if (props.type === "tertiary") {
+  if (props.type === 'tertiary') {
     return (
       <View style={props.containerStyle ? props.containerStyle : {}}>
         {props.disabled ? (
@@ -29,7 +29,7 @@ const Button: FC<IButtonProps> = (props) => {
             style={[
               GlobalStyles.buttonStyle,
               props.buttonStyle,
-              { backgroundColor: "#245264" },
+              { backgroundColor: '#245264' },
               props.style ? props.style : {},
             ]}
           >
@@ -43,7 +43,7 @@ const Button: FC<IButtonProps> = (props) => {
               {props.title}
             </Text>
             {props.loading ? (
-              <Spinner color={"#fff"} />
+              <Spinner color={'#fff'} />
             ) : (
               <View style={[GlobalStyles.pl4]}>{props.Icon}</View>
             )}
@@ -54,7 +54,7 @@ const Button: FC<IButtonProps> = (props) => {
               style={[
                 GlobalStyles.buttonStyle,
                 props.buttonStyle,
-                { backgroundColor: "#245264" },
+                { backgroundColor: '#245264' },
                 props.style ? props.style : {},
               ]}
             >
@@ -68,7 +68,7 @@ const Button: FC<IButtonProps> = (props) => {
                 {props.title}
               </Text>
               {props.loading ? (
-                <Spinner color={"#fff"} />
+                <Spinner color={'#fff'} />
               ) : (
                 <View style={[GlobalStyles.pl4]}>{props.Icon}</View>
               )}
@@ -78,7 +78,7 @@ const Button: FC<IButtonProps> = (props) => {
       </View>
     );
   }
-  if (props.type === "outline-primary") {
+  if (props.type === 'outline-primary') {
     return (
       <View style={props.containerStyle ? props.containerStyle : {}}>
         {props.disabled ? (
@@ -86,7 +86,7 @@ const Button: FC<IButtonProps> = (props) => {
             style={[
               GlobalStyles.buttonStyle,
               props.buttonStyle,
-              { backgroundColor: "#88969D" },
+              { backgroundColor: '#88969D' },
               props.style ? props.style : {},
             ]}
           >
@@ -135,7 +135,7 @@ const Button: FC<IButtonProps> = (props) => {
       </View>
     );
   }
-  if (props.type === "cancel") {
+  if (props.type === 'cancel') {
     return (
       <View style={props.containerStyle}>
         {props.disabled ? (
@@ -143,7 +143,7 @@ const Button: FC<IButtonProps> = (props) => {
             style={[
               GlobalStyles.buttonStyle,
               props.buttonStyle,
-              { backgroundColor: "#88969D" },
+              { backgroundColor: '#88969D' },
               props.style ? props.style : {},
             ]}
           >
@@ -169,7 +169,7 @@ const Button: FC<IButtonProps> = (props) => {
                 GlobalStyles.buttonStyle,
                 props.buttonStyle,
                 GlobalStyles.primaryButtonOnline,
-                { backgroundColor: "#88969D", borderColor: "#88969D" },
+                { backgroundColor: '#88969D', borderColor: '#88969D' },
                 props.style ? props.style : {},
               ]}
             >
@@ -200,7 +200,7 @@ const Button: FC<IButtonProps> = (props) => {
           style={[
             GlobalStyles.buttonStyle,
             props.buttonStyle,
-            { backgroundColor: "#88969D" },
+            { backgroundColor: '#88969D' },
             props.style ? props.style : {},
           ]}
         >
@@ -209,13 +209,13 @@ const Button: FC<IButtonProps> = (props) => {
               GlobalStyles.textWhite,
               GlobalStyles.fontInterRegular,
               GlobalStyles.fontSize13,
-              { textAlign: "center" },
+              { textAlign: 'center' },
             ]}
           >
             {props.title}
           </Text>
           {props.loading ? (
-            <Spinner color={"#fff"} />
+            <Spinner color={'#fff'} />
           ) : (
             props.Icon && <View style={[GlobalStyles.pl4]}>{props.Icon}</View>
           )}
@@ -228,7 +228,7 @@ const Button: FC<IButtonProps> = (props) => {
               props.buttonStyle,
               props.style ? props.style : {},
             ]}
-            colors={["#00CDFE", "#009AEE"]}
+            colors={['#00CDFE', '#009AEE']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
           >
@@ -237,14 +237,13 @@ const Button: FC<IButtonProps> = (props) => {
                 GlobalStyles.textWhite,
                 GlobalStyles.fontInterRegular,
                 GlobalStyles.fontSize13,
-                { textAlign: "center",
-              fontWeight: 500},
+                { textAlign: 'center', fontWeight: '500' },
               ]}
             >
               {props.title}
             </Text>
             {props.loading ? (
-              <Spinner color={"#fff"} />
+              <Spinner color={'#fff'} />
             ) : (
               props.Icon && <View style={[GlobalStyles.pl4]}>{props.Icon}</View>
             )}

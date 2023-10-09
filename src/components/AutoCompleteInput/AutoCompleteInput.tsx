@@ -1,9 +1,9 @@
-import { FC, useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
-import { View } from "react-native";
-import Autocomplete from "react-native-autocomplete-input";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import colors from "../../theme/colors";
+import { FC, useEffect, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View } from 'react-native';
+import Autocomplete from 'react-native-autocomplete-input';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import colors from '../../theme/colors';
 
 interface IProps {
   data?: string[];
@@ -13,7 +13,7 @@ interface IProps {
 
 const AutoCompleteInput: FC<IProps> = ({ data, value, onChangeText }) => {
   const [hide, setHide] = useState(false);
-  const [selectedInput, setSelectedInput] = useState("");
+  const [selectedInput, setSelectedInput] = useState('');
 
   // useEffect(() => {
   //   if()
@@ -25,11 +25,11 @@ const AutoCompleteInput: FC<IProps> = ({ data, value, onChangeText }) => {
         data={data || []}
         inputContainerStyle={[styles.input]}
         containerStyle={{
-          backgroundColor: "#F3F5F7",
+          backgroundColor: '#F3F5F7',
           borderRadius: 8,
-          width: "100%",
+          width: '100%',
         }}
-        hideResults={`${value}`.trim() === "" || selectedInput === value}
+        hideResults={`${value}`.trim() === '' || selectedInput === value}
         value={value}
         placeholder="Search School"
         onChangeText={onChangeText}
@@ -49,7 +49,6 @@ const AutoCompleteInput: FC<IProps> = ({ data, value, onChangeText }) => {
                   // paddingTop: 10,
                   // paddingLeft: 10,
                   // paddingBottom: 10,
-                  
                 },
               ]}
             >
@@ -74,7 +73,7 @@ const styles = StyleSheet.create({
   autocompleteContainer: {
     flex: 1,
     left: 0,
-    position: "absolute",
+    position: 'absolute',
     right: 0,
     top: 0,
     zIndex: 1,
@@ -82,7 +81,7 @@ const styles = StyleSheet.create({
   input: {
     paddingVertical: 7.5,
     paddingHorizontal: 20,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 8,
   },
 });

@@ -1,8 +1,8 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import { GlobalStyles } from "../../../theme/GlobalStyles";
-import { AntDesign } from "@expo/vector-icons";
-import colors from "../../../theme/colors";
-import { FC } from "react";
+import { View, Text, TouchableOpacity } from 'react-native';
+import { GlobalStyles } from '../../../theme/GlobalStyles';
+import { AntDesign } from '@expo/vector-icons';
+import colors from '../../../theme/colors';
+import { FC } from 'react';
 
 interface IProps {
   showExperienceModal: () => void | null;
@@ -21,9 +21,9 @@ const renderExperienceTimelineView = ({
     title: (
       <View
         style={{
-          justifyContent: "space-between",
-          flexDirection: "row",
-          width: "100%",
+          justifyContent: 'space-between',
+          flexDirection: 'row',
+          width: '100%',
         }}
       >
         <Text
@@ -41,7 +41,7 @@ const renderExperienceTimelineView = ({
       <View style={[{ marginTop: 20, marginBottom: 10 }]}>
         <TouchableOpacity
           onPress={() => showExperienceModal(true)}
-          style={{ flexDirection: "row", gap: 8 }}
+          style={{ flexDirection: 'row', gap: 8 }}
         >
           <AntDesign name="plus" size={16} color={colors.primary} />
           <Text

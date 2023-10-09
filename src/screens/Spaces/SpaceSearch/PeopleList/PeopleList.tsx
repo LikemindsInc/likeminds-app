@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect } from 'react';
 import {
   Image,
   ScrollView,
@@ -6,29 +6,28 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import useAppDispatch from "../../../../hooks/useAppDispatch";
-import useAppSelector from "../../../../hooks/useAppSelector";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { APP_SCREEN_LIST } from "../../../../constants";
-import PeopleSearchResultCard from "../../../../PeopleSearchResultCard/PeopleSearchResultCard";
-import { FlatList } from "react-native";
-import { GlobalStyles } from "../../../../theme/GlobalStyles";
-import { IUserData } from "@app-model";
-import Button from "../../../../components/Button/Button";
-import { getProfile } from "../../../../reducers/connection";
+} from 'react-native';
+import useAppDispatch from '../../../../hooks/useAppDispatch';
+import useAppSelector from '../../../../hooks/useAppSelector';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { APP_SCREEN_LIST } from '../../../../constants';
+import PeopleSearchResultCard from '../../../../PeopleSearchResultCard/PeopleSearchResultCard';
+import { FlatList } from 'react-native';
+import { GlobalStyles } from '../../../../theme/GlobalStyles';
+import { IUserData } from '@app-model';
+import Button from '../../../../components/Button/Button';
+import { getProfile } from '../../../../reducers/connection';
 import {
   getUserRecommendationByIndustry,
   getUserRecommendationBySchool,
   getUsersBySuggestion,
-} from "../../../../actions/connection";
-import { AntDesign } from "@expo/vector-icons";
-import colors from "../../../../theme/colors";
+} from '../../../../actions/connection';
+import { AntDesign } from '@expo/vector-icons';
+import colors from '../../../../theme/colors';
 
-const PeopleList: FC<any> = ({ item, searchText = "" }) => {
+const PeopleList: FC<any> = ({ item, searchText = '' }) => {
   const navigation = useNavigation<NavigationProp<any>>();
   const dispatch = useAppDispatch();
-
 
   const state = useAppSelector((state) => state.connectionReducer);
 
@@ -37,8 +36,8 @@ const PeopleList: FC<any> = ({ item, searchText = "" }) => {
   };
 
   useEffect(() => {
-    dispatch(getUserRecommendationByIndustry({ search: "" }));
-    dispatch(getUserRecommendationBySchool({ search: "" }));
+    dispatch(getUserRecommendationByIndustry({ search: '' }));
+    dispatch(getUserRecommendationBySchool({ search: '' }));
     dispatch(getUsersBySuggestion());
   }, []);
 
@@ -58,9 +57,9 @@ const PeopleList: FC<any> = ({ item, searchText = "" }) => {
         </View>
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
             gap: 8,
-            alignItems: "center",
+            alignItems: 'center',
             marginBottom: 20,
           }}
         >
@@ -205,9 +204,9 @@ const PeopleList: FC<any> = ({ item, searchText = "" }) => {
             </View>
             <View style={[GlobalStyles.mt20]}>
               {state.usersBySuggestions.length === 0 ? (
-                <View style={{ alignItems: "center" }}>
+                <View style={{ alignItems: 'center' }}>
                   <Image
-                    source={require("../../../../../assets/folder.png")}
+                    source={require('../../../../../assets/folder.png')}
                     style={{ width: 100, height: 100 }}
                     resizeMethod="resize"
                     resizeMode="contain"
@@ -244,7 +243,7 @@ const Suggestion: FC<IProps> = (props) => {
     <View style={[styles.container]}>
       <View>
         {props.data.profilePicture &&
-          props.data.profilePicture.trim() !== "" && (
+          props.data.profilePicture.trim() !== '' && (
             <Image
               source={{ uri: props.data.profilePicture as string }}
               style={{ width: 50, height: 50, borderRadius: 50 }}
@@ -256,8 +255,8 @@ const Suggestion: FC<IProps> = (props) => {
       <View
         style={{
           flex: 1,
-          flexDirection: "row",
-          justifyContent: "space-between",
+          flexDirection: 'row',
+          justifyContent: 'space-between',
         }}
       >
         <TouchableOpacity onPress={handleOnProfilePress}>
@@ -287,8 +286,8 @@ const Suggestion: FC<IProps> = (props) => {
             style={{
               paddingVertical: 4,
               paddingHorizontal: 10,
-              justifyContent: "center",
-              alignItems: "center",
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
             title="View"
             onPress={handleOnProfilePress}
@@ -301,9 +300,9 @@ const Suggestion: FC<IProps> = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginBottom: 20,
-    alignItems: "center",
+    alignItems: 'center',
     gap: 12,
   },
 });

@@ -1,10 +1,10 @@
-import { FC } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { addOpacity } from "../../theme/colors";
-import useDimension from "../../hooks/useDimension";
-import { Text } from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import font from "../../theme/font";
+import { FC } from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { addOpacity } from '../../theme/colors';
+import useDimension from '../../hooks/useDimension';
+import { Text } from 'react-native';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import font from '../../theme/font';
 
 interface IProps {
   item: {
@@ -47,7 +47,7 @@ const IntroListItem: FC<IProps> = ({ item }) => {
             GlobalStyles.fontInterMedium,
             GlobalStyles.fontWeight700,
             GlobalStyles.textPrimary,
-            { fontSize: font.size.font15, textAlign: "right" },
+            { fontSize: font.size.font15, textAlign: 'right' },
           ]}
         >
           {item.time}
@@ -59,15 +59,15 @@ const IntroListItem: FC<IProps> = ({ item }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#009AEE" + addOpacity(10),
+    backgroundColor: '#009AEE' + addOpacity(10),
     maxWidth: 260,
     borderRadius: 10,
     paddingHorizontal: 15,
     paddingVertical: 12,
     marginRight: 16,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });
 

@@ -1,23 +1,23 @@
-import { IPostFeed } from "@app-model";
-import { FC, useEffect, useMemo, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
-import colors from "../../theme/colors";
-import useAppDispatch from "../../hooks/useAppDispatch";
-import useAppSelector from "../../hooks/useAppSelector";
+import { IPostFeed } from '@app-model';
+import { FC, useEffect, useMemo, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import colors from '../../theme/colors';
+import useAppDispatch from '../../hooks/useAppDispatch';
+import useAppSelector from '../../hooks/useAppSelector';
 import {
   IPostState,
   clearPostRactionStatus,
   showReactionView,
-} from "../../reducers/post_reducer";
-import { GlobalStyles } from "../../theme/GlobalStyles";
+} from '../../reducers/post_reducer';
+import { GlobalStyles } from '../../theme/GlobalStyles';
 import {
   getPostFeedAction,
   getPostReactions,
   reactToPostAction,
   unReactToPost,
-} from "../../actions/post";
-import { useToast } from "native-base";
+} from '../../actions/post';
+import { useToast } from 'native-base';
 
 interface Props {
   post: IPostFeed;
@@ -38,7 +38,7 @@ const ReactionIcon: FC<Props> = ({ post, handleLikeReactionOnPost }) => {
     dispatch(showReactionView({ show: true, post }));
   };
 
-  const REACTIONS = useMemo(() => ["💡", "👏", "😄", "💝", "❤️"], []);
+  const REACTIONS = useMemo(() => ['💡', '👏', '😄', '💝', '❤️'], []);
 
   useEffect(() => {
     dispatch(getPostReactions(post.id));
@@ -51,7 +51,7 @@ const ReactionIcon: FC<Props> = ({ post, handleLikeReactionOnPost }) => {
   useEffect(() => {
     if (state.postReaction.length > 0) {
       const item = state.postReaction.findLast(
-        (item) => item.user.id === data.userInfo?.id && item.postId === post.id
+        (item) => item.user.id === data.userInfo?.id && item.postId === post.id,
       );
 
       if (item) {
@@ -91,7 +91,7 @@ const ReactionIcon: FC<Props> = ({ post, handleLikeReactionOnPost }) => {
         {likedIcon ? (
           <Text style={{ fontSize: 22 }}>{likedIcon}</Text>
         ) : (
-          <AntDesign name={"hearto"} size={24} color={colors.navyBlue} />
+          <AntDesign name={'hearto'} size={24} color={colors.navyBlue} />
         )}
       </TouchableOpacity>
       {state.showReactionView && state.postReacted?.id === post.id && (
@@ -108,11 +108,11 @@ const ReactionIcon: FC<Props> = ({ post, handleLikeReactionOnPost }) => {
 };
 const styles = StyleSheet.create({
   containerStyle: {
-    position: "relative",
+    position: 'relative',
   },
 
   reactionWrapper: {
-    position: "absolute",
+    position: 'absolute',
     width: 200,
     top: -48,
     left: -175,
@@ -123,8 +123,8 @@ const styles = StyleSheet.create({
     borderRadius: 32,
     borderTopRightRadius: 16,
     borderBottomRightRadius: 0,
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 

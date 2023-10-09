@@ -5,8 +5,8 @@ import {
   IProfileInformation,
   IThunkAPIStatus,
   IUserProfileData,
-} from "@app-model";
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+} from '@app-model';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import {
   changePasswordAction,
   completeUserProfileAction,
@@ -21,10 +21,10 @@ import {
   updateSkillsProfileAction,
   verifyOTPActionAction,
   verifyOTPOnChangePasswordAction,
-} from "../actions/auth";
-import { PURGE, REHYDRATE } from "redux-persist";
-import * as ImagePicker from "expo-image-picker";
-import * as DocumentPicker from "expo-document-picker";
+} from '../actions/auth';
+import { PURGE, REHYDRATE } from 'redux-persist';
+import * as ImagePicker from 'expo-image-picker';
+import * as DocumentPicker from 'expo-document-picker';
 
 export interface ISessionState {
   signingInStatus: IThunkAPIStatus;
@@ -69,44 +69,44 @@ export interface ISessionState {
 }
 
 const initialState: ISessionState = {
-  signingInStatus: "idle",
-  signingInSuccess: "",
-  signingInError: "",
+  signingInStatus: 'idle',
+  signingInSuccess: '',
+  signingInError: '',
 
-  resendOtpStatus: "idle",
-  resendOtpSuccess: "",
-  resendOtpError: "",
+  resendOtpStatus: 'idle',
+  resendOtpSuccess: '',
+  resendOtpError: '',
 
-  requestOTPEmailStatus: "idle",
-  requestOTPEmailSuccess: "",
-  requestOTPEmailError: "",
+  requestOTPEmailStatus: 'idle',
+  requestOTPEmailSuccess: '',
+  requestOTPEmailError: '',
 
-  requestOTPPhoneStatus: "idle",
-  requestOTPPhoneSuccess: "",
-  requestOTPPhoneError: "",
+  requestOTPPhoneStatus: 'idle',
+  requestOTPPhoneSuccess: '',
+  requestOTPPhoneError: '',
 
-  verifyPhoneEmailOTPStatus: "idle",
-  verifyPhoneEmailOTPSuccess: "",
-  verifyPhoneEmailOTPError: "",
+  verifyPhoneEmailOTPStatus: 'idle',
+  verifyPhoneEmailOTPSuccess: '',
+  verifyPhoneEmailOTPError: '',
 
-  changePasswordOTpStatus: "idle",
-  changePasswordOTpSuccess: "",
-  changePasswordOTpError: "",
+  changePasswordOTpStatus: 'idle',
+  changePasswordOTpSuccess: '',
+  changePasswordOTpError: '',
 
-  signingUpStatus: "idle",
-  signingUpSuccess: "",
-  signingUpError: "",
+  signingUpStatus: 'idle',
+  signingUpSuccess: '',
+  signingUpError: '',
 
   profileData: {
-    phoneNumber: "",
+    phoneNumber: '',
     personalInformation: {
-      firstName: "",
-      lastName: "",
-      country: "",
-      countryOfOrigin: "",
+      firstName: '',
+      lastName: '',
+      country: '',
+      countryOfOrigin: '',
       resume: null,
-      bio: "",
-      city: "",
+      bio: '',
+      city: '',
     },
     education: [],
     experience: [],
@@ -115,45 +115,45 @@ const initialState: ISessionState = {
     skills: [],
   },
 
-  otpVerificationStatus: "idle",
-  otpVerificationSuccess: "",
-  otpVerificationError: "",
+  otpVerificationStatus: 'idle',
+  otpVerificationSuccess: '',
+  otpVerificationError: '',
 
-  completeProfileStatus: "idle",
-  completeProfileSuccess: "",
-  completeProfileError: "",
+  completeProfileStatus: 'idle',
+  completeProfileSuccess: '',
+  completeProfileError: '',
 
-  otpChannelValue: "",
+  otpChannelValue: '',
 
-  otpCode: "",
+  otpCode: '',
 };
 
 const sessionSlice = createSlice({
-  name: "session",
+  name: 'session',
   initialState,
   reducers: {
     clearLoginStatus(state: ISessionState) {
-      state.signingInStatus = "idle";
-      state.signingInSuccess = "";
-      state.signingInError = "";
+      state.signingInStatus = 'idle';
+      state.signingInSuccess = '';
+      state.signingInError = '';
     },
 
     clearSignupStatus(state: ISessionState) {
-      state.signingUpStatus = "idle";
-      state.signingUpSuccess = "";
-      state.signingUpError = "";
+      state.signingUpStatus = 'idle';
+      state.signingUpSuccess = '';
+      state.signingUpError = '';
     },
 
     clearResendOtpStatus(state: ISessionState) {
-      state.requestOTPPhoneStatus = "idle";
-      state.requestOTPPhoneSuccess = "";
-      state.resendOtpError = "";
+      state.requestOTPPhoneStatus = 'idle';
+      state.requestOTPPhoneSuccess = '';
+      state.resendOtpError = '';
     },
 
     clearOtpVerificationStatus(state: ISessionState) {
-      state.otpVerificationStatus = "idle";
-      state.otpVerificationSuccess = "";
-      state.otpVerificationError = "";
+      state.otpVerificationStatus = 'idle';
+      state.otpVerificationSuccess = '';
+      state.otpVerificationError = '';
     },
     updatePhoneNumber(state: ISessionState, action: PayloadAction<string>) {
       state.profileData.phoneNumber = action.payload;
@@ -171,7 +171,7 @@ const sessionSlice = createSlice({
 
     updatePersonalInformation(
       state: ISessionState,
-      action: PayloadAction<IProfileInformation>
+      action: PayloadAction<IProfileInformation>,
     ) {
       state.profileData.personalInformation = action.payload;
     },
@@ -180,15 +180,15 @@ const sessionSlice = createSlice({
       state: ISessionState,
       action: PayloadAction<
         DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult | null
-      >
+      >,
     ) {
       state.profileData.profilePicture = action.payload;
     },
 
     clearEmailPhoneOtpVerificationStatus(state: ISessionState) {
-      state.verifyPhoneEmailOTPError = "";
-      state.verifyPhoneEmailOTPStatus = "idle";
-      state.verifyPhoneEmailOTPSuccess = "";
+      state.verifyPhoneEmailOTPError = '';
+      state.verifyPhoneEmailOTPStatus = 'idle';
+      state.verifyPhoneEmailOTPSuccess = '';
     },
 
     updateSkills(state: ISessionState, action: PayloadAction<string[]>) {
@@ -203,7 +203,7 @@ const sessionSlice = createSlice({
     },
     updateCertificate(
       state: ISessionState,
-      action: PayloadAction<{ name: string; file: FilePickerFormat }>
+      action: PayloadAction<{ name: string; file: FilePickerFormat }>,
     ) {
       if (action.payload) {
         state.profileData.certificates = [
@@ -213,37 +213,37 @@ const sessionSlice = createSlice({
       }
     },
     clearCompleteProfileStatus(state: ISessionState) {
-      state.completeProfileStatus = "idle";
-      state.completeProfileError = "";
-      state.completeProfileError = "";
+      state.completeProfileStatus = 'idle';
+      state.completeProfileError = '';
+      state.completeProfileError = '';
     },
 
     clearChangePasswordError(state: ISessionState) {
-      state.changePasswordOTpError = "";
+      state.changePasswordOTpError = '';
     },
   },
   extraReducers: (builder) => {
     builder.addCase(PURGE, (state) => {
-      state.signingInStatus = "idle";
-      state.signingInSuccess = "";
-      state.signingInError = "";
-      state.signingUpSuccess = "";
-      state.signingUpStatus = "idle";
+      state.signingInStatus = 'idle';
+      state.signingInSuccess = '';
+      state.signingInError = '';
+      state.signingUpSuccess = '';
+      state.signingUpStatus = 'idle';
 
-      state.otpVerificationStatus = "idle";
-      state.otpVerificationSuccess = "";
-      state.otpVerificationError = "";
+      state.otpVerificationStatus = 'idle';
+      state.otpVerificationSuccess = '';
+      state.otpVerificationError = '';
 
       state.profileData = {
-        phoneNumber: "",
+        phoneNumber: '',
         personalInformation: {
-          firstName: "",
-          lastName: "",
-          country: "",
-          countryOfOrigin: "",
+          firstName: '',
+          lastName: '',
+          country: '',
+          countryOfOrigin: '',
           resume: null,
-          bio: "",
-          city: "",
+          bio: '',
+          city: '',
         },
         education: [],
         experience: [],
@@ -253,187 +253,187 @@ const sessionSlice = createSlice({
       };
     });
     builder.addCase(REHYDRATE, (state) => {
-      state.signingInStatus = "idle";
-      state.signingInSuccess = "";
-      state.signingInError = "";
-      state.signingUpSuccess = "";
-      state.signingUpStatus = "idle";
+      state.signingInStatus = 'idle';
+      state.signingInSuccess = '';
+      state.signingInError = '';
+      state.signingUpSuccess = '';
+      state.signingUpStatus = 'idle';
 
-      state.otpVerificationStatus = "idle";
-      state.otpVerificationSuccess = "";
-      state.otpVerificationError = "";
+      state.otpVerificationStatus = 'idle';
+      state.otpVerificationSuccess = '';
+      state.otpVerificationError = '';
     });
     builder.addCase(loginUserActionAction.pending, (state) => {
-      state.signingInStatus = "loading";
+      state.signingInStatus = 'loading';
     });
     builder.addCase(loginUserActionAction.fulfilled, (state, action) => {
-      state.signingInStatus = "completed";
+      state.signingInStatus = 'completed';
     });
     builder.addCase(loginUserActionAction.rejected, (state, action) => {
-      state.signingInError = "";
-      state.signingInStatus = "failed";
+      state.signingInError = '';
+      state.signingInStatus = 'failed';
     });
 
     builder.addCase(resendOTPAction.pending, (state) => {
-      state.resendOtpStatus = "loading";
+      state.resendOtpStatus = 'loading';
     });
     builder.addCase(resendOTPAction.fulfilled, (state, action) => {
-      state.resendOtpStatus = "completed";
+      state.resendOtpStatus = 'completed';
     });
     builder.addCase(resendOTPAction.rejected, (state, action) => {
       state.resendOtpError = action.payload?.message as string;
-      state.resendOtpStatus = "failed";
+      state.resendOtpStatus = 'failed';
     });
 
     builder.addCase(signupUserActionAction.pending, (state) => {
-      state.signingUpStatus = "loading";
+      state.signingUpStatus = 'loading';
     });
     builder.addCase(signupUserActionAction.fulfilled, (state, action) => {
       state.signingUpSuccess = action.payload.message;
-      state.signingUpStatus = "completed";
+      state.signingUpStatus = 'completed';
     });
     builder.addCase(signupUserActionAction.rejected, (state, action) => {
-      state.signingUpStatus = "failed";
+      state.signingUpStatus = 'failed';
     });
 
     builder.addCase(verifyOTPActionAction.pending, (state) => {
-      state.otpVerificationStatus = "loading";
+      state.otpVerificationStatus = 'loading';
     });
     builder.addCase(verifyOTPActionAction.fulfilled, (state, action) => {
       state.otpVerificationSuccess = action.payload.message;
       console.log(action.payload);
-      state.otpVerificationStatus = "completed";
+      state.otpVerificationStatus = 'completed';
     });
     builder.addCase(verifyOTPActionAction.rejected, (state, action) => {
-      state.otpVerificationStatus = "failed";
+      state.otpVerificationStatus = 'failed';
     });
 
     builder.addCase(completeUserProfileAction.pending, (state) => {
-      state.completeProfileStatus = "loading";
+      state.completeProfileStatus = 'loading';
     });
     builder.addCase(completeUserProfileAction.fulfilled, (state, action) => {
       state.completeProfileSuccess = action.payload.message;
-      state.completeProfileStatus = "completed";
+      state.completeProfileStatus = 'completed';
     });
     builder.addCase(completeUserProfileAction.rejected, (state, action) => {
-      state.completeProfileStatus = "failed";
+      state.completeProfileStatus = 'failed';
       state.completeProfileError =
-        (action.payload?.message as string) || action.error.message || "";
+        (action.payload?.message as string) || action.error.message || '';
     });
 
     builder.addCase(updateEducationProfileAction.pending, (state) => {
-      state.completeProfileStatus = "loading";
+      state.completeProfileStatus = 'loading';
     });
     builder.addCase(updateEducationProfileAction.fulfilled, (state, action) => {
       state.completeProfileSuccess = action.payload.message;
-      state.completeProfileStatus = "completed";
+      state.completeProfileStatus = 'completed';
     });
     builder.addCase(updateEducationProfileAction.rejected, (state, action) => {
-      state.completeProfileStatus = "failed";
+      state.completeProfileStatus = 'failed';
       state.completeProfileError =
-        (action.payload?.message as string) || action.error.message || "";
+        (action.payload?.message as string) || action.error.message || '';
     });
 
     builder.addCase(updateExperienceProfileAction.pending, (state) => {
-      state.completeProfileStatus = "loading";
+      state.completeProfileStatus = 'loading';
     });
     builder.addCase(
       updateExperienceProfileAction.fulfilled,
       (state, action) => {
         state.completeProfileSuccess = action.payload.message;
-        state.completeProfileStatus = "completed";
-      }
+        state.completeProfileStatus = 'completed';
+      },
     );
     builder.addCase(updateExperienceProfileAction.rejected, (state, action) => {
-      state.completeProfileStatus = "failed";
+      state.completeProfileStatus = 'failed';
       state.completeProfileError =
-        (action.payload?.message as string) || action.error.message || "";
+        (action.payload?.message as string) || action.error.message || '';
     });
 
     builder.addCase(updateCertificateProfileAction.pending, (state) => {
-      state.completeProfileStatus = "loading";
+      state.completeProfileStatus = 'loading';
     });
     builder.addCase(
       updateCertificateProfileAction.fulfilled,
       (state, action) => {
         state.completeProfileSuccess = action.payload.message;
-        state.completeProfileStatus = "completed";
-      }
+        state.completeProfileStatus = 'completed';
+      },
     );
     builder.addCase(
       updateCertificateProfileAction.rejected,
       (state, action) => {
-        state.completeProfileStatus = "failed";
+        state.completeProfileStatus = 'failed';
         state.completeProfileError =
-          (action.payload?.message as string) || action.error.message || "";
-      }
+          (action.payload?.message as string) || action.error.message || '';
+      },
     );
 
     builder.addCase(updateSkillsProfileAction.pending, (state) => {
-      state.completeProfileStatus = "loading";
+      state.completeProfileStatus = 'loading';
     });
     builder.addCase(updateSkillsProfileAction.fulfilled, (state, action) => {
       state.completeProfileSuccess = action.payload.message;
-      state.completeProfileStatus = "completed";
+      state.completeProfileStatus = 'completed';
     });
     builder.addCase(updateSkillsProfileAction.rejected, (state, action) => {
-      state.completeProfileStatus = "failed";
+      state.completeProfileStatus = 'failed';
       state.completeProfileError =
-        (action.payload?.message as string) || action.error.message || "";
+        (action.payload?.message as string) || action.error.message || '';
     });
 
     builder.addCase(requestOTPEmailAction.pending, (state) => {
-      state.requestOTPEmailStatus = "loading";
+      state.requestOTPEmailStatus = 'loading';
     });
     builder.addCase(requestOTPEmailAction.fulfilled, (state, action) => {
       state.requestOTPEmailSuccess = action.payload.message;
-      state.requestOTPEmailStatus = "completed";
+      state.requestOTPEmailStatus = 'completed';
     });
     builder.addCase(requestOTPEmailAction.rejected, (state, action) => {
-      state.requestOTPEmailStatus = "failed";
+      state.requestOTPEmailStatus = 'failed';
       state.requestOTPEmailError = action.payload?.message as string;
     });
 
     builder.addCase(requestOTPPhoneAction.pending, (state) => {
-      state.requestOTPPhoneStatus = "loading";
+      state.requestOTPPhoneStatus = 'loading';
     });
     builder.addCase(requestOTPPhoneAction.fulfilled, (state, action) => {
       state.requestOTPPhoneSuccess = action.payload.message;
-      state.requestOTPPhoneStatus = "completed";
+      state.requestOTPPhoneStatus = 'completed';
     });
     builder.addCase(requestOTPPhoneAction.rejected, (state, action) => {
-      state.requestOTPPhoneStatus = "failed";
+      state.requestOTPPhoneStatus = 'failed';
       state.requestOTPPhoneError = action.payload?.message as string;
     });
 
     builder.addCase(changePasswordAction.pending, (state) => {
-      state.changePasswordOTpStatus = "loading";
+      state.changePasswordOTpStatus = 'loading';
     });
     builder.addCase(changePasswordAction.fulfilled, (state, action) => {
       state.changePasswordOTpSuccess = action.payload.message;
-      state.changePasswordOTpStatus = "completed";
+      state.changePasswordOTpStatus = 'completed';
     });
     builder.addCase(changePasswordAction.rejected, (state, action) => {
-      state.changePasswordOTpStatus = "failed";
+      state.changePasswordOTpStatus = 'failed';
       state.changePasswordOTpError = action.payload?.message as string;
     });
 
     builder.addCase(verifyOTPOnChangePasswordAction.pending, (state) => {
-      state.verifyPhoneEmailOTPStatus = "loading";
+      state.verifyPhoneEmailOTPStatus = 'loading';
     });
     builder.addCase(
       verifyOTPOnChangePasswordAction.fulfilled,
       (state, action) => {
         state.verifyPhoneEmailOTPSuccess = action.payload.message;
-        state.verifyPhoneEmailOTPStatus = "completed";
-      }
+        state.verifyPhoneEmailOTPStatus = 'completed';
+      },
     );
     builder.addCase(
       verifyOTPOnChangePasswordAction.rejected,
       (state, action) => {
-        state.verifyPhoneEmailOTPStatus = "failed";
+        state.verifyPhoneEmailOTPStatus = 'failed';
         state.verifyPhoneEmailOTPError = action.payload?.message as string;
-      }
+      },
     );
   },
 });

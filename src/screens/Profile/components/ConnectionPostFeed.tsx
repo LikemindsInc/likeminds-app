@@ -1,14 +1,14 @@
-import { FlatList, useToast } from "native-base";
-import StoryFeedItem from "../../../components/StoryFeedItem/StoryFeedItem";
-import { useCallback, useEffect, useState } from "react";
-import useAppDispatch from "../../../hooks/useAppDispatch";
+import { FlatList, useToast } from 'native-base';
+import StoryFeedItem from '../../../components/StoryFeedItem/StoryFeedItem';
+import { useCallback, useEffect, useState } from 'react';
+import useAppDispatch from '../../../hooks/useAppDispatch';
 import {
   getConnectionPostFeedAction,
   getCurrentUserFeedAction,
   getPostFeedAction,
-} from "../../../actions/post";
-import useAppSelector from "../../../hooks/useAppSelector";
-import { IPostState } from "../../../reducers/post_reducer";
+} from '../../../actions/post';
+import useAppSelector from '../../../hooks/useAppSelector';
+import { IPostState } from '../../../reducers/post_reducer';
 
 const ConnectionPostFeed = () => {
   const dispatch = useAppDispatch();
@@ -26,19 +26,19 @@ const ConnectionPostFeed = () => {
   }, []);
 
   useEffect(() => {
-    if (state.getConnectionPostFeedStatus === "failed") {
-      console.log("error:", state.getPostFeedError);
+    if (state.getConnectionPostFeedStatus === 'failed') {
+      console.log('error:', state.getPostFeedError);
     }
   }, [state.getConnectionPostFeedStatus]);
 
   useEffect(() => {
-    if (state.createPostStatus === "completed") {
+    if (state.createPostStatus === 'completed') {
       getPostFeeds();
     }
   }, [state.createPostStatus]);
 
   useEffect(() => {
-    if (state.getCurrentUserPostStatus === "completed") {
+    if (state.getCurrentUserPostStatus === 'completed') {
       setRefresh(false);
     }
   }, [state.getCurrentUserPostStatus]);

@@ -1,12 +1,12 @@
-import React from "react";
-import { PixelRatio, Pressable, StyleSheet, Text, View } from "react-native";
+import React from 'react';
+import { PixelRatio, Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { RadioButtonProps } from "./types";
+import { RadioButtonProps } from './types';
 
 export default function RadioButton({
   borderColor,
   borderSize = 2,
-  color = "#444",
+  color = '#444',
   containerStyle,
   description,
   descriptionStyle,
@@ -14,7 +14,7 @@ export default function RadioButton({
   id,
   label,
   labelStyle,
-  layout = "row",
+  layout = 'row',
   onPress,
   selected = false,
   size = 24,
@@ -24,11 +24,11 @@ export default function RadioButton({
   const sizeHalf = PixelRatio.roundToNearestPixel(size * 0.5);
   const sizeFull = PixelRatio.roundToNearestPixel(size);
 
-  let orientation: any = { flexDirection: "row" };
+  let orientation: any = { flexDirection: 'row' };
   let margin: any = { marginLeft: 10 };
 
-  if (layout === "column") {
-    orientation = { alignItems: "center" };
+  if (layout === 'column') {
+    orientation = { alignItems: 'center' };
     margin = { marginTop: 10 };
   }
 
@@ -87,12 +87,12 @@ export default function RadioButton({
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
+    alignItems: 'center',
     marginHorizontal: 10,
     marginVertical: 5,
   },
   border: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

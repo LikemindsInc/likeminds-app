@@ -1,24 +1,24 @@
-import { IPostCommentFeed } from "@app-model";
-import { FC, useEffect, useState } from "react";
+import { IPostCommentFeed } from '@app-model';
+import { FC, useEffect, useState } from 'react';
 import {
   Image,
   StyleSheet,
   Text,
   TextStyle,
   TouchableOpacity,
-} from "react-native";
-import { GlobalStyles } from "../../../theme/GlobalStyles";
-import { View, useToast } from "native-base";
-import colors from "../../../theme/colors";
-import DateFormatter from "../../../utils/date-formatter";
-import Input from "../../../components/Input/Input";
-import { Feather, AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
-import useAppDispatch from "../../../hooks/useAppDispatch";
-import { commentOnCommentAction } from "../../../actions/post";
-import useAppSelector from "../../../hooks/useAppSelector";
-import { IPostState } from "../../../reducers/post_reducer";
-import ReactionIcon from "../../../components/ReactionIcon/ReactionIcon";
-import CommentReactionIcon from "../../../components/ReactionIcon/CommentReactionIcon";
+} from 'react-native';
+import { GlobalStyles } from '../../../theme/GlobalStyles';
+import { View, useToast } from 'native-base';
+import colors from '../../../theme/colors';
+import DateFormatter from '../../../utils/date-formatter';
+import Input from '../../../components/Input/Input';
+import { Feather, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
+import useAppDispatch from '../../../hooks/useAppDispatch';
+import { commentOnCommentAction } from '../../../actions/post';
+import useAppSelector from '../../../hooks/useAppSelector';
+import { IPostState } from '../../../reducers/post_reducer';
+import ReactionIcon from '../../../components/ReactionIcon/ReactionIcon';
+import CommentReactionIcon from '../../../components/ReactionIcon/CommentReactionIcon';
 
 interface Props {
   item: IPostCommentFeed;
@@ -27,10 +27,10 @@ interface Props {
 const CommentRowItem: FC<Props> = ({ item }) => {
   const [shouldCommentOnComment, setShowCommentInput] = useState(false);
 
-  const [commentOnComment, setCommentOnComment] = useState("");
+  const [commentOnComment, setCommentOnComment] = useState('');
 
   const postState = useAppSelector(
-    (state: any) => state.postReducer
+    (state: any) => state.postReducer,
   ) as IPostState;
 
   const dispatch = useAppDispatch();
@@ -38,22 +38,22 @@ const CommentRowItem: FC<Props> = ({ item }) => {
   const toast = useToast();
 
   useEffect(() => {
-    if (postState.commentOnCommentStatus === "failed") {
+    if (postState.commentOnCommentStatus === 'failed') {
       toast.show({ description: postState.commentOnCommentError });
-    } else if (postState.commentOnCommentStatus === "completed") {
-      setCommentOnComment("");
+    } else if (postState.commentOnCommentStatus === 'completed') {
+      setCommentOnComment('');
     }
   }, [postState.commentOnCommentStatus]);
 
   const handlePostComment = () => {
-    if (commentOnComment.trim() == "") return;
+    if (commentOnComment.trim() == '') return;
 
     dispatch(
       commentOnCommentAction({
         commentId: item.id,
         postId: item.postId,
         comment: commentOnComment,
-      })
+      }),
     );
   };
 
@@ -80,15 +80,15 @@ const CommentRowItem: FC<Props> = ({ item }) => {
 
   return (
     <View style={[GlobalStyles.mb20]}>
-      <View style={[{ flexDirection: "row", gap: 12 }]}>
+      <View style={[{ flexDirection: 'row', gap: 12 }]}>
         <View style={[styles.storyHeader]}>
-          <TouchableOpacity style={{ flexDirection: "row" }}>
+          <TouchableOpacity style={{ flexDirection: 'row' }}>
             <View>
               <Image
                 source={
                   item.user?.profilePicture
                     ? { uri: item.user.profilePicture }
-                    : require("../../../../assets/imageAvatar.jpeg")
+                    : require('../../../../assets/imageAvatar.jpeg')
                 }
                 style={{ width: 30, height: 30, borderRadius: 15 }}
               />
@@ -97,9 +97,9 @@ const CommentRowItem: FC<Props> = ({ item }) => {
         </View>
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
             flex: 1,
-            justifyContent: "space-between",
+            justifyContent: 'space-between',
           }}
         >
           <View style={[GlobalStyles.flexOne]}>
@@ -126,9 +126,9 @@ const CommentRowItem: FC<Props> = ({ item }) => {
               style={[
                 GlobalStyles.mt5,
                 {
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  width: "60%",
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  width: '60%',
                 },
               ]}
             >
@@ -137,7 +137,7 @@ const CommentRowItem: FC<Props> = ({ item }) => {
                   GlobalStyles.fontInterMedium,
                   GlobalStyles.fontWeight700,
                   GlobalStyles.fontSize10,
-                  { color: "#284453" },
+                  { color: '#284453' },
                 ]}
               >
                 {DateFormatter.getTimeAgo(item.createdAt)}
@@ -147,11 +147,11 @@ const CommentRowItem: FC<Props> = ({ item }) => {
                   GlobalStyles.fontInterMedium,
                   GlobalStyles.fontWeight700,
                   GlobalStyles.fontSize10,
-                  { color: "#284453" },
+                  { color: '#284453' },
                 ]}
               >
-                {item.reactionCount}{" "}
-                {item.reactionCount > 1 ? "reactions" : "reaction"}
+                {item.reactionCount}{' '}
+                {item.reactionCount > 1 ? 'reactions' : 'reaction'}
               </Text>
               {/* <TouchableOpacity onPress={handleCommentOnComment}>
                 <Text
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     paddingHorizontal: 25,
     paddingTop: 16,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   commentWrapper: {
     borderTopWidth: StyleSheet.hairlineWidth,
@@ -208,12 +208,12 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   storyHeader: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginBottom: 15,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   image: {
-    width: "100%",
+    width: '100%',
     borderRadius: 10,
     height: 300,
   },

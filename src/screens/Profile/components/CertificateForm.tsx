@@ -1,61 +1,61 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { GlobalStyles } from "../../../theme/GlobalStyles";
-import Input from "../../../components/Input/Input";
-import React, { useEffect, useState } from "react";
-import Button from "../../../components/Button/Button";
-import TextLink from "../../../components/TextLink/TextLink";
-import colors from "../../../theme/colors";
-import DatePicker from "../../../components/DatePicker/DatePicker";
-import DropZone from "../../../components/DropZone/DropZone";
-import { APP_SCREEN_LIST } from "../../../constants";
-import { useNavigation } from "@react-navigation/native";
-import * as DocumentPicker from "expo-document-picker";
-import * as ImagePicker from "expo-image-picker";
-import useAppDispatch from "../../../hooks/useAppDispatch";
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { GlobalStyles } from '../../../theme/GlobalStyles';
+import Input from '../../../components/Input/Input';
+import React, { useEffect, useState } from 'react';
+import Button from '../../../components/Button/Button';
+import TextLink from '../../../components/TextLink/TextLink';
+import colors from '../../../theme/colors';
+import DatePicker from '../../../components/DatePicker/DatePicker';
+import DropZone from '../../../components/DropZone/DropZone';
+import { APP_SCREEN_LIST } from '../../../constants';
+import { useNavigation } from '@react-navigation/native';
+import * as DocumentPicker from 'expo-document-picker';
+import * as ImagePicker from 'expo-image-picker';
+import useAppDispatch from '../../../hooks/useAppDispatch';
 import {
   ISessionState,
   clearCompleteProfileStatus,
   updateCertificate,
-} from "../../../reducers/session";
-import useAppSelector from "../../../hooks/useAppSelector";
+} from '../../../reducers/userProfileSession';
+import useAppSelector from '../../../hooks/useAppSelector';
 import {
   completeUserProfileAction,
   updateCertificateProfileAction,
-} from "../../../actions/auth";
-import BackButton from "../../../components/Navigation/BackButton/BackButton";
-import { useToast } from "react-native-toast-notifications";
-import { FilePickerFormat } from "@app-model";
-import { AntDesign } from "@expo/vector-icons";
+} from '../../../actions/auth';
+import BackButton from '../../../components/Navigation/BackButton/BackButton';
+import { useToast } from 'react-native-toast-notifications';
+import { FilePickerFormat } from '@app-model';
+import { AntDesign } from '@expo/vector-icons';
 
 const CertificateForm = () => {
   const navigation = useNavigation<any>();
 
   const dispatch = useAppDispatch();
 
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
 
   const toast = useToast();
 
   const [uploods, setUploads] = useState([{}]);
 
   const session = useAppSelector(
-    (state: any) => state.sessionReducer
+    (state: any) => state.sessionReducer,
   ) as ISessionState;
 
   const [file, setFile] = useState<
     FilePickerFormat | null | ImagePicker.ImagePickerResult
   >(null);
   const handleOnFileSelect = (
-    file: FilePickerFormat | ImagePicker.ImagePickerResult
+    file: FilePickerFormat | ImagePicker.ImagePickerResult,
   ) => {
     setFile(file);
     return null;
   };
   const handleOnNextPress = () => {
     if (file) {
-      console.log("file> ", file);
+      console.log('file> ', file);
       dispatch(
-        updateCertificate({ file: file as FilePickerFormat, name: name })
+        updateCertificate({ file: file as FilePickerFormat, name: name }),
       );
       setTimeout(() => {
         dispatch(updateCertificateProfileAction(session.profileData));
@@ -116,7 +116,7 @@ const CertificateForm = () => {
       </ScrollView>
       <View>
         <Button
-          loading={session.completeProfileStatus === "loading"}
+          loading={session.completeProfileStatus === 'loading'}
           title="Continue"
           onPress={handleOnNextPress}
         />
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inputDouble: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 20,
   },
   inputFlex: {

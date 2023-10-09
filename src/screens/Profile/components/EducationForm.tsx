@@ -1,41 +1,41 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { GlobalStyles } from "../../../theme/GlobalStyles";
-import Input from "../../../components/Input/Input";
-import React, { useEffect, useState } from "react";
-import Button from "../../../components/Button/Button";
-import TextLink from "../../../components/TextLink/TextLink";
-import colors from "../../../theme/colors";
-import DatePicker from "../../../components/DatePicker/DatePicker";
-import { Checkbox } from "native-base";
-import { APP_SCREEN_LIST, SCHOOL_DEGREES } from "../../../constants";
-import { useNavigation } from "@react-navigation/native";
-import DateFormatter from "../../../utils/date-formatter";
-import useAppDispatch from "../../../hooks/useAppDispatch";
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { GlobalStyles } from '../../../theme/GlobalStyles';
+import Input from '../../../components/Input/Input';
+import React, { useEffect, useState } from 'react';
+import Button from '../../../components/Button/Button';
+import TextLink from '../../../components/TextLink/TextLink';
+import colors from '../../../theme/colors';
+import DatePicker from '../../../components/DatePicker/DatePicker';
+import { Checkbox } from 'native-base';
+import { APP_SCREEN_LIST, SCHOOL_DEGREES } from '../../../constants';
+import { useNavigation } from '@react-navigation/native';
+import DateFormatter from '../../../utils/date-formatter';
+import useAppDispatch from '../../../hooks/useAppDispatch';
 import {
   clearCompleteProfileStatus,
   updateEducation,
-} from "../../../reducers/session";
-import BackButton from "../../../components/Navigation/BackButton/BackButton";
-import moment from "moment";
-import AutoCompleteInput from "../../../components/AutoCompleteInput/AutoCompleteInput";
+} from '../../../reducers/userProfileSession';
+import BackButton from '../../../components/Navigation/BackButton/BackButton';
+import moment from 'moment';
+import AutoCompleteInput from '../../../components/AutoCompleteInput/AutoCompleteInput';
 import {
   getAllSchoolAction,
   updateEducationProfileAction,
-} from "../../../actions/auth";
-import useAppSelector from "../../../hooks/useAppSelector";
-import { ISchool } from "@app-model";
-import { useToast } from "react-native-toast-notifications";
-import { SelectList } from "react-native-dropdown-select-list";
-import { AntDesign } from "@expo/vector-icons";
+} from '../../../actions/auth';
+import useAppSelector from '../../../hooks/useAppSelector';
+import { ISchool } from '@app-model';
+import { useToast } from 'react-native-toast-notifications';
+import { SelectList } from 'react-native-dropdown-select-list';
+import { AntDesign } from '@expo/vector-icons';
 
 const EducationForm = () => {
   const [startDate, setStartDate] = useState(
-    moment().subtract("7", "days").format("YYYY-MM-DD")
+    moment().subtract('7', 'days').format('YYYY-MM-DD'),
   );
-  const [endDate, setEndDate] = useState(moment().format("YYYY-MM-DD"));
-  const [school, setSchool] = useState("");
+  const [endDate, setEndDate] = useState(moment().format('YYYY-MM-DD'));
+  const [school, setSchool] = useState('');
 
-  const [degree, setDegree] = useState("");
+  const [degree, setDegree] = useState('');
 
   const navigation = useNavigation<any>();
 
@@ -76,61 +76,44 @@ const EducationForm = () => {
     });
   }, []);
 
-  const toast = useToast();
-
-  // useEffect(() => {
-  //   if (state.completeProfileStatus === "completed") {
-  //     toast.show("Education added successfully", {
-  //       animationType: "slide-in",
-  //       placement: "top",
-  //     });
-  //   } else if (state.completeProfileStatus === "failed") {
-  //     toast.show(
-  //       state.completeProfileError ||
-  //         "Unable to complete action please try again"
-  //     );
-  //   }
-  //   dispatch(clearCompleteProfileStatus());
-  // }, [state.completeProfileStatus]);
-
   const validateStartDate = () => {
-    if (startDate.trim() !== "") {
-      if (moment().diff(startDate, "days") < 0) {
+    if (startDate.trim() !== '') {
+      if (moment().diff(startDate, 'days') < 0) {
         return setErrors((state) => ({
           ...state,
-          startDate: "Start date can not be a future date",
+          startDate: 'Start date can not be a future date',
         }));
       } else if (
-        startDate.trim() !== "" &&
-        moment(endDate).diff(startDate, "days") < 0
+        startDate.trim() !== '' &&
+        moment(endDate).diff(startDate, 'days') < 0
       ) {
         return setErrors((state) => ({
           ...state,
-          startDate: "Start date can not be earlier than end date ",
+          startDate: 'Start date can not be earlier than end date ',
         }));
       }
       setErrors((state) => ({ ...state, startDate: null }));
     } else
       setErrors((state) => ({
         ...state,
-        startDate: "start date is required",
+        startDate: 'start date is required',
       }));
   };
 
   const validateEndDate = () => {
-    if (endDate.trim() !== "") {
+    if (endDate.trim() !== '') {
       if (
-        startDate.trim() !== "" &&
-        moment(startDate).diff(endDate, "days") > 0
+        startDate.trim() !== '' &&
+        moment(startDate).diff(endDate, 'days') > 0
       ) {
         return setErrors((state) => ({
           ...state,
-          endDate: "End date can not be earlier than start date",
+          endDate: 'End date can not be earlier than start date',
         }));
       }
       setErrors((state) => ({ ...state, endDate: null }));
     } else
-      setErrors((state) => ({ ...state, endDate: "End date is required" }));
+      setErrors((state) => ({ ...state, endDate: 'End date is required' }));
   };
 
   useEffect(() => {
@@ -142,21 +125,21 @@ const EducationForm = () => {
   }, [endDate, startDate]);
 
   const handleOnNextPress = () => {
-    if (school.trim() === "")
+    if (school.trim() === '')
       return setErrors((state) => ({
         ...state,
-        school: "School is required",
+        school: 'School is required',
       }));
 
-    if (degree.trim() === "")
+    if (degree.trim() === '')
       return setErrors((state) => ({
         ...state,
-        degree: "Degree is required",
+        degree: 'Degree is required',
       }));
-    if (startDate.trim() === "")
+    if (startDate.trim() === '')
       return setErrors((state) => ({
         ...state,
-        startDate: "start date is required",
+        startDate: 'start date is required',
       }));
     dispatch(updateEducation({ school, startDate, endDate, degree }));
     setTimeout(() => {
@@ -166,7 +149,7 @@ const EducationForm = () => {
   };
 
   useEffect(() => {
-    if (degree.trim() !== "")
+    if (degree.trim() !== '')
       setErrors((state) => ({ ...state, degree: null }));
     // else
     //   setErrors((state) => ({
@@ -176,7 +159,7 @@ const EducationForm = () => {
   }, [degree]);
 
   useEffect(() => {
-    if (degree.trim() !== "")
+    if (degree.trim() !== '')
       setErrors((state) => ({ ...state, school: null }));
     // else
     //   setErrors((state) => ({
@@ -186,10 +169,10 @@ const EducationForm = () => {
   }, [school]);
 
   const handleOnSchoolFilter = (query: string) => {
-    if (query.trim() === "") setSchools(setting.schools);
+    if (query.trim() === '') setSchools(setting.schools);
     else {
       const data = setting.schools.filter((item) =>
-        item.name.toLowerCase().startsWith(query.toLowerCase().trim())
+        item.name.toLowerCase().startsWith(query.toLowerCase().trim()),
       );
 
       setSchools(data);
@@ -217,7 +200,7 @@ const EducationForm = () => {
           <DatePicker
             value={startDate}
             onDateChange={(text) =>
-              setStartDate(DateFormatter.format(text, "YYYY-MM-DD"))
+              setStartDate(DateFormatter.format(text, 'YYYY-MM-DD'))
             }
             placeholder="Start Date"
             style={styles.inputFlex}
@@ -226,7 +209,7 @@ const EducationForm = () => {
           <DatePicker
             value={endDate}
             onChangeText={(text) =>
-              setEndDate(DateFormatter.format(text, "YYYY-MM-DD"))
+              setEndDate(DateFormatter.format(text, 'YYYY-MM-DD'))
             }
             placeholder="End Date"
             style={styles.inputFlex}
@@ -240,7 +223,7 @@ const EducationForm = () => {
               borderWidth: 0,
               paddingVertical: 21,
               backgroundColor: colors.white,
-              shadowColor: "#000",
+              shadowColor: '#000',
               shadowOffset: {
                 width: 0,
                 height: 4,
@@ -272,7 +255,7 @@ const EducationForm = () => {
       </ScrollView>
       <View>
         <Button
-          loading={state.completeProfileStatus === "loading"}
+          loading={state.completeProfileStatus === 'loading'}
           title="Save"
           onPress={handleOnNextPress}
         />
@@ -286,7 +269,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inputDouble: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 20,
   },
   inputFlex: {

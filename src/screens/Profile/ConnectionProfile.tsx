@@ -7,38 +7,36 @@ import {
   TouchableOpacity,
   View,
   useWindowDimensions,
-} from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import useDimension from "../../hooks/useDimension";
-import { AntDesign, Feather } from "@expo/vector-icons";
-import colors, { addOpacity } from "../../theme/colors";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { ScrollView } from "react-native";
-import Button from "../../components/Button/Button";
-import { TabView, SceneMap } from "react-native-tab-view";
-import { Profiler, useCallback, useEffect, useState } from "react";
-import { StatusBar } from "react-native";
-import { Box, Pressable, useColorModeValue } from "native-base";
-import useAppSelector from "../../hooks/useAppSelector";
-import { ISessionState } from "../../reducers/session";
-import { ISettingState } from "../../reducers/settings";
-import StoryFeedList from "../Home/components/StoryFeedList";
-import useAppDispatch from "../../hooks/useAppDispatch";
+} from 'react-native';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import useDimension from '../../hooks/useDimension';
+import { AntDesign, Feather } from '@expo/vector-icons';
+import colors, { addOpacity } from '../../theme/colors';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { ScrollView } from 'react-native';
+import Button from '../../components/Button/Button';
+import { TabView, SceneMap } from 'react-native-tab-view';
+import { Profiler, useCallback, useEffect, useState } from 'react';
+import { StatusBar } from 'react-native';
+import { Box, Pressable, useColorModeValue } from 'native-base';
+import useAppSelector from '../../hooks/useAppSelector';
+import { ISessionState } from '../../reducers/userProfileSession';
+import { ISettingState } from '../../reducers/settings';
+import StoryFeedList from '../Home/components/StoryFeedList';
+import useAppDispatch from '../../hooks/useAppDispatch';
 import {
   getRequestConnectionStatus,
   getSingleUserAction,
   requestConnection,
   undoConnectionRequest,
-} from "../../actions/connection";
-import { useToast } from "react-native-toast-notifications";
-import {
-  clearConnectionProfileData,
-} from "../../reducers/connection";
-import UserExperience from "./components/UserExperience";
-import ConnectionPostFeed from "./components/ConnectionPostFeed";
-import ReadMore from "react-native-read-more-text";
-import moment from "moment";
-import renderExperienceTimelineView from "./components/renderExperienceTimelineView";
+} from '../../actions/connection';
+import { useToast } from 'react-native-toast-notifications';
+import { clearConnectionProfileData } from '../../reducers/connection';
+import UserExperience from './components/UserExperience';
+import ConnectionPostFeed from './components/ConnectionPostFeed';
+import ReadMore from 'react-native-read-more-text';
+import moment from 'moment';
+import renderExperienceTimelineView from './components/renderExperienceTimelineView';
 
 const ConnectionProfile = () => {
   const height = useDimension().height;
@@ -47,7 +45,7 @@ const ConnectionProfile = () => {
   const dispatch = useAppDispatch();
 
   const state = useAppSelector(
-    (state: any) => state.settingReducer
+    (state: any) => state.settingReducer,
   ) as ISettingState;
 
   const selector = useAppSelector((state) => state.connectionReducer);
@@ -58,7 +56,7 @@ const ConnectionProfile = () => {
   }, [selector.profile?.id]);
 
   const getUserProfile = useCallback(() => {
-    if (selector.profileId.trim() === "") return;
+    if (selector.profileId.trim() === '') return;
     dispatch(getSingleUserAction(selector.profileId));
   }, [selector.profileId]);
 
@@ -78,43 +76,43 @@ const ConnectionProfile = () => {
   };
 
   useEffect(() => {
-    if (selector.undoConnectionStatus === "completed") {
+    if (selector.undoConnectionStatus === 'completed') {
       dispatch(getRequestConnectionStatus(selector.profile?.id as string));
     }
   }, [selector.undoConnectionStatus]);
 
   const getButtonType = () => {
-    if (!selector.connectionStatus) return "primary";
+    if (!selector.connectionStatus) return 'primary';
 
     switch (selector.connectionStatus) {
-      case "approved":
-        return "outline-primary";
-      case "pending":
-        return "tertiary";
+      case 'approved':
+        return 'outline-primary';
+      case 'pending':
+        return 'tertiary';
       default:
-        return "primary";
+        return 'primary';
     }
   };
 
   const requestButtonDisabled = () => {
-    if (selector.requestConnectionStatus === "loading") return true;
+    if (selector.requestConnectionStatus === 'loading') return true;
 
-    if (selector.connectionStatus && selector.connectionStatus === "pending")
+    if (selector.connectionStatus && selector.connectionStatus === 'pending')
       return true;
 
     return false;
   };
 
   const getText = () => {
-    if (!selector.connectionStatus) return "Connect";
+    if (!selector.connectionStatus) return 'Connect';
 
     switch (selector.connectionStatus) {
-      case "approved":
-        return "Following";
-      case "pending":
-        return "Pending";
+      case 'approved':
+        return 'Following';
+      case 'pending':
+        return 'Pending';
       default:
-        return "Connect";
+        return 'Connect';
     }
   };
 
@@ -151,30 +149,30 @@ const ConnectionProfile = () => {
   };
 
   useEffect(() => {
-    if (selector.requestConnectionStatus === "completed") {
+    if (selector.requestConnectionStatus === 'completed') {
       dispatch(getRequestConnectionStatus(selector.profile?.id as string));
     }
   }, [selector.requestConnectionStatus]);
 
   const renderConnectionButton = () => {
-    if (selector.requestConnectionStatus === "loading")
+    if (selector.requestConnectionStatus === 'loading')
       return (
         <Button
-          loading={selector.requestConnectionStatus === "loading"}
+          loading={selector.requestConnectionStatus === 'loading'}
           disabled={requestButtonDisabled()}
           containerStyle={{ flex: 1 }}
           type={getButtonType()}
           title={getText()}
         />
       );
-    if (selector.connectionStatus === "pending") {
+    if (selector.connectionStatus === 'pending') {
       return (
         <Button
           onPress={handleUndoConnectionRequest}
           containerStyle={{ flex: 1 }}
-          type={"tertiary"}
+          type={'tertiary'}
           title={getText()}
-          loading={selector.undoConnectionStatus === "loading"}
+          loading={selector.undoConnectionStatus === 'loading'}
         />
       );
     }
@@ -184,7 +182,7 @@ const ConnectionProfile = () => {
         containerStyle={{ flex: 1 }}
         type={getButtonType()}
         title={getText()}
-        loading={selector.getConnectionStatus === "loading"}
+        loading={selector.getConnectionStatus === 'loading'}
       />
     );
   };
@@ -195,8 +193,8 @@ const ConnectionProfile = () => {
   };
 
   const initials = state?.userInfo?.email
-  ? `${state?.userInfo?.email[0]}${state?.userInfo?.email[1]}`.toLocaleUpperCase()
-  : "IN";
+    ? `${state?.userInfo?.email[0]}${state?.userInfo?.email[1]}`.toLocaleUpperCase()
+    : 'IN';
 
   return (
     <View
@@ -210,122 +208,123 @@ const ConnectionProfile = () => {
         // style={styles.contentWrapper}
       >
         <View>
-          {selector.profile?.profilePicture ? (<ImageBackground
-            resizeMode="cover"
-            source={
-              selector.profile?.profilePicture &&
-              selector.profile.profilePicture.trim() !== ""
-                ? { uri: selector.profile.profilePicture }
-                : require("../../../assets/image9.png")
-            }
-            style={[
-              styles.imageBg,
-              height * 0.4 > 240
-                ? { height: 240 }
-                : { height: height * 0.4, position: "relative" },
-            ]}
-          >
-            <View
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                height: "100%",
-                width: "100%",
-                backgroundColor: "rgba(0,0,0,0.5)",
-              }}
-            ></View>
-            <TouchableOpacity
-              onPress={handleBackNavigation}
-              style={[styles.imageHeaderWrapper]}
+          {selector.profile?.profilePicture ? (
+            <ImageBackground
+              resizeMode="cover"
+              source={
+                selector.profile?.profilePicture &&
+                selector.profile.profilePicture.trim() !== ''
+                  ? { uri: selector.profile.profilePicture }
+                  : require('../../../assets/image9.png')
+              }
+              style={[
+                styles.imageBg,
+                height * 0.4 > 240
+                  ? { height: 240 }
+                  : { height: height * 0.4, position: 'relative' },
+              ]}
             >
-              <AntDesign
-                name="arrowleft"
-                size={24}
+              <View
                 style={{
-                  textShadowColor: "rgba(0, 0, 0, 0.75)",
-                  textShadowRadius: 10,
-                  textShadowOffset: { width: 2, height: 2 },
-                  color: colors.white,
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  height: '100%',
+                  width: '100%',
+                  backgroundColor: 'rgba(0,0,0,0.5)',
                 }}
-              />
-            </TouchableOpacity>
-          </ImageBackground>): initials ? (
-						<View
-							style={[
-								styles.imageBg,
-								height * 0.4 > 240
-									? { height: 240 }
-									: { height: height * 0.4, position: "relative" },
-								{
-									flex: 1,
-									width: "100%",
-									justifyContent: "center",
-									alignItems: "center",
-									position: "relative",
-									backgroundColor: "#daf3ff",
-									top: -50,
-								},
-							]}
-						>
-							<View
-								style={{
-									position: "absolute",
-									alignSelf: "flex-start",
-									top: 50,
-								}}
-							>
-								<TouchableOpacity
-									onPress={() => navigation.goBack()}
-									style={[styles.imageHeaderWrapper]}
-								>
-									<AntDesign
-										name="arrowleft"
-										size={24}
-										style={{
-											textShadowColor: "#fff",
-											textShadowRadius: 10,
-											textShadowOffset: { width: 2, height: 2 },
-											color: "#000",
-										}}
-									/>
-								</TouchableOpacity>
-							</View>
+              ></View>
+              <TouchableOpacity
+                onPress={handleBackNavigation}
+                style={[styles.imageHeaderWrapper]}
+              >
+                <AntDesign
+                  name="arrowleft"
+                  size={24}
+                  style={{
+                    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+                    textShadowRadius: 10,
+                    textShadowOffset: { width: 2, height: 2 },
+                    color: colors.white,
+                  }}
+                />
+              </TouchableOpacity>
+            </ImageBackground>
+          ) : initials ? (
+            <View
+              style={[
+                styles.imageBg,
+                height * 0.4 > 240
+                  ? { height: 240 }
+                  : { height: height * 0.4, position: 'relative' },
+                {
+                  flex: 1,
+                  width: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  position: 'relative',
+                  backgroundColor: '#daf3ff',
+                  top: -50,
+                },
+              ]}
+            >
+              <View
+                style={{
+                  position: 'absolute',
+                  alignSelf: 'flex-start',
+                  top: 50,
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => navigation.goBack()}
+                  style={[styles.imageHeaderWrapper]}
+                >
+                  <AntDesign
+                    name="arrowleft"
+                    size={24}
+                    style={{
+                      textShadowColor: '#fff',
+                      textShadowRadius: 10,
+                      textShadowOffset: { width: 2, height: 2 },
+                      color: '#000',
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
 
-							<View
-								style={[
-									{
-										width: 100,
-										height: 100,
-										justifyContent: "center",
-										alignItems: "center",
-										borderRadius: 500,
-										backgroundColor: "#f1f3f9",
-									},
-								]}
-							>
-								<Text
-									style={[
-										GlobalStyles.fontWeight600,
-										GlobalStyles.textNavyBlue,
-										{
-											fontSize: 40,
-										},
-									]}
-								>
-									{initials}
-								</Text>
-							</View>
-						</View>
-					) : null}
-          
+              <View
+                style={[
+                  {
+                    width: 100,
+                    height: 100,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: 500,
+                    backgroundColor: '#f1f3f9',
+                  },
+                ]}
+              >
+                <Text
+                  style={[
+                    GlobalStyles.fontWeight600,
+                    GlobalStyles.textNavyBlue,
+                    {
+                      fontSize: 40,
+                    },
+                  ]}
+                >
+                  {initials}
+                </Text>
+              </View>
+            </View>
+          ) : null}
         </View>
         <View style={styles.contentWrapper}>
           <View
             style={[
               GlobalStyles.flewRow,
               GlobalStyles.mb10,
-              { justifyContent: "space-between" },
+              { justifyContent: 'space-between' },
             ]}
           >
             <View>
@@ -493,17 +492,17 @@ const FirstRoute = () => {
       selector.profile?.experience
         .filter(
           (item) =>
-            item.companyName !== "" &&
-            item.responsibilities?.trim() !== "" &&
-            item.jobTitle?.trim() !== ""
+            item.companyName !== '' &&
+            item.responsibilities?.trim() !== '' &&
+            item.jobTitle?.trim() !== '',
         )
         .map((item) => ({
           title: (
             <View
               style={{
-                justifyContent: "space-between",
-                flexDirection: "row",
-                width: "100%",
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+                width: '100%',
               }}
             >
               <Text
@@ -524,11 +523,11 @@ const FirstRoute = () => {
                 ]}
               >
                 {item.stillWorkHere ? (
-                  `${moment(item.startDate).format("MMM YYYY")} - PRESENT`
+                  `${moment(item.startDate).format('MMM YYYY')} - PRESENT`
                 ) : (
                   <Text>
-                    {moment(item.startDate).format("MMM YYYY")} -{" "}
-                    {moment(item.endDate).format("MMM YYYY")}
+                    {moment(item.startDate).format('MMM YYYY')} -{' '}
+                    {moment(item.endDate).format('MMM YYYY')}
                   </Text>
                 )}
               </Text>
@@ -566,8 +565,8 @@ const FirstRoute = () => {
         })) ||
       renderExperienceTimelineView({
         showExperienceModal: null,
-        title: "Experience",
-        actionTitle: "Add Experience",
+        title: 'Experience',
+        actionTitle: 'Add Experience',
       });
 
     return [
@@ -575,9 +574,9 @@ const FirstRoute = () => {
         title: (
           <View
             style={{
-              justifyContent: "space-between",
-              flexDirection: "row",
-              width: "100%",
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+              width: '100%',
             }}
           >
             <Text
@@ -611,9 +610,9 @@ const FirstRoute = () => {
         title: (
           <View
             style={{
-              justifyContent: "space-between",
-              flexDirection: "row",
-              width: "100%",
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+              width: '100%',
             }}
           >
             <Text
@@ -629,8 +628,8 @@ const FirstRoute = () => {
           <View style={[{ marginTop: -5 }]}>
             <View
               style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
+                flexDirection: 'row',
+                justifyContent: 'space-between',
                 marginTop: 10,
                 marginBottom: 20,
               }}
@@ -656,8 +655,8 @@ const FirstRoute = () => {
                 ]}
               >
                 <Text>
-                  {moment(item.startDate).format("MMM YYYY")} -{" "}
-                  {moment(item.endDate).format("MMM YYYY")}
+                  {moment(item.startDate).format('MMM YYYY')} -{' '}
+                  {moment(item.endDate).format('MMM YYYY')}
                 </Text>
               </Text>
             </View>
@@ -677,8 +676,8 @@ const FirstRoute = () => {
       })) ||
       renderExperienceTimelineView({
         showExperienceModal: null,
-        title: "Education",
-        actionTitle: "Add Education",
+        title: 'Education',
+        actionTitle: 'Add Education',
       });
 
     return [
@@ -686,9 +685,9 @@ const FirstRoute = () => {
         title: (
           <View
             style={{
-              justifyContent: "space-between",
-              flexDirection: "row",
-              width: "100%",
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+              width: '100%',
             }}
           >
             <Text
@@ -713,9 +712,9 @@ const FirstRoute = () => {
 
   const handleFileDownload = async (url: string) => {
     try {
-      if (!(url.startsWith("https") || url.startsWith("http"))) return;
+      if (!(url.startsWith('https') || url.startsWith('http'))) return;
 
-      url = url.startsWith("https://") ? url : `https://${url}`;
+      url = url.startsWith('https://') ? url : `https://${url}`;
 
       url = url.trim();
 
@@ -725,7 +724,7 @@ const FirstRoute = () => {
         await Linking.openURL(url);
       }
     } catch (error) {
-      console.log("Error opening Link", error);
+      console.log('Error opening Link', error);
     }
   };
 
@@ -735,9 +734,9 @@ const FirstRoute = () => {
         title: (
           <View
             style={{
-              justifyContent: "space-between",
-              flexDirection: "row",
-              width: "100%",
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+              width: '100%',
               marginBottom: 10,
             }}
           ></View>
@@ -745,7 +744,7 @@ const FirstRoute = () => {
         description: (
           <View style={[{ marginBottom: 10 }]}>
             <TouchableOpacity
-              style={{ flex: 1, flexDirection: "row", gap: 12 }}
+              style={{ flex: 1, flexDirection: 'row', gap: 12 }}
               onPress={() => handleFileDownload(item.url)}
             >
               <View
@@ -755,8 +754,8 @@ const FirstRoute = () => {
                   height: 40,
                   borderRadius: 4,
                   paddingHorizontal: 8,
-                  justifyContent: "center",
-                  alignItems: "center",
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}
               >
                 <Text
@@ -790,9 +789,9 @@ const FirstRoute = () => {
         title: (
           <View
             style={{
-              justifyContent: "space-between",
-              flexDirection: "row",
-              width: "100%",
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+              width: '100%',
             }}
           >
             <Text
@@ -826,7 +825,7 @@ const FirstRoute = () => {
 
             ...filterEducatio(),
             {
-              title: "Skills",
+              title: 'Skills',
               description: (
                 <View style={{ marginBottom: 20, paddingTop: 20 }}>
                   <Text
@@ -836,7 +835,7 @@ const FirstRoute = () => {
                       GlobalStyles.textNavyBlue,
                     ]}
                   >
-                    {selector.profile?.skills.join(",")}
+                    {selector.profile?.skills.join(',')}
                   </Text>
                 </View>
               ),
@@ -868,8 +867,8 @@ function TabViewExample() {
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    { key: "first", title: "Bio" },
-    { key: "second", title: "Feed" },
+    { key: 'first', title: 'Bio' },
+    { key: 'second', title: 'Feed' },
   ]);
 
   const renderTabBar = (props: any) => {
@@ -880,17 +879,17 @@ function TabViewExample() {
           const opacity = props.position.interpolate({
             inputRange,
             outputRange: inputRange.map((inputIndex: any) =>
-              inputIndex === i ? 1 : 0.5
+              inputIndex === i ? 1 : 0.5,
             ),
           });
           const color =
             index === i
-              ? useColorModeValue("#000", "#e5e5e5")
-              : useColorModeValue("#1f2937", "#a1a1aa");
+              ? useColorModeValue('#000', '#e5e5e5')
+              : useColorModeValue('#1f2937', '#a1a1aa');
           const borderColor =
             index === i
-              ? "#284453"
-              : useColorModeValue("coolGray.200", "gray.400");
+              ? '#284453'
+              : useColorModeValue('coolGray.200', 'gray.400');
           return (
             <Box
               borderBottomWidth="3"
@@ -935,7 +934,7 @@ function TabViewExample() {
 
 const styles = StyleSheet.create({
   imageBg: {
-    width: "100%",
+    width: '100%',
     height: 240,
     minHeight: 300,
   },
@@ -955,19 +954,19 @@ const styles = StyleSheet.create({
   },
   boxSummary: {
     flex: 1,
-    backgroundColor: "#F3F5F7",
+    backgroundColor: '#F3F5F7',
     paddingVertical: 15,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 10,
   },
   tabBar: {
-    flexDirection: "row",
+    flexDirection: 'row',
     paddingTop: StatusBar.currentHeight,
   },
   tabItem: {
     flex: 1,
-    alignItems: "center",
+    alignItems: 'center',
     padding: 16,
   },
 });

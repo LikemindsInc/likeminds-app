@@ -4,52 +4,52 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import { GlobalStyles } from "../../../theme/GlobalStyles";
-import Input from "../../../components/Input/Input";
-import React, { useEffect, useState } from "react";
-import Button from "../../../components/Button/Button";
-import TextLink from "../../../components/TextLink/TextLink";
-import colors from "../../../theme/colors";
-import DatePicker from "../../../components/DatePicker/DatePicker";
-import { APP_SCREEN_LIST } from "../../../constants";
-import { useNavigation } from "@react-navigation/native";
-import BackButton from "../../../components/Navigation/BackButton/BackButton";
-import useAppSelector from "../../../hooks/useAppSelector";
-import { useToast } from "react-native-toast-notifications";
-import useAppDispatch from "../../../hooks/useAppDispatch";
+} from 'react-native';
+import { GlobalStyles } from '../../../theme/GlobalStyles';
+import Input from '../../../components/Input/Input';
+import React, { useEffect, useState } from 'react';
+import Button from '../../../components/Button/Button';
+import TextLink from '../../../components/TextLink/TextLink';
+import colors from '../../../theme/colors';
+import DatePicker from '../../../components/DatePicker/DatePicker';
+import { APP_SCREEN_LIST } from '../../../constants';
+import { useNavigation } from '@react-navigation/native';
+import BackButton from '../../../components/Navigation/BackButton/BackButton';
+import useAppSelector from '../../../hooks/useAppSelector';
+import { useToast } from 'react-native-toast-notifications';
+import useAppDispatch from '../../../hooks/useAppDispatch';
 import {
   completeUserProfileAction,
   updateSkillsProfileAction,
-} from "../../../actions/auth";
+} from '../../../actions/auth';
 import {
   clearCompleteProfileStatus,
   updateSkills,
-} from "../../../reducers/session";
+} from '../../../reducers/userProfileSession';
 
 const SUGGESTIONS = [
-  "App Design",
-  "User Experience",
-  "UX/UI",
-  "Figma",
-  "Adobe",
-  "Sketch",
-  "Wireframes",
+  'App Design',
+  'User Experience',
+  'UX/UI',
+  'Figma',
+  'Adobe',
+  'Sketch',
+  'Wireframes',
 ];
 
 const SkillsForm = () => {
   const navigation = useNavigation<any>();
   const session = useAppSelector((state: any) => state.sessionReducer);
-  const [skills, setSkills] = useState("");
+  const [skills, setSkills] = useState('');
   const toast = useToast();
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
 
   const dispatch = useAppDispatch();
   const handleOnNextPress = () => {
-    if (skills.trim() === "")
-      return toast.show("Please provide skills", { type: "normal" });
+    if (skills.trim() === '')
+      return toast.show('Please provide skills', { type: 'normal' });
 
-    dispatch(updateSkills(skills.split(",")));
+    dispatch(updateSkills(skills.split(',')));
     setTimeout(() => {
       dispatch(updateSkillsProfileAction(session.profileData));
     }, 300);
@@ -77,10 +77,10 @@ const SkillsForm = () => {
 
     if (index !== -1) {
       const addedSkills = skills
-        .split(",")
+        .split(',')
         .map((item) => item.trim())
         .filter((item) => item !== selectedSkills[index])
-        .join(", ");
+        .join(', ');
 
       state.splice(index, 1);
 
@@ -94,28 +94,28 @@ const SkillsForm = () => {
     const allSkills = selectedSkills;
 
     const addedSkills = skills
-      .split(",")
+      .split(',')
       .map((item) => item.trim())
       .filter((item) => !allSkills.includes(item));
 
     const filtered = [...addedSkills, ...allSkills]
 
       .map((item) => item.trim())
-      .filter((item) => item !== "," && item.trim() !== "");
+      .filter((item) => item !== ',' && item.trim() !== '');
 
     const set = new Set(filtered);
 
-    const newSkills = Array.from(set).join(", ");
+    const newSkills = Array.from(set).join(', ');
 
     setSkills(newSkills);
   }, [selectedSkills]);
 
   useEffect(() => {
-    const skillsList = skills.split(",").map((item) => item.toLowerCase());
+    const skillsList = skills.split(',').map((item) => item.toLowerCase());
     const i2 = [...selectedSkills];
 
     const i3 = selectedSkills.filter((item) =>
-      skillsList.includes(item.toLowerCase())
+      skillsList.includes(item.toLowerCase()),
     );
 
     setSelectedSkills(i3);
@@ -157,9 +157,9 @@ const SkillsForm = () => {
 
         <View
           style={{
-            flexDirection: "row",
-            flexWrap: "wrap",
-            alignSelf: "flex-start",
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            alignSelf: 'flex-start',
             gap: 10,
             // marginBottom: 20,
           }}
@@ -172,12 +172,12 @@ const SkillsForm = () => {
                 borderRadius: 30,
                 borderColor: selectedSkills.includes(item)
                   ? colors.primary
-                  : "#88969D",
+                  : '#88969D',
                 borderWidth: 1,
 
-                flexDirection: "row",
-                flexWrap: "wrap",
-                alignSelf: "flex-start",
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                alignSelf: 'flex-start',
               }}
               key={i}
               onPress={() => addSelectedSkill(item)}
@@ -200,7 +200,7 @@ const SkillsForm = () => {
       </ScrollView>
       <View>
         <Button
-          loading={session.completeProfileStatus === "loading"}
+          loading={session.completeProfileStatus === 'loading'}
           title="Save"
           onPress={handleOnNextPress}
         />
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inputDouble: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 20,
   },
   inputFlex: {

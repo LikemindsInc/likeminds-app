@@ -1,16 +1,16 @@
-import { Text, View } from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import BackButton from "../../components/Navigation/BackButton/BackButton";
-import colors from "../../theme/colors";
-import DropZone from "../../components/DropZone/DropZone";
-import Button from "../../components/Button/Button";
-import * as DocumentPicker from "expo-document-picker";
-import * as ImagePicker from "expo-image-picker";
-import { useEffect, useState } from "react";
-import { APP_SCREEN_LIST } from "../../constants";
-import { useNavigation } from "@react-navigation/native";
-import useAppDispatch from "../../hooks/useAppDispatch";
-import { updateProfilePicture } from "../../reducers/session";
+import { Text, View } from 'react-native';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import BackButton from '../../components/Navigation/BackButton/BackButton';
+import colors from '../../theme/colors';
+import DropZone from '../../components/DropZone/DropZone';
+import Button from '../../components/Button/Button';
+import * as DocumentPicker from 'expo-document-picker';
+import * as ImagePicker from 'expo-image-picker';
+import { useEffect, useState } from 'react';
+import { APP_SCREEN_LIST } from '../../constants';
+import { useNavigation } from '@react-navigation/native';
+import useAppDispatch from '../../hooks/useAppDispatch';
+import { updateProfilePicture } from '../../reducers/userProfileSession';
 
 const SignupProfilePicture = () => {
   const navigation = useNavigation<any>();
@@ -20,7 +20,7 @@ const SignupProfilePicture = () => {
     DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult | null
   >(null);
   const handleOnFileSelect = (
-    file: DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult
+    file: DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult,
   ) => {
     setFile(file);
     return null;
@@ -55,7 +55,7 @@ const SignupProfilePicture = () => {
         </Text>
       </View>
       <View style={{ flex: 1 }}>
-        <DropZone style={{ height: "60%" }} onSelect={handleOnFileSelect} />
+        <DropZone style={{ height: '60%' }} onSelect={handleOnFileSelect} />
       </View>
       <Button
         disabled={isDisabled}

@@ -1,4 +1,4 @@
-import { IFlatListProps } from "native-base/lib/typescript/components/basic/FlatList";
+import { IFlatListProps } from 'native-base/lib/typescript/components/basic/FlatList';
 import {
   FC,
   LegacyRef,
@@ -7,7 +7,7 @@ import {
   useMemo,
   useRef,
   useState,
-} from "react";
+} from 'react';
 import {
   Image,
   KeyboardAvoidingView,
@@ -15,21 +15,21 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import colors from "../../theme/colors";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import { Feather, AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
-import { IPostCommentFeed, IPostFeed } from "@app-model";
-import useAppSelector from "../../hooks/useAppSelector";
-import { ISettingState } from "../../reducers/settings";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+} from 'react-native';
+import colors from '../../theme/colors';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import { Feather, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
+import { IPostCommentFeed, IPostFeed } from '@app-model';
+import useAppSelector from '../../hooks/useAppSelector';
+import { ISettingState } from '../../reducers/settings';
+import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import {
   IPostState,
   clearCreateCommentOnPostState,
   openReactionList,
   savePostDetail,
-} from "../../reducers/post_reducer";
-import useAppDispatch from "../../hooks/useAppDispatch";
+} from '../../reducers/post_reducer';
+import useAppDispatch from '../../hooks/useAppDispatch';
 import {
   commentOnPostAction,
   getCommentsOnPostAction,
@@ -37,20 +37,20 @@ import {
   getPostReactions,
   likePostAction,
   unlikePostAction,
-} from "../../actions/post";
-import ReadMore from "react-native-read-more-text";
-import Input from "../Input/Input";
-import { Spinner, useToast } from "native-base";
-import { ScrollView } from "react-native-gesture-handler";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { APP_SCREEN_LIST } from "../../constants";
-import FbGrid from "react-native-fb-image-grid";
-import ReactionIcon from "../ReactionIcon/ReactionIcon";
-import { getProfile } from "../../reducers/connection";
-import FullScreenImageCarousel from "../FullScreenImageCarousel/FullScreenImageCarousel";
-import { Video, ResizeMode } from "expo-av";
-import { IOScrollView, InView } from "react-native-intersection-observer";
-import VideoPlayer from "expo-video-player";
+} from '../../actions/post';
+import ReadMore from 'react-native-read-more-text';
+import Input from '../Input/Input';
+import { Spinner, useToast } from 'native-base';
+import { ScrollView } from 'react-native-gesture-handler';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { APP_SCREEN_LIST } from '../../constants';
+import FbGrid from 'react-native-fb-image-grid';
+import ReactionIcon from '../ReactionIcon/ReactionIcon';
+import { getProfile } from '../../reducers/connection';
+import FullScreenImageCarousel from '../FullScreenImageCarousel/FullScreenImageCarousel';
+import { Video, ResizeMode } from 'expo-av';
+import { IOScrollView, InView } from 'react-native-intersection-observer';
+import VideoPlayer from 'expo-video-player';
 
 interface IProps {
   item: IPostFeed;
@@ -58,10 +58,10 @@ interface IProps {
 
 const StoryFeedItem: FC<IProps> = ({ item }) => {
   const state = useAppSelector(
-    (state: any) => state.settingReducer
+    (state: any) => state.settingReducer,
   ) as ISettingState;
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["50%", "60%"], []);
+  const snapPoints = useMemo(() => ['50%', '60%'], []);
 
   const handleSheetChanges = useCallback((index: number) => {}, []);
 
@@ -73,10 +73,10 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
 
   const navigation = useNavigation<NavigationProp<any>>();
 
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState('');
 
   const postState = useAppSelector(
-    (state: any) => state.postReducer
+    (state: any) => state.postReducer,
   ) as IPostState;
 
   const [isPostLiked, setLiked] = useState(false);
@@ -99,8 +99,8 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
 
   useEffect(() => {
     if (
-      postState.likePostStatus === "completed" ||
-      postState.unlikePostStatus === "completed"
+      postState.likePostStatus === 'completed' ||
+      postState.unlikePostStatus === 'completed'
     ) {
       dispatch(getPostFeedAction());
     }
@@ -111,16 +111,16 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
   }, [showComments]);
 
   useEffect(() => {
-    if (postState.commentOnPostStatus === "failed") {
+    if (postState.commentOnPostStatus === 'failed') {
       toast.show({ description: postState.commentOnPostError });
-    } else if (postState.commentOnPostStatus === "completed") {
-      setComment("");
+    } else if (postState.commentOnPostStatus === 'completed') {
+      setComment('');
       dispatch(clearCreateCommentOnPostState());
     }
   }, [postState.commentOnPostStatus]);
 
   useEffect(() => {
-    if (postState.getCommentOnPostStatus === "failed") {
+    if (postState.getCommentOnPostStatus === 'failed') {
       toast.show({ description: postState.commentOnPostError });
     }
   }, [postState.getCommentOnPostStatus]);
@@ -184,17 +184,17 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
 
   const renderCommentRowItem = (item: IPostCommentFeed) => {
     return (
-      <View style={[GlobalStyles.mb5, { flexDirection: "row", gap: 12 }]}>
+      <View style={[GlobalStyles.mb5, { flexDirection: 'row', gap: 12 }]}>
         <View style={[styles.storyHeader]}>
           <TouchableOpacity
-            style={{ flexDirection: "row", alignItems: "center" }}
+            style={{ flexDirection: 'row', alignItems: 'center' }}
           >
             <View>
               <Image
                 source={
                   item.user?.profilePicture
                     ? { uri: item.user.profilePicture }
-                    : require("../../../assets/imageAvatar.jpeg")
+                    : require('../../../assets/imageAvatar.jpeg')
                 }
                 style={{ width: 30, height: 30, borderRadius: 15 }}
               />
@@ -230,14 +230,14 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
           </ReadMore>
         </View>
         <View>
-          <AntDesign name={"hearto"} size={14} color={colors.navyBlue} />
+          <AntDesign name={'hearto'} size={14} color={colors.navyBlue} />
         </View>
       </View>
     );
   };
 
   const handlePostComment = () => {
-    if (comment.trim() === "") return;
+    if (comment.trim() === '') return;
 
     dispatch(commentOnPostAction({ postId: item.id, comment }));
   };
@@ -276,7 +276,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
             Comments
           </Text>
           <View>
-            {postState.getCommentOnPostStatus === "loading" && (
+            {postState.getCommentOnPostStatus === 'loading' && (
               <Spinner
                 accessibilityLabel="Loading comments"
                 color="emerald.500"
@@ -330,7 +330,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
       <View>
         <View style={styles.storyHeader}>
           <TouchableOpacity
-            style={{ flexDirection: "row", alignItems: "center" }}
+            style={{ flexDirection: 'row', alignItems: 'center' }}
             onPress={handleNavigationToProfileScreen}
           >
             <View>
@@ -338,7 +338,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
                 source={
                   item.user?.profilePicture
                     ? { uri: item.user.profilePicture }
-                    : require("../../../assets/imageAvatar.jpeg")
+                    : require('../../../assets/imageAvatar.jpeg')
                 }
                 style={{ width: 40, height: 40, borderRadius: 20 }}
               />
@@ -355,7 +355,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
               {item?.user?.firstName} {item?.user?.lastName}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{ justifyContent: "center" }}>
+          <TouchableOpacity style={{ justifyContent: 'center' }}>
             <Feather name="more-horizontal" size={24} color={colors.grey} />
           </TouchableOpacity>
         </View>
@@ -380,7 +380,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
         </TouchableOpacity>
 
         {item.images && item.images.length > 0 ? (
-          <View style={{ width: "100%", height: 300 }}>
+          <View style={{ width: '100%', height: 300 }}>
             <FbGrid images={item.images} onPress={onPress} />
           </View>
         ) : null}
@@ -397,7 +397,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
                         uri: item,
                       },
                       style: {
-                        width: "100%",
+                        width: '100%',
                         height: 300,
                         borderRadius: 16,
                       },
@@ -429,12 +429,12 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
           GlobalStyles.mt10,
           GlobalStyles.mb10,
           {
-            alignItems: "center",
-            flexDirection: "row",
+            alignItems: 'center',
+            flexDirection: 'row',
           },
         ]}
       >
-        <View style={[{ gap: 12, alignItems: "center", flexDirection: "row" }]}>
+        <View style={[{ gap: 12, alignItems: 'center', flexDirection: 'row' }]}>
           <TouchableOpacity onPress={() => getReactionOnPost(item.id)}>
             <Text
               style={[
@@ -462,10 +462,10 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
           style={[
             {
               gap: 20,
-              justifyContent: "flex-end",
+              justifyContent: 'flex-end',
               flex: 1,
-              flexDirection: "row",
-              width: "100%",
+              flexDirection: 'row',
+              width: '100%',
             },
           ]}
         >
@@ -508,12 +508,12 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   storyHeader: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginBottom: 15,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   image: {
-    width: "100%",
+    width: '100%',
     borderRadius: 10,
     height: 300,
   },
