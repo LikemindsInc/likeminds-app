@@ -133,7 +133,7 @@ const Login = () => {
         >
           <Text
             style={[
-              GlobalStyles.fontInterMedium,
+              // GlobalStyles.fontInterMedium,
               GlobalStyles.fontSize13,
               GlobalStyles.fontWeight700,
               GlobalStyles.textPrimary,

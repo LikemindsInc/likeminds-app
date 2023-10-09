@@ -43,12 +43,13 @@ const AutoCompleteInput: FC<IProps> = ({ data, value, onChangeText }) => {
               }}
               style={[
                 {
-                  marginBottom: 10,
+                  // marginBottom: 10,
                   borderBottomWidth: StyleSheet.hairlineWidth,
                   borderBottomColor: colors.grey,
-                  paddingTop: 10,
-                  paddingLeft: 10,
-                  paddingBottom: 10,
+                  // paddingTop: 10,
+                  // paddingLeft: 10,
+                  // paddingBottom: 10,
+                  
                 },
               ]}
             >
@@ -79,15 +80,10 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   input: {
-    paddingLeft: 16,
-    backgroundColor: "#F3F5F7",
+    paddingVertical: 7.5,
+    paddingHorizontal: 20,
+    backgroundColor: "#fff",
     borderRadius: 8,
-    // height: 60,
-    // paddingLeft: 16,
-    // paddingRight: 16,
-    // borderRadius: 10,
-    // marginBottom: 6,
-    // width: "100%",
   },
 });
 

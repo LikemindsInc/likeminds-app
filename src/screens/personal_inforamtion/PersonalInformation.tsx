@@ -214,14 +214,15 @@ const PersonalInformation = () => {
             boxStyles={{
               borderWidth: 0,
               backgroundColor: colors.white,
+              paddingVertical: 20,
               shadowColor: "#000",
               shadowOffset: {
                 width: 0,
-                height: 2,
+                height: 4,
               },
-              shadowOpacity: 0.25,
-              shadowRadius: 3.84,
-              elevation: 20,
+              shadowOpacity: 0.1,
+              shadowRadius: 16,
+              elevation: 4,
             }}
             save="key"
             setSelected={(val: string) => setCountry(val)}
@@ -263,15 +264,16 @@ const PersonalInformation = () => {
           <SelectList
             boxStyles={{
               borderWidth: 0,
+              paddingVertical: 21,
               backgroundColor: colors.white,
               shadowColor: "#000",
               shadowOffset: {
                 width: 0,
-                height: 0,
+                height: 4,
               },
-              shadowOpacity: 0.25,
-              shadowRadius: 3.84,
-              elevation: 20,
+              shadowOpacity: 0.1,
+              shadowRadius: 16,
+              elevation: 4,
             }}
             save="key"
             fontFamily="Inter-Regular"
