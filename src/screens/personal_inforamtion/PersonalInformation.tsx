@@ -17,7 +17,7 @@ import { PURGE } from "redux-persist";
 import {
   ISessionState,
   updatePersonalInformation,
-} from "../../reducers/session";
+} from "../../reducers/userProfileSession";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import { SelectList } from "react-native-dropdown-select-list";

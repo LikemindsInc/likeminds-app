@@ -25,7 +25,7 @@ import {
 import {
   clearCompleteProfileStatus,
   updateSkills,
-} from "../../../reducers/session";
+} from "../../../reducers/userProfileSession";
 
 const SUGGESTIONS = [
   "App Design",

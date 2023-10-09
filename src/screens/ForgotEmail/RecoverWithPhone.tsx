@@ -9,7 +9,10 @@ import { APP_SCREEN_LIST } from "../../constants";
 import { useEffect, useState } from "react";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
-import { ISessionState, storeOTPChannelValue } from "../../reducers/session";
+import {
+  ISessionState,
+  storeOTPChannelValue,
+} from "../../reducers/userProfileSession";
 import { requestOTPPhoneAction } from "../../actions/auth";
 import BackButton from "../../components/Navigation/BackButton/BackButton";
 import Util from "../../utils";
@@ -29,9 +32,8 @@ const RecoverWithPhone = () => {
 
   const handleOnNextPress = () => {
     let formattedPhone = "";
-    dispatch(clearNetworkError())
-    if (!countryCode.trim())
-      return setErrorMessage("Please select country");
+    dispatch(clearNetworkError());
+    if (!countryCode.trim()) return setErrorMessage("Please select country");
 
     if (phone.trim() === "")
       return setErrorMessage("Please provide your phone number");
@@ -39,9 +41,7 @@ const RecoverWithPhone = () => {
     setErrorMessage(null);
 
     dispatch(storeOTPChannelValue(`phone_${countryCode}${formattedPhone}`));
-    dispatch(
-      requestOTPPhoneAction({ phone: `${countryCode}${phone}` })
-    );
+    dispatch(requestOTPPhoneAction({ phone: `${countryCode}${phone}` }));
   };
 
   useEffect(() => {
@@ -56,10 +56,10 @@ const RecoverWithPhone = () => {
   }, [session.requestOTPPhoneStatus]);
 
   const handleChange = (text: string) => {
-    if(text.length > 10) return
+    if (text.length > 10) return;
     const newNumberText = Util.getNumber(text);
-    setPhone(newNumberText)
-  }
+    setPhone(newNumberText);
+  };
 
   return (
     <View style={[GlobalStyles.container]}>
@@ -80,18 +80,18 @@ const RecoverWithPhone = () => {
           </Text>
         </View>
         {errorReducer.message ? (
-				<View style={[GlobalStyles.mb20]}>
-					<Text
-						style={[
-							GlobalStyles.fontInterRegular,
-							GlobalStyles.fontSize13,
-							GlobalStyles.textRed,
-						]}
-					>
-						{errorReducer.message}
-					</Text>
-				</View>
-			) : null}
+          <View style={[GlobalStyles.mb20]}>
+            <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textRed,
+              ]}
+            >
+              {errorReducer.message}
+            </Text>
+          </View>
+        ) : null}
         <View style={[GlobalStyles.mb20]}>
           <Input
             placeholder="Phone Number"

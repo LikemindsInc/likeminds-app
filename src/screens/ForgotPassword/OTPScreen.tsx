@@ -15,7 +15,7 @@ import {
   clearEmailPhoneOtpVerificationStatus,
   clearResendOtpStatus,
   storeOtpCode,
-} from "../../reducers/session";
+} from "../../reducers/userProfileSession";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import {
   resendOTPAction,
@@ -55,7 +55,7 @@ const OTPEmailScreen = () => {
   };
 
   const handleTextChange = (text: string) => {
-    const numericText = Util.getNumber(text)
+    const numericText = Util.getNumber(text);
     setOTP(numericText);
   };
 

@@ -17,7 +17,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import OTPTextInput from "react-native-otp-textinput";
 import useAppSelector from "../../hooks/useAppSelector";
-import { ISessionState, clearResendOtpStatus } from "../../reducers/session";
+import {
+  ISessionState,
+  clearResendOtpStatus,
+} from "../../reducers/userProfileSession";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import { resendOTPAction, verifyOTPActionAction } from "../../actions/auth";
 import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
@@ -76,8 +79,10 @@ const OTPVerification = () => {
     }
   }, [session.resendOtpStatus]);
 
-
-  const  phone = session && session?.profileData?.phoneNumber ? session?.profileData?.phoneNumber : 'your phone number'
+  const phone =
+    session && session?.profileData?.phoneNumber
+      ? session?.profileData?.phoneNumber
+      : "your phone number";
 
   return (
     <KeyboardDismisser style={{ flex: 1 }}>
@@ -93,10 +98,12 @@ const OTPVerification = () => {
                 GlobalStyles.textGrey,
               ]}
             >
-              Enter the 4 digit verification code sent to <Text style={[
-                GlobalStyles.fontWeight700,
-                GlobalStyles.textBlack
-              ]}>{phone}</Text>
+              Enter the 4 digit verification code sent to{" "}
+              <Text
+                style={[GlobalStyles.fontWeight700, GlobalStyles.textBlack]}
+              >
+                {phone}
+              </Text>
             </Text>
           </View>
           {errorReducer?.message ? (

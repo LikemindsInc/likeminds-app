@@ -10,7 +10,10 @@ import { useEffect, useState } from "react";
 import { requestOTPEmailAction } from "../../actions/auth";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
-import { ISessionState, storeOTPChannelValue } from "../../reducers/session";
+import {
+  ISessionState,
+  storeOTPChannelValue,
+} from "../../reducers/userProfileSession";
 import BackButton from "../../components/Navigation/BackButton/BackButton";
 import { useToast } from "react-native-toast-notifications";
 

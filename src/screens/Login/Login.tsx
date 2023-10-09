@@ -7,7 +7,10 @@ import { GlobalStyles } from "../../theme/GlobalStyles";
 import TextLink from "../../components/TextLink/TextLink";
 import { APP_SCREEN_LIST, PENDING_OTP_MESSAGE } from "../../constants";
 import useAppSelector from "../../hooks/useAppSelector";
-import { ISessionState, updatePhoneNumber } from "../../reducers/session";
+import {
+  ISessionState,
+  updatePhoneNumber,
+} from "../../reducers/userProfileSession";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import { loginUserActionAction } from "../../actions/auth";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
@@ -63,7 +66,6 @@ const Login = () => {
   }, [session.signingInStatus]);
 
   useEffect(() => {
-    dispatch(clearNetworkError());
     if (errorReducer.message === PENDING_OTP_MESSAGE) {
       navigation.navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
       dispatch(clearNetworkError());

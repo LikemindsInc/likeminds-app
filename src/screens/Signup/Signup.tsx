@@ -17,12 +17,11 @@ import {
   ISessionState,
   clearSignupStatus,
   updatePhoneNumber,
-} from "../../reducers/session";
+} from "../../reducers/userProfileSession";
 import { signupUserActionAction } from "../../actions/auth";
 import BackButton from "../../components/Navigation/BackButton/BackButton";
 import { initialSignupValues, signupValidator } from "./validator";
 import Util from "../../utils";
-import { clearNetworkError } from "../../reducers/errorHanlder";
 
 const Signup = () => {
   const toast = useToast();
@@ -85,15 +84,11 @@ const Signup = () => {
 
   const navigation = useNavigation<NavigationProp<any>>();
 
-	// handle numbers only no text
-	const handlePhoneTextChange = (newText: string) => {
-		const numericText = Util.getNumber(newText)
-		setFieldValue('phone', numericText);
-	}
-
-  useEffect( () => {
-    dispatch(clearNetworkError());
-  }, [])
+  // handle numbers only no text
+  const handlePhoneTextChange = (newText: string) => {
+    const numericText = Util.getNumber(newText);
+    setFieldValue("phone", numericText);
+  };
 
   return (
     <View style={[GlobalStyles.container]}>

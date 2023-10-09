@@ -17,7 +17,10 @@ import { Checkbox } from "native-base";
 import { APP_SCREEN_LIST } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
 import useAppSelector from "../../hooks/useAppSelector";
-import { ISessionState, updateExperience } from "../../reducers/session";
+import {
+  ISessionState,
+  updateExperience,
+} from "../../reducers/userProfileSession";
 import { ISettingState } from "../../reducers/settings";
 import { AntDesign } from "@expo/vector-icons";
 import DateFormatter from "../../utils/date-formatter";

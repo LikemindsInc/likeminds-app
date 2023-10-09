@@ -20,7 +20,7 @@ import { Profiler, useCallback, useEffect, useState } from "react";
 import { StatusBar } from "react-native";
 import { Box, Pressable, useColorModeValue } from "native-base";
 import useAppSelector from "../../hooks/useAppSelector";
-import { ISessionState } from "../../reducers/session";
+import { ISessionState } from "../../reducers/userProfileSession";
 import { ISettingState } from "../../reducers/settings";
 import StoryFeedList from "../Home/components/StoryFeedList";
 import useAppDispatch from "../../hooks/useAppDispatch";
@@ -31,9 +31,7 @@ import {
   undoConnectionRequest,
 } from "../../actions/connection";
 import { useToast } from "react-native-toast-notifications";
-import {
-  clearConnectionProfileData,
-} from "../../reducers/connection";
+import { clearConnectionProfileData } from "../../reducers/connection";
 import UserExperience from "./components/UserExperience";
 import ConnectionPostFeed from "./components/ConnectionPostFeed";
 import ReadMore from "react-native-read-more-text";
@@ -195,8 +193,8 @@ const ConnectionProfile = () => {
   };
 
   const initials = state?.userInfo?.email
-  ? `${state?.userInfo?.email[0]}${state?.userInfo?.email[1]}`.toLocaleUpperCase()
-  : "IN";
+    ? `${state?.userInfo?.email[0]}${state?.userInfo?.email[1]}`.toLocaleUpperCase()
+    : "IN";
 
   return (
     <View
@@ -210,116 +208,117 @@ const ConnectionProfile = () => {
         // style={styles.contentWrapper}
       >
         <View>
-        {initials ? (
-						<View
-							style={[
-								styles.imageBg,
-								height * 0.4 > 240
-									? { height: 240 }
-									: { height: height * 0.4, position: "relative" },
-								{
-									flex: 1,
-									width: "100%",
-									justifyContent: "center",
-									alignItems: "center",
-									position: "relative",
-									backgroundColor: "#daf3ff",
-									top: -50,
-								},
-							]}
-						>
-							<View
-								style={{
-									position: "absolute",
-									alignSelf: "flex-start",
-									top: 50,
-								}}
-							>
-								<TouchableOpacity
-									onPress={() => navigation.goBack()}
-									style={[styles.imageHeaderWrapper]}
-								>
-									<AntDesign
-										name="arrowleft"
-										size={24}
-										style={{
-											textShadowColor: "#fff",
-											textShadowRadius: 10,
-											textShadowOffset: { width: 2, height: 2 },
-											color: "#000",
-										}}
-									/>
-								</TouchableOpacity>
-							</View>
-
-							<View
-								style={[
-									{
-										width: 100,
-										height: 100,
-										justifyContent: "center",
-										alignItems: "center",
-										borderRadius: 500,
-										backgroundColor: "#f1f3f9",
-									},
-								]}
-							>
-								<Text
-									style={[
-										GlobalStyles.fontWeight600,
-										GlobalStyles.textNavyBlue,
-										{
-											fontSize: 40,
-										},
-									]}
-								>
-									{initials}
-								</Text>
-							</View>
-						</View>
-					) : null}
-          {selector.profile?.profilePicture ? (<ImageBackground
-            resizeMode="cover"
-            source={
-              selector.profile?.profilePicture &&
-              selector.profile.profilePicture.trim() !== ""
-                ? { uri: selector.profile.profilePicture }
-                : require("../../../assets/image9.png")
-            }
-            style={[
-              styles.imageBg,
-              height * 0.4 > 240
-                ? { height: 240 }
-                : { height: height * 0.4, position: "relative" },
-            ]}
-          >
+          {initials ? (
             <View
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                height: "100%",
-                width: "100%",
-                backgroundColor: "rgba(0,0,0,0.5)",
-              }}
-            ></View>
-            <TouchableOpacity
-              onPress={handleBackNavigation}
-              style={[styles.imageHeaderWrapper]}
+              style={[
+                styles.imageBg,
+                height * 0.4 > 240
+                  ? { height: 240 }
+                  : { height: height * 0.4, position: "relative" },
+                {
+                  flex: 1,
+                  width: "100%",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  position: "relative",
+                  backgroundColor: "#daf3ff",
+                  top: -50,
+                },
+              ]}
             >
-              <AntDesign
-                name="arrowleft"
-                size={24}
+              <View
                 style={{
-                  textShadowColor: "rgba(0, 0, 0, 0.75)",
-                  textShadowRadius: 10,
-                  textShadowOffset: { width: 2, height: 2 },
-                  color: colors.white,
+                  position: "absolute",
+                  alignSelf: "flex-start",
+                  top: 50,
                 }}
-              />
-            </TouchableOpacity>
-          </ImageBackground>): null}
-          
+              >
+                <TouchableOpacity
+                  onPress={() => navigation.goBack()}
+                  style={[styles.imageHeaderWrapper]}
+                >
+                  <AntDesign
+                    name="arrowleft"
+                    size={24}
+                    style={{
+                      textShadowColor: "#fff",
+                      textShadowRadius: 10,
+                      textShadowOffset: { width: 2, height: 2 },
+                      color: "#000",
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
+
+              <View
+                style={[
+                  {
+                    width: 100,
+                    height: 100,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderRadius: 500,
+                    backgroundColor: "#f1f3f9",
+                  },
+                ]}
+              >
+                <Text
+                  style={[
+                    GlobalStyles.fontWeight600,
+                    GlobalStyles.textNavyBlue,
+                    {
+                      fontSize: 40,
+                    },
+                  ]}
+                >
+                  {initials}
+                </Text>
+              </View>
+            </View>
+          ) : null}
+          {selector.profile?.profilePicture ? (
+            <ImageBackground
+              resizeMode="cover"
+              source={
+                selector.profile?.profilePicture &&
+                selector.profile.profilePicture.trim() !== ""
+                  ? { uri: selector.profile.profilePicture }
+                  : require("../../../assets/image9.png")
+              }
+              style={[
+                styles.imageBg,
+                height * 0.4 > 240
+                  ? { height: 240 }
+                  : { height: height * 0.4, position: "relative" },
+              ]}
+            >
+              <View
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  height: "100%",
+                  width: "100%",
+                  backgroundColor: "rgba(0,0,0,0.5)",
+                }}
+              ></View>
+              <TouchableOpacity
+                onPress={handleBackNavigation}
+                style={[styles.imageHeaderWrapper]}
+              >
+                <AntDesign
+                  name="arrowleft"
+                  size={24}
+                  style={{
+                    textShadowColor: "rgba(0, 0, 0, 0.75)",
+                    textShadowRadius: 10,
+                    textShadowOffset: { width: 2, height: 2 },
+                    color: colors.white,
+                  }}
+                />
+              </TouchableOpacity>
+            </ImageBackground>
+          ) : null}
         </View>
         <View style={styles.contentWrapper}>
           <View

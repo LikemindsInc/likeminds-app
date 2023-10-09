@@ -21,7 +21,7 @@ import {
   ISessionState,
   clearCompleteProfileStatus,
   updateExperience,
-} from "../../../reducers/session";
+} from "../../../reducers/userProfileSession";
 import { ISettingState } from "../../../reducers/settings";
 import { AntDesign } from "@expo/vector-icons";
 import DateFormatter from "../../../utils/date-formatter";

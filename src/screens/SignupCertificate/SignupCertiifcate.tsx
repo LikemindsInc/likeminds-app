@@ -14,7 +14,10 @@ import { completeUserProfileAction } from "../../actions/auth";
 import { FilePickerFormat } from "@app-model";
 import { FileUploadEmptyIcon } from "../personal_inforamtion/PersonalInformation";
 import { GlobalStyles } from "../../theme/GlobalStyles";
-import { ISessionState, updateCertificate } from "../../reducers/session";
+import {
+  ISessionState,
+  updateCertificate,
+} from "../../reducers/userProfileSession";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useToast } from "react-native-toast-notifications";
@@ -41,8 +44,6 @@ const SignupCertificate = () => {
     setFile(file);
     return null;
   };
-
-
 
   const handleOnNextPress = () => {
     if (file) {
@@ -74,7 +75,7 @@ const SignupCertificate = () => {
     handleOnNextPress();
   };
 
-  console.log(errorReducer)
+  console.log(errorReducer);
 
   return (
     <View style={[GlobalStyles.container]}>

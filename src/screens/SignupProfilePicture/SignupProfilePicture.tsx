@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { APP_SCREEN_LIST } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
 import useAppDispatch from "../../hooks/useAppDispatch";
-import { updateProfilePicture } from "../../reducers/session";
+import { updateProfilePicture } from "../../reducers/userProfileSession";
 
 const SignupProfilePicture = () => {
   const navigation = useNavigation<any>();

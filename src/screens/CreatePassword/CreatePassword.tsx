@@ -19,7 +19,7 @@ import useAppSelector from "../../hooks/useAppSelector";
 import {
   ISessionState,
   clearChangePasswordError,
-} from "../../reducers/session";
+} from "../../reducers/userProfileSession";
 import { useEffect, useState } from "react";
 import { changePasswordAction } from "../../actions/auth";
 import { AntDesign } from "@expo/vector-icons";

@@ -15,7 +15,7 @@ import {
   isRejected,
 } from "@reduxjs/toolkit";
 import { Reducer } from "redux";
-import sessionReducer from "../reducers/session";
+import sessionReducer from "../reducers/userProfileSession";
 import errorReducer from "../reducers/errorHanlder";
 
 import settingReducer from "../reducers/settings";

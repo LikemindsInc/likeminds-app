@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { APP_SCREEN_LIST } from "../../constants";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import useAppDispatch from "../../hooks/useAppDispatch";
-import { updateProfilePicture } from "../../reducers/session";
+import { updateProfilePicture } from "../../reducers/userProfileSession";
 import {
   ISpaceState,
   clearCreateSpaceStatus,

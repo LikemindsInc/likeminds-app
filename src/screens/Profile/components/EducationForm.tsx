@@ -14,7 +14,7 @@ import useAppDispatch from "../../../hooks/useAppDispatch";
 import {
   clearCompleteProfileStatus,
   updateEducation,
-} from "../../../reducers/session";
+} from "../../../reducers/userProfileSession";
 import BackButton from "../../../components/Navigation/BackButton/BackButton";
 import moment from "moment";
 import AutoCompleteInput from "../../../components/AutoCompleteInput/AutoCompleteInput";

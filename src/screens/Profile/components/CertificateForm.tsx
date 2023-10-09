@@ -16,7 +16,7 @@ import {
   ISessionState,
   clearCompleteProfileStatus,
   updateCertificate,
-} from "../../../reducers/session";
+} from "../../../reducers/userProfileSession";
 import useAppSelector from "../../../hooks/useAppSelector";
 import {
   completeUserProfileAction,

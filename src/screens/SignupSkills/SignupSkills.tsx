@@ -19,7 +19,7 @@ import useAppSelector from "../../hooks/useAppSelector";
 import { useToast } from "react-native-toast-notifications";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import { completeUserProfileAction } from "../../actions/auth";
-import { updateSkills } from "../../reducers/session";
+import { updateSkills } from "../../reducers/userProfileSession";
 
 const SUGGESTIONS = [
   "App Design",

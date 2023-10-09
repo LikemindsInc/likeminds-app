@@ -11,7 +11,7 @@ import { APP_SCREEN_LIST, SCHOOL_DEGREES } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
 import DateFormatter from "../../utils/date-formatter";
 import useAppDispatch from "../../hooks/useAppDispatch";
-import { updateEducation } from "../../reducers/session";
+import { updateEducation } from "../../reducers/userProfileSession";
 import BackButton from "../../components/Navigation/BackButton/BackButton";
 import moment from "moment";
 import AutoCompleteInput from "../../components/AutoCompleteInput/AutoCompleteInput";

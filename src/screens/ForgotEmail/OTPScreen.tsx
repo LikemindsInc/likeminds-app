@@ -15,7 +15,7 @@ import {
   clearEmailPhoneOtpVerificationStatus,
   clearResendOtpStatus,
   storeOtpCode,
-} from "../../reducers/session";
+} from "../../reducers/userProfileSession";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import {
   resendOTPAction,
