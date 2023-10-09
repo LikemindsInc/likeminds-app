@@ -4,10 +4,10 @@
   "scripts": {
     "start": "expo start --dev-client",
     "android": "expo run:android",
-    "lint": "eslint --fix App.tsx",
     "format": "prettier -w .",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "lint": "prettier --check ."
   },
   "husky": {
     "hooks": {
