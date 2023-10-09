@@ -1,11 +1,11 @@
-import { ScrollView, View } from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import { Text } from "react-native";
-import TextLink from "../../components/TextLink/TextLink";
-import colors from "../../theme/colors";
-import Button from "../../components/Button/Button";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { APP_SCREEN_LIST } from "../../constants";
+import { ScrollView, View } from 'react-native';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import { Text } from 'react-native';
+import TextLink from '../../components/TextLink/TextLink';
+import colors from '../../theme/colors';
+import Button from '../../components/Button/Button';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { APP_SCREEN_LIST } from '../../constants';
 
 const SignupComplete = () => {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -79,7 +79,7 @@ const SignupComplete = () => {
               GlobalStyles.fontInterRegular,
               GlobalStyles.fontWeight400,
               GlobalStyles.textNavyBlue,
-              { textAlign: "center" },
+              { textAlign: 'center' },
             ]}
           >
             By selecting ‘Lets Go!’ you agree to the
@@ -90,9 +90,9 @@ const SignupComplete = () => {
                 GlobalStyles.fontWeight700,
               ]}
             >
-              Terms Of Use{" "}
+              Terms Of Use{' '}
             </Text>
-            and{" "}
+            and{' '}
             <Text
               style={[
                 GlobalStyles.textNavyBlue,
@@ -101,7 +101,7 @@ const SignupComplete = () => {
               ]}
             >
               Privacy Policy
-            </Text>{" "}
+            </Text>{' '}
             of Like Minds
           </Text>
         </View>

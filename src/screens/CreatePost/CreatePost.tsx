@@ -4,34 +4,34 @@ import {
   View,
   Image,
   ScrollView,
-} from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import { Text } from "react-native";
-import Button from "../../components/Button/Button";
-import Input from "../../components/Input/Input";
-import colors, { addOpacity } from "../../theme/colors";
-import { Entypo, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
-import * as ImagePicker from "expo-image-picker";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+} from 'react-native';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import { Text } from 'react-native';
+import Button from '../../components/Button/Button';
+import Input from '../../components/Input/Input';
+import colors, { addOpacity } from '../../theme/colors';
+import { Entypo, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import useAppDispatch from "../../hooks/useAppDispatch";
-import useAppSelector from "../../hooks/useAppSelector";
-import { IPostState, clearCreatePostStatus } from "../../reducers/post_reducer";
-import { createPostAction } from "../../actions/post";
+import useAppDispatch from '../../hooks/useAppDispatch';
+import useAppSelector from '../../hooks/useAppSelector';
+import { IPostState, clearCreatePostStatus } from '../../reducers/post_reducer';
+import { createPostAction } from '../../actions/post';
 import {
   NavigationProp,
   useFocusEffect,
   useNavigation,
-} from "@react-navigation/native";
-import { APP_SCREEN_LIST } from "../../constants";
-import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
-import { Video, ResizeMode } from "expo-av";
-import { useToast } from "react-native-toast-notifications";
-import { clearNetworkError } from "../../reducers/errorHanlder";
+} from '@react-navigation/native';
+import { APP_SCREEN_LIST } from '../../constants';
+import KeyboardDismisser from '../../components/KeyboardDismisser/KeyboardDismisser';
+import { Video, ResizeMode } from 'expo-av';
+import { useToast } from 'react-native-toast-notifications';
+import { clearNetworkError } from '../../reducers/errorHanlder';
 
 const CreatePost = () => {
   const [images, setImages] = useState<ImagePicker.ImagePickerAsset[]>([]);
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState('');
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NavigationProp<any>>();
   const video = useRef(null);
@@ -89,8 +89,8 @@ const CreatePost = () => {
   };
 
   useEffect(() => {
-    if (postState.createPostStatus === "completed") {
-      setContent("");
+    if (postState.createPostStatus === 'completed') {
+      setContent('');
       // toast.show({
       //   description: "Post creared successfully",
       //   variant: "contained",
@@ -99,9 +99,9 @@ const CreatePost = () => {
       setVideoSelected([]);
       navigation.navigate(APP_SCREEN_LIST.HOME_SCREEN);
       dispatch(clearCreatePostStatus());
-    } else if (postState.createPostStatus === "failed") {
+    } else if (postState.createPostStatus === 'failed') {
       toast.show(postState.createPostError as string, {
-        animationType: "slide-in",
+        animationType: 'slide-in',
         swipeEnabled: true,
       });
       setTimeout(() => {
@@ -112,15 +112,15 @@ const CreatePost = () => {
   }, [postState.createPostStatus]);
 
   useEffect(() => {
-    navigation.addListener("blur", clearState);
+    navigation.addListener('blur', clearState);
     return () => {
-      navigation.removeListener("blur", clearState);
+      navigation.removeListener('blur', clearState);
     };
   }, []);
 
   const clearState = () => {
     setImages([]);
-    setContent("");
+    setContent('');
     setVideoSelected([]);
     dispatch(clearCreatePostStatus());
   };
@@ -132,7 +132,7 @@ const CreatePost = () => {
           style={[
             GlobalStyles.mb20,
             GlobalStyles.mt20,
-            { flexDirection: "row", justifyContent: "space-between" },
+            { flexDirection: 'row', justifyContent: 'space-between' },
           ]}
         >
           <Text
@@ -155,7 +155,7 @@ const CreatePost = () => {
                 GlobalStyles.fontInterMedium,
                 GlobalStyles.fontSize15,
                 GlobalStyles.fontWeight700,
-                { textTransform: "uppercase" },
+                { textTransform: 'uppercase' },
               ]}
             >
               x
@@ -221,7 +221,7 @@ const CreatePost = () => {
           </ScrollView>
         </View>
         <Button
-          loading={postState.createPostStatus === "loading"}
+          loading={postState.createPostStatus === 'loading'}
           onPress={handleCreatePost}
           title="Post Now"
         />
@@ -235,13 +235,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     height: 300,
     paddingLeft: 0,
-    alignItems: "flex-start",
+    alignItems: 'flex-start',
   },
   imagesWrapper: {
-    flexWrap: "wrap",
-    flexDirection: "row",
+    flexWrap: 'wrap',
+    flexDirection: 'row',
     gap: 10,
-    width: "100%",
+    width: '100%',
     marginVertical: 20,
   },
   files: {
@@ -252,13 +252,13 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     marginTop: 20,
     borderTopWidth: 1,
-    borderTopColor: "#88969D" + addOpacity(20),
+    borderTopColor: '#88969D' + addOpacity(20),
     borderBottomWidth: 1,
-    borderBottomColor: "#88969D" + addOpacity(20),
+    borderBottomColor: '#88969D' + addOpacity(20),
     paddingVertical: 10,
-    justifyContent: "center",
+    justifyContent: 'center',
     gap: 20,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
 });
 

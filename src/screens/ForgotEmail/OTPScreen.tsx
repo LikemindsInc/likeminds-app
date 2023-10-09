@@ -1,31 +1,31 @@
-import { StyleSheet, View } from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import BackButton from "../../components/Navigation/BackButton/BackButton";
-import colors from "../../theme/colors";
-import { Text } from "react-native";
-import Button from "../../components/Button/Button";
-import TextLink from "../../components/TextLink/TextLink";
-import { APP_SCREEN_LIST, __ROOT_REDUX_STATE_KEY__ } from "../../constants";
-import React, { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-import OTPTextInput from "react-native-otp-textinput";
-import useAppSelector from "../../hooks/useAppSelector";
+import { StyleSheet, View } from 'react-native';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import BackButton from '../../components/Navigation/BackButton/BackButton';
+import colors from '../../theme/colors';
+import { Text } from 'react-native';
+import Button from '../../components/Button/Button';
+import TextLink from '../../components/TextLink/TextLink';
+import { APP_SCREEN_LIST, __ROOT_REDUX_STATE_KEY__ } from '../../constants';
+import React, { useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import OTPTextInput from 'react-native-otp-textinput';
+import useAppSelector from '../../hooks/useAppSelector';
 import {
   ISessionState,
   clearEmailPhoneOtpVerificationStatus,
   clearResendOtpStatus,
   storeOtpCode,
-} from "../../reducers/userProfileSession";
-import useAppDispatch from "../../hooks/useAppDispatch";
+} from '../../reducers/userProfileSession';
+import useAppDispatch from '../../hooks/useAppDispatch';
 import {
   resendOTPAction,
   verifyOTPOnChangePasswordAction,
-} from "../../actions/auth";
-import KeyboardDismisser from "../../components/KeyboardDismisser/KeyboardDismisser";
-import { clearNetworkError } from "../../reducers/errorHanlder";
+} from '../../actions/auth';
+import KeyboardDismisser from '../../components/KeyboardDismisser/KeyboardDismisser';
+import { clearNetworkError } from '../../reducers/errorHanlder';
 
 const OTPScreen = () => {
-  const [information, setInformation] = useState("");
+  const [information, setInformation] = useState('');
 
   const dispatch = useAppDispatch();
 
@@ -35,21 +35,21 @@ const OTPScreen = () => {
 
   const navigation = useNavigation<any>();
 
-  const [otp, setOTP] = useState("");
+  const [otp, setOTP] = useState('');
 
   const error = useAppSelector((state) => state.errorReducer);
 
   const handleOnVerify = () => {
-    setInformation("");
-    console.log("handleOnVerify");
-    if (otp.length < 4) return setInformation("Incomplete OTP");
+    setInformation('');
+    console.log('handleOnVerify');
+    if (otp.length < 4) return setInformation('Incomplete OTP');
 
     dispatch(clearEmailPhoneOtpVerificationStatus());
 
     dispatch(storeOtpCode(otp));
     dispatch(
       verifyOTPOnChangePasswordAction({
-        phone: session.otpChannelValue.split("_")[1],
+        phone: session.otpChannelValue.split('_')[1],
         code: `${otp}`,
       }),
     );
@@ -60,12 +60,12 @@ const OTPScreen = () => {
   };
 
   useEffect(() => {
-    setInformation("");
-    if (session.resendOtpStatus === "completed") {
+    setInformation('');
+    if (session.resendOtpStatus === 'completed') {
       // toast.show("OTP sent successfully");
       dispatch(clearResendOtpStatus());
       dispatch(clearNetworkError());
-    } else if (session.resendOtpStatus === "failed") {
+    } else if (session.resendOtpStatus === 'failed') {
       // toast.show(session.resendOtpError as string, {
       //   type: "error",
       //   animationType: "slide-in",
@@ -78,11 +78,11 @@ const OTPScreen = () => {
   }, [session.resendOtpStatus]);
 
   useEffect(() => {
-    if (session.verifyPhoneEmailOTPStatus === "completed") {
+    if (session.verifyPhoneEmailOTPStatus === 'completed') {
       dispatch(clearEmailPhoneOtpVerificationStatus());
       dispatch(clearNetworkError());
       navigation.navigate(APP_SCREEN_LIST.CREATE_PASSWORD_SCREEN);
-    } else if (session.verifyPhoneEmailOTPStatus === "failed") {
+    } else if (session.verifyPhoneEmailOTPStatus === 'failed') {
       setTimeout(() => {
         dispatch(clearEmailPhoneOtpVerificationStatus());
         dispatch(clearNetworkError());
@@ -92,7 +92,7 @@ const OTPScreen = () => {
 
   const phone =
     session && session?.otpChannelValue
-      ? session?.otpChannelValue.split("_")[1]
+      ? session?.otpChannelValue.split('_')[1]
       : `your phone number to verify it’s
   really you.`;
 
@@ -111,7 +111,7 @@ const OTPScreen = () => {
                 GlobalStyles.textGrey,
               ]}
             >
-              Enter the 4 digit code sent to{" "}
+              Enter the 4 digit code sent to{' '}
               <Text
                 style={[GlobalStyles.fontWeight700, GlobalStyles.textBlack]}
               >
@@ -152,8 +152,8 @@ const OTPScreen = () => {
               textInputStyle={{
                 borderWidth: 4,
                 borderRadius: 8,
-                backgroundColor: "#F3F5F7",
-                borderColor: "#F3F5F7",
+                backgroundColor: '#F3F5F7',
+                borderColor: '#F3F5F7',
               }}
               autoFocus
               tintColor={colors.primary}
@@ -179,8 +179,8 @@ const OTPScreen = () => {
               onPress={() =>
                 dispatch(
                   resendOTPAction({
-                    phone: session.otpChannelValue.split("_")[1],
-                    type: "FORGOT_PASSWORD",
+                    phone: session.otpChannelValue.split('_')[1],
+                    type: 'FORGOT_PASSWORD',
                   }),
                 )
               }
@@ -189,8 +189,8 @@ const OTPScreen = () => {
         </View>
         <Button
           loading={
-            session.verifyPhoneEmailOTPStatus === "loading" ||
-            session.resendOtpStatus === "loading"
+            session.verifyPhoneEmailOTPStatus === 'loading' ||
+            session.resendOtpStatus === 'loading'
           }
           title="Verify Phone"
           onPress={handleOnVerify}
@@ -203,12 +203,12 @@ const OTPScreen = () => {
 const styles = StyleSheet.create({
   input: {
     width: 60,
-    textAlign: "center",
+    textAlign: 'center',
   },
   inputWrapper: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 20,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   container: {
     flex: 1,

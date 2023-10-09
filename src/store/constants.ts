@@ -14,7 +14,7 @@ export const CACHE_VERSION: number = 1; // version 1
  * extending app global constants
  * @constant CACHE_KEY default value
  */
-export const __ROOT_REDUX_STATE_KEY__: string = "@REDUX_LOCAL_PERSISTANCE_KEY";
+export const __ROOT_REDUX_STATE_KEY__: string = '@REDUX_LOCAL_PERSISTANCE_KEY';
 
 /**
  * extending app global constants

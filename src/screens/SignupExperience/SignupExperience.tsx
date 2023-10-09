@@ -5,42 +5,42 @@ import {
   StyleSheet,
   Text,
   View,
-} from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import Input from "../../components/Input/Input";
-import React, { useEffect, useState } from "react";
-import Button from "../../components/Button/Button";
-import TextLink from "../../components/TextLink/TextLink";
-import colors from "../../theme/colors";
-import DatePicker from "../../components/DatePicker/DatePicker";
-import { Checkbox } from "native-base";
-import { APP_SCREEN_LIST } from "../../constants";
-import { useNavigation } from "@react-navigation/native";
-import useAppSelector from "../../hooks/useAppSelector";
+} from 'react-native';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import Input from '../../components/Input/Input';
+import React, { useEffect, useState } from 'react';
+import Button from '../../components/Button/Button';
+import TextLink from '../../components/TextLink/TextLink';
+import colors from '../../theme/colors';
+import DatePicker from '../../components/DatePicker/DatePicker';
+import { Checkbox } from 'native-base';
+import { APP_SCREEN_LIST } from '../../constants';
+import { useNavigation } from '@react-navigation/native';
+import useAppSelector from '../../hooks/useAppSelector';
 import {
   ISessionState,
   updateExperience,
-} from "../../reducers/userProfileSession";
-import { ISettingState } from "../../reducers/settings";
-import { AntDesign } from "@expo/vector-icons";
-import DateFormatter from "../../utils/date-formatter";
-import useAppDispatch from "../../hooks/useAppDispatch";
-import BackButton from "../../components/Navigation/BackButton/BackButton";
-import moment from "moment";
-import { SelectList } from "react-native-dropdown-select-list";
-import { getAllIndustriesAction } from "../../actions/auth";
+} from '../../reducers/userProfileSession';
+import { ISettingState } from '../../reducers/settings';
+import { AntDesign } from '@expo/vector-icons';
+import DateFormatter from '../../utils/date-formatter';
+import useAppDispatch from '../../hooks/useAppDispatch';
+import BackButton from '../../components/Navigation/BackButton/BackButton';
+import moment from 'moment';
+import { SelectList } from 'react-native-dropdown-select-list';
+import { getAllIndustriesAction } from '../../actions/auth';
 
 const SignupExperience = () => {
   const navigation = useNavigation<any>();
   const [startDate, setStartDate] = useState(
-    moment().subtract("7", "days").format("YYYY-MM-DD"),
+    moment().subtract('7', 'days').format('YYYY-MM-DD'),
   );
-  const [endDate, setEndDate] = useState(moment().format("YYYY-MM-DD"));
+  const [endDate, setEndDate] = useState(moment().format('YYYY-MM-DD'));
   const [stillWorkHere, setStillWorkHere] = useState(false);
-  const [jobTitle, setJobTitle] = useState("");
-  const [companyName, setCompanyName] = useState("");
-  const [industry, setIndustry] = useState("");
-  const [responsibilities, setResponsibilities] = useState("");
+  const [jobTitle, setJobTitle] = useState('');
+  const [companyName, setCompanyName] = useState('');
+  const [industry, setIndustry] = useState('');
+  const [responsibilities, setResponsibilities] = useState('');
 
   const settings = useAppSelector((state) => state.settingReducer);
 
@@ -76,14 +76,14 @@ const SignupExperience = () => {
   }, []);
 
   useEffect(() => {
-    if (jobTitle.trim() !== "")
+    if (jobTitle.trim() !== '')
       setErrors((state) => ({ ...state, jobTitle: null }));
     // else
     //   setErrors((state) => ({ ...state, jobTitle: "Job title is required" }));
   }, [jobTitle]);
 
   useEffect(() => {
-    if (companyName.trim() !== "")
+    if (companyName.trim() !== '')
       setErrors((state) => ({ ...state, companyName: null }));
     // else
     //   setErrors((state) => ({
@@ -93,7 +93,7 @@ const SignupExperience = () => {
   }, [companyName]);
 
   useEffect(() => {
-    if (responsibilities.trim() !== "")
+    if (responsibilities.trim() !== '')
       setErrors((state) => ({ ...state, responsibilities: null }));
     // else
     //   setErrors((state) => ({
@@ -103,45 +103,45 @@ const SignupExperience = () => {
   }, [responsibilities]);
 
   const validateStartDate = () => {
-    if (startDate.trim() !== "") {
-      if (moment().diff(startDate, "days") < 0) {
+    if (startDate.trim() !== '') {
+      if (moment().diff(startDate, 'days') < 0) {
         return setErrors((state) => ({
           ...state,
-          startDate: "Start date can not be a future date",
+          startDate: 'Start date can not be a future date',
         }));
       } else if (
-        startDate.trim() !== "" &&
-        moment(endDate).diff(startDate, "days") < 0
+        startDate.trim() !== '' &&
+        moment(endDate).diff(startDate, 'days') < 0
       ) {
         return setErrors((state) => ({
           ...state,
-          startDate: "Start date can not be earlier than end date ",
+          startDate: 'Start date can not be earlier than end date ',
         }));
       }
       setErrors((state) => ({ ...state, startDate: null }));
     } else
       setErrors((state) => ({
         ...state,
-        startDate: "start date is required",
+        startDate: 'start date is required',
       }));
   };
 
   const validateEndDate = () => {
     if (!stillWorkHere) {
       setErrors((state) => ({ ...state, endDate: null }));
-    } else if (endDate.trim() !== "") {
+    } else if (endDate.trim() !== '') {
       if (
-        startDate.trim() !== "" &&
-        moment(startDate).diff(endDate, "days") < 0
+        startDate.trim() !== '' &&
+        moment(startDate).diff(endDate, 'days') < 0
       ) {
         return setErrors((state) => ({
           ...state,
-          endDate: "End date can not be earlier than start date",
+          endDate: 'End date can not be earlier than start date',
         }));
       }
       setErrors((state) => ({ ...state, endDate: null }));
     } else
-      setErrors((state) => ({ ...state, endDate: "End date is required" }));
+      setErrors((state) => ({ ...state, endDate: 'End date is required' }));
   };
 
   useEffect(() => {
@@ -163,26 +163,26 @@ const SignupExperience = () => {
   const dispatch = useAppDispatch();
 
   const handleOnNextPress = () => {
-    if (companyName.trim() === "")
+    if (companyName.trim() === '')
       return setErrors((state) => ({
         ...state,
-        companyName: "Company name is Required",
+        companyName: 'Company name is Required',
       }));
-    if (responsibilities.trim() === "")
+    if (responsibilities.trim() === '')
       return setErrors((state) => ({
         ...state,
-        responsibilities: "Responsibilities is Required",
+        responsibilities: 'Responsibilities is Required',
       }));
-    if (jobTitle.trim() === "")
+    if (jobTitle.trim() === '')
       return setErrors((state) => ({
         ...state,
-        jobTitle: "Job title is Required",
+        jobTitle: 'Job title is Required',
       }));
 
-    if (startDate.trim() === "")
+    if (startDate.trim() === '')
       return setErrors((state) => ({
         ...state,
-        startDate: "start date is required",
+        startDate: 'start date is required',
       }));
     dispatch(
       updateExperience({
@@ -204,7 +204,7 @@ const SignupExperience = () => {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={50}
       // keyboardShouldPersistTaps={"always"}
     >
@@ -231,7 +231,7 @@ const SignupExperience = () => {
           <View style={[styles.inputDouble]}>
             <DatePicker
               onDateChange={(date) =>
-                setStartDate(DateFormatter.format(date, "YYYY-MM-DD"))
+                setStartDate(DateFormatter.format(date, 'YYYY-MM-DD'))
               }
               placeholder="Start Date"
               style={styles.inputFlex}
@@ -240,7 +240,7 @@ const SignupExperience = () => {
             {!stillWorkHere && (
               <DatePicker
                 onDateChange={(date) =>
-                  setEndDate(DateFormatter.format(date, "YYYY-MM-DD"))
+                  setEndDate(DateFormatter.format(date, 'YYYY-MM-DD'))
                 }
                 placeholder="End Date"
                 style={styles.inputFlex}
@@ -252,7 +252,7 @@ const SignupExperience = () => {
             style={[
               GlobalStyles.mb20,
               GlobalStyles.displayRow,
-              { alignItems: "center" },
+              { alignItems: 'center' },
             ]}
           >
             <Checkbox
@@ -302,7 +302,7 @@ const SignupExperience = () => {
                 borderWidth: 0,
                 paddingVertical: 21,
                 backgroundColor: colors.white,
-                shadowColor: "#000",
+                shadowColor: '#000',
                 shadowOffset: {
                   width: 0,
                   height: 4,
@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inputDouble: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 20,
   },
   inputFlex: {

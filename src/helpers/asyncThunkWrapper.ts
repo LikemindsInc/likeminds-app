@@ -1,5 +1,5 @@
-import { ApiResponseError } from "@app-model";
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { ApiResponseError } from '@app-model';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export default function asyncThunkWrapper<Returned, Args>(
   prefix: string,

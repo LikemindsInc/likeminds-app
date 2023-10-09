@@ -1,25 +1,25 @@
-import { StyleSheet, View } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
-import colors from "../../../theme/colors";
-import { TouchableOpacity } from "react-native";
-import { Image as NativeImage } from "react-native";
-import { GlobalStyles } from "../../../theme/GlobalStyles";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { DrawerNavigationProp } from "@react-navigation/drawer";
-import { APP_SCREEN_LIST } from "../../../constants";
-import useAppSelector from "../../../hooks/useAppSelector";
-import { useUser } from "../../../hooks/userUser";
-import Image from "react-native-image-progress";
+import { StyleSheet, View } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
+import colors from '../../../theme/colors';
+import { TouchableOpacity } from 'react-native';
+import { Image as NativeImage } from 'react-native';
+import { GlobalStyles } from '../../../theme/GlobalStyles';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { APP_SCREEN_LIST } from '../../../constants';
+import useAppSelector from '../../../hooks/useAppSelector';
+import { useUser } from '../../../hooks/userUser';
+import Image from 'react-native-image-progress';
 
 const HomeHeader = () => {
   const state = useAppSelector((state) => state.settingReducer);
   const [user] = useUser();
   const renderProfilePicture = () => {
-    if (user && user.profilePicture && user.profilePicture.trim() !== "") {
+    if (user && user.profilePicture && user.profilePicture.trim() !== '') {
       return { uri: user.profilePicture };
     }
-    return require("../../../../assets/imageAvatar.jpeg");
+    return require('../../../../assets/imageAvatar.jpeg');
   };
   const navigation = useNavigation<DrawerNavigationProp<any>>();
   return (
@@ -31,7 +31,7 @@ const HomeHeader = () => {
       </View>
       <View style={[GlobalStyles.pl4, { flex: 1 }]}>
         <NativeImage
-          source={require("../../../../assets/image2.png")}
+          source={require('../../../../assets/image2.png')}
           style={{ width: 120, height: 20 }}
           resizeMethod="auto"
           resizeMode="contain"
@@ -39,8 +39,8 @@ const HomeHeader = () => {
       </View>
       <View
         style={{
-          flexDirection: "row",
-          alignItems: "center",
+          flexDirection: 'row',
+          alignItems: 'center',
 
           height: 60,
         }}
@@ -67,7 +67,7 @@ const HomeHeader = () => {
           <View style={{ paddingRight: 30, paddingBottom: 40 }}>
             <Image
               source={renderProfilePicture()}
-              indicator={require("../../../../assets/loader.gif")}
+              indicator={require('../../../../assets/loader.gif')}
               resizeMethod="auto"
               resizeMode="cover"
               indicatorProps={{
@@ -86,7 +86,7 @@ const HomeHeader = () => {
 const styles = StyleSheet.create({
   container: {},
   notificationIcon: {
-    transform: [{ rotateZ: "0.785398rad" }],
+    transform: [{ rotateZ: '0.785398rad' }],
   },
 });
 

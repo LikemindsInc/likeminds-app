@@ -1,12 +1,12 @@
-declare module "@app-model" {
-  import * as DocumentPicker from "expo-document-picker";
-  import * as ImagePicker from "expo-image-picker";
+declare module '@app-model' {
+  import * as DocumentPicker from 'expo-document-picker';
+  import * as ImagePicker from 'expo-image-picker';
 
   interface FilePickerFormat {
     mimeType: string;
     name: string;
     size: number;
-    type: "success" | "cancel";
+    type: 'success' | 'cancel';
     uri: string;
   }
 
@@ -17,7 +17,7 @@ declare module "@app-model" {
     errors: object | null;
   }
 
-  type IThunkAPIStatus = "idle" | "loading" | "completed" | "failed";
+  type IThunkAPIStatus = 'idle' | 'loading' | 'completed' | 'failed';
 
   interface ApiResponseError {
     message: string | string[];
@@ -131,7 +131,7 @@ declare module "@app-model" {
     lastName: string | null;
     phone: string | null;
     provider: string | null;
-    role: "user";
+    role: 'user';
     email: string | null;
     message: string | null;
     followers: any[] | null;
@@ -140,7 +140,7 @@ declare module "@app-model" {
     followingCount: number;
     isActive: boolean;
     isVerified: boolean;
-    role: "user";
+    role: 'user';
     skills: string[];
     socialLogin: boolean;
     refreshToken: string;
@@ -194,7 +194,7 @@ declare module "@app-model" {
 
   interface ResendOTPDTO {
     phone: string;
-    type: "SIGNUP" | "FORGOT_PASSWORD";
+    type: 'SIGNUP' | 'FORGOT_PASSWORD';
   }
 
   interface IPostFeed {
@@ -272,12 +272,12 @@ declare module "@app-model" {
     tailor: string[];
   }
 
-  export type IPostedDate = "anytime" | "oneday" | "week" | "month";
+  export type IPostedDate = 'anytime' | 'oneday' | 'week' | 'month';
 
   interface IGetJobDTO {
     experienceLevel?: string;
     postedDate?: IPostedDate;
-    sort?: "recent" | "relevant";
+    sort?: 'recent' | 'relevant';
     search?: string;
     companyName?: string;
     page?: number;

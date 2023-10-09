@@ -4,10 +4,10 @@ import {
   IThunkAPIStatus,
   IUserData,
   Industry,
-} from "@app-model";
-import { createSlice } from "@reduxjs/toolkit";
-import { getCountriesAction } from "../actions/settings";
-import { PURGE, REHYDRATE } from "redux-persist";
+} from '@app-model';
+import { createSlice } from '@reduxjs/toolkit';
+import { getCountriesAction } from '../actions/settings';
+import { PURGE, REHYDRATE } from 'redux-persist';
 import {
   getAllIndustriesAction,
   getAllSchoolAction,
@@ -16,7 +16,7 @@ import {
   refreshTokenAction,
   signupUserActionAction,
   verifyOTPActionAction,
-} from "../actions/auth";
+} from '../actions/auth';
 
 export interface ISettingState {
   getCountriesStatus: IThunkAPIStatus;
@@ -42,21 +42,21 @@ export interface ISettingState {
 }
 
 const initialState: ISettingState = {
-  getCountriesStatus: "idle",
-  getCountriesSuccess: "",
-  getCountriesError: "",
+  getCountriesStatus: 'idle',
+  getCountriesSuccess: '',
+  getCountriesError: '',
 
-  getCurrentUserStatus: "idle",
-  getCurrentUserSuccess: "",
-  getCurrentUserError: "",
+  getCurrentUserStatus: 'idle',
+  getCurrentUserSuccess: '',
+  getCurrentUserError: '',
 
-  getSchoolsStatus: "idle",
-  getSchoolsSuccess: "",
-  getSchoolsError: "",
+  getSchoolsStatus: 'idle',
+  getSchoolsSuccess: '',
+  getSchoolsError: '',
 
-  getIndustryStatus: "idle",
-  getIndustrySuccess: "",
-  getIndustryError: "",
+  getIndustryStatus: 'idle',
+  getIndustrySuccess: '',
+  getIndustryError: '',
 
   countries: [],
   schools: [],
@@ -65,7 +65,7 @@ const initialState: ISettingState = {
 };
 
 const settingSlice = createSlice({
-  name: "settings",
+  name: 'settings',
   initialState,
   reducers: {
     logoutUserAction(state) {
@@ -77,14 +77,14 @@ const settingSlice = createSlice({
       state.userInfo = null;
     });
     builder.addCase(getCountriesAction.pending, (state) => {
-      state.getCountriesStatus = "loading";
+      state.getCountriesStatus = 'loading';
     });
     builder.addCase(getCountriesAction.fulfilled, (state, action) => {
       state.countries = action.payload.data;
-      state.getCountriesStatus = "completed";
+      state.getCountriesStatus = 'completed';
     });
     builder.addCase(getCountriesAction.rejected, (state, action) => {
-      state.getCountriesStatus = "failed";
+      state.getCountriesStatus = 'failed';
     });
 
     builder.addCase(verifyOTPActionAction.pending, (state) => {});
@@ -95,41 +95,41 @@ const settingSlice = createSlice({
     builder.addCase(verifyOTPActionAction.rejected, (state, action) => {});
 
     builder.addCase(getCurrentUserAction.pending, (state) => {
-      state.getCurrentUserStatus = "loading";
+      state.getCurrentUserStatus = 'loading';
     });
     builder.addCase(getCurrentUserAction.fulfilled, (state, action) => {
-      state.getCurrentUserStatus = "completed";
+      state.getCurrentUserStatus = 'completed';
       state.userInfo = { ...state.userInfo, ...action.payload.data };
     });
 
     builder.addCase(getCurrentUserAction.rejected, (state, action) => {
-      state.getCurrentUserStatus = "failed";
+      state.getCurrentUserStatus = 'failed';
       state.getCurrentUserError = action.payload?.message as string;
     });
 
     builder.addCase(getAllIndustriesAction.pending, (state) => {
-      state.getIndustryStatus = "loading";
+      state.getIndustryStatus = 'loading';
     });
     builder.addCase(getAllIndustriesAction.fulfilled, (state, action) => {
-      state.getIndustryStatus = "completed";
+      state.getIndustryStatus = 'completed';
       state.industries = action.payload.data;
     });
 
     builder.addCase(getAllIndustriesAction.rejected, (state, action) => {
-      state.getIndustryStatus = "failed";
+      state.getIndustryStatus = 'failed';
       state.getIndustryError = action.payload?.message as string;
     });
 
     builder.addCase(getAllSchoolAction.pending, (state) => {
-      state.getSchoolsStatus = "loading";
+      state.getSchoolsStatus = 'loading';
     });
     builder.addCase(getAllSchoolAction.fulfilled, (state, action) => {
-      state.getCountriesStatus = "completed";
+      state.getCountriesStatus = 'completed';
       state.schools = action.payload.data;
     });
 
     builder.addCase(getAllSchoolAction.rejected, (state, action) => {
-      state.getSchoolsStatus = "failed";
+      state.getSchoolsStatus = 'failed';
       state.getSchoolsError = action.payload?.message as string;
     });
 

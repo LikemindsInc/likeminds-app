@@ -1,6 +1,6 @@
-import { AxiosResponse } from "axios";
-import axiosClient from "../config/axiosClient";
-import asyncThunkWrapper from "../helpers/asyncThunkWrapper";
+import { AxiosResponse } from 'axios';
+import axiosClient from '../config/axiosClient';
+import asyncThunkWrapper from '../helpers/asyncThunkWrapper';
 import {
   ApiResponseSuccess,
   ICommentOnCommentDTO,
@@ -13,30 +13,30 @@ import {
   IPostFeed,
   IPostReaction,
   IReactionToPostDTO,
-} from "@app-model";
-import { uploadFile } from "./auth";
+} from '@app-model';
+import { uploadFile } from './auth';
 
-const CREATE_POST = "post:CREATE_POST";
-const COMMENT_ON_POST = "post:COMMENT_ON_POST";
-const COMMENT_ON_COMMENT = "post:COMMENT_ON_COMMENT";
-const GET_COMMENT_ON_POST = "post:GET_COMMENT_ON_POST";
-const UNLIKE_POST = "post:UNLIKE_POST";
-const REACTION_TO_POST = "post:REACTION_TO_POST";
-const LIKE_POST = "post:LIKE_POST";
-const GET_USER_POST_FEED = "post:GET_USER_POST_FEED";
-const GET_CONNECTION_POST_FEED = "post:GET_CONNECTION_POST_FEED";
-const GET_POST_FEED_REACTIONS = "post:GET_POST_FEED_REACTIONS";
+const CREATE_POST = 'post:CREATE_POST';
+const COMMENT_ON_POST = 'post:COMMENT_ON_POST';
+const COMMENT_ON_COMMENT = 'post:COMMENT_ON_COMMENT';
+const GET_COMMENT_ON_POST = 'post:GET_COMMENT_ON_POST';
+const UNLIKE_POST = 'post:UNLIKE_POST';
+const REACTION_TO_POST = 'post:REACTION_TO_POST';
+const LIKE_POST = 'post:LIKE_POST';
+const GET_USER_POST_FEED = 'post:GET_USER_POST_FEED';
+const GET_CONNECTION_POST_FEED = 'post:GET_CONNECTION_POST_FEED';
+const GET_POST_FEED_REACTIONS = 'post:GET_POST_FEED_REACTIONS';
 
-const GET_POST_FEED = "post:GET_POST_FEED";
-const GET_SINGLE_POST_FEED = "post:GET_SINGLE_POST_FEED";
-const UNREACT_TO_POST = "post:UNREACT_TO_POST";
-const CREATE_JOB = "job:CREATE_JOB";
-const GET_JOBS = "job:GET_JOBS";
-const GET_COMMENT_REACTIONS = "comment:GET_COMMENT_REACTIONS";
-const REACT_TO_COMMENT = "comment:REACT_TO_COMMENT";
-const REMOVE_COMMENT_REACTION = "comment:REMOVE_COMMENT_REACTION";
+const GET_POST_FEED = 'post:GET_POST_FEED';
+const GET_SINGLE_POST_FEED = 'post:GET_SINGLE_POST_FEED';
+const UNREACT_TO_POST = 'post:UNREACT_TO_POST';
+const CREATE_JOB = 'job:CREATE_JOB';
+const GET_JOBS = 'job:GET_JOBS';
+const GET_COMMENT_REACTIONS = 'comment:GET_COMMENT_REACTIONS';
+const REACT_TO_COMMENT = 'comment:REACT_TO_COMMENT';
+const REMOVE_COMMENT_REACTION = 'comment:REMOVE_COMMENT_REACTION';
 
-import { Image, Video } from "react-native-compressor";
+import { Image, Video } from 'react-native-compressor';
 
 export const createPostAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
@@ -49,11 +49,11 @@ export const createPostAction = asyncThunkWrapper<
   const videos = [];
   for (let i = 0; i < videoAssets.length; i++) {
     const result = await Video.compress(videoAssets[i].uri, {
-      compressionMethod: "auto",
+      compressionMethod: 'auto',
     });
 
     const formData = new FormData() as any;
-    formData.append("file", {
+    formData.append('file', {
       uri: result,
       type: videoAssets[i].type,
       name: videoAssets[i].fileName,
@@ -61,7 +61,7 @@ export const createPostAction = asyncThunkWrapper<
 
     const response = await uploadFile(formData);
 
-    const videoUrl = response.data?.data?.url || "";
+    const videoUrl = response.data?.data?.url || '';
 
     videos.push(videoUrl);
   }
@@ -71,9 +71,9 @@ export const createPostAction = asyncThunkWrapper<
       quality: 0.8,
     });
 
-    console.log("result of compressing> ", result);
+    console.log('result of compressing> ', result);
     const formData = new FormData() as any;
-    formData.append("file", {
+    formData.append('file', {
       uri: result,
       type: imageAssets[i].type,
       name: imageAssets[i].fileName,
@@ -81,12 +81,12 @@ export const createPostAction = asyncThunkWrapper<
 
     const response = await uploadFile(formData);
 
-    const imageUrl = response.data?.data?.url || "";
+    const imageUrl = response.data?.data?.url || '';
 
     images.push(imageUrl);
   }
   const response = await axiosClient.post<AxiosResponse<any>>(
-    "/api/post/create",
+    '/api/post/create',
     {
       content: agrs.content,
       images: [...images, ...videos],
@@ -101,7 +101,7 @@ export const getPostFeedAction = asyncThunkWrapper<
   void
 >(GET_POST_FEED, async () => {
   const response = await axiosClient.get<AxiosResponse<any>>(
-    "/api/post/feeds?page=1&limit=50",
+    '/api/post/feeds?page=1&limit=50',
   );
   return response.data;
 });
@@ -153,7 +153,7 @@ export const getCurrentUserFeedAction = asyncThunkWrapper<
   void
 >(GET_USER_POST_FEED, async () => {
   const response = await axiosClient.get<AxiosResponse<any>>(
-    "/api/post/me/feeds?page=1&limit=1000",
+    '/api/post/me/feeds?page=1&limit=1000',
   );
   return response.data;
 });
@@ -172,13 +172,13 @@ export const getJobsAction = asyncThunkWrapper<
   ApiResponseSuccess<IJobDTO[]>,
   IGetJobDTO | void
 >(GET_JOBS, async (data: any) => {
-  let url = "/api/job?page=1&limit=1000";
+  let url = '/api/job?page=1&limit=1000';
 
   const { tailor, ...rest } = data;
 
   if (rest) {
     Object.keys(rest).forEach((key) => {
-      if (!rest[key] && rest[key].trim() === "") return;
+      if (!rest[key] && rest[key].trim() === '') return;
 
       url += `&${key}=${rest[key]}`;
     });
@@ -188,7 +188,7 @@ export const getJobsAction = asyncThunkWrapper<
     url += `&tailor=${tailor}`;
   }
 
-  console.log("url> ", url);
+  console.log('url> ', url);
 
   const response = await axiosClient.get<AxiosResponse<any>>(url);
   return response.data;
@@ -198,7 +198,7 @@ export const createJobAction = asyncThunkWrapper<
   ApiResponseSuccess<IPostFeed[]>,
   ICreateJobDTO
 >(CREATE_JOB, async (args: ICreateJobDTO) => {
-  const response = await axiosClient.post<AxiosResponse<any>>("/api/job", args);
+  const response = await axiosClient.post<AxiosResponse<any>>('/api/job', args);
 
   return response.data;
 });
@@ -227,7 +227,7 @@ export const likePostAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
   string
 >(LIKE_POST, async (args: string) => {
-  console.log("called to like a post> ", args);
+  console.log('called to like a post> ', args);
   const response = await axiosClient.post<AxiosResponse<any>>(
     `/api/post/${args}/like`,
     {},
@@ -240,7 +240,7 @@ export const unlikePostAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
   string
 >(UNLIKE_POST, async (args: string) => {
-  console.log("called to unklike a post> ", args);
+  console.log('called to unklike a post> ', args);
   const response = await axiosClient.post<AxiosResponse<any>>(
     `/api/post/${args}/unlike`,
     {},

@@ -7,31 +7,31 @@ import {
   TouchableOpacity,
   View,
   useWindowDimensions,
-} from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import useDimension from "../../hooks/useDimension";
-import { AntDesign, Feather } from "@expo/vector-icons";
-import colors from "../../theme/colors";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { ScrollView } from "react-native";
-import { TabView, SceneMap } from "react-native-tab-view";
-import { useEffect, useState } from "react";
-import { StatusBar } from "react-native";
-import { Box, Pressable, useColorModeValue } from "native-base";
-import useAppSelector from "../../hooks/useAppSelector";
-import { ISettingState } from "../../reducers/settings";
-import UserPostFeed from "./components/UserPostFeed";
-import UserExperience from "./components/UserExperience";
-import { useUser } from "../../hooks/userUser";
-import ReadMore from "react-native-read-more-text";
-import moment from "moment";
-import AppModal from "../../components/Modal/AppModal";
-import EducationForm from "./components/EducationForm";
-import ExperienceForm from "./components/ExperienceForm";
-import SkillsForm from "./components/SkillsForm";
-import CertificateForm from "./components/CertificateForm";
-import useAppDispatch from "../../hooks/useAppDispatch";
-import { getCurrentUserAction } from "../../actions/auth";
+} from 'react-native';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import useDimension from '../../hooks/useDimension';
+import { AntDesign, Feather } from '@expo/vector-icons';
+import colors from '../../theme/colors';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { ScrollView } from 'react-native';
+import { TabView, SceneMap } from 'react-native-tab-view';
+import { useEffect, useState } from 'react';
+import { StatusBar } from 'react-native';
+import { Box, Pressable, useColorModeValue } from 'native-base';
+import useAppSelector from '../../hooks/useAppSelector';
+import { ISettingState } from '../../reducers/settings';
+import UserPostFeed from './components/UserPostFeed';
+import UserExperience from './components/UserExperience';
+import { useUser } from '../../hooks/userUser';
+import ReadMore from 'react-native-read-more-text';
+import moment from 'moment';
+import AppModal from '../../components/Modal/AppModal';
+import EducationForm from './components/EducationForm';
+import ExperienceForm from './components/ExperienceForm';
+import SkillsForm from './components/SkillsForm';
+import CertificateForm from './components/CertificateForm';
+import useAppDispatch from '../../hooks/useAppDispatch';
+import { getCurrentUserAction } from '../../actions/auth';
 
 // Get the height of the status bar
 const statusBarHeight = StatusBar.currentHeight;
@@ -78,7 +78,7 @@ const UserProfile = () => {
 
   const initials = state?.userInfo?.email
     ? `${state?.userInfo?.email[0]}${state?.userInfo?.email[1]}`.toLocaleUpperCase()
-    : "IN";
+    : 'IN';
 
   return (
     <View
@@ -97,25 +97,25 @@ const UserProfile = () => {
               resizeMode="cover"
               source={
                 state.userInfo?.profilePicture &&
-                state.userInfo.profilePicture.trim() !== ""
+                state.userInfo.profilePicture.trim() !== ''
                   ? { uri: state.userInfo.profilePicture }
-                  : require("../../../assets/image9.png")
+                  : require('../../../assets/image9.png')
               }
               style={[
                 styles.imageBg,
                 height * 0.4 > 240
                   ? { height: 240 }
-                  : { height: height * 0.4, position: "relative" },
+                  : { height: height * 0.4, position: 'relative' },
               ]}
             >
               <View
                 style={{
-                  position: "absolute",
+                  position: 'absolute',
                   top: 0,
                   left: 0,
-                  height: "100%",
-                  width: "100%",
-                  backgroundColor: "rgba(0,0,0,0.4)",
+                  height: '100%',
+                  width: '100%',
+                  backgroundColor: 'rgba(0,0,0,0.4)',
                 }}
               ></View>
               <View>
@@ -127,7 +127,7 @@ const UserProfile = () => {
                     name="arrowleft"
                     size={24}
                     style={{
-                      textShadowColor: "rgba(0, 0, 0, 0.75)",
+                      textShadowColor: 'rgba(0, 0, 0, 0.75)',
                       textShadowRadius: 10,
                       textShadowOffset: { width: 2, height: 2 },
                       color: colors.white,
@@ -143,22 +143,22 @@ const UserProfile = () => {
                 styles.imageBg,
                 height * 0.4 > 240
                   ? { height: 240 }
-                  : { height: height * 0.4, position: "relative" },
+                  : { height: height * 0.4, position: 'relative' },
                 {
                   flex: 1,
-                  width: "100%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  position: "relative",
-                  backgroundColor: "#daf3ff",
+                  width: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  position: 'relative',
+                  backgroundColor: '#daf3ff',
                   top: -50,
                 },
               ]}
             >
               <View
                 style={{
-                  position: "absolute",
-                  alignSelf: "flex-start",
+                  position: 'absolute',
+                  alignSelf: 'flex-start',
                   top: 50,
                 }}
               >
@@ -170,10 +170,10 @@ const UserProfile = () => {
                     name="arrowleft"
                     size={24}
                     style={{
-                      textShadowColor: "#fff",
+                      textShadowColor: '#fff',
                       textShadowRadius: 10,
                       textShadowOffset: { width: 2, height: 2 },
-                      color: "#000",
+                      color: '#000',
                     }}
                   />
                 </TouchableOpacity>
@@ -184,10 +184,10 @@ const UserProfile = () => {
                   {
                     width: 100,
                     height: 100,
-                    justifyContent: "center",
-                    alignItems: "center",
+                    justifyContent: 'center',
+                    alignItems: 'center',
                     borderRadius: 500,
-                    backgroundColor: "#f1f3f9",
+                    backgroundColor: '#f1f3f9',
                   },
                 ]}
               >
@@ -211,7 +211,7 @@ const UserProfile = () => {
             style={[
               GlobalStyles.flewRow,
               GlobalStyles.mb10,
-              { justifyContent: "space-between" },
+              { justifyContent: 'space-between' },
             ]}
           >
             <View>
@@ -254,7 +254,7 @@ const UserProfile = () => {
                 GlobalStyles.mb10,
               ]}
             >
-              From {state.userInfo?.city}, {state.userInfo?.country}. Lives in{" "}
+              From {state.userInfo?.city}, {state.userInfo?.country}. Lives in{' '}
               {state.userInfo?.countryOfOrigin}
             </Text>
             <ReadMore
@@ -371,7 +371,7 @@ const FirstRoute = () => {
   const width = useDimension().width;
   const getExperienceTimeLine = () => {
     const filtered = (user?.experience || []).filter(
-      (item) => item.companyName && item.companyName.trim() !== "",
+      (item) => item.companyName && item.companyName.trim() !== '',
     );
     const timeline =
       filtered.length > 0
@@ -379,9 +379,9 @@ const FirstRoute = () => {
             title: (
               <View
                 style={{
-                  justifyContent: "space-between",
-                  flexDirection: "row",
-                  width: "100%",
+                  justifyContent: 'space-between',
+                  flexDirection: 'row',
+                  width: '100%',
                 }}
               >
                 <Text
@@ -408,11 +408,11 @@ const FirstRoute = () => {
                   ]}
                 >
                   {item.stillWorkHere ? (
-                    `${moment(item.startDate).format("MMM YYYY")} - PRESENT`
+                    `${moment(item.startDate).format('MMM YYYY')} - PRESENT`
                   ) : (
                     <Text>
-                      {moment(item.startDate).format("MMM YYYY")} -{" "}
-                      {moment(item.endDate).format("MMM YYYY")}
+                      {moment(item.startDate).format('MMM YYYY')} -{' '}
+                      {moment(item.endDate).format('MMM YYYY')}
                     </Text>
                   )}
                 </Text>
@@ -450,9 +450,9 @@ const FirstRoute = () => {
         title: (
           <View
             style={{
-              justifyContent: "space-between",
-              flexDirection: "row",
-              width: "100%",
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+              width: '100%',
             }}
           >
             <Text
@@ -478,7 +478,7 @@ const FirstRoute = () => {
           )),
           <TouchableOpacity
             onPress={() => setShowExprienceModal(true)}
-            style={{ flexDirection: "row", gap: 8 }}
+            style={{ flexDirection: 'row', gap: 8 }}
           >
             <AntDesign name="plus" size={16} color={colors.primary} />
             <Text
@@ -501,8 +501,8 @@ const FirstRoute = () => {
 
   useEffect(() => {
     if (
-      session.completeProfileStatus === "completed" ||
-      session.completeProfileStatus === "failed"
+      session.completeProfileStatus === 'completed' ||
+      session.completeProfileStatus === 'failed'
     ) {
       setShowEducationModal(false);
       setShowExprienceModal(false);
@@ -517,9 +517,9 @@ const FirstRoute = () => {
             title: (
               <View
                 style={{
-                  justifyContent: "space-between",
-                  flexDirection: "row",
-                  width: "100%",
+                  justifyContent: 'space-between',
+                  flexDirection: 'row',
+                  width: '100%',
                 }}
               >
                 <Text
@@ -537,11 +537,11 @@ const FirstRoute = () => {
             description: (
               <View style={[{ marginTop: -5 }]}>
                 <View style={{ marginBottom: 10 }}>
-                  {item.degree.trim() !== "" && (
+                  {item.degree.trim() !== '' && (
                     <View
                       style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
                       }}
                     >
                       <Text
@@ -567,14 +567,14 @@ const FirstRoute = () => {
                         ]}
                       >
                         <Text>
-                          {moment(item.startDate).format("MMM YYYY")} -{" "}
-                          {moment(item.endDate).format("MMM YYYY")}
+                          {moment(item.startDate).format('MMM YYYY')} -{' '}
+                          {moment(item.endDate).format('MMM YYYY')}
                         </Text>
                       </Text>
                     </View>
                   )}
 
-                  {item.school.trim() !== "" && (
+                  {item.school.trim() !== '' && (
                     <Text
                       style={[
                         GlobalStyles.fontInterRegular,
@@ -597,9 +597,9 @@ const FirstRoute = () => {
         title: (
           <View
             style={{
-              justifyContent: "space-between",
-              flexDirection: "row",
-              width: "100%",
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+              width: '100%',
             }}
           >
             <Text
@@ -621,7 +621,7 @@ const FirstRoute = () => {
           )),
           <TouchableOpacity
             onPress={() => setShowEducationModal(true)}
-            style={{ flexDirection: "row", gap: 8 }}
+            style={{ flexDirection: 'row', gap: 8 }}
           >
             <AntDesign name="plus" size={16} color={colors.primary} />
             <Text
@@ -642,9 +642,9 @@ const FirstRoute = () => {
 
   const handleFileDownload = async (url: string) => {
     try {
-      if (!(url.startsWith("https") || url.startsWith("http"))) return;
+      if (!(url.startsWith('https') || url.startsWith('http'))) return;
 
-      url = url.startsWith("https://") ? url : `https://${url}`;
+      url = url.startsWith('https://') ? url : `https://${url}`;
 
       url = url.trim();
 
@@ -654,7 +654,7 @@ const FirstRoute = () => {
         await Linking.openURL(url);
       }
     } catch (error) {
-      console.log("Error opening Link", error);
+      console.log('Error opening Link', error);
     }
   };
 
@@ -664,9 +664,9 @@ const FirstRoute = () => {
         title: (
           <View
             style={{
-              justifyContent: "space-between",
-              flexDirection: "row",
-              width: "100%",
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+              width: '100%',
               marginBottom: 10,
             }}
           ></View>
@@ -674,7 +674,7 @@ const FirstRoute = () => {
         description: (
           <View style={[{ marginBottom: 25 }]}>
             <TouchableOpacity
-              style={{ flex: 1, flexDirection: "row", gap: 12 }}
+              style={{ flex: 1, flexDirection: 'row', gap: 12 }}
               onPress={() => handleFileDownload(item.url)}
             >
               <View
@@ -684,8 +684,8 @@ const FirstRoute = () => {
                   height: 40,
                   borderRadius: 4,
                   paddingHorizontal: 8,
-                  justifyContent: "center",
-                  alignItems: "center",
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}
               >
                 <Text
@@ -719,9 +719,9 @@ const FirstRoute = () => {
         title: (
           <View
             style={{
-              justifyContent: "space-between",
-              flexDirection: "row",
-              width: "100%",
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+              width: '100%',
             }}
           >
             <Text
@@ -743,7 +743,7 @@ const FirstRoute = () => {
           )),
           <TouchableOpacity
             onPress={() => setshowCerticatesModal(true)}
-            style={{ flexDirection: "row", gap: 8 }}
+            style={{ flexDirection: 'row', gap: 8 }}
           >
             <AntDesign name="plus" size={16} color={colors.primary} />
             <Text
@@ -783,9 +783,9 @@ const FirstRoute = () => {
             title: (
               <View
                 style={{
-                  justifyContent: "space-between",
-                  flexDirection: "row",
-                  width: "100%",
+                  justifyContent: 'space-between',
+                  flexDirection: 'row',
+                  width: '100%',
                 }}
               >
                 <Text
@@ -811,13 +811,13 @@ const FirstRoute = () => {
                       GlobalStyles.mb20,
                     ]}
                   >
-                    {user?.skills.join(",")}
+                    {user?.skills.join(',')}
                   </Text>
                 ) : null}
                 <TouchableOpacity
                   onPress={() => setShowSkillsModal(true)}
                   style={{
-                    flexDirection: "row",
+                    flexDirection: 'row',
                     gap: 8,
                     marginBottom: 5,
                   }}
@@ -891,8 +891,8 @@ function TabViewExample() {
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    { key: "first", title: "Bio" },
-    { key: "second", title: "Feed" },
+    { key: 'first', title: 'Bio' },
+    { key: 'second', title: 'Feed' },
   ]);
 
   const renderTabBar = (props: any) => {
@@ -908,13 +908,13 @@ function TabViewExample() {
           });
           const color =
             index === i
-              ? useColorModeValue(colors.navyBlue, "#000")
-              : useColorModeValue(colors.grey, "#000");
+              ? useColorModeValue(colors.navyBlue, '#000')
+              : useColorModeValue(colors.grey, '#000');
 
           const borderColor =
             index === i
-              ? "#284453"
-              : useColorModeValue("coolGray.200", "gray.400");
+              ? '#284453'
+              : useColorModeValue('coolGray.200', 'gray.400');
           return (
             <Box
               borderBottomWidth="3"
@@ -954,7 +954,7 @@ function TabViewExample() {
 
 const styles = StyleSheet.create({
   imageBg: {
-    width: "100%",
+    width: '100%',
     height: 240,
     minHeight: 300,
   },
@@ -974,19 +974,19 @@ const styles = StyleSheet.create({
   },
   boxSummary: {
     flex: 1,
-    backgroundColor: "#F3F5F7",
+    backgroundColor: '#F3F5F7',
     paddingVertical: 15,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 10,
   },
   tabBar: {
-    flexDirection: "row",
+    flexDirection: 'row',
     paddingTop: StatusBar.currentHeight,
   },
   tabItem: {
     flex: 1,
-    alignItems: "center",
+    alignItems: 'center',
     padding: 16,
   },
 });

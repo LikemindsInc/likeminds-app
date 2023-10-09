@@ -4,48 +4,48 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import Input from "../../components/Input/Input";
-import React, { useEffect, useState } from "react";
-import Button from "../../components/Button/Button";
-import TextLink from "../../components/TextLink/TextLink";
-import colors from "../../theme/colors";
-import DatePicker from "../../components/DatePicker/DatePicker";
-import { APP_SCREEN_LIST } from "../../constants";
-import { useNavigation } from "@react-navigation/native";
-import BackButton from "../../components/Navigation/BackButton/BackButton";
-import useAppSelector from "../../hooks/useAppSelector";
-import { useToast } from "react-native-toast-notifications";
-import useAppDispatch from "../../hooks/useAppDispatch";
-import { completeUserProfileAction } from "../../actions/auth";
-import { updateSkills } from "../../reducers/userProfileSession";
+} from 'react-native';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import Input from '../../components/Input/Input';
+import React, { useEffect, useState } from 'react';
+import Button from '../../components/Button/Button';
+import TextLink from '../../components/TextLink/TextLink';
+import colors from '../../theme/colors';
+import DatePicker from '../../components/DatePicker/DatePicker';
+import { APP_SCREEN_LIST } from '../../constants';
+import { useNavigation } from '@react-navigation/native';
+import BackButton from '../../components/Navigation/BackButton/BackButton';
+import useAppSelector from '../../hooks/useAppSelector';
+import { useToast } from 'react-native-toast-notifications';
+import useAppDispatch from '../../hooks/useAppDispatch';
+import { completeUserProfileAction } from '../../actions/auth';
+import { updateSkills } from '../../reducers/userProfileSession';
 
 const SUGGESTIONS = [
-  "App Design",
-  "User Experience",
-  "UX/UI",
-  "Figma",
-  "Adobe",
-  "Sketch",
-  "Wireframes",
+  'App Design',
+  'User Experience',
+  'UX/UI',
+  'Figma',
+  'Adobe',
+  'Sketch',
+  'Wireframes',
 ];
 
 const SignupSkills = () => {
   const navigation = useNavigation<any>();
   const session = useAppSelector((state: any) => state.sessionReducer);
-  const [skills, setSkills] = useState("");
+  const [skills, setSkills] = useState('');
   const toast = useToast();
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
-  const [skillsValue, setSkillsValue] = useState("");
+  const [skillsValue, setSkillsValue] = useState('');
 
   const dispatch = useAppDispatch();
   const handleOnNextPress = () => {
-    if (skillsValue.trim() === "")
-      return toast.show("Please provide skills", { type: "normal" });
+    if (skillsValue.trim() === '')
+      return toast.show('Please provide skills', { type: 'normal' });
 
     navigation.navigate(APP_SCREEN_LIST.SIGNUP_CERTIFICATE_SCREEN);
-    dispatch(updateSkills(skillsValue.split(",")));
+    dispatch(updateSkills(skillsValue.split(',')));
     // dispatch(completeUserProfileAction(session.profileData));
   };
 
@@ -56,10 +56,10 @@ const SignupSkills = () => {
 
     if (index !== -1) {
       const addedSkills = skills
-        .split(",")
+        .split(',')
         .map((item) => item.trim())
         .filter((item) => item !== selectedSkills[index])
-        .join(", ");
+        .join(', ');
 
       state.splice(index, 1);
 
@@ -73,26 +73,26 @@ const SignupSkills = () => {
     const allSkills = selectedSkills;
 
     const addedSkills = skills
-      .split(",")
+      .split(',')
       .map((item) => item.trim())
       .filter((item) => !allSkills.includes(item));
 
     const filtered = [...addedSkills, ...allSkills]
 
       .map((item) => item.trim())
-      .filter((item) => item !== "," && item.trim() !== "");
+      .filter((item) => item !== ',' && item.trim() !== '');
 
     const set = new Set([
       ...skills
-        .split(",")
+        .split(',')
         .map((item) => item.trim())
-        .filter((item) => item !== ""),
-      ...filtered.map((item) => item.trim()).filter((item) => item !== ""),
+        .filter((item) => item !== ''),
+      ...filtered.map((item) => item.trim()).filter((item) => item !== ''),
     ]);
 
-    console.log("set> ", set);
+    console.log('set> ', set);
 
-    let newSkills = Array.from(set).join(", ");
+    let newSkills = Array.from(set).join(', ');
 
     // newSkills += ",";
 
@@ -101,7 +101,7 @@ const SignupSkills = () => {
 
   useEffect(() => {
     const skillsList = skills
-      .split(",")
+      .split(',')
       .map((item) => item.toLowerCase().trim());
     const i2 = [...selectedSkills];
 
@@ -109,8 +109,8 @@ const SignupSkills = () => {
       skillsList.includes(item.toLowerCase().trim()),
     );
 
-    console.log("skilss> ", skills);
-    if (!skills.endsWith(",")) setSelectedSkills(i3);
+    console.log('skilss> ', skills);
+    if (!skills.endsWith(',')) setSelectedSkills(i3);
     setSkillsValue(skills);
   }, [skills]);
   return (
@@ -153,9 +153,9 @@ const SignupSkills = () => {
 
         <View
           style={{
-            flexDirection: "row",
-            flexWrap: "wrap",
-            alignSelf: "flex-start",
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            alignSelf: 'flex-start',
             gap: 10,
             // marginBottom: 20,
           }}
@@ -168,12 +168,12 @@ const SignupSkills = () => {
                 borderRadius: 30,
                 borderColor: selectedSkills.includes(item)
                   ? colors.primary
-                  : "#88969D",
+                  : '#88969D',
                 borderWidth: 1,
 
-                flexDirection: "row",
-                flexWrap: "wrap",
-                alignSelf: "flex-start",
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                alignSelf: 'flex-start',
               }}
               key={i}
               onPress={() => addSelectedSkill(item)}
@@ -205,7 +205,7 @@ const SignupSkills = () => {
           />
         </View>
         <Button
-          loading={session.completeProfileStatus === "loading"}
+          loading={session.completeProfileStatus === 'loading'}
           title="Continue"
           onPress={handleOnNextPress}
         />
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inputDouble: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 20,
   },
   inputFlex: {

@@ -1,8 +1,8 @@
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import useAppSelector from "./useAppSelector";
-import { APP_SCREEN_LIST } from "../constants";
-import useAppDispatch from "./useAppDispatch";
-import { getProfile } from "../reducers/connection";
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import useAppSelector from './useAppSelector';
+import { APP_SCREEN_LIST } from '../constants';
+import useAppDispatch from './useAppDispatch';
+import { getProfile } from '../reducers/connection';
 
 export function useProfileNavigation(profileId: string) {
   const state = useAppSelector((state) => state.settingReducer);

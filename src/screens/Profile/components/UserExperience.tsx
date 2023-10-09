@@ -1,8 +1,8 @@
-import colors from "../../../theme/colors";
-import Timeline from "react-native-timeline-flatlist";
-import { FC, useCallback, useEffect } from "react";
-import { GlobalStyles } from "../../../theme/GlobalStyles";
-import { View } from "react-native";
+import colors from '../../../theme/colors';
+import Timeline from 'react-native-timeline-flatlist';
+import { FC, useCallback, useEffect } from 'react';
+import { GlobalStyles } from '../../../theme/GlobalStyles';
+import { View } from 'react-native';
 
 interface IProps {
   data?: { title: any; description: any }[];

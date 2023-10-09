@@ -1,84 +1,84 @@
-import Home from "../screens/Home/Home";
-import Login from "../screens/Login/Login";
-import OnBoarding from "../screens/onboarding/OnBoarding";
-import OTPVerification from "../screens/otp_verification/OTPVerification";
-import PersonalInformation from "../screens/personal_inforamtion/PersonalInformation";
-import Signup from "../screens/Signup/Signup";
-import SignupCertificate from "../screens/SignupCertificate/SignupCertiifcate";
-import SignupComplete from "../screens/SignupComplete/SignupComplete";
-import SignupEducation from "../screens/SignupEducation/SignupEducation";
-import SignupExperience from "../screens/SignupExperience/SignupExperience";
-import SignupProfilePicture from "../screens/SignupProfilePicture/SignupProfilePicture";
-import SignupSkills from "../screens/SignupSkills/SignupSkills";
+import Home from '../screens/Home/Home';
+import Login from '../screens/Login/Login';
+import OnBoarding from '../screens/onboarding/OnBoarding';
+import OTPVerification from '../screens/otp_verification/OTPVerification';
+import PersonalInformation from '../screens/personal_inforamtion/PersonalInformation';
+import Signup from '../screens/Signup/Signup';
+import SignupCertificate from '../screens/SignupCertificate/SignupCertiifcate';
+import SignupComplete from '../screens/SignupComplete/SignupComplete';
+import SignupEducation from '../screens/SignupEducation/SignupEducation';
+import SignupExperience from '../screens/SignupExperience/SignupExperience';
+import SignupProfilePicture from '../screens/SignupProfilePicture/SignupProfilePicture';
+import SignupSkills from '../screens/SignupSkills/SignupSkills';
 import {
   APP_SCREEN_LIST,
   DRAWER_WIDTH,
   UNHANDLED_GLOBAL_ERRORS,
-} from "../constants";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+} from '../constants';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import {
   MaterialCommunityIcons,
   Ionicons,
   Feather,
   AntDesign,
-} from "@expo/vector-icons";
+} from '@expo/vector-icons';
 import {
   DrawerContentComponentProps,
   DrawerContentScrollView,
   DrawerItem,
   DrawerNavigationProp,
   createDrawerNavigator,
-} from "@react-navigation/drawer";
+} from '@react-navigation/drawer';
 import {
   BackHandler,
   Image,
   TouchableOpacity,
   View,
   useWindowDimensions,
-} from "react-native";
-import { GlobalStyles } from "../theme/GlobalStyles";
-import useDimension from "../hooks/useDimension";
-import Button from "../components/Button/Button";
-import colors from "../theme/colors";
-import { Text } from "react-native";
-import { useEffect } from "react";
-import useAppSelector from "../hooks/useAppSelector";
-import { IGlobalErrorState, clearNetworkError } from "../reducers/errorHanlder";
-import useAppDispatch from "../hooks/useAppDispatch";
-import { PURGE } from "redux-persist";
-import { __ROOT_REDUX_STATE_KEY__ } from "../store/constants";
-import { logoutAction } from "../actions/auth";
+} from 'react-native';
+import { GlobalStyles } from '../theme/GlobalStyles';
+import useDimension from '../hooks/useDimension';
+import Button from '../components/Button/Button';
+import colors from '../theme/colors';
+import { Text } from 'react-native';
+import { useEffect } from 'react';
+import useAppSelector from '../hooks/useAppSelector';
+import { IGlobalErrorState, clearNetworkError } from '../reducers/errorHanlder';
+import useAppDispatch from '../hooks/useAppDispatch';
+import { PURGE } from 'redux-persist';
+import { __ROOT_REDUX_STATE_KEY__ } from '../store/constants';
+import { logoutAction } from '../actions/auth';
 import {
   DrawerActions,
   NavigationProp,
   useNavigation,
-} from "@react-navigation/native";
-import { ISettingState, logoutUserAction } from "../reducers/settings";
-import ForgotPassword from "../screens/ForgotPassword/ForgotPassword";
-import RecoverWithPhone from "../screens/ForgotEmail/RecoverWithPhone";
-import OTPScreen from "../screens/ForgotEmail/OTPScreen";
-import OTPEmailScreen from "../screens/ForgotPassword/OTPScreen";
-import CreatePassword from "../screens/CreatePassword/CreatePassword";
-import CreateSpace from "../screens/CreateSpace/CreateSpace";
-import CreateSpaceAddPicture from "../screens/CreateSpace/CreateSpaceAddPicture";
-import CreatePost from "../screens/CreatePost/CreatePost";
-import UserProfile from "../screens/Profile/UserProfile";
-import PostJob from "../screens/Job/PostJob/PostJob";
-import SpaceSearch from "../screens/Spaces/SpaceSearch/SpaceSearch";
-import SpaceProfile from "../screens/Spaces/SpaceProfile";
-import PostDetail from "../screens/Home/components/PostDetail";
-import Jobs from "../screens/Job/PostJob/Jobs";
-import Messages from "../screens/Message/Messages";
-import ConnectionProfile from "../screens/Profile/ConnectionProfile";
-import Notification from "../screens/Notification/Notification";
-import { useToast } from "react-native-toast-notifications";
-import { getCurrentUserSpace } from "../actions/space";
-import { persistor } from "../store/store";
-import JobFilter from "../screens/Job/JobFilter";
-import ReactionsViewModal from "../components/ReactionsViewModal/ReactionsViewModal";
+} from '@react-navigation/native';
+import { ISettingState, logoutUserAction } from '../reducers/settings';
+import ForgotPassword from '../screens/ForgotPassword/ForgotPassword';
+import RecoverWithPhone from '../screens/ForgotEmail/RecoverWithPhone';
+import OTPScreen from '../screens/ForgotEmail/OTPScreen';
+import OTPEmailScreen from '../screens/ForgotPassword/OTPScreen';
+import CreatePassword from '../screens/CreatePassword/CreatePassword';
+import CreateSpace from '../screens/CreateSpace/CreateSpace';
+import CreateSpaceAddPicture from '../screens/CreateSpace/CreateSpaceAddPicture';
+import CreatePost from '../screens/CreatePost/CreatePost';
+import UserProfile from '../screens/Profile/UserProfile';
+import PostJob from '../screens/Job/PostJob/PostJob';
+import SpaceSearch from '../screens/Spaces/SpaceSearch/SpaceSearch';
+import SpaceProfile from '../screens/Spaces/SpaceProfile';
+import PostDetail from '../screens/Home/components/PostDetail';
+import Jobs from '../screens/Job/PostJob/Jobs';
+import Messages from '../screens/Message/Messages';
+import ConnectionProfile from '../screens/Profile/ConnectionProfile';
+import Notification from '../screens/Notification/Notification';
+import { useToast } from 'react-native-toast-notifications';
+import { getCurrentUserSpace } from '../actions/space';
+import { persistor } from '../store/store';
+import JobFilter from '../screens/Job/JobFilter';
+import ReactionsViewModal from '../components/ReactionsViewModal/ReactionsViewModal';
 
 const Stack = createNativeStackNavigator();
 
@@ -111,11 +111,11 @@ const AppHome = () => {
   };
 
   useEffect(() => {
-    BackHandler.addEventListener("hardwareBackPress", handleBackPress);
-    navigation.addListener("beforeRemove", handleBackNavigation);
+    BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+    navigation.addListener('beforeRemove', handleBackNavigation);
     return () => {
-      BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
-      navigation.removeListener("beforeRemove", handleBackNavigation);
+      BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+      navigation.removeListener('beforeRemove', handleBackNavigation);
     };
   }, [navigation, setting.userInfo]);
 
@@ -128,9 +128,9 @@ const AppHome = () => {
     <View style={GlobalStyles.flexOne}>
       <Tab.Navigator
         screenOptions={({ route }) => ({
-          tabBarActiveTintColor: "#009AEE",
-          tabBarInactiveTintColor: "#88969D",
-          tabBarLabelStyle: { fontFamily: "Inter-Regular", display: "none" },
+          tabBarActiveTintColor: '#009AEE',
+          tabBarInactiveTintColor: '#88969D',
+          tabBarLabelStyle: { fontFamily: 'Inter-Regular', display: 'none' },
           tabBarIcon: ({ focused, color, size }) => {
             switch (route.name) {
               case APP_SCREEN_LIST.HOME_SCREEN:
@@ -208,13 +208,13 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
         <View
           style={[
             GlobalStyles.menuItemsCard,
-            { backgroundColor: "#284453", width: width, height: height },
+            { backgroundColor: '#284453', width: width, height: height },
             GlobalStyles.drawerContainer,
           ]}
         >
           <View style={[GlobalStyles.displayRowCenter, GlobalStyles.mb40]}>
             <Image
-              source={require("../../assets/image4.png")}
+              source={require('../../assets/image4.png')}
               style={{ height: 30, width: 120 }}
               resizeMethod="auto"
               resizeMode="contain"
@@ -243,8 +243,8 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
             <TouchableOpacity
               style={[
                 {
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginBottom: 40,
                 },
               ]}
@@ -266,8 +266,8 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
             <TouchableOpacity
               style={[
                 {
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginBottom: 40,
                 },
               ]}
@@ -295,8 +295,8 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
             <TouchableOpacity
               style={[
                 {
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginBottom: 40,
                 },
               ]}
@@ -319,8 +319,8 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
             <TouchableOpacity
               style={[
                 {
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   marginBottom: 40,
                 },
               ]}
@@ -344,7 +344,7 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
           <View style={[{ marginBottom: 110 }]}>
             <Button
               onPress={() => {
-                console.log("CALLED");
+                console.log('CALLED');
                 dispatch(logoutUserAction());
                 dispatch(logoutAction());
                 persistor.purge();
@@ -374,8 +374,8 @@ const AppDrawer = () => {
         drawerStyle: {
           width,
         },
-        drawerType: useWindowDimensions().width >= 768 ? "permanent" : "front",
-        overlayColor: "transparent",
+        drawerType: useWindowDimensions().width >= 768 ? 'permanent' : 'front',
+        overlayColor: 'transparent',
       }}
       initialRouteName="DrawerHome"
       drawerContent={(props) => <CustomDrawerContent {...props} />}
@@ -394,7 +394,7 @@ const AppRoutes = () => {
   const state = useAppSelector((state) => state.settingReducer);
   const toast = useToast();
   useEffect(() => {
-    if (errorReducer.message?.trim() !== "") {
+    if (errorReducer.message?.trim() !== '') {
       // toast.show({ description: errorReducer.message });
       if (UNHANDLED_GLOBAL_ERRORS.includes(errorReducer.message)) {
         dispatch(clearNetworkError());

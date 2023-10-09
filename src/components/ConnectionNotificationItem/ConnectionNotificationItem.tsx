@@ -1,22 +1,22 @@
-import { IConnectionReceivedDTO } from "@app-model";
-import { FC, useEffect } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Button from "../Button/Button";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import moment from "moment";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { APP_SCREEN_LIST } from "../../constants";
-import useAppDispatch from "../../hooks/useAppDispatch";
+import { IConnectionReceivedDTO } from '@app-model';
+import { FC, useEffect } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Button from '../Button/Button';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import moment from 'moment';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { APP_SCREEN_LIST } from '../../constants';
+import useAppDispatch from '../../hooks/useAppDispatch';
 import {
   clearConnectionRespondStatus,
   getProfile,
-} from "../../reducers/connection";
+} from '../../reducers/connection';
 import {
   acceptConnectionRequestAction,
   getConnections,
-} from "../../actions/connection";
-import { useToast } from "react-native-toast-notifications";
-import useAppSelector from "../../hooks/useAppSelector";
+} from '../../actions/connection';
+import { useToast } from 'react-native-toast-notifications';
+import useAppSelector from '../../hooks/useAppSelector';
 
 interface IProps {
   item: IConnectionReceivedDTO;
@@ -28,9 +28,9 @@ const ConnectionNotificationItem: FC<IProps> = ({ item, handleOnRespond }) => {
     if (
       !item.user ||
       !item.user.profilePicture ||
-      item.user?.profilePicture.trim() === ""
+      item.user?.profilePicture.trim() === ''
     )
-      return require("../../../assets/image20.png");
+      return require('../../../assets/image20.png');
     return { uri: item.user.profilePicture };
   };
   const navigation = useNavigation<NavigationProp<any>>();
@@ -44,12 +44,12 @@ const ConnectionNotificationItem: FC<IProps> = ({ item, handleOnRespond }) => {
   const toast = useToast();
 
   useEffect(() => {
-    if (state.connectionRespondStatus === "completed") {
+    if (state.connectionRespondStatus === 'completed') {
       dispatch(getConnections());
-      toast.show("Connection accepted successfully", {
-        placement: "top",
-        type: "success",
-        animationType: "slide-in",
+      toast.show('Connection accepted successfully', {
+        placement: 'top',
+        type: 'success',
+        animationType: 'slide-in',
       });
     }
 
@@ -111,8 +111,8 @@ const ConnectionNotificationItem: FC<IProps> = ({ item, handleOnRespond }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 20,
     gap: 10,
   },

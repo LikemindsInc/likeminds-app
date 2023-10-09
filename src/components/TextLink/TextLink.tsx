@@ -1,10 +1,10 @@
-import { useNavigation } from "@react-navigation/native";
-import { Text } from "native-base";
-import { FC } from "react";
-import { ButtonProps, StyleSheet, TouchableOpacity } from "react-native";
-import colors from "../../theme/colors";
-import font from "../../theme/font";
-import { GlobalStyles } from "../../theme/GlobalStyles";
+import { useNavigation } from '@react-navigation/native';
+import { Text } from 'native-base';
+import { FC } from 'react';
+import { ButtonProps, StyleSheet, TouchableOpacity } from 'react-native';
+import colors from '../../theme/colors';
+import font from '../../theme/font';
+import { GlobalStyles } from '../../theme/GlobalStyles';
 
 export interface ITextLinkProps extends ButtonProps {
   linkTo?: string;
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 700,
     fontSize: font.size.font16,
-    textDecorationLine: "underline",
+    textDecorationLine: 'underline',
   },
 });
 

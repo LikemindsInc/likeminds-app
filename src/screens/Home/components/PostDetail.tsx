@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from 'react';
 import {
   Image,
   KeyboardAvoidingView,
@@ -8,9 +8,9 @@ import {
   TextStyle,
   TouchableOpacity,
   View,
-} from "react-native";
-import { Feather, AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
-import { IPostFeed, IPostReaction } from "@app-model";
+} from 'react-native';
+import { Feather, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
+import { IPostFeed, IPostReaction } from '@app-model';
 
 import {
   commentOnPostAction,
@@ -20,28 +20,28 @@ import {
   getPostReactions,
   likePostAction,
   unlikePostAction,
-} from "../../../actions/post";
-import ReadMore from "react-native-read-more-text";
-import { Spinner, useToast } from "native-base";
-import { ScrollView } from "react-native-gesture-handler";
+} from '../../../actions/post';
+import ReadMore from 'react-native-read-more-text';
+import { Spinner, useToast } from 'native-base';
+import { ScrollView } from 'react-native-gesture-handler';
 import {
   IPostState,
   clearCreateCommentOnPostState,
   openReactionList,
-} from "../../../reducers/post_reducer";
-import Input from "../../../components/Input/Input";
-import useAppDispatch from "../../../hooks/useAppDispatch";
-import { ISettingState } from "../../../reducers/settings";
-import useAppSelector from "../../../hooks/useAppSelector";
-import { GlobalStyles } from "../../../theme/GlobalStyles";
-import colors from "../../../theme/colors";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import CommentRowItem from "./CommentRowItem";
-import FbGrid from "react-native-fb-image-grid";
-import ReactionIcon from "../../../components/ReactionIcon/ReactionIcon";
-import { Video, ResizeMode } from "expo-av";
-import EventDismisser from "../../../components/EventDismisser/EventDismisser";
-import FullScreenImageCarousel from "../../../components/FullScreenImageCarousel/FullScreenImageCarousel";
+} from '../../../reducers/post_reducer';
+import Input from '../../../components/Input/Input';
+import useAppDispatch from '../../../hooks/useAppDispatch';
+import { ISettingState } from '../../../reducers/settings';
+import useAppSelector from '../../../hooks/useAppSelector';
+import { GlobalStyles } from '../../../theme/GlobalStyles';
+import colors from '../../../theme/colors';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import CommentRowItem from './CommentRowItem';
+import FbGrid from 'react-native-fb-image-grid';
+import ReactionIcon from '../../../components/ReactionIcon/ReactionIcon';
+import { Video, ResizeMode } from 'expo-av';
+import EventDismisser from '../../../components/EventDismisser/EventDismisser';
+import FullScreenImageCarousel from '../../../components/FullScreenImageCarousel/FullScreenImageCarousel';
 
 interface IProps {
   item: IPostFeed;
@@ -58,7 +58,7 @@ const PostDetail = () => {
 
   const navigation = useNavigation<NavigationProp<any>>();
 
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState('');
 
   const postState = useAppSelector(
     (state: any) => state.postReducer,
@@ -78,8 +78,8 @@ const PostDetail = () => {
 
   const onPress = (url: any, index: any, event: any) => {
     // url and index of the image you have clicked alongwith onPress event.
-    console.log("url> ", url);
-    console.log("index> ", index);
+    console.log('url> ', url);
+    console.log('index> ', index);
     setShowImageZoom(true);
   };
 
@@ -94,10 +94,10 @@ const PostDetail = () => {
   }, [showComments]);
 
   useEffect(() => {
-    if (postState.commentOnPostStatus === "failed") {
+    if (postState.commentOnPostStatus === 'failed') {
       toast.show({ description: postState.commentOnPostError });
-    } else if (postState.commentOnPostStatus === "completed") {
-      setComment("");
+    } else if (postState.commentOnPostStatus === 'completed') {
+      setComment('');
       dispatch(clearCreateCommentOnPostState());
       dispatch(getCommentsOnPostAction(item.id));
       dispatch(getPostFeedAction());
@@ -106,22 +106,22 @@ const PostDetail = () => {
 
   useEffect(() => {
     if (
-      postState.likePostStatus === "completed" ||
-      postState.unlikePostStatus === "completed"
+      postState.likePostStatus === 'completed' ||
+      postState.unlikePostStatus === 'completed'
     ) {
       dispatch(getPostFeedByIdAction(item.id));
     }
   }, [postState.likePostStatus, postState.unlikePostStatus]);
 
   useEffect(() => {
-    if (postState.getCommentOnPostStatus === "failed") {
+    if (postState.getCommentOnPostStatus === 'failed') {
       toast.show({ description: postState.commentOnPostError });
     }
   }, [postState.getCommentOnPostStatus]);
 
   const handleLikeReactionOnPost = () => {
     if (isPostLiked) {
-      console.log("unliking a post");
+      console.log('unliking a post');
       dispatch(unlikePostAction(item.id));
       // setLiked(false);
     } else {
@@ -131,10 +131,10 @@ const PostDetail = () => {
   };
 
   const renderProfilePicture = (item: IPostReaction) => {
-    if (item.user.profilePicture && item.user.profilePicture.trim() !== "") {
+    if (item.user.profilePicture && item.user.profilePicture.trim() !== '') {
       return { uri: item.user.profilePicture };
     }
-    return require("../../../../assets/imageAvatar.jpeg");
+    return require('../../../../assets/imageAvatar.jpeg');
   };
 
   const handleLoadComments = () => {};
@@ -172,7 +172,7 @@ const PostDetail = () => {
   };
 
   const handlePostComment = () => {
-    if (comment.trim() === "") return;
+    if (comment.trim() === '') return;
 
     dispatch(commentOnPostAction({ postId: item.id, comment }));
   };
@@ -212,7 +212,7 @@ const PostDetail = () => {
             Comments
           </Text>
           <View>
-            {postState.getCommentOnPostStatus === "loading" && (
+            {postState.getCommentOnPostStatus === 'loading' && (
               <Spinner
                 accessibilityLabel="Loading comments"
                 color="emerald.500"
@@ -238,7 +238,7 @@ const PostDetail = () => {
     <EventDismisser>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={50}
         // keyboardShouldPersistTaps={"always"}
       >
@@ -255,14 +255,14 @@ const PostDetail = () => {
           <View>
             <View style={styles.storyHeader}>
               <TouchableOpacity
-                style={{ flexDirection: "row", alignItems: "center" }}
+                style={{ flexDirection: 'row', alignItems: 'center' }}
               >
                 <View>
                   <Image
                     source={
                       item.user?.profilePicture
                         ? { uri: item.user.profilePicture }
-                        : require("../../../../assets/imageAvatar.jpeg")
+                        : require('../../../../assets/imageAvatar.jpeg')
                     }
                     style={{ width: 40, height: 40, borderRadius: 20 }}
                   />
@@ -280,11 +280,11 @@ const PostDetail = () => {
                   {item?.user?.firstName} {item?.user?.lastName}
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={{ justifyContent: "center" }}>
+              <TouchableOpacity style={{ justifyContent: 'center' }}>
                 <Feather name="more-horizontal" size={24} color={colors.grey} />
               </TouchableOpacity>
             </View>
-            <View style={{ width: "100%", height: 300 }}>
+            <View style={{ width: '100%', height: 300 }}>
               {item.images && item.images.length > 0 ? (
                 <FbGrid images={item.images} onPress={onPress} />
               ) : null}
@@ -292,7 +292,7 @@ const PostDetail = () => {
                 ? item.videos.map((item) => (
                     <View style={[GlobalStyles.mb20]}>
                       <Video
-                        style={{ width: "100%", height: 300 }}
+                        style={{ width: '100%', height: 300 }}
                         source={{
                           uri: item,
                         }}
@@ -311,11 +311,11 @@ const PostDetail = () => {
               GlobalStyles.flewRow,
               GlobalStyles.mt10,
               GlobalStyles.mb10,
-              { alignItems: "center" },
+              { alignItems: 'center' },
             ]}
           >
             <View
-              style={[GlobalStyles.flewRow, { gap: 12, alignItems: "center" }]}
+              style={[GlobalStyles.flewRow, { gap: 12, alignItems: 'center' }]}
             >
               <TouchableOpacity onPress={() => handleGetPostReactions(item.id)}>
                 <Text
@@ -341,7 +341,7 @@ const PostDetail = () => {
             <View
               style={[
                 GlobalStyles.flewRow,
-                { gap: 20, justifyContent: "flex-end", flex: 1 },
+                { gap: 20, justifyContent: 'flex-end', flex: 1 },
               ]}
             >
               <TouchableOpacity>
@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     paddingHorizontal: 25,
     paddingTop: 16,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   commentWrapper: {
     borderTopWidth: StyleSheet.hairlineWidth,
@@ -426,12 +426,12 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   storyHeader: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginBottom: 15,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   image: {
-    width: "100%",
+    width: '100%',
     borderRadius: 10,
     height: 300,
   },

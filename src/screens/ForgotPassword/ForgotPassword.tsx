@@ -1,24 +1,24 @@
-import { Text, View } from "native-base";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import Input from "../../components/Input/Input";
-import TextLink from "../../components/TextLink/TextLink";
-import { StyleSheet } from "react-native";
-import Button from "../../components/Button/Button";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { APP_SCREEN_LIST } from "../../constants";
-import { useEffect, useState } from "react";
-import { requestOTPEmailAction } from "../../actions/auth";
-import useAppDispatch from "../../hooks/useAppDispatch";
-import useAppSelector from "../../hooks/useAppSelector";
+import { Text, View } from 'native-base';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import Input from '../../components/Input/Input';
+import TextLink from '../../components/TextLink/TextLink';
+import { StyleSheet } from 'react-native';
+import Button from '../../components/Button/Button';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { APP_SCREEN_LIST } from '../../constants';
+import { useEffect, useState } from 'react';
+import { requestOTPEmailAction } from '../../actions/auth';
+import useAppDispatch from '../../hooks/useAppDispatch';
+import useAppSelector from '../../hooks/useAppSelector';
 import {
   ISessionState,
   storeOTPChannelValue,
-} from "../../reducers/userProfileSession";
-import BackButton from "../../components/Navigation/BackButton/BackButton";
-import { useToast } from "react-native-toast-notifications";
+} from '../../reducers/userProfileSession';
+import BackButton from '../../components/Navigation/BackButton/BackButton';
+import { useToast } from 'react-native-toast-notifications';
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const navigation = useNavigation<NavigationProp<any>>();
   const dispatch = useAppDispatch();
   const session = useAppSelector(
@@ -26,15 +26,15 @@ const ForgotPassword = () => {
   ) as ISessionState;
   const toast = useToast();
   const handleOnNextPress = () => {
-    if (email.trim() === "") return;
+    if (email.trim() === '') return;
 
     dispatch(storeOTPChannelValue(`email_${email}`));
     dispatch(requestOTPEmailAction({ email }));
   };
   useEffect(() => {
-    if (session.requestOTPEmailStatus === "completed") {
+    if (session.requestOTPEmailStatus === 'completed') {
       navigation.navigate(APP_SCREEN_LIST.FORGOT_EMAIL_OTP_SCREEN);
-    } else if (session.requestOTPEmailStatus === "failed") {
+    } else if (session.requestOTPEmailStatus === 'failed') {
     }
   }, [session.requestOTPEmailStatus]);
   return (
@@ -59,7 +59,7 @@ const ForgotPassword = () => {
           <Input
             placeholder="Email Address"
             autoCorrect={false}
-            autoCapitalize={"none"}
+            autoCapitalize={'none'}
             keyboardType="email-address"
             value={email}
             onChangeText={(value) => setEmail(value)}
@@ -88,7 +88,7 @@ const ForgotPassword = () => {
       </View>
       <View style={[GlobalStyles.mb10]}>
         <Button
-          loading={session.requestOTPEmailStatus === "loading"}
+          loading={session.requestOTPEmailStatus === 'loading'}
           onPress={handleOnNextPress}
           title="Send Code"
         />

@@ -1,21 +1,21 @@
-import { createSlice, isRejected, isPending } from "@reduxjs/toolkit";
-import _ from "lodash";
-import { PURGE } from "redux-persist";
+import { createSlice, isRejected, isPending } from '@reduxjs/toolkit';
+import _ from 'lodash';
+import { PURGE } from 'redux-persist';
 
 export interface IGlobalErrorState {
   message: string;
 }
 
 const initialState: IGlobalErrorState = {
-  message: "",
+  message: '',
 };
 
 const errorSlice = createSlice({
-  name: "error",
+  name: 'error',
   initialState,
   reducers: {
     clearNetworkError(state: IGlobalErrorState) {
-      state.message = "";
+      state.message = '';
     },
   },
   extraReducers: (builder) => {
@@ -24,17 +24,17 @@ const errorSlice = createSlice({
     });
     builder.addMatcher(isPending, (state, action: any) => {
       // global error handle reducer
-      state.message = "";
+      state.message = '';
     });
     builder.addMatcher(isRejected, (state, action: any) => {
       // global error handle reducer
-      console.log("rejected", action);
+      console.log('rejected', action);
 
       if (action.payload?.message && _.isArray(action.payload.message)) {
-        state.message = action.payload?.message?.join(",");
+        state.message = action.payload?.message?.join(',');
       } else if (
         action.payload?.message &&
-        action.payload.message.trim() !== ""
+        action.payload.message.trim() !== ''
       ) {
         state.message = action.payload?.message;
       } else if (action.error?.message && _.isArray(action.error?.message)) {
@@ -42,7 +42,7 @@ const errorSlice = createSlice({
       } else if (action.error?.message && !_.isArray(action.error?.message)) {
         state.message = action.error?.message;
       } else {
-        state.message = action.payload?.message || action.message || "";
+        state.message = action.payload?.message || action.message || '';
       }
     });
   },

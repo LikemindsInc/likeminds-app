@@ -1,42 +1,42 @@
-import { Text, View } from "native-base";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import Input from "../../components/Input/Input";
-import TextLink from "../../components/TextLink/TextLink";
-import { StyleSheet } from "react-native";
-import Button from "../../components/Button/Button";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { APP_SCREEN_LIST } from "../../constants";
-import { useEffect, useState } from "react";
-import useAppDispatch from "../../hooks/useAppDispatch";
-import useAppSelector from "../../hooks/useAppSelector";
+import { Text, View } from 'native-base';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import Input from '../../components/Input/Input';
+import TextLink from '../../components/TextLink/TextLink';
+import { StyleSheet } from 'react-native';
+import Button from '../../components/Button/Button';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { APP_SCREEN_LIST } from '../../constants';
+import { useEffect, useState } from 'react';
+import useAppDispatch from '../../hooks/useAppDispatch';
+import useAppSelector from '../../hooks/useAppSelector';
 import {
   ISessionState,
   storeOTPChannelValue,
-} from "../../reducers/userProfileSession";
-import { requestOTPPhoneAction } from "../../actions/auth";
-import BackButton from "../../components/Navigation/BackButton/BackButton";
-import Util from "../../utils";
-import { clearNetworkError } from "../../reducers/errorHanlder";
+} from '../../reducers/userProfileSession';
+import { requestOTPPhoneAction } from '../../actions/auth';
+import BackButton from '../../components/Navigation/BackButton/BackButton';
+import Util from '../../utils';
+import { clearNetworkError } from '../../reducers/errorHanlder';
 
 const RecoverWithPhone = () => {
   const navigation = useNavigation<NavigationProp<any>>();
-  const [errorMessage, setErrorMessage] = useState<string | null>("");
-  const [phone, setPhone] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string | null>('');
+  const [phone, setPhone] = useState('');
   const session = useAppSelector(
     (state: any) => state.sessionReducer,
   ) as ISessionState;
   const dispatch = useAppDispatch();
-  const [countryCode, setCountryCode] = useState("");
+  const [countryCode, setCountryCode] = useState('');
 
   const errorReducer = useAppSelector((state) => state.errorReducer);
 
   const handleOnNextPress = () => {
-    let formattedPhone = "";
+    let formattedPhone = '';
     dispatch(clearNetworkError());
-    if (!countryCode.trim()) return setErrorMessage("Please select country");
+    if (!countryCode.trim()) return setErrorMessage('Please select country');
 
-    if (phone.trim() === "")
-      return setErrorMessage("Please provide your phone number");
+    if (phone.trim() === '')
+      return setErrorMessage('Please provide your phone number');
 
     setErrorMessage(null);
 
@@ -45,11 +45,11 @@ const RecoverWithPhone = () => {
   };
 
   useEffect(() => {
-    if (session.requestOTPPhoneStatus === "completed") {
+    if (session.requestOTPPhoneStatus === 'completed') {
       navigation.navigate(APP_SCREEN_LIST.FORGOT_PHONE_OTP_SCREEN);
     } else if (
-      session.requestOTPPhoneStatus === "failed" &&
-      session.requestOTPEmailError?.trim() !== ""
+      session.requestOTPPhoneStatus === 'failed' &&
+      session.requestOTPEmailError?.trim() !== ''
     ) {
       // toast.show(session.requestOTPEmailError as string, { type: "normal" });
     }
@@ -96,7 +96,7 @@ const RecoverWithPhone = () => {
           <Input
             placeholder="Phone Number"
             autoCorrect={false}
-            autoCapitalize={"none"}
+            autoCapitalize={'none'}
             keyboardType="default"
             value={phone}
             mode="phone-pad"
@@ -128,7 +128,7 @@ const RecoverWithPhone = () => {
       </View>
       <View style={[GlobalStyles.mb10]}>
         <Button
-          loading={session.requestOTPPhoneStatus === "loading"}
+          loading={session.requestOTPPhoneStatus === 'loading'}
           onPress={handleOnNextPress}
           title="Send Code"
         />

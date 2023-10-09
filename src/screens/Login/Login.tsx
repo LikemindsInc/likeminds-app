@@ -1,22 +1,22 @@
-import { Text, TouchableOpacity, View } from "react-native";
-import { useEffect } from "react";
-import { useFormik } from "formik";
-import Button from "../../components/Button/Button";
-import Input from "../../components/Input/Input";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import TextLink from "../../components/TextLink/TextLink";
-import { APP_SCREEN_LIST, PENDING_OTP_MESSAGE } from "../../constants";
-import useAppSelector from "../../hooks/useAppSelector";
+import { Text, TouchableOpacity, View } from 'react-native';
+import { useEffect } from 'react';
+import { useFormik } from 'formik';
+import Button from '../../components/Button/Button';
+import Input from '../../components/Input/Input';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import TextLink from '../../components/TextLink/TextLink';
+import { APP_SCREEN_LIST, PENDING_OTP_MESSAGE } from '../../constants';
+import useAppSelector from '../../hooks/useAppSelector';
 import {
   ISessionState,
   updatePhoneNumber,
-} from "../../reducers/userProfileSession";
-import useAppDispatch from "../../hooks/useAppDispatch";
-import { loginUserActionAction } from "../../actions/auth";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import BackButton from "../../components/Navigation/BackButton/BackButton";
-import { initialLoginValue, loginValidator } from "./validator";
-import { clearNetworkError } from "../../reducers/errorHanlder";
+} from '../../reducers/userProfileSession';
+import useAppDispatch from '../../hooks/useAppDispatch';
+import { loginUserActionAction } from '../../actions/auth';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import BackButton from '../../components/Navigation/BackButton/BackButton';
+import { initialLoginValue, loginValidator } from './validator';
+import { clearNetworkError } from '../../reducers/errorHanlder';
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -53,7 +53,7 @@ const Login = () => {
   });
 
   useEffect(() => {
-    if (session.signingInStatus === "completed") {
+    if (session.signingInStatus === 'completed') {
       if (!setting.userInfo?.isVerified) {
         dispatch(updatePhoneNumber(setting.userInfo?.phone as string));
         navigation.navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
@@ -61,7 +61,7 @@ const Login = () => {
         return;
       }
       navigation.navigate(APP_SCREEN_LIST.MAIN_SCREEN);
-    } else if (session.signingInStatus === "failed") {
+    } else if (session.signingInStatus === 'failed') {
     }
   }, [session.signingInStatus]);
 
@@ -103,23 +103,23 @@ const Login = () => {
           <Input
             placeholder="Email Address"
             autoCorrect={false}
-            autoCapitalize={"none"}
+            autoCapitalize={'none'}
             value={values.email}
-            onBlur={handleBlur("email")}
+            onBlur={handleBlur('email')}
             keyboardType="email-address"
-            onChangeText={handleChange("email")}
+            onChangeText={handleChange('email')}
             returnKeyType="done"
             errorMessage={touched.email ? errors.email : null}
           />
           <Input
             placeholder="Password"
             autoCorrect={false}
-            autoCapitalize={"none"}
-            onBlur={handleBlur("password")}
+            autoCapitalize={'none'}
+            onBlur={handleBlur('password')}
             secureTextEntry
             value={values.password}
             keyboardType="default"
-            onChangeText={handleChange("password")}
+            onChangeText={handleChange('password')}
             returnKeyType="done"
             errorMessage={touched.password ? errors.password : null}
           />
@@ -143,7 +143,7 @@ const Login = () => {
           </Text>
         </TouchableOpacity>
         <Button
-          loading={session.signingInStatus === "loading"}
+          loading={session.signingInStatus === 'loading'}
           onPress={() => handleSubmit()}
           title="Login"
           disabled={!isValid}

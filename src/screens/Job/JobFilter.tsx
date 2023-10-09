@@ -1,32 +1,32 @@
-import { Text, View } from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import BackButton from "../../components/Navigation/BackButton/BackButton";
-import Button from "../../components/Button/Button";
-import { Divider } from "native-base";
-import colors from "../../theme/colors";
-import { RadioButtonProps, RadioGroup } from "../../components/RadioGroup";
-import { useMemo, useState } from "react";
-import useDimension from "../../hooks/useDimension";
-import { JOB_EXPERIENCE } from "../../constants";
-import useAppDispatch from "../../hooks/useAppDispatch";
-import { getJobsAction } from "../../actions/post";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { Text, View } from 'react-native';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import BackButton from '../../components/Navigation/BackButton/BackButton';
+import Button from '../../components/Button/Button';
+import { Divider } from 'native-base';
+import colors from '../../theme/colors';
+import { RadioButtonProps, RadioGroup } from '../../components/RadioGroup';
+import { useMemo, useState } from 'react';
+import useDimension from '../../hooks/useDimension';
+import { JOB_EXPERIENCE } from '../../constants';
+import useAppDispatch from '../../hooks/useAppDispatch';
+import { getJobsAction } from '../../actions/post';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 const JobFilter = () => {
   const { width } = useDimension();
   const columnWidth = (width - 80) / 2;
-  const [sortBy, setSortBy] = useState<"recent" | "relevant" | undefined>();
-  const [datePosted, setDatePosted] = useState("");
-  const [experienceLevel, setExperienceLevel] = useState("");
-  const [company, setCompany] = useState("");
+  const [sortBy, setSortBy] = useState<'recent' | 'relevant' | undefined>();
+  const [datePosted, setDatePosted] = useState('');
+  const [experienceLevel, setExperienceLevel] = useState('');
+  const [company, setCompany] = useState('');
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NavigationProp<any>>();
 
   const radioButtons: RadioButtonProps[] = useMemo(
     () =>
       [
-        { label: "Most Recent", value: "recent" },
-        { label: "Most Relevant", value: "relevant" },
+        { label: 'Most Recent', value: 'recent' },
+        { label: 'Most Relevant', value: 'relevant' },
       ].map((item, i) => ({
         id: item.value,
         label: item.label,
@@ -38,10 +38,10 @@ const JobFilter = () => {
   const radioButtons2: RadioButtonProps[] = useMemo(
     () =>
       [
-        { label: "Any Time", value: "anytime" },
-        { label: "Past Week", value: "pastweek" },
-        { label: "Last 24 hours", value: "last24hours" },
-        { label: "Last Month", value: "lastmonth" },
+        { label: 'Any Time', value: 'anytime' },
+        { label: 'Past Week', value: 'pastweek' },
+        { label: 'Last 24 hours', value: 'last24hours' },
+        { label: 'Last Month', value: 'lastmonth' },
       ].map((item, i) => ({
         id: item.value,
         label: item.label,
@@ -63,12 +63,12 @@ const JobFilter = () => {
   const radioButtons4: RadioButtonProps[] = useMemo(
     () =>
       [
-        "Turing",
-        "Beyond",
-        "Eris Solution",
-        "Bistol",
-        "Arbisoft",
-        "Keep Trucking",
+        'Turing',
+        'Beyond',
+        'Eris Solution',
+        'Bistol',
+        'Arbisoft',
+        'Keep Trucking',
       ].map((item, i) => ({
         id: item,
         label: item,
@@ -79,7 +79,7 @@ const JobFilter = () => {
 
   const applyFilterHandler = () => {
     dispatch(
-      getJobsAction({ sort: sortBy, experienceLevel, postedDate: "anytime" }),
+      getJobsAction({ sort: sortBy, experienceLevel, postedDate: 'anytime' }),
     );
     navigation.goBack();
   };
@@ -95,7 +95,7 @@ const JobFilter = () => {
       </View>
       <View style={[GlobalStyles.flexOne]}>
         <Divider style={{ marginBottom: 20 }} />
-        <View style={{ justifyContent: "center", paddingHorizontal: 16 }}>
+        <View style={{ justifyContent: 'center', paddingHorizontal: 16 }}>
           <View>
             <Text
               style={[
@@ -114,9 +114,9 @@ const JobFilter = () => {
                 layout="row"
                 color={colors.primary}
                 containerStyle={{
-                  flexWrap: "wrap",
-                  width: "100%",
-                  flexDirection: "row",
+                  flexWrap: 'wrap',
+                  width: '100%',
+                  flexDirection: 'row',
                   gap: 20,
                 }}
                 onPress={(value: any) => setSortBy(value)}
@@ -126,7 +126,7 @@ const JobFilter = () => {
           </View>
         </View>
         <Divider style={{ marginBottom: 20, marginTop: 20 }} />
-        <View style={{ justifyContent: "center", paddingHorizontal: 16 }}>
+        <View style={{ justifyContent: 'center', paddingHorizontal: 16 }}>
           <View>
             <Text
               style={[
@@ -146,7 +146,7 @@ const JobFilter = () => {
               layout="row"
               color={colors.primary}
               containerStyle={{
-                flexWrap: "wrap",
+                flexWrap: 'wrap',
                 gap: 20,
               }}
               onPress={(value: string) => setDatePosted(value)}
@@ -155,7 +155,7 @@ const JobFilter = () => {
           </View>
         </View>
         <Divider style={{ marginBottom: 20, marginTop: 20 }} />
-        <View style={{ justifyContent: "center", paddingHorizontal: 16 }}>
+        <View style={{ justifyContent: 'center', paddingHorizontal: 16 }}>
           <View>
             <Text
               style={[
@@ -175,7 +175,7 @@ const JobFilter = () => {
               layout="row"
               color={colors.primary}
               containerStyle={{
-                flexWrap: "wrap",
+                flexWrap: 'wrap',
                 gap: 20,
               }}
               onPress={(value: string) => setExperienceLevel(value)}
@@ -184,7 +184,7 @@ const JobFilter = () => {
           </View>
         </View>
         <Divider style={{ marginBottom: 20 }} />
-        <View style={{ justifyContent: "center", paddingHorizontal: 16 }}>
+        <View style={{ justifyContent: 'center', paddingHorizontal: 16 }}>
           <View>
             <Text
               style={[
@@ -203,7 +203,7 @@ const JobFilter = () => {
                 layout="row"
                 color={colors.primary}
                 containerStyle={{
-                  flexWrap: "wrap",
+                  flexWrap: 'wrap',
                   gap: 20,
                 }}
                 onPress={(value: string) => setCompany(value)}

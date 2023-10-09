@@ -6,26 +6,26 @@ import {
   TouchableOpacity,
   View,
   useWindowDimensions,
-} from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import useDimension from "../../hooks/useDimension";
+} from 'react-native';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import useDimension from '../../hooks/useDimension';
 import {
   AntDesign,
   Feather,
   Foundation,
   FontAwesome,
   Ionicons,
-} from "@expo/vector-icons";
-import colors from "../../theme/colors";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { ScrollView } from "react-native";
-import Button from "../../components/Button/Button";
-import { TabView, SceneMap } from "react-native-tab-view";
-import { useState } from "react";
-import { StatusBar } from "react-native";
-import { Box, Pressable, useColorModeValue } from "native-base";
-import LiveFeedList from "../Home/components/LiveFeedList";
-import { APP_SCREEN_LIST } from "../../constants";
+} from '@expo/vector-icons';
+import colors from '../../theme/colors';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { ScrollView } from 'react-native';
+import Button from '../../components/Button/Button';
+import { TabView, SceneMap } from 'react-native-tab-view';
+import { useState } from 'react';
+import { StatusBar } from 'react-native';
+import { Box, Pressable, useColorModeValue } from 'native-base';
+import LiveFeedList from '../Home/components/LiveFeedList';
+import { APP_SCREEN_LIST } from '../../constants';
 
 const SpaceProfile = () => {
   const height = useDimension().height;
@@ -40,7 +40,7 @@ const SpaceProfile = () => {
       <View>
         <ImageBackground
           resizeMode="cover"
-          source={require("../../../assets/image11.png")}
+          source={require('../../../assets/image11.png')}
           style={[
             styles.imageBg,
             height * 0.4 > 240 ? { height: 240 } : { height: height * 0.4 },
@@ -59,7 +59,7 @@ const SpaceProfile = () => {
           style={[
             GlobalStyles.flewRow,
             GlobalStyles.mb10,
-            { justifyContent: "space-between" },
+            { justifyContent: 'space-between' },
           ]}
         >
           <View>
@@ -179,7 +179,7 @@ const SpaceProfile = () => {
       <View
         style={[
           GlobalStyles.flewRow,
-          { justifyContent: "space-between", paddingTop: 8 },
+          { justifyContent: 'space-between', paddingTop: 8 },
         ]}
       >
         <TouchableOpacity
@@ -205,11 +205,11 @@ const SpaceProfile = () => {
 };
 
 const FirstRoute = () => (
-  <View style={{ flex: 1, backgroundColor: "#ff4081" }} />
+  <View style={{ flex: 1, backgroundColor: '#ff4081' }} />
 );
 
 const SecondRoute = () => (
-  <View style={{ flex: 1, backgroundColor: "#673ab7" }} />
+  <View style={{ flex: 1, backgroundColor: '#673ab7' }} />
 );
 
 const renderScene = SceneMap({
@@ -224,15 +224,15 @@ function TabViewExample() {
   const [index, setIndex] = useState(0);
   const [routes] = useState<any>([
     {
-      key: "posts",
+      key: 'posts',
       title: <AntDesign name="appstore-o" size={24} color="black" />,
     },
     {
-      key: "videos",
+      key: 'videos',
       title: <Foundation name="play-video" size={24} color="black" />,
     },
     {
-      key: "events",
+      key: 'events',
       title: <AntDesign name="calendar" size={24} color="black" />,
     },
   ]);
@@ -250,12 +250,12 @@ function TabViewExample() {
           });
           const color =
             index === i
-              ? useColorModeValue("#000", "#e5e5e5")
-              : useColorModeValue("#1f2937", "#a1a1aa");
+              ? useColorModeValue('#000', '#e5e5e5')
+              : useColorModeValue('#1f2937', '#a1a1aa');
           const borderColor =
             index === i
-              ? "#284453"
-              : useColorModeValue("coolGray.200", "gray.400");
+              ? '#284453'
+              : useColorModeValue('coolGray.200', 'gray.400');
           return (
             <Box
               borderBottomWidth="3"
@@ -298,7 +298,7 @@ function TabViewExample() {
 
 const styles = StyleSheet.create({
   imageBg: {
-    width: "100%",
+    width: '100%',
     height: 240,
     minHeight: 300,
   },
@@ -318,19 +318,19 @@ const styles = StyleSheet.create({
   },
   boxSummary: {
     flex: 1,
-    backgroundColor: "#F3F5F7",
+    backgroundColor: '#F3F5F7',
     paddingVertical: 15,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 10,
   },
   tabBar: {
-    flexDirection: "row",
+    flexDirection: 'row',
     paddingTop: StatusBar.currentHeight,
   },
   tabItem: {
     flex: 1,
-    alignItems: "center",
+    alignItems: 'center',
     padding: 16,
   },
 });

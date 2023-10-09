@@ -1,17 +1,17 @@
-import { FlatList, Image, StyleSheet, View } from "react-native";
-import LiveFeedItem from "../../../components/LiveFeedItem/LiveFeedItem";
-import useDimension from "../../../hooks/useDimension";
-import { Text } from "react-native";
-import { GlobalStyles } from "../../../theme/GlobalStyles";
-import font from "../../../theme/font";
+import { FlatList, Image, StyleSheet, View } from 'react-native';
+import LiveFeedItem from '../../../components/LiveFeedItem/LiveFeedItem';
+import useDimension from '../../../hooks/useDimension';
+import { Text } from 'react-native';
+import { GlobalStyles } from '../../../theme/GlobalStyles';
+import font from '../../../theme/font';
 
 const DATA = [
   {
     id: 90,
     isUserProfile: true,
-    image: require("../../../../assets/imageAvatar.jpeg"),
+    image: require('../../../../assets/imageAvatar.jpeg'),
     isLive: false,
-    userName: "My Story",
+    userName: 'My Story',
   },
 ];
 
@@ -25,7 +25,7 @@ const LiveFeedList = () => {
           marginBottom: 0,
 
           height: 80,
-          justifyContent: "center",
+          justifyContent: 'center',
         },
       ]}
     >
@@ -43,7 +43,7 @@ const LiveFeedList = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
 });
 

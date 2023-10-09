@@ -5,11 +5,11 @@ import {
   Text,
   FlatList,
   TextStyle,
-} from "react-native";
-import { GlobalStyles } from "../../../theme/GlobalStyles";
-import { Feather, AntDesign } from "@expo/vector-icons";
-import colors from "../../../theme/colors";
-import { ScrollView } from "react-native-gesture-handler";
+} from 'react-native';
+import { GlobalStyles } from '../../../theme/GlobalStyles';
+import { Feather, AntDesign } from '@expo/vector-icons';
+import colors from '../../../theme/colors';
+import { ScrollView } from 'react-native-gesture-handler';
 import {
   Tailor,
   Industry,
@@ -19,13 +19,13 @@ import {
   ExperienceLevel,
   Salary,
   PostDate,
-} from "../../../components/Dropdown/Dropdown";
-import JobItem from "../../../components/JobItem/JobItem";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import useAppDispatch from "../../../hooks/useAppDispatch";
-import { getJobsAction } from "../../../actions/post";
-import useAppSelector from "../../../hooks/useAppSelector";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+} from '../../../components/Dropdown/Dropdown';
+import JobItem from '../../../components/JobItem/JobItem';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import useAppDispatch from '../../../hooks/useAppDispatch';
+import { getJobsAction } from '../../../actions/post';
+import useAppSelector from '../../../hooks/useAppSelector';
+import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import {
   APP_SCREEN_LIST,
   INDUSTRIES,
@@ -34,20 +34,20 @@ import {
   JOB_LOCATION,
   JOB_TYPES,
   TAILOR_JOBS,
-} from "../../../constants";
-import { IndustryItem, JobType } from "./PostJob";
-import Button from "../../../components/Button/Button";
+} from '../../../constants';
+import { IndustryItem, JobType } from './PostJob';
+import Button from '../../../components/Button/Button';
 import {
   setJobDateFilterValue,
   setJobExperienceFilterValue,
   setJobFilterTailorValue,
   setJobLocationFilterValue,
   setJobTypeFilterValue,
-} from "../../../reducers/post_reducer";
-import Input from "../../../components/Input/Input";
-import { Spinner } from "native-base";
-import { IGetJobDTO, IPostedDate } from "@app-model";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+} from '../../../reducers/post_reducer';
+import Input from '../../../components/Input/Input';
+import { Spinner } from 'native-base';
+import { IGetJobDTO, IPostedDate } from '@app-model';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 export default function Jobs() {
   const dispatch = useAppDispatch();
@@ -58,15 +58,15 @@ export default function Jobs() {
   const bottomSheetRef3 = useRef<BottomSheet>(null);
   const bottomSheetRef4 = useRef<BottomSheet>(null);
   const bottomSheetRef5 = useRef<BottomSheet>(null);
-  const [sortBy, setSortBy] = useState<"recent" | "relevant">("recent");
-  const snapPoints = useMemo(() => ["50%", "60%"], []);
+  const [sortBy, setSortBy] = useState<'recent' | 'relevant'>('recent');
+  const snapPoints = useMemo(() => ['50%', '60%'], []);
 
-  const [tailor, setTailor] = useState("");
+  const [tailor, setTailor] = useState('');
 
-  const [location, setLocation] = useState("");
-  const [jobType, setJobType] = useState("");
+  const [location, setLocation] = useState('');
+  const [jobType, setJobType] = useState('');
 
-  const [postedDate, setValueDate] = useState<IPostedDate>("anytime");
+  const [postedDate, setValueDate] = useState<IPostedDate>('anytime');
 
   const handleOnIndustrySelect = (industry: string) => {
     // dispatch(setJobFilterTailorValue(industry));
@@ -118,14 +118,14 @@ export default function Jobs() {
 
   useEffect(() => {
     if (!searchMode) {
-      dispatch(getJobsAction({ search: "", sort: sortBy }));
+      dispatch(getJobsAction({ search: '', sort: sortBy }));
     }
   }, [searchMode]);
 
-  const [selectedIndustry, setSelectedIndustry] = useState("");
-  const [selected, setSelected] = useState("");
-  const [experienceLevel, setExprienceLevel] = useState("");
-  const [searchValue, setSearchValue] = useState("");
+  const [selectedIndustry, setSelectedIndustry] = useState('');
+  const [selected, setSelected] = useState('');
+  const [experienceLevel, setExprienceLevel] = useState('');
+  const [searchValue, setSearchValue] = useState('');
   const handleSheetChanges = useCallback((index: number) => {}, []);
   const getJobs = useCallback(() => {
     dispatch(
@@ -154,7 +154,7 @@ export default function Jobs() {
   };
 
   useEffect(() => {
-    if (!searchMode) setSearchValue("");
+    if (!searchMode) setSearchValue('');
   }, [searchMode]);
 
   const navigation = useNavigation<NavigationProp<any>>();
@@ -176,22 +176,22 @@ export default function Jobs() {
   }, [sortBy]);
 
   const filterSearchQuery = (data: IGetJobDTO) => {
-    if (data.experienceLevel?.trim().toLowerCase() === "all")
-      data.experienceLevel = "";
+    if (data.experienceLevel?.trim().toLowerCase() === 'all')
+      data.experienceLevel = '';
 
-    if (data.tailor?.trim().toLowerCase() === "all") data.tailor = "";
+    if (data.tailor?.trim().toLowerCase() === 'all') data.tailor = '';
 
-    if (data.location?.trim().toLowerCase() === "all") data.location = "";
+    if (data.location?.trim().toLowerCase() === 'all') data.location = '';
 
     return data;
   };
 
   const handleChangeSortBy = () => {
-    if (sortBy === "recent") {
-      setSortBy("relevant");
+    if (sortBy === 'recent') {
+      setSortBy('relevant');
       return;
     }
-    setSortBy("recent");
+    setSortBy('recent');
   };
 
   useEffect(() => {
@@ -279,9 +279,9 @@ export default function Jobs() {
   }, [jobType]);
 
   return (
-    <View style={[GlobalStyles.container, { width: "100%" }]}>
+    <View style={[GlobalStyles.container, { width: '100%' }]}>
       {searchMode ? (
-        <View style={[GlobalStyles.flewRow, { alignItems: "center" }]}>
+        <View style={[GlobalStyles.flewRow, { alignItems: 'center' }]}>
           <View style={{ flex: 1 }}>
             <Input
               inputStyle={{ flex: 1 }}
@@ -291,7 +291,7 @@ export default function Jobs() {
               suffixElement={renderSearchButton()}
               autoCorrect={false}
               returnKeyType="done"
-              keyboardType={"default"}
+              keyboardType={'default'}
             />
           </View>
           <TouchableOpacity
@@ -308,11 +308,11 @@ export default function Jobs() {
               style={[
                 GlobalStyles.title,
                 GlobalStyles.fontInterRegular,
-                { fontWeight: "800" },
+                { fontWeight: '800' },
               ]}
             >
-              {" "}
-              Jobs{" "}
+              {' '}
+              Jobs{' '}
             </Text>
           </View>
           <TouchableOpacity
@@ -349,12 +349,12 @@ export default function Jobs() {
         </ScrollView>
       </View>
       <View>
-        {state.getJobsStatus === "loading" && (
+        {state.getJobsStatus === 'loading' && (
           <View
             style={[
               GlobalStyles.flewRow,
               GlobalStyles.mb20,
-              { justifyContent: "center" },
+              { justifyContent: 'center' },
             ]}
           >
             <Spinner />
@@ -376,7 +376,7 @@ export default function Jobs() {
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
         backdropComponent={(props: any) => (
-          <BottomSheetBackdrop {...props} pressBehavior={"close"} />
+          <BottomSheetBackdrop {...props} pressBehavior={'close'} />
         )}
         enablePanDownToClose
       >
@@ -413,7 +413,7 @@ export default function Jobs() {
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
         backdropComponent={(props: any) => (
-          <BottomSheetBackdrop {...props} pressBehavior={"close"} />
+          <BottomSheetBackdrop {...props} pressBehavior={'close'} />
         )}
         enablePanDownToClose
       >
@@ -452,7 +452,7 @@ export default function Jobs() {
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
         backdropComponent={(props: any) => (
-          <BottomSheetBackdrop {...props} pressBehavior={"close"} />
+          <BottomSheetBackdrop {...props} pressBehavior={'close'} />
         )}
         enablePanDownToClose
       >
@@ -489,7 +489,7 @@ export default function Jobs() {
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
         backdropComponent={(props: any) => (
-          <BottomSheetBackdrop {...props} pressBehavior={"close"} />
+          <BottomSheetBackdrop {...props} pressBehavior={'close'} />
         )}
         enablePanDownToClose
       >
@@ -526,7 +526,7 @@ export default function Jobs() {
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
         backdropComponent={(props: any) => (
-          <BottomSheetBackdrop {...props} pressBehavior={"close"} />
+          <BottomSheetBackdrop {...props} pressBehavior={'close'} />
         )}
         enablePanDownToClose
       >
@@ -564,13 +564,13 @@ const styles = StyleSheet.create({
   filter: {
     paddingHorizontal: 1,
     paddingVertical: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   search: {
     paddingHorizontal: 1,
     paddingVertical: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

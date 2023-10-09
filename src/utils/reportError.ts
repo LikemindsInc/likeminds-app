@@ -10,7 +10,7 @@ const reportError = (error: Error): void => {
   // Report error to external service like sentry or firebase crashlytics
   // console.error("Reported Error to our external service:", error);
 
-  if (error.message && error.message.trim() !== "") {
+  if (error.message && error.message.trim() !== '') {
     alert(error.message);
   }
 };

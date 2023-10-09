@@ -1,29 +1,29 @@
-import { BackHandler, ScrollView, StyleSheet, Text, View } from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import Input from "../../components/Input/Input";
-import Button from "../../components/Button/Button";
-import { CheckIcon, Select } from "native-base";
-import { AntDesign } from "@expo/vector-icons";
-import colors from "../../theme/colors";
-import DropZone from "../../components/DropZone/DropZone";
-import { APP_SCREEN_LIST } from "../../constants";
-import { useNavigation } from "@react-navigation/native";
-import { useCallback, useEffect, useState } from "react";
-import useAppSelector from "../../hooks/useAppSelector";
-import { ISettingState } from "../../reducers/settings";
-import useAppDispatch from "../../hooks/useAppDispatch";
-import { getCountriesAction } from "../../actions/settings";
-import { PURGE } from "redux-persist";
+import { BackHandler, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import Input from '../../components/Input/Input';
+import Button from '../../components/Button/Button';
+import { CheckIcon, Select } from 'native-base';
+import { AntDesign } from '@expo/vector-icons';
+import colors from '../../theme/colors';
+import DropZone from '../../components/DropZone/DropZone';
+import { APP_SCREEN_LIST } from '../../constants';
+import { useNavigation } from '@react-navigation/native';
+import { useCallback, useEffect, useState } from 'react';
+import useAppSelector from '../../hooks/useAppSelector';
+import { ISettingState } from '../../reducers/settings';
+import useAppDispatch from '../../hooks/useAppDispatch';
+import { getCountriesAction } from '../../actions/settings';
+import { PURGE } from 'redux-persist';
 import {
   ISessionState,
   updatePersonalInformation,
-} from "../../reducers/userProfileSession";
-import * as DocumentPicker from "expo-document-picker";
-import * as ImagePicker from "expo-image-picker";
-import { SelectList } from "react-native-dropdown-select-list";
-import { FilePickerFormat } from "@app-model";
-import { useToast } from "react-native-toast-notifications";
-import Sanitizer from "../../utils/sanitizer";
+} from '../../reducers/userProfileSession';
+import * as DocumentPicker from 'expo-document-picker';
+import * as ImagePicker from 'expo-image-picker';
+import { SelectList } from 'react-native-dropdown-select-list';
+import { FilePickerFormat } from '@app-model';
+import { useToast } from 'react-native-toast-notifications';
+import Sanitizer from '../../utils/sanitizer';
 
 const PersonalInformation = () => {
   const settings = useAppSelector(
@@ -34,8 +34,8 @@ const PersonalInformation = () => {
   ) as ISessionState;
   const dispatch = useAppDispatch();
   const getCountries = useCallback(() => {
-    if (settings.getCountriesStatus === "idle") {
-      dispatch(getCountriesAction("d"));
+    if (settings.getCountriesStatus === 'idle') {
+      dispatch(getCountriesAction('d'));
     }
   }, [settings.getCountriesStatus]);
 
@@ -50,7 +50,7 @@ const PersonalInformation = () => {
   );
   const [bio, setBio] = useState(session.profileData?.personalInformation?.bio);
   const [country, setCountry] = useState(
-    (session.profileData?.personalInformation?.country as string) || "",
+    (session.profileData?.personalInformation?.country as string) || '',
   );
   const [countryOfOrigin, setCountryOfOrigin] = useState(
     session.profileData?.personalInformation?.countryOfOrigin,
@@ -68,21 +68,21 @@ const PersonalInformation = () => {
   }, []);
 
   useEffect(() => {
-    if (firstName.trim() !== "")
+    if (firstName.trim() !== '')
       setErrors((state) => ({ ...state, firstName: null }));
     // else
     //   setErrors((state) => ({ ...state, firstName: "First name is required" }));
   }, [firstName]);
 
   useEffect(() => {
-    if (lastName.trim() !== "")
+    if (lastName.trim() !== '')
       setErrors((state) => ({ ...state, lastName: null }));
     // else
     //   setErrors((state) => ({ ...state, lastName: "Last name is required" }));
   }, [lastName]);
 
   useEffect(() => {
-    if (bio.trim() !== "") setErrors((state) => ({ ...state, bio: null }));
+    if (bio.trim() !== '') setErrors((state) => ({ ...state, bio: null }));
     // else setErrors((state) => ({ ...state, bio: "Bio is required" }));
   }, [bio]);
 
@@ -98,16 +98,16 @@ const PersonalInformation = () => {
   };
 
   useEffect(() => {
-    BackHandler.addEventListener("hardwareBackPress", handleBackPress);
-    navigation.addListener("beforeRemove", handleBackNavigation);
+    BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+    navigation.addListener('beforeRemove', handleBackNavigation);
     return () => {
-      BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
-      navigation.removeListener("beforeRemove", handleBackNavigation);
+      BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+      navigation.removeListener('beforeRemove', handleBackNavigation);
     };
   }, [navigation]);
 
   useEffect(() => {
-    if (city.trim() !== "") setErrors((state) => ({ ...state, city: null }));
+    if (city.trim() !== '') setErrors((state) => ({ ...state, city: null }));
     // else setErrors((state) => ({ ...state, city: "City is required" }));
   }, [city]);
 
@@ -131,34 +131,34 @@ const PersonalInformation = () => {
   const toast = useToast();
 
   const handleOnNextPress = () => {
-    if (firstName.trim() === "")
+    if (firstName.trim() === '')
       return setErrors((state) => ({
         ...state,
-        firstName: "First name is Required",
+        firstName: 'First name is Required',
       }));
-    if (lastName.trim() === "")
+    if (lastName.trim() === '')
       return setErrors((state) => ({
         ...state,
-        lastName: "Last name is Required",
+        lastName: 'Last name is Required',
       }));
 
-    if (city.trim() === "")
+    if (city.trim() === '')
       return setErrors((state) => ({
         ...state,
-        city: "City is Required",
+        city: 'City is Required',
       }));
 
-    if (bio.trim() === "")
+    if (bio.trim() === '')
       return setErrors((state) => ({
         ...state,
-        bio: "Bio is Required",
+        bio: 'Bio is Required',
       }));
 
-    if (country.trim() === "")
-      return toast.show("Please provide your country of resident");
+    if (country.trim() === '')
+      return toast.show('Please provide your country of resident');
 
-    if (countryOfOrigin.trim() === "")
-      return toast.show("Please provide your country of origin");
+    if (countryOfOrigin.trim() === '')
+      return toast.show('Please provide your country of origin');
 
     dispatch(
       updatePersonalInformation(
@@ -197,7 +197,7 @@ const PersonalInformation = () => {
             value={firstName}
             errorMessage={errors.firstName}
             autoCorrect={false}
-            inputViewStyle={{ width: "50%" }}
+            inputViewStyle={{ width: '50%' }}
           />
           <Input
             onChangeText={(text) => setLastName(text)}
@@ -206,7 +206,7 @@ const PersonalInformation = () => {
             value={lastName}
             autoCorrect={false}
             errorMessage={errors.lastName}
-            inputViewStyle={{ width: "50%" }}
+            inputViewStyle={{ width: '50%' }}
           />
         </View>
         <View style={[GlobalStyles.mb30]}>
@@ -215,7 +215,7 @@ const PersonalInformation = () => {
               borderWidth: 0,
               backgroundColor: colors.white,
               paddingVertical: 20,
-              shadowColor: "#000",
+              shadowColor: '#000',
               shadowOffset: {
                 width: 0,
                 height: 4,
@@ -266,7 +266,7 @@ const PersonalInformation = () => {
               borderWidth: 0,
               paddingVertical: 21,
               backgroundColor: colors.white,
-              shadowColor: "#000",
+              shadowColor: '#000',
               shadowOffset: {
                 width: 0,
                 height: 4,
@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inputDouble: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 20,
   },
   inputFlex: {

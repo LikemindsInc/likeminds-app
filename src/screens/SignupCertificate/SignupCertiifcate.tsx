@@ -1,31 +1,31 @@
-import * as ImagePicker from "expo-image-picker";
-import BackButton from "../../components/Navigation/BackButton/BackButton";
-import Button from "../../components/Button/Button";
-import colors from "../../theme/colors";
-import DropZone from "../../components/DropZone/DropZone";
-import Input from "../../components/Input/Input";
-import React, { useEffect, useState } from "react";
-import TextLink from "../../components/TextLink/TextLink";
-import useAppDispatch from "../../hooks/useAppDispatch";
-import useAppSelector from "../../hooks/useAppSelector";
-import { APP_SCREEN_LIST } from "../../constants";
-import { CertificateUploadEmptyIcon } from "../Profile/components/CertificateForm";
-import { completeUserProfileAction } from "../../actions/auth";
-import { FilePickerFormat } from "@app-model";
-import { FileUploadEmptyIcon } from "../personal_inforamtion/PersonalInformation";
-import { GlobalStyles } from "../../theme/GlobalStyles";
+import * as ImagePicker from 'expo-image-picker';
+import BackButton from '../../components/Navigation/BackButton/BackButton';
+import Button from '../../components/Button/Button';
+import colors from '../../theme/colors';
+import DropZone from '../../components/DropZone/DropZone';
+import Input from '../../components/Input/Input';
+import React, { useEffect, useState } from 'react';
+import TextLink from '../../components/TextLink/TextLink';
+import useAppDispatch from '../../hooks/useAppDispatch';
+import useAppSelector from '../../hooks/useAppSelector';
+import { APP_SCREEN_LIST } from '../../constants';
+import { CertificateUploadEmptyIcon } from '../Profile/components/CertificateForm';
+import { completeUserProfileAction } from '../../actions/auth';
+import { FilePickerFormat } from '@app-model';
+import { FileUploadEmptyIcon } from '../personal_inforamtion/PersonalInformation';
+import { GlobalStyles } from '../../theme/GlobalStyles';
 import {
   ISessionState,
   updateCertificate,
-} from "../../reducers/userProfileSession";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { useToast } from "react-native-toast-notifications";
+} from '../../reducers/userProfileSession';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useToast } from 'react-native-toast-notifications';
 
 const SignupCertificate = () => {
   const toast = useToast();
   const dispatch = useAppDispatch();
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
   const navigation = useNavigation<any>();
   const [uploods, setUploads] = useState([{}]);
   const errorReducer = useAppSelector((state) => state.errorReducer);
@@ -55,15 +55,15 @@ const SignupCertificate = () => {
   };
 
   useEffect(() => {
-    if (session.completeProfileStatus === "completed") {
+    if (session.completeProfileStatus === 'completed') {
       navigation.navigate(APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN);
-    } else if (session.completeProfileStatus === "failed") {
+    } else if (session.completeProfileStatus === 'failed') {
       toast.show(
-        session.completeProfileError?.trim() === ""
-          ? "Unable to complete request. Please try again later"
+        session.completeProfileError?.trim() === ''
+          ? 'Unable to complete request. Please try again later'
           : (session.completeProfileError as string),
         {
-          type: "normal",
+          type: 'normal',
         },
       );
     }
@@ -132,7 +132,7 @@ const SignupCertificate = () => {
           />
         </View>
         <Button
-          loading={session.completeProfileStatus === "loading"}
+          loading={session.completeProfileStatus === 'loading'}
           title="Continue"
           onPress={handleOnNextPress}
         />
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inputDouble: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 20,
   },
   inputFlex: {

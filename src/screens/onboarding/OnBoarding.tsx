@@ -1,4 +1,4 @@
-import { LinearGradient } from "expo-linear-gradient";
+import { LinearGradient } from 'expo-linear-gradient';
 import {
   Text,
   View,
@@ -6,66 +6,66 @@ import {
   Image,
   TouchableOpacity,
   Animated,
-} from "react-native";
-import AppIntroSlider from "react-native-app-intro-slider";
-import font from "../../theme/font";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import { AntDesign } from "@expo/vector-icons";
-import colors from "../../theme/colors";
-import { StatusBar } from "expo-status-bar";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { APP_SCREEN_LIST, INavigationProps } from "../../constants";
-import useAppSelector from "../../hooks/useAppSelector";
-import { ISettingState } from "../../reducers/settings";
-import { useEffect, useMemo, useRef } from "react";
-import Util from "../../utils";
+} from 'react-native';
+import AppIntroSlider from 'react-native-app-intro-slider';
+import font from '../../theme/font';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import { AntDesign } from '@expo/vector-icons';
+import colors from '../../theme/colors';
+import { StatusBar } from 'expo-status-bar';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { APP_SCREEN_LIST, INavigationProps } from '../../constants';
+import useAppSelector from '../../hooks/useAppSelector';
+import { ISettingState } from '../../reducers/settings';
+import { useEffect, useMemo, useRef } from 'react';
+import Util from '../../utils';
 
 const { wp } = Util.responsiveWidthHeight();
 const slides = [
   {
     key: 1,
-    title: "Welcome To",
-    text: "A platform for bringing talented and diverse communities together to support one another and grow.",
-    image: require("../../../assets/group1.png"),
-    logo: require("../../../assets/image1.png"),
-    backgroundColor: "#59b2ab",
-    footerText: "Find and apply to jobs or internships",
+    title: 'Welcome To',
+    text: 'A platform for bringing talented and diverse communities together to support one another and grow.',
+    image: require('../../../assets/group1.png'),
+    logo: require('../../../assets/image1.png'),
+    backgroundColor: '#59b2ab',
+    footerText: 'Find and apply to jobs or internships',
   },
   {
     key: 2,
-    title: "Welcome To",
-    text: "A platform for bringing talented and diverse communities together to support one another and grow.",
-    image: require("../../../assets/group2.png"),
-    logo: require("../../../assets/image1.png"),
-    backgroundColor: "#59b2ab",
-    footerText: "Meet and network with others just like YOU",
+    title: 'Welcome To',
+    text: 'A platform for bringing talented and diverse communities together to support one another and grow.',
+    image: require('../../../assets/group2.png'),
+    logo: require('../../../assets/image1.png'),
+    backgroundColor: '#59b2ab',
+    footerText: 'Meet and network with others just like YOU',
   },
   {
     key: 3,
-    title: "Welcome To",
-    text: "A platform for bringing talented and diverse communities together to support one another and grow.",
-    image: require("../../../assets/group3.png"),
-    logo: require("../../../assets/image1.png"),
-    backgroundColor: "#59b2ab",
-    footerText: "Host and join spaces",
+    title: 'Welcome To',
+    text: 'A platform for bringing talented and diverse communities together to support one another and grow.',
+    image: require('../../../assets/group3.png'),
+    logo: require('../../../assets/image1.png'),
+    backgroundColor: '#59b2ab',
+    footerText: 'Host and join spaces',
   },
   {
     key: 4,
-    title: "Welcome To",
-    text: "A platform for bringing talented and diverse communities together to support one another and grow.",
-    image: require("../../../assets/group4.png"),
-    logo: require("../../../assets/image1.png"),
-    backgroundColor: "#59b2ab",
-    footerText: "Have open conversations",
+    title: 'Welcome To',
+    text: 'A platform for bringing talented and diverse communities together to support one another and grow.',
+    image: require('../../../assets/group4.png'),
+    logo: require('../../../assets/image1.png'),
+    backgroundColor: '#59b2ab',
+    footerText: 'Have open conversations',
   },
   {
     key: 5,
-    title: "Welcome To",
-    text: "A platform for bringing talented and diverse  communities together to support one another and grow.",
-    image: require("../../../assets/group6.png"),
-    logo: require("../../../assets/image1.png"),
-    backgroundColor: "#59b2ab",
-    footerText: "Bond over shared challenges and experiences",
+    title: 'Welcome To',
+    text: 'A platform for bringing talented and diverse  communities together to support one another and grow.',
+    image: require('../../../assets/group6.png'),
+    logo: require('../../../assets/image1.png'),
+    backgroundColor: '#59b2ab',
+    footerText: 'Bond over shared challenges and experiences',
   },
 ];
 
@@ -105,7 +105,7 @@ const OnBoarding = () => {
   const _renderItem = ({ item }: any) => {
     return (
       <View>
-        <View style={{ alignItems: "center" }}>
+        <View style={{ alignItems: 'center' }}>
           <Animated.Image
             style={[styles.groupImage, animatedStyle]}
             source={item.image}
@@ -148,7 +148,7 @@ const OnBoarding = () => {
     <TouchableOpacity onPress={handleOnDone} style={styles.nextButtonStyle}>
       <LinearGradient
         style={[GlobalStyles.buttonStyle, styles.getStartedButtonStyle]}
-        colors={["#00CDFE", "#009AEE"]}
+        colors={['#00CDFE', '#009AEE']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
       >
@@ -190,7 +190,7 @@ const OnBoarding = () => {
         </View>
         <View style={[GlobalStyles.alignHorizontalCenter, GlobalStyles.mb40]}>
           <Image
-            source={require("../../../assets/image1.png")}
+            source={require('../../../assets/image1.png')}
             resizeMethod="auto"
             resizeMode="contain"
             style={styles.logoImage}
@@ -216,7 +216,7 @@ const OnBoarding = () => {
         </View>
       </View>
       <AppIntroSlider
-        activeDotStyle={{ backgroundColor: "#284453", width: 24 }}
+        activeDotStyle={{ backgroundColor: '#284453', width: 24 }}
         bottomButton
         data={slides}
         renderItem={_renderItem}
@@ -233,26 +233,26 @@ const OnBoarding = () => {
 
 const styles = StyleSheet.create({
   nextButtonStyle: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   getStartedButtonStyle: {
     width: 200,
     paddingVertical: 21,
     borderRadius: 40,
-    flexDirection: "row",
-    justifyContent: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   welcomeTextContainer: {
     marginBottom: 40,
   },
   logoImage: {
-    width: "80%",
+    width: '80%',
     maxWidth: 240,
-    margin: "auto",
+    margin: 'auto',
     height: 60,
   },
   groupImage: {
-    width: "95%",
+    width: '95%',
     maxWidth: 320,
     height: 200,
   },

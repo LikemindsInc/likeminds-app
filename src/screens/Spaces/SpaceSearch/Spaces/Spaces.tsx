@@ -1,11 +1,11 @@
-import { FlatList, Text, View, useToast } from "native-base";
-import { useCallback, useEffect } from "react";
-import useAppDispatch from "../../../../hooks/useAppDispatch";
-import { getSpaceListAction } from "../../../../actions/space";
-import useAppSelector from "../../../../hooks/useAppSelector";
-import { ISpaceState } from "../../../../reducers/space_reducer";
-import SpaceItem from "./SpaceItem/SpaceItem";
-import { GlobalStyles } from "../../../../theme/GlobalStyles";
+import { FlatList, Text, View, useToast } from 'native-base';
+import { useCallback, useEffect } from 'react';
+import useAppDispatch from '../../../../hooks/useAppDispatch';
+import { getSpaceListAction } from '../../../../actions/space';
+import useAppSelector from '../../../../hooks/useAppSelector';
+import { ISpaceState } from '../../../../reducers/space_reducer';
+import SpaceItem from './SpaceItem/SpaceItem';
+import { GlobalStyles } from '../../../../theme/GlobalStyles';
 
 const Spaces = () => {
   const dispatch = useAppDispatch();
@@ -29,10 +29,10 @@ const Spaces = () => {
   };
 
   useEffect(() => {
-    if (state.getSpaceListStatus == "failed") {
+    if (state.getSpaceListStatus == 'failed') {
       toast.close({
         description: state.getSpaceListError,
-        variant: "contained",
+        variant: 'contained',
       });
     }
   }, [state.getSpaceListStatus]);

@@ -1,34 +1,34 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { persistStore, persistReducer } from "redux-persist";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { persistStore, persistReducer } from 'redux-persist';
 
-import { CACHE_VERSION, __ROOT_REDUX_STATE_KEY__ } from "./constants";
+import { CACHE_VERSION, __ROOT_REDUX_STATE_KEY__ } from './constants';
 import {
   __SETTINGS__REDUX__STATE_KEY__,
   __SESSION__REDUX__STATE_KEY__,
-} from "../reducers/constants";
-import autoMergeLevel2 from "redux-persist/es/stateReconciler/autoMergeLevel2";
+} from '../reducers/constants';
+import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2';
 import {
   configureStore,
   combineReducers,
   isRejectedWithValue,
   createListenerMiddleware,
   isRejected,
-} from "@reduxjs/toolkit";
-import { Reducer } from "redux";
-import sessionReducer from "../reducers/userProfileSession";
-import errorReducer from "../reducers/errorHanlder";
+} from '@reduxjs/toolkit';
+import { Reducer } from 'redux';
+import sessionReducer from '../reducers/userProfileSession';
+import errorReducer from '../reducers/errorHanlder';
 
-import settingReducer from "../reducers/settings";
-import spaceReducer from "../reducers/space_reducer";
-import postReducer from "../reducers/post_reducer";
-import connectionReducer from "../reducers/connection";
+import settingReducer from '../reducers/settings';
+import spaceReducer from '../reducers/space_reducer';
+import postReducer from '../reducers/post_reducer';
+import connectionReducer from '../reducers/connection';
 
 const rootPersistConfig = {
   storage: AsyncStorage,
   key: __ROOT_REDUX_STATE_KEY__,
   // stateReconciler: autoMergeLevel2,
-  whitelist: ["settingReducer"],
-  blacklist: ["errorReducer", "sessionReducer"], // only settings and other state stores will be persisted
+  whitelist: ['settingReducer'],
+  blacklist: ['errorReducer', 'sessionReducer'], // only settings and other state stores will be persisted
 };
 
 type CombinedState = typeof rootReducer extends Reducer<infer U, any>
@@ -56,7 +56,7 @@ const persistedReducer = persistReducer(
 
 const store = configureStore({
   reducer: persistedReducer,
-  devTools: process.env.NODE_ENV === "development",
+  devTools: process.env.NODE_ENV === 'development',
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,

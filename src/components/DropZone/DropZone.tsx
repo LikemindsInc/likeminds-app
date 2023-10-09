@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from 'react';
 import {
   Image,
   StyleSheet,
@@ -6,32 +6,32 @@ import {
   TouchableOpacity,
   View,
   ViewStyle,
-} from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import * as DocumentPicker from "expo-document-picker";
-import * as ImagePicker from "expo-image-picker";
-import colors from "../../theme/colors";
-import { AntDesign } from "@expo/vector-icons";
-import { FilePickerFormat } from "@app-model";
+} from 'react-native';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import * as DocumentPicker from 'expo-document-picker';
+import * as ImagePicker from 'expo-image-picker';
+import colors from '../../theme/colors';
+import { AntDesign } from '@expo/vector-icons';
+import { FilePickerFormat } from '@app-model';
 
 interface IProps {
   emptyIcon?: JSX.Element | undefined;
   style?: ViewStyle;
-  type?: "image" | "video" | "all" | "document";
+  type?: 'image' | 'video' | 'all' | 'document';
   onSelect?: (file: FilePickerFormat | ImagePicker.ImagePickerResult) => null;
 }
 
 const DropZone: FC<IProps> = ({
   emptyIcon,
   style,
-  type = "image",
+  type = 'image',
   onSelect,
 }) => {
   const [image, setImage] = useState<string | null>(null);
   //   const [status, requestPermission] = ImagePicker.useCameraPermissions();
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
   useEffect(() => {
-    if (type !== "document") requestPermission();
+    if (type !== 'document') requestPermission();
   }, []);
 
   //   useEffect(() => {
@@ -54,11 +54,11 @@ const DropZone: FC<IProps> = ({
 
   const getMediaType = () => {
     switch (type) {
-      case "image":
+      case 'image':
         return ImagePicker.MediaTypeOptions.Images;
-      case "video":
+      case 'video':
         return ImagePicker.MediaTypeOptions.Videos;
-      case "all":
+      case 'all':
         return ImagePicker.MediaTypeOptions.All;
     }
   };
@@ -79,37 +79,37 @@ const DropZone: FC<IProps> = ({
     } catch (error) {}
   };
   const handleDocumentSelect = async () => {
-    if (type === "all") return handleFileSelect();
+    if (type === 'all') return handleFileSelect();
 
     return handleMediaSelect();
   };
 
   const renderSelectedFiles = () => {
-    if (type === "all" && file && file?.type !== "cancel") {
+    if (type === 'all' && file && file?.type !== 'cancel') {
       return (
         <View
           style={{
-            flexDirection: "row",
-            height: "100%",
+            flexDirection: 'row',
+            height: '100%',
             gap: 8,
           }}
         >
           <View
             style={{
               backgroundColor: colors.primary,
-              justifyContent: "center",
-              alignItems: "center",
+              justifyContent: 'center',
+              alignItems: 'center',
               width: 80,
             }}
           >
             <AntDesign name="addfile" size={32} color="white" />
           </View>
-          <View style={{ flex: 1, justifyContent: "center" }}>
+          <View style={{ flex: 1, justifyContent: 'center' }}>
             <Text
               style={[
                 GlobalStyles.fontInterRegular,
                 GlobalStyles.fontSize13,
-                { textTransform: "capitalize" },
+                { textTransform: 'capitalize' },
               ]}
             >
               {file?.name}
@@ -118,12 +118,12 @@ const DropZone: FC<IProps> = ({
         </View>
       );
     }
-    if (type === "image" && image) {
+    if (type === 'image' && image) {
       return (
         <Image
           source={{ uri: `${image}` }}
           style={{
-            width: "100%",
+            width: '100%',
             height: undefined,
             aspectRatio: 1,
             borderRadius: 10,
@@ -167,13 +167,13 @@ const styles = StyleSheet.create({
   text: {},
   contaner: {
     paddingVertical: 34,
-    borderStyle: "dotted",
+    borderStyle: 'dotted',
     borderWidth: 2,
-    borderColor: "#88969D",
+    borderColor: '#88969D',
     marginBottom: 20,
     borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

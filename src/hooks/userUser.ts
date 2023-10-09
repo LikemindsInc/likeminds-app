@@ -1,8 +1,8 @@
-import { IUserData } from "@app-model";
-import { useCallback, useEffect, useState } from "react";
-import useAppDispatch from "./useAppDispatch";
-import { getCurrentUserAction } from "../actions/auth";
-import useAppSelector from "./useAppSelector";
+import { IUserData } from '@app-model';
+import { useCallback, useEffect, useState } from 'react';
+import useAppDispatch from './useAppDispatch';
+import { getCurrentUserAction } from '../actions/auth';
+import useAppSelector from './useAppSelector';
 
 export function useUser() {
   const [user, setUser] = useState<IUserData | null>(null);
@@ -15,9 +15,9 @@ export function useUser() {
   }, []);
 
   useEffect(() => {
-    if (state.getCurrentUserStatus === "completed") {
+    if (state.getCurrentUserStatus === 'completed') {
       setUser(state.userInfo);
-    } else if (state.getCurrentUserStatus === "failed") {
+    } else if (state.getCurrentUserStatus === 'failed') {
       setUser(null);
     }
   }, [state.getCurrentUserStatus]);

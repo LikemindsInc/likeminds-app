@@ -2,21 +2,21 @@ import {
   ICreateSpaceRequestDTO,
   ISpaceList,
   IThunkAPIStatus,
-} from "@app-model";
+} from '@app-model';
 import {
   createSlice,
   isRejected,
   isPending,
   PayloadAction,
-} from "@reduxjs/toolkit";
-import _ from "lodash";
+} from '@reduxjs/toolkit';
+import _ from 'lodash';
 import {
   createSpaceAction,
   followSpaceAction,
   getCurrentUserSpace,
   getSpaceListAction,
-} from "../actions/space";
-import { PURGE } from "redux-persist";
+} from '../actions/space';
+import { PURGE } from 'redux-persist';
 
 export interface ISpaceState {
   createSpaceDTO: ICreateSpaceRequestDTO;
@@ -39,21 +39,21 @@ export interface ISpaceState {
 
 const initialState: ISpaceState = {
   createSpaceDTO: {
-    title: "",
-    description: "",
+    title: '',
+    description: '',
     photo: null,
   },
-  createSpaceStatus: "idle",
-  createSpaceSuccess: "",
-  createSpaceError: "",
+  createSpaceStatus: 'idle',
+  createSpaceSuccess: '',
+  createSpaceError: '',
 
-  getSpaceListStatus: "idle",
-  getSpaceListSuccess: "",
-  getSpaceListError: "",
+  getSpaceListStatus: 'idle',
+  getSpaceListSuccess: '',
+  getSpaceListError: '',
 
-  followSpaceStatus: "idle",
-  followSpaceSuccess: "",
-  followSpaceError: "",
+  followSpaceStatus: 'idle',
+  followSpaceSuccess: '',
+  followSpaceError: '',
 
   spaceList: [],
 
@@ -61,7 +61,7 @@ const initialState: ISpaceState = {
 };
 
 const SpaceSlice = createSlice({
-  name: "space-slice",
+  name: 'space-slice',
   initialState,
   reducers: {
     storeSpaceTitleAndDescription(
@@ -75,15 +75,15 @@ const SpaceSlice = createSlice({
       state.createSpaceDTO.photo = action.payload;
     },
     clearCreateSpaceStatus(state: ISpaceState) {
-      state.createSpaceStatus = "idle";
-      state.createSpaceSuccess = "";
-      state.createSpaceError = "";
+      state.createSpaceStatus = 'idle';
+      state.createSpaceSuccess = '';
+      state.createSpaceError = '';
     },
 
     clearFollowSpaceStatus(state: ISpaceState) {
-      state.followSpaceStatus = "idle";
-      state.followSpaceSuccess = "";
-      state.followSpaceError = "";
+      state.followSpaceStatus = 'idle';
+      state.followSpaceSuccess = '';
+      state.followSpaceError = '';
     },
   },
   extraReducers: (builder) => {
@@ -91,49 +91,49 @@ const SpaceSlice = createSlice({
       return state;
     });
     builder.addCase(createSpaceAction.pending, (state) => {
-      state.createSpaceStatus = "loading";
+      state.createSpaceStatus = 'loading';
     });
     builder.addCase(createSpaceAction.fulfilled, (state, action) => {
       state.createSpaceSuccess = action.payload.message;
-      state.createSpaceStatus = "completed";
+      state.createSpaceStatus = 'completed';
     });
     builder.addCase(createSpaceAction.rejected, (state, action) => {
-      state.createSpaceStatus = "failed";
+      state.createSpaceStatus = 'failed';
       state.createSpaceError = action.payload?.message as string;
     });
 
     builder.addCase(getSpaceListAction.pending, (state) => {
-      state.getSpaceListStatus = "loading";
+      state.getSpaceListStatus = 'loading';
     });
     builder.addCase(getSpaceListAction.fulfilled, (state, action) => {
       state.spaceList = action.payload.data;
-      state.getSpaceListStatus = "completed";
+      state.getSpaceListStatus = 'completed';
     });
     builder.addCase(getSpaceListAction.rejected, (state, action) => {
-      state.getSpaceListStatus = "failed";
+      state.getSpaceListStatus = 'failed';
       state.getSpaceListError = action.payload?.message as string;
     });
 
     builder.addCase(followSpaceAction.pending, (state) => {
-      state.followSpaceStatus = "loading";
+      state.followSpaceStatus = 'loading';
     });
     builder.addCase(followSpaceAction.fulfilled, (state, action) => {
-      state.followSpaceStatus = "completed";
+      state.followSpaceStatus = 'completed';
     });
     builder.addCase(followSpaceAction.rejected, (state, action) => {
-      state.followSpaceStatus = "failed";
+      state.followSpaceStatus = 'failed';
       state.followSpaceError = action.payload?.message as string;
     });
 
     builder.addCase(getCurrentUserSpace.pending, (state) => {
-      state.getSpaceListStatus = "loading";
+      state.getSpaceListStatus = 'loading';
     });
     builder.addCase(getCurrentUserSpace.fulfilled, (state, action) => {
-      state.getSpaceListStatus = "completed";
+      state.getSpaceListStatus = 'completed';
       state.currentUserSpaceList = action.payload.data;
     });
     builder.addCase(getCurrentUserSpace.rejected, (state, action) => {
-      state.getSpaceListStatus = "failed";
+      state.getSpaceListStatus = 'failed';
       state.getSpaceListError = action.payload?.message as string;
     });
   },

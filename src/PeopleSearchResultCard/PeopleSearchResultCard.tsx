@@ -1,13 +1,13 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import colors from "../theme/colors";
-import Button from "../components/Button/Button";
-import { GlobalStyles } from "../theme/GlobalStyles";
-import { FC } from "react";
-import { IUserData } from "@app-model";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import useAppDispatch from "../hooks/useAppDispatch";
-import { getProfile } from "../reducers/connection";
-import { APP_SCREEN_LIST } from "../constants";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import colors from '../theme/colors';
+import Button from '../components/Button/Button';
+import { GlobalStyles } from '../theme/GlobalStyles';
+import { FC } from 'react';
+import { IUserData } from '@app-model';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import useAppDispatch from '../hooks/useAppDispatch';
+import { getProfile } from '../reducers/connection';
+import { APP_SCREEN_LIST } from '../constants';
 
 interface IProps {
   item: IUserData | null;
@@ -32,12 +32,12 @@ const PeopleSearchResultCard: FC<IProps> = ({ item }) => {
       }}
     >
       <View style={styles.card}>
-        <View style={{ marginTop: 18, alignItems: "center" }}>
+        <View style={{ marginTop: 18, alignItems: 'center' }}>
           <Image
             source={
-              item?.profilePicture && item?.profilePicture.trim() !== ""
+              item?.profilePicture && item?.profilePicture.trim() !== ''
                 ? { uri: item?.profilePicture }
-                : require("../../assets/image10.png")
+                : require('../../assets/image10.png')
             }
             resizeMethod="auto"
             resizeMode="cover"
@@ -64,18 +64,18 @@ const PeopleSearchResultCard: FC<IProps> = ({ item }) => {
                 GlobalStyles.fontInterMedium,
                 GlobalStyles.fontSize10,
                 GlobalStyles.fontWeight400,
-                { alignSelf: "center", color: colors.grey },
+                { alignSelf: 'center', color: colors.grey },
               ]}
             >
               {item?.bio?.slice(0, 20)}
             </Text>
           </View>
-          <View style={[GlobalStyles.mt10, { justifyContent: "flex-end" }]}>
+          <View style={[GlobalStyles.mt10, { justifyContent: 'flex-end' }]}>
             <Button
               buttonStyle={{
                 paddingVertical: 4,
-                justifyContent: "center",
-                alignItems: "center",
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
               title="View"
               onPress={handleOnProfilePress}
@@ -89,11 +89,11 @@ const PeopleSearchResultCard: FC<IProps> = ({ item }) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
-    height: "auto",
+    width: '100%',
+    height: 'auto',
     borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     flex: 1,
     padding: 8,
   },
@@ -108,11 +108,11 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    fontWeight: "500",
-    color: "#88969D",
+    fontWeight: '500',
+    color: '#88969D',
   },
   card: {
-    shadowColor: "gray", // Shadow color
+    shadowColor: 'gray', // Shadow color
     shadowOffset: { width: 0, height: 2 }, // Shadow offset
     shadowOpacity: 0.5, // Shadow opacity
     shadowRadius: 4, // Shadow radius

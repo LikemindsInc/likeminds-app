@@ -4,11 +4,11 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import { AntDesign } from "@expo/vector-icons";
-import { FC } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { GlobalStyles } from "../../../theme/GlobalStyles";
+} from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import { FC } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { GlobalStyles } from '../../../theme/GlobalStyles';
 
 interface IProps extends ButtonProps {
   iconColor?: string;
@@ -28,7 +28,7 @@ const BackButton: FC<IProps> = (props) => {
         <AntDesign
           name="arrowleft"
           size={24}
-          color={props.iconColor || "black"}
+          color={props.iconColor || 'black'}
         />
       )}
       <Text
@@ -46,10 +46,10 @@ const BackButton: FC<IProps> = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    display: "flex",
-    flexDirection: "row",
+    display: 'flex',
+    flexDirection: 'row',
     gap: 24,
-    alignItems: "center",
+    alignItems: 'center',
   },
 });
 

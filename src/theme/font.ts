@@ -1,4 +1,4 @@
-import { DEVICE_FULL_WIDTH } from "../constants";
+import { DEVICE_FULL_WIDTH } from '../constants';
 
 const size = {
   font6: DEVICE_FULL_WIDTH * (6 / 365),
@@ -20,11 +20,11 @@ const size = {
 };
 
 const weight = {
-  full: "900",
-  semi: "600",
-  low: "400",
-  bold: "bold",
-  normal: "normal",
+  full: '900',
+  semi: '600',
+  low: '400',
+  bold: 'bold',
+  normal: 'normal',
 };
 
 export default { size, weight };

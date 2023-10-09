@@ -1,58 +1,58 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { GlobalStyles } from "../../../theme/GlobalStyles";
-import BackButton from "../../../components/Navigation/BackButton/BackButton";
-import colors, { addOpacity } from "../../../theme/colors";
-import { ScrollView, useToast } from "native-base";
-import Input from "../../../components/Input/Input";
-import { AntDesign } from "@expo/vector-icons";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import Button from "../../../components/Button/Button";
-import { Feather } from "@expo/vector-icons";
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { GlobalStyles } from '../../../theme/GlobalStyles';
+import BackButton from '../../../components/Navigation/BackButton/BackButton';
+import colors, { addOpacity } from '../../../theme/colors';
+import { ScrollView, useToast } from 'native-base';
+import Input from '../../../components/Input/Input';
+import { AntDesign } from '@expo/vector-icons';
+import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import Button from '../../../components/Button/Button';
+import { Feather } from '@expo/vector-icons';
 import {
   INDUSTRIES,
   JOB_EXPERIENCE,
   JOB_LOCATION,
   JOB_TYPES,
   TAILOR_JOBS,
-} from "../../../constants";
-import RadioGroup, { RadioButtonProps } from "react-native-radio-buttons-group";
-import useAppDispatch from "../../../hooks/useAppDispatch";
-import useAppSelector from "../../../hooks/useAppSelector";
+} from '../../../constants';
+import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
+import useAppDispatch from '../../../hooks/useAppDispatch';
+import useAppSelector from '../../../hooks/useAppSelector';
 import {
   IPostState,
   clearCreateJobStatus,
-} from "../../../reducers/post_reducer";
-import { createJobAction } from "../../../actions/post";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import KeyboardDismisser from "../../../components/KeyboardDismisser/KeyboardDismisser";
-import { Checkbox } from "react-native-paper";
+} from '../../../reducers/post_reducer';
+import { createJobAction } from '../../../actions/post';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import KeyboardDismisser from '../../../components/KeyboardDismisser/KeyboardDismisser';
+import { Checkbox } from 'react-native-paper';
 
 const PostJob = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const [selectedIndustry, setSelectedIndustry] = useState("");
-  const [jobType, setJobType] = useState("");
+  const [selectedIndustry, setSelectedIndustry] = useState('');
+  const [jobType, setJobType] = useState('');
   const [jobLocation, setJobLocation] = useState(JOB_LOCATION[0].value);
   const [tailorJob, setTailorJob] = useState<string[]>([]);
-  const [jobExperience, setJobExperience] = useState("");
+  const [jobExperience, setJobExperience] = useState('');
 
-  const [companyName, setCompanyName] = useState("");
-  const [companyDescription, setCompanyDescription] = useState("");
-  const [jobTitle, setJobTitle] = useState("");
-  const [jobDescription, setJobDescription] = useState("");
-  const [locationAddress, setLocationAddress] = useState("");
-  const [salary, setSalary] = useState("");
-  const [jobName, setJobName] = useState("");
+  const [companyName, setCompanyName] = useState('');
+  const [companyDescription, setCompanyDescription] = useState('');
+  const [jobTitle, setJobTitle] = useState('');
+  const [jobDescription, setJobDescription] = useState('');
+  const [locationAddress, setLocationAddress] = useState('');
+  const [salary, setSalary] = useState('');
+  const [jobName, setJobName] = useState('');
 
-  const [applicationLink, setJobApplicationLink] = useState("");
+  const [applicationLink, setJobApplicationLink] = useState('');
 
   const state = useAppSelector((state: any) => state.postReducer) as IPostState;
 
   const dispatch = useAppDispatch();
 
   // variables
-  const snapPoints = useMemo(() => ["50%", "60%"], []);
+  const snapPoints = useMemo(() => ['50%', '60%'], []);
   const radioButtons: any[] = useMemo(
     () =>
       JOB_LOCATION.map((item, i) => ({
@@ -118,13 +118,13 @@ const PostJob = () => {
       salary,
     };
     const isInComplete = Object.values(payload).some(
-      (value) => value.trim() === "",
+      (value) => value.trim() === '',
     );
 
     if (isInComplete)
       return toast.show({
-        description: "Please fill all fields",
-        variant: "contained",
+        description: 'Please fill all fields',
+        variant: 'contained',
       });
 
     dispatch(
@@ -146,32 +146,32 @@ const PostJob = () => {
   };
 
   useEffect(() => {
-    if (state.createJobStatus === "completed") {
-      setSelectedIndustry("");
-      setCompanyName("");
-      setCompanyDescription("");
-      setJobDescription("");
-      setJobExperience("");
-      setJobDescription("");
-      setJobLocation("");
-      setJobTitle("");
-      setSalary("");
-      setJobType("");
-      setLocationAddress("");
+    if (state.createJobStatus === 'completed') {
+      setSelectedIndustry('');
+      setCompanyName('');
+      setCompanyDescription('');
+      setJobDescription('');
+      setJobExperience('');
+      setJobDescription('');
+      setJobLocation('');
+      setJobTitle('');
+      setSalary('');
+      setJobType('');
+      setLocationAddress('');
 
       toast.show({
-        description: "Job posted successfully",
-        variant: "contained",
+        description: 'Job posted successfully',
+        variant: 'contained',
       });
 
       naviation.goBack();
 
       dispatch(clearCreateJobStatus());
-    } else if (state.createJobStatus === "failed") {
+    } else if (state.createJobStatus === 'failed') {
       toast.show({
         description:
-          state.createJobError || "Unable to post Job. Please try again",
-        variant: "contained",
+          state.createJobError || 'Unable to post Job. Please try again',
+        variant: 'contained',
       });
       dispatch(clearCreateJobStatus());
     }
@@ -188,7 +188,7 @@ const PostJob = () => {
             <Input
               placeholder="Job Title"
               autoCorrect={false}
-              autoCapitalize={"none"}
+              autoCapitalize={'none'}
               value={jobTitle}
               onChangeText={(text) => setJobTitle(text)}
             />
@@ -197,7 +197,7 @@ const PostJob = () => {
             <Input
               placeholder="Company Name"
               autoCorrect={false}
-              autoCapitalize={"none"}
+              autoCapitalize={'none'}
               value={companyName}
               onChangeText={(text) => setCompanyName(text)}
             />
@@ -206,8 +206,8 @@ const PostJob = () => {
             <Input
               placeholder="Company Description"
               autoCorrect={false}
-              autoCapitalize={"none"}
-              contentContainerStyle={{ height: 100, alignItems: "flex-start" }}
+              autoCapitalize={'none'}
+              contentContainerStyle={{ height: 100, alignItems: 'flex-start' }}
               textAlignVertical="top"
               textAlign="left"
               multiline={true}
@@ -221,7 +221,7 @@ const PostJob = () => {
                 <View
                   style={[
                     GlobalStyles.flewRow,
-                    { justifyContent: "space-between" },
+                    { justifyContent: 'space-between' },
                   ]}
                 >
                   <Text
@@ -231,7 +231,7 @@ const PostJob = () => {
                       GlobalStyles.fontSize15,
                     ]}
                   >
-                    {selectedIndustry === "" ? "Industry" : selectedIndustry}
+                    {selectedIndustry === '' ? 'Industry' : selectedIndustry}
                   </Text>
                   <AntDesign
                     name="caretdown"
@@ -247,8 +247,8 @@ const PostJob = () => {
             <Input
               placeholder="Job Description"
               autoCorrect={false}
-              autoCapitalize={"none"}
-              contentContainerStyle={{ height: 100, alignItems: "flex-start" }}
+              autoCapitalize={'none'}
+              contentContainerStyle={{ height: 100, alignItems: 'flex-start' }}
               textAlignVertical="top"
               textAlign="left"
               multiline={true}
@@ -260,7 +260,7 @@ const PostJob = () => {
             <Input
               placeholder="Job Link"
               autoCorrect={false}
-              autoCapitalize={"none"}
+              autoCapitalize={'none'}
               textAlignVertical="top"
               textAlign="left"
               value={applicationLink}
@@ -274,10 +274,10 @@ const PostJob = () => {
                 GlobalStyles.fontSize15,
                 GlobalStyles.fontWeight400,
                 GlobalStyles.textNavyBlue,
-                { justifyContent: "center" },
+                { justifyContent: 'center' },
               ]}
             >
-              Job Type{" "}
+              Job Type{' '}
               <Text
                 style={[
                   GlobalStyles.fontInterMedium,
@@ -293,10 +293,10 @@ const PostJob = () => {
               style={[
                 GlobalStyles.flewRow,
                 GlobalStyles.mt20,
-                { flexWrap: "wrap", gap: 10 },
+                { flexWrap: 'wrap', gap: 10 },
               ]}
             >
-              {JOB_TYPES.filter((item) => item.label !== "All").map(
+              {JOB_TYPES.filter((item) => item.label !== 'All').map(
                 (item, i) => (
                   <JobType
                     isSelected={item.value === jobType}
@@ -315,10 +315,10 @@ const PostJob = () => {
                 GlobalStyles.fontSize15,
                 GlobalStyles.fontWeight400,
                 GlobalStyles.textNavyBlue,
-                { justifyContent: "center" },
+                { justifyContent: 'center' },
               ]}
             >
-              Location of Job{" "}
+              Location of Job{' '}
               <Text
                 style={[
                   GlobalStyles.fontInterMedium,
@@ -334,7 +334,7 @@ const PostJob = () => {
               style={[
                 GlobalStyles.flewRow,
                 GlobalStyles.mt20,
-                { flexWrap: "wrap", gap: 10 },
+                { flexWrap: 'wrap', gap: 10 },
               ]}
             >
               <RadioGroup
@@ -351,7 +351,7 @@ const PostJob = () => {
             <Input
               placeholder="Location"
               autoCorrect={false}
-              autoCapitalize={"none"}
+              autoCapitalize={'none'}
               value={locationAddress}
               onChangeText={(text) => setLocationAddress(text)}
             />
@@ -363,10 +363,10 @@ const PostJob = () => {
                 GlobalStyles.fontSize15,
                 GlobalStyles.fontWeight400,
                 GlobalStyles.textNavyBlue,
-                { justifyContent: "center" },
+                { justifyContent: 'center' },
               ]}
             >
-              Job Experience{" "}
+              Job Experience{' '}
               <Text
                 style={[
                   GlobalStyles.fontInterMedium,
@@ -382,10 +382,10 @@ const PostJob = () => {
               style={[
                 GlobalStyles.flewRow,
                 GlobalStyles.mt20,
-                { flexWrap: "wrap", gap: 10 },
+                { flexWrap: 'wrap', gap: 10 },
               ]}
             >
-              {JOB_EXPERIENCE.filter((item) => item.label !== "All").map(
+              {JOB_EXPERIENCE.filter((item) => item.label !== 'All').map(
                 (item, i) => (
                   <JobType
                     isSelected={item.value === jobExperience}
@@ -401,7 +401,7 @@ const PostJob = () => {
             <Input
               placeholder="Salary*"
               autoCorrect={false}
-              autoCapitalize={"none"}
+              autoCapitalize={'none'}
               keyboardType="number-pad"
               value={salary}
               mode="currency"
@@ -417,7 +417,7 @@ const PostJob = () => {
                 GlobalStyles.fontSize15,
                 GlobalStyles.fontWeight400,
                 GlobalStyles.textNavyBlue,
-                { justifyContent: "center" },
+                { justifyContent: 'center' },
               ]}
             >
               Tailor
@@ -436,12 +436,12 @@ const PostJob = () => {
                   uncheckedColor={colors.grey}
                   status={
                     tailorJob.findIndex((value) => item.value === value) !== -1
-                      ? "checked"
-                      : "indeterminate"
+                      ? 'checked'
+                      : 'indeterminate'
                   }
                   label={item.label}
                   position="leading"
-                  labelStyle={{ textAlign: "left" }}
+                  labelStyle={{ textAlign: 'left' }}
                   mode="ios"
                   onPress={() => {
                     // setChecked(!checked);
@@ -453,7 +453,7 @@ const PostJob = () => {
           </View>
           <View>
             <Button
-              loading={state.createJobStatus === "loading"}
+              loading={state.createJobStatus === 'loading'}
               onPress={handleOnPress}
               title="Post Job"
             />
@@ -465,7 +465,7 @@ const PostJob = () => {
           snapPoints={snapPoints}
           onChange={handleSheetChanges}
           backdropComponent={(props: any) => (
-            <BottomSheetBackdrop {...props} pressBehavior={"close"} />
+            <BottomSheetBackdrop {...props} pressBehavior={'close'} />
           )}
         >
           <View style={{ flex: 1 }}>
@@ -516,7 +516,7 @@ export const IndustryItem = (props: any) => {
         <Feather
           name="check"
           size={20}
-          color={props.isSelected ? colors.white : "#88969D"}
+          color={props.isSelected ? colors.white : '#88969D'}
         />
       </View>
       <Text
@@ -559,12 +559,12 @@ export const JobType = (props: any) => {
 
 const styles = StyleSheet.create({
   JobType: {
-    backgroundColor: "#F3F5F7",
+    backgroundColor: '#F3F5F7',
     borderRadius: 30,
     paddingVertical: 11,
     paddingHorizontal: 20,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 10,
   },
   industryStyle: {
@@ -572,7 +572,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     backgroundColor: colors.white,
     borderRadius: 10,
-    shadowColor: "#2844531a",
+    shadowColor: '#2844531a',
     shadowOffset: {
       width: 0,
       height: 0,
@@ -584,17 +584,17 @@ const styles = StyleSheet.create({
   industryRowItem: {
     marginBottom: 20,
     paddingBottom: 20,
-    alignItems: "center",
+    alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: "#889669" + addOpacity(20),
+    borderBottomColor: '#889669' + addOpacity(20),
   },
   checkWrapper: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F3F5F7",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F3F5F7',
   },
 });
 

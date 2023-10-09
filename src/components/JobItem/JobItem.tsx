@@ -4,17 +4,17 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import Button from "../Button/Button";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import { AntDesign } from "@expo/vector-icons";
-import colors from "../../theme/colors";
-import { IJobDTO } from "@app-model";
-import { FC } from "react";
-import moment from "moment";
-import ReadMore from "react-native-read-more-text";
-import Util from "../../utils";
-import Converter from "../../utils/Converters";
+} from 'react-native';
+import Button from '../Button/Button';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import { AntDesign } from '@expo/vector-icons';
+import colors from '../../theme/colors';
+import { IJobDTO } from '@app-model';
+import { FC } from 'react';
+import moment from 'moment';
+import ReadMore from 'react-native-read-more-text';
+import Util from '../../utils';
+import Converter from '../../utils/Converters';
 
 interface IProps {
   item: IJobDTO;
@@ -54,7 +54,7 @@ const JobItem: FC<IProps> = ({ item }) => {
   };
   const handleOnApply = async (url: string) => {
     try {
-      url = url.startsWith("https://") ? url : `https://${url}`;
+      url = url.startsWith('https://') ? url : `https://${url}`;
 
       url = url.trim();
 
@@ -67,7 +67,7 @@ const JobItem: FC<IProps> = ({ item }) => {
         await Linking.openURL(url);
       }
     } catch (error) {
-      console.log("Error opening Link", error);
+      console.log('Error opening Link', error);
     }
   };
   return (
@@ -77,7 +77,7 @@ const JobItem: FC<IProps> = ({ item }) => {
         borderWidth: 1,
         borderRadius: 10,
         padding: 18,
-        borderColor: "grey",
+        borderColor: 'grey',
       }}
     >
       <View style={[GlobalStyles.flewRow, { marginBottom: 8 }]}>
@@ -86,10 +86,10 @@ const JobItem: FC<IProps> = ({ item }) => {
             style={[
               GlobalStyles.fontInterBlack,
               GlobalStyles.textNavyBlue,
-              { fontWeight: "800" },
+              { fontWeight: '800' },
             ]}
           >
-            {Util.capitalize(item.jobTitle, " ")}
+            {Util.capitalize(item.jobTitle, ' ')}
           </Text>
           <Text
             style={[
@@ -124,7 +124,7 @@ const JobItem: FC<IProps> = ({ item }) => {
         </ReadMore>
       </View>
 
-      <View style={[GlobalStyles.flewRow, { marginBottom: 8, width: "80%" }]}>
+      <View style={[GlobalStyles.flewRow, { marginBottom: 8, width: '80%' }]}>
         <View style={{ flex: 1 }}>
           <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>
             Industry
@@ -133,7 +133,7 @@ const JobItem: FC<IProps> = ({ item }) => {
             style={[
               GlobalStyles.fontInterBlack,
               GlobalStyles.textNavyBlue,
-              { fontWeight: "800" },
+              { fontWeight: '800' },
             ]}
           >
             {item.industry}
@@ -148,15 +148,15 @@ const JobItem: FC<IProps> = ({ item }) => {
             style={[
               GlobalStyles.fontInterBlack,
               GlobalStyles.textNavyBlue,
-              { fontWeight: "800" },
+              { fontWeight: '800' },
             ]}
           >
-            {Util.capitalize(item.jobLocation, "")}
+            {Util.capitalize(item.jobLocation, '')}
           </Text>
         </View>
       </View>
 
-      <View style={[GlobalStyles.flewRow, { marginBottom: 8, width: "80%" }]}>
+      <View style={[GlobalStyles.flewRow, { marginBottom: 8, width: '80%' }]}>
         <View style={{ flex: 1 }}>
           <Text style={[GlobalStyles.textGrey, GlobalStyles.fontInterRegular]}>
             Type
@@ -165,7 +165,7 @@ const JobItem: FC<IProps> = ({ item }) => {
             style={[
               GlobalStyles.textNavyBlue,
               GlobalStyles.fontInterBlack,
-              { fontWeight: "800" },
+              { fontWeight: '800' },
             ]}
           >
             {Util.capitalize(item.jobType)}
@@ -180,10 +180,10 @@ const JobItem: FC<IProps> = ({ item }) => {
             style={[
               GlobalStyles.textNavyBlue,
               GlobalStyles.fontInterBlack,
-              { fontWeight: "800" },
+              { fontWeight: '800' },
             ]}
           >
-            {Util.capitalize(item.companyName, "")}
+            {Util.capitalize(item.companyName, '')}
           </Text>
         </View>
       </View>
@@ -196,7 +196,7 @@ const JobItem: FC<IProps> = ({ item }) => {
           style={[
             GlobalStyles.fontInterBlack,
             GlobalStyles.textNavyBlue,
-            { fontWeight: "800" },
+            { fontWeight: '800' },
           ]}
         >
           {Util.capitalize(item.experienceLevel)}
@@ -211,10 +211,10 @@ const JobItem: FC<IProps> = ({ item }) => {
           style={[
             GlobalStyles.fontInterBlack,
             GlobalStyles.textNavyBlue,
-            { fontWeight: "800" },
+            { fontWeight: '800' },
           ]}
         >
-          {item?.tailor?.join(",")}
+          {item?.tailor?.join(',')}
         </Text>
       </View>
 
@@ -225,7 +225,7 @@ const JobItem: FC<IProps> = ({ item }) => {
         <Text
           style={[
             GlobalStyles.fontInterBlack,
-            { fontWeight: "800", fontSize: 14, color: "#47D0FD" },
+            { fontWeight: '800', fontSize: 14, color: '#47D0FD' },
           ]}
         >
           NGN {Converter.formatNumber(item.salary)}/year
@@ -235,10 +235,10 @@ const JobItem: FC<IProps> = ({ item }) => {
       <View>
         <Text
           style={[
-            { fontSize: 12, fontWeight: "800" },
+            { fontSize: 12, fontWeight: '800' },
             GlobalStyles.textNavyBlue,
             GlobalStyles.fontInterBlack,
-            { fontWeight: "800" },
+            { fontWeight: '800' },
           ]}
         >
           About {item.companyName.trim()}
@@ -246,7 +246,7 @@ const JobItem: FC<IProps> = ({ item }) => {
         <Text
           style={[
             GlobalStyles.fontInterRegular,
-            { fontSize: 12, fontWeight: "300" },
+            { fontSize: 12, fontWeight: '300' },
           ]}
         >
           {item.companyDescription.trim()}
@@ -256,22 +256,22 @@ const JobItem: FC<IProps> = ({ item }) => {
       <View
         style={[
           GlobalStyles.flewRow,
-          { justifyContent: "space-between", width: 160 },
+          { justifyContent: 'space-between', width: 160 },
         ]}
       >
         <Button
           buttonStyle={{
             paddingVertical: 0,
             paddingHorizontal: 0,
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
           style={{
-            width: "100%",
+            width: '100%',
             height: 35,
             marginTop: 8,
             padding: 8,
-            alignSelf: "flex-end",
+            alignSelf: 'flex-end',
           }}
           title="Apply"
           onPress={() => handleOnApply(item.applicationLink)}
@@ -285,14 +285,14 @@ const styles = StyleSheet.create({
   filter: {
     paddingHorizontal: 1,
     paddingVertical: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   search: {
     paddingHorizontal: 1,
     paddingVertical: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

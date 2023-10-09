@@ -1,33 +1,33 @@
-import { ScrollView, View, Modal, StyleSheet, Image, Text } from "react-native";
-import { GlobalStyles } from "../../theme/GlobalStyles";
-import BackButton from "../../components/Navigation/BackButton/BackButton";
-import colors, { addOpacity } from "../../theme/colors";
-import useAppSelector from "../../hooks/useAppSelector";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import useAppDispatch from "../../hooks/useAppDispatch";
+import { ScrollView, View, Modal, StyleSheet, Image, Text } from 'react-native';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import BackButton from '../../components/Navigation/BackButton/BackButton';
+import colors, { addOpacity } from '../../theme/colors';
+import useAppSelector from '../../hooks/useAppSelector';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import useAppDispatch from '../../hooks/useAppDispatch';
 import {
   acceptConnectionRequestAction,
   getConnections,
-} from "../../actions/connection";
-import ConnectionNotificationItem from "../../components/ConnectionNotificationItem/ConnectionNotificationItem";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
-import { IConnectionReceivedDTO } from "@app-model";
-import Button from "../../components/Button/Button";
-import { useToast } from "react-native-toast-notifications";
+} from '../../actions/connection';
+import ConnectionNotificationItem from '../../components/ConnectionNotificationItem/ConnectionNotificationItem';
+import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
+import { IConnectionReceivedDTO } from '@app-model';
+import Button from '../../components/Button/Button';
+import { useToast } from 'react-native-toast-notifications';
 import {
   clearConnectionRespondStatus,
   getProfile,
-} from "../../reducers/connection";
-import TextLink from "../../components/TextLink/TextLink";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { APP_SCREEN_LIST } from "../../constants";
+} from '../../reducers/connection';
+import TextLink from '../../components/TextLink/TextLink';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { APP_SCREEN_LIST } from '../../constants';
 
 const Notification = () => {
   const selector = useAppSelector((state) => state.connectionReducer);
   const dispatch = useAppDispatch();
 
   const bottomSheetRef2 = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["50%", "60%"], []);
+  const snapPoints = useMemo(() => ['50%', '60%'], []);
 
   const handleSheetChanges = useCallback((index: number) => {}, []);
 
@@ -38,12 +38,12 @@ const Notification = () => {
   const toast = useToast();
 
   useEffect(() => {
-    if (state.connectionRespondStatus === "completed") {
+    if (state.connectionRespondStatus === 'completed') {
       dispatch(getConnections());
-      toast.show("Connection accepted successfully", {
-        placement: "top",
-        type: "normal",
-        animationType: "slide-in",
+      toast.show('Connection accepted successfully', {
+        placement: 'top',
+        type: 'normal',
+        animationType: 'slide-in',
       });
     }
 
@@ -73,7 +73,7 @@ const Notification = () => {
     dispatch(
       acceptConnectionRequestAction({
         connectionId: connection.id,
-        status: "accepted",
+        status: 'accepted',
       }),
     );
   };
@@ -89,7 +89,7 @@ const Notification = () => {
     dispatch(
       acceptConnectionRequestAction({
         connectionId: connection.id,
-        status: "declined",
+        status: 'declined',
       }),
     );
   };
@@ -115,15 +115,15 @@ const Notification = () => {
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
         backdropComponent={(props: any) => (
-          <BottomSheetBackdrop {...props} pressBehavior={"close"} />
+          <BottomSheetBackdrop {...props} pressBehavior={'close'} />
         )}
       >
         <View style={{ flex: 1 }}>
-          <View style={[GlobalStyles.container, { backgroundColor: "#fff" }]}>
+          <View style={[GlobalStyles.container, { backgroundColor: '#fff' }]}>
             <View
               style={[
                 GlobalStyles.flewRow,
-                { gap: 12, alignItems: "center", marginBottom: 20 },
+                { gap: 12, alignItems: 'center', marginBottom: 20 },
               ]}
             >
               <Image
@@ -145,7 +145,7 @@ const Notification = () => {
           <View
             style={[
               GlobalStyles.flewRow,
-              { gap: 12, alignItems: "center", marginBottom: 20 },
+              { gap: 12, alignItems: 'center', marginBottom: 20 },
             ]}
           >
             <Image
@@ -167,7 +167,7 @@ const Notification = () => {
           <View
             style={[
               GlobalStyles.flewRow,
-              { gap: 12, alignItems: "center", marginBottom: 30 },
+              { gap: 12, alignItems: 'center', marginBottom: 30 },
             ]}
           >
             <TextLink
@@ -182,7 +182,7 @@ const Notification = () => {
           <View
             style={[
               GlobalStyles.flewRow,
-              { gap: 12, alignItems: "center", marginBottom: 20 },
+              { gap: 12, alignItems: 'center', marginBottom: 20 },
             ]}
           >
             <Button
@@ -202,13 +202,13 @@ const Notification = () => {
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    backgroundColor: "white",
-    width: "80%",
+    backgroundColor: 'white',
+    width: '80%',
     maxHeight: 300, // Set your desired maximum height
     padding: 20,
     borderRadius: 10,
