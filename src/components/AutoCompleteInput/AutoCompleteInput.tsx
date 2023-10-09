@@ -49,7 +49,6 @@ const AutoCompleteInput: FC<IProps> = ({ data, value, onChangeText }) => {
                   // paddingTop: 10,
                   // paddingLeft: 10,
                   // paddingBottom: 10,
-                  
                 },
               ]}
             >

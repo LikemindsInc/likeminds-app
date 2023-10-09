@@ -66,7 +66,7 @@ const SpaceSlice = createSlice({
   reducers: {
     storeSpaceTitleAndDescription(
       state: ISpaceState,
-      action: PayloadAction<{ title: string; description: string }>
+      action: PayloadAction<{ title: string; description: string }>,
     ) {
       state.createSpaceDTO.title = action.payload.title;
       state.createSpaceDTO.description = action.payload.description;

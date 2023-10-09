@@ -155,7 +155,7 @@ const Input: FC<ITextInputProps> = (props) => {
               props.inputStyle,
             ]}
             value={Converter.thousandSeparator(
-              Number(props.value?.trim() === "" ? 0 : props.value?.trim())
+              Number(props.value?.trim() === "" ? 0 : props.value?.trim()),
             )}
             onChangeText={(value) =>
               props.onChangeText &&

@@ -104,8 +104,7 @@ const DropZone: FC<IProps> = ({
           >
             <AntDesign name="addfile" size={32} color="white" />
           </View>
-          <View style={{ flex: 1, justifyContent: "center", 
-         }}>
+          <View style={{ flex: 1, justifyContent: "center" }}>
             <Text
               style={[
                 GlobalStyles.fontInterRegular,
@@ -157,7 +156,6 @@ const DropZone: FC<IProps> = ({
         styles.contaner,
         image ? { borderWidth: 0 } : { borderWidth: 2 },
         style,
-        
       ]}
     >
       {renderSelectedFiles()}

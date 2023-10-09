@@ -48,7 +48,7 @@ export const getSpaceListAction = asyncThunkWrapper<
   void
 >(GET_SPACE_LIST, async () => {
   const response = await axiosClient.get<AxiosResponse<any>>(
-    "/api/space?page=1&limit=1000"
+    "/api/space?page=1&limit=1000",
   );
   return response.data;
 });
@@ -66,7 +66,7 @@ export const followSpaceAction = asyncThunkWrapper<
   string
 >(FOLLOW_SPACE, async (spaceId: string) => {
   const response = await axiosClient.patch<AxiosResponse<any>>(
-    `/api/space/follow/${spaceId}`
+    `/api/space/follow/${spaceId}`,
   );
   return response.data;
 });

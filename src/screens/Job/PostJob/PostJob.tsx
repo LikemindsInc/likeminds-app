@@ -60,7 +60,7 @@ const PostJob = () => {
         label: item.label,
         value: item.value,
       })),
-    []
+    [],
   );
 
   const tailorRadioButtons: any[] = useMemo(
@@ -70,7 +70,7 @@ const PostJob = () => {
         label: item.label,
         value: item.value,
       })),
-    []
+    [],
   );
 
   // callbacks
@@ -118,7 +118,7 @@ const PostJob = () => {
       salary,
     };
     const isInComplete = Object.values(payload).some(
-      (value) => value.trim() === ""
+      (value) => value.trim() === "",
     );
 
     if (isInComplete)
@@ -141,7 +141,7 @@ const PostJob = () => {
         jobType: payload.jobType,
         applicationLink,
         tailor: tailorJob,
-      })
+      }),
     );
   };
 
@@ -304,7 +304,7 @@ const PostJob = () => {
                     text={item.label}
                     key={i}
                   />
-                )
+                ),
               )}
             </View>
           </View>
@@ -393,7 +393,7 @@ const PostJob = () => {
                     text={item.label}
                     key={i}
                   />
-                )
+                ),
               )}
             </View>
           </View>

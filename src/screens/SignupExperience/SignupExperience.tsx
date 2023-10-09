@@ -33,7 +33,7 @@ import { getAllIndustriesAction } from "../../actions/auth";
 const SignupExperience = () => {
   const navigation = useNavigation<any>();
   const [startDate, setStartDate] = useState(
-    moment().subtract("7", "days").format("YYYY-MM-DD")
+    moment().subtract("7", "days").format("YYYY-MM-DD"),
   );
   const [endDate, setEndDate] = useState(moment().format("YYYY-MM-DD"));
   const [stillWorkHere, setStillWorkHere] = useState(false);
@@ -153,11 +153,11 @@ const SignupExperience = () => {
   }, [endDate, stillWorkHere, startDate]);
 
   const session = useAppSelector(
-    (state: any) => state.sessionReducer
+    (state: any) => state.sessionReducer,
   ) as ISessionState;
 
   const setting = useAppSelector(
-    (state: any) => state.settingReducer
+    (state: any) => state.settingReducer,
   ) as ISettingState;
 
   const dispatch = useAppDispatch();
@@ -193,7 +193,7 @@ const SignupExperience = () => {
         companyName,
         responsibilities: responsibilities,
         industry,
-      })
+      }),
     );
     navigation.navigate(APP_SCREEN_LIST.SIGNUP_EDUCATION_SCREEN);
   };
@@ -300,16 +300,16 @@ const SignupExperience = () => {
             <SelectList
               boxStyles={{
                 borderWidth: 0,
-              paddingVertical: 21,
-              backgroundColor: colors.white,
-              shadowColor: "#000",
-              shadowOffset: {
-                width: 0,
-                height: 4,
-              },
-              shadowOpacity: 0.1,
-              shadowRadius: 16,
-              elevation: 4,
+                paddingVertical: 21,
+                backgroundColor: colors.white,
+                shadowColor: "#000",
+                shadowOffset: {
+                  width: 0,
+                  height: 4,
+                },
+                shadowOpacity: 0.1,
+                shadowRadius: 16,
+                elevation: 4,
               }}
               save="key"
               setSelected={(val: string) => setIndustry(val)}

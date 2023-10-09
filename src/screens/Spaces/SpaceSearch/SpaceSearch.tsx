@@ -135,7 +135,7 @@ function SpacePeopleTabView({ searchText }: ISpaceSearchProps) {
           const opacity = props.position.interpolate({
             inputRange,
             outputRange: inputRange.map((inputIndex: any) =>
-              inputIndex === i ? 1 : 0.5
+              inputIndex === i ? 1 : 0.5,
             ),
           });
           const color =

@@ -27,7 +27,7 @@ const Signup = () => {
   const toast = useToast();
   const dispatch = useAppDispatch();
   const session = useAppSelector(
-    (state: any) => state.sessionReducer
+    (state: any) => state.sessionReducer,
   ) as ISessionState;
   const errorReducer = useAppSelector((state) => state.errorReducer);
 
@@ -43,7 +43,7 @@ const Signup = () => {
           password: values.password.trim(),
           confirmPassword: values.confirmPassword.trim(),
           phone: `${values.countryCode}${values.phone}`.trim(),
-        })
+        }),
       );
     } catch (error: any) {
       reportError(error);

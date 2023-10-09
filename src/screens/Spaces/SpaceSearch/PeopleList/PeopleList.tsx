@@ -29,7 +29,6 @@ const PeopleList: FC<any> = ({ item, searchText = "" }) => {
   const navigation = useNavigation<NavigationProp<any>>();
   const dispatch = useAppDispatch();
 
-
   const state = useAppSelector((state) => state.connectionReducer);
 
   const handleNavigation = () => {

@@ -48,7 +48,7 @@ const persistedReducer = persistReducer(
     spaceReducer,
     postReducer,
     connectionReducer,
-  })
+  }),
 );
 // create the saga middleware
 

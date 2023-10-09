@@ -50,7 +50,7 @@ export const loginUserActionAction = asyncThunkWrapper<
 >(SIGN_IN, async (agrs: ILogin) => {
   const response = await axiosClient.post<AxiosResponse<IUserData>>(
     "/api/auth/login",
-    agrs
+    agrs,
   );
 
   console.log(response.data);
@@ -64,7 +64,7 @@ export const resendOTPAction = asyncThunkWrapper<
 >(RESEND_OTP, async (agrs: ResendOTPDTO) => {
   const response = await axiosClient.post<AxiosResponse<any>>(
     "/api/auth/resend-otp",
-    agrs
+    agrs,
   );
 
   return response.data;
@@ -102,7 +102,7 @@ export const refreshTokenAction = asyncThunkWrapper<
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
 
     return response.data;
@@ -115,7 +115,7 @@ export const storeOTPChannelValueAction = asyncThunkWrapper<string, string>(
   STORE_OTP_CHANNEL_VALUE,
   async (agrs: string) => {
     return agrs;
-  }
+  },
 );
 
 export const signupUserActionAction = asyncThunkWrapper<
@@ -125,7 +125,7 @@ export const signupUserActionAction = asyncThunkWrapper<
   console.log("args> ", agrs);
   const response = await axiosClient.post<AxiosResponse<any>>(
     "/api/auth/sign-up",
-    agrs
+    agrs,
   );
 
   return response.data;
@@ -137,7 +137,7 @@ export const verifyOTPActionAction = asyncThunkWrapper<
 >(VERIFY_OTP, async (agrs: IVerifyOtpPaylod) => {
   const response = await axiosClient.post<AxiosResponse<any>>(
     "/api/auth/verify-phone",
-    agrs
+    agrs,
   );
 
   return response.data;
@@ -149,7 +149,7 @@ export const requestOTPEmailAction = asyncThunkWrapper<
 >(REQUEST_OTP_EMAIL, async (agrs: IRequestOTPEmail) => {
   const response = await axiosClient.post<AxiosResponse<any>>(
     "/api/auth/forgot-password",
-    agrs
+    agrs,
   );
 
   return response.data;
@@ -161,7 +161,7 @@ export const requestOTPPhoneAction = asyncThunkWrapper<
 >(REQUEST_OTP_PHONE, async (agrs: IRequestOTPPhone) => {
   const response = await axiosClient.post<AxiosResponse<any>>(
     "/api/auth/forgot-password",
-    agrs
+    agrs,
   );
 
   return response.data;
@@ -173,7 +173,7 @@ export const changePasswordAction = asyncThunkWrapper<
 >(CHANGE_PASSWORD_OTP, async (agrs: IChangePasswordDTO) => {
   const response = await axiosClient.patch<AxiosResponse<any>>(
     "/api/auth/change-password",
-    agrs
+    agrs,
   );
 
   return response.data;
@@ -183,9 +183,8 @@ export const getCurrentUserAction = asyncThunkWrapper<
   ApiResponseSuccess<IUserData>,
   void
 >(GET_CURRENT_USER, async () => {
-  const response = await axiosClient.get<AxiosResponse<any>>(
-    "/api/users/current"
-  );
+  const response =
+    await axiosClient.get<AxiosResponse<any>>("/api/users/current");
 
   return response.data;
 });
@@ -197,7 +196,7 @@ export const verifyOTPOnChangePasswordAction = asyncThunkWrapper<
   console.log("valled to verify otp ", agrs);
   const response = await axiosClient.post<AxiosResponse<any>>(
     "/api/auth/verify-otp",
-    agrs
+    agrs,
   );
 
   return response.data;
@@ -219,7 +218,7 @@ export const updateEducationProfileAction = asyncThunkWrapper<
           school: education[0].school,
         },
       ],
-    }
+    },
   );
 
   return response.data;
@@ -244,7 +243,7 @@ export const updateExperienceProfileAction = asyncThunkWrapper<
           industry: experiences[0]?.industry,
         },
       ],
-    }
+    },
   );
 
   return response.data;
@@ -259,7 +258,7 @@ export const updateSkillsProfileAction = asyncThunkWrapper<
     "/api/auth/complete-registration",
     {
       skills: skills,
-    }
+    },
   );
 
   return response.data;
@@ -293,7 +292,7 @@ export const updateCertificateProfileAction = asyncThunkWrapper<
     "/api/auth/complete-registration",
     {
       certificates: certificates,
-    }
+    },
   );
 
   return response.data;
@@ -323,7 +322,7 @@ export const completeUserProfileAction = asyncThunkWrapper<
   ) {
     // console.log(">>>>>>1");
     const profileImageBlob = Converter.dataURItoBlob(
-      profilePictureFile?.assets ? profilePictureFile.assets[0].uri : ""
+      profilePictureFile?.assets ? profilePictureFile.assets[0].uri : "",
     );
     const formData = new FormData() as any;
 
@@ -436,7 +435,7 @@ export const completeUserProfileAction = asyncThunkWrapper<
       skills: agrs.skills,
       certificates: [{ name: "Certificate", url: certificateFileUrl }],
       profilePicture: profileResponseUrl,
-    }
+    },
   );
 
   return response.data;
@@ -450,7 +449,7 @@ export const uploadFile = async (payload: FormData) => {
       headers: {
         "Content-Type": "multipart/form-data",
       },
-    }
+    },
   );
   return response;
 };

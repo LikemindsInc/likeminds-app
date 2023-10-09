@@ -171,7 +171,7 @@ const sessionSlice = createSlice({
 
     updatePersonalInformation(
       state: ISessionState,
-      action: PayloadAction<IProfileInformation>
+      action: PayloadAction<IProfileInformation>,
     ) {
       state.profileData.personalInformation = action.payload;
     },
@@ -180,7 +180,7 @@ const sessionSlice = createSlice({
       state: ISessionState,
       action: PayloadAction<
         DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult | null
-      >
+      >,
     ) {
       state.profileData.profilePicture = action.payload;
     },
@@ -203,7 +203,7 @@ const sessionSlice = createSlice({
     },
     updateCertificate(
       state: ISessionState,
-      action: PayloadAction<{ name: string; file: FilePickerFormat }>
+      action: PayloadAction<{ name: string; file: FilePickerFormat }>,
     ) {
       if (action.payload) {
         state.profileData.certificates = [
@@ -342,7 +342,7 @@ const sessionSlice = createSlice({
       (state, action) => {
         state.completeProfileSuccess = action.payload.message;
         state.completeProfileStatus = "completed";
-      }
+      },
     );
     builder.addCase(updateExperienceProfileAction.rejected, (state, action) => {
       state.completeProfileStatus = "failed";
@@ -358,7 +358,7 @@ const sessionSlice = createSlice({
       (state, action) => {
         state.completeProfileSuccess = action.payload.message;
         state.completeProfileStatus = "completed";
-      }
+      },
     );
     builder.addCase(
       updateCertificateProfileAction.rejected,
@@ -366,7 +366,7 @@ const sessionSlice = createSlice({
         state.completeProfileStatus = "failed";
         state.completeProfileError =
           (action.payload?.message as string) || action.error.message || "";
-      }
+      },
     );
 
     builder.addCase(updateSkillsProfileAction.pending, (state) => {
@@ -426,14 +426,14 @@ const sessionSlice = createSlice({
       (state, action) => {
         state.verifyPhoneEmailOTPSuccess = action.payload.message;
         state.verifyPhoneEmailOTPStatus = "completed";
-      }
+      },
     );
     builder.addCase(
       verifyOTPOnChangePasswordAction.rejected,
       (state, action) => {
         state.verifyPhoneEmailOTPStatus = "failed";
         state.verifyPhoneEmailOTPError = action.payload?.message as string;
-      }
+      },
     );
   },
 });

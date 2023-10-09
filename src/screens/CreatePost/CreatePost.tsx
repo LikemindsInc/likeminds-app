@@ -40,7 +40,7 @@ const CreatePost = () => {
   >([]);
   const [status, setStatus] = useState({});
   const postState = useAppSelector(
-    (state: any) => state.postReducer
+    (state: any) => state.postReducer,
   ) as IPostState;
   const toast = useToast();
   const handleMediaSelect = async () => {
@@ -84,7 +84,7 @@ const CreatePost = () => {
         content: content.trim(),
         image: images,
         videos: videoSelected,
-      })
+      }),
     );
   };
 

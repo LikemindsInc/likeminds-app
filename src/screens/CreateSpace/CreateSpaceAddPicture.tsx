@@ -24,7 +24,7 @@ const CreateSpaceAddPicture = () => {
   const navigation = useNavigation<NavigationProp<any>>();
   const [isDisabled, setDisabled] = useState(true);
   const space = useAppSelector(
-    (state: any) => state.spaceReducer
+    (state: any) => state.spaceReducer,
   ) as ISpaceState;
   const dispatch = useAppDispatch();
   const toast = useToast();
@@ -32,7 +32,7 @@ const CreateSpaceAddPicture = () => {
     DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult | null
   >(null);
   const handleOnFileSelect = (
-    file: DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult
+    file: DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult,
   ) => {
     setFile(file);
     return null;
@@ -51,7 +51,7 @@ const CreateSpaceAddPicture = () => {
         title: space.createSpaceDTO.title,
         description: space.createSpaceDTO.description,
         photo: file,
-      })
+      }),
     );
   };
 

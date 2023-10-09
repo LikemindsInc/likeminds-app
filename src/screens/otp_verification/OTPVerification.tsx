@@ -33,7 +33,7 @@ const OTPVerification = () => {
   const dispatch = useAppDispatch();
 
   const session = useAppSelector(
-    (state: any) => state.sessionReducer
+    (state: any) => state.sessionReducer,
   ) as ISessionState;
 
   // const ref1 = React.createRef<TextInput>();
@@ -52,7 +52,7 @@ const OTPVerification = () => {
       verifyOTPActionAction({
         phone: session.profileData.phoneNumber,
         code: otp,
-      })
+      }),
     );
   };
 
@@ -166,7 +166,7 @@ const OTPVerification = () => {
                   resendOTPAction({
                     phone: session.profileData.phoneNumber,
                     type: "SIGNUP",
-                  })
+                  }),
                 )
               }
             />

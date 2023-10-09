@@ -30,7 +30,7 @@ const OTPEmailScreen = () => {
   const [information, setInformation] = useState("");
 
   const session = useAppSelector(
-    (state: any) => state.sessionReducer
+    (state: any) => state.sessionReducer,
   ) as ISessionState;
 
   const error = useAppSelector((state) => state.errorReducer);
@@ -50,7 +50,7 @@ const OTPEmailScreen = () => {
       verifyOTPOnChangePasswordAction({
         email: session.otpChannelValue.split("_")[1],
         code: otp,
-      })
+      }),
     );
   };
 
@@ -177,7 +177,7 @@ const OTPEmailScreen = () => {
                   resendOTPAction({
                     phone: session.otpChannelValue.split("_")[1],
                     type: "FORGOT_PASSWORD",
-                  })
+                  }),
                 )
               }
             />

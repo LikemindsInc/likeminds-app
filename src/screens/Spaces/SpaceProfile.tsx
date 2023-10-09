@@ -9,7 +9,13 @@ import {
 } from "react-native";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 import useDimension from "../../hooks/useDimension";
-import { AntDesign, Feather, Foundation, FontAwesome, Ionicons } from "@expo/vector-icons";
+import {
+  AntDesign,
+  Feather,
+  Foundation,
+  FontAwesome,
+  Ionicons,
+} from "@expo/vector-icons";
 import colors from "../../theme/colors";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native";
@@ -170,10 +176,29 @@ const SpaceProfile = () => {
         </View>
         <TabViewExample />
       </ScrollView>
-      <View style={[GlobalStyles.flewRow, {justifyContent:"space-between", paddingTop: 8}]}>
-      <TouchableOpacity onPress={() => navigation.navigate(APP_SCREEN_LIST.SPACE_SEARCH_SCREEN)}><FontAwesome name="fighter-jet" size={24} color={colors.grey} /></TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate(APP_SCREEN_LIST.HOME_SCREEN)}><AntDesign name="plus" size={24} color={colors.grey} /></TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate(APP_SCREEN_LIST.CHAT_ICON_TAB)}><Ionicons name="chatbubbles-outline" size={24} color={colors.grey} /></TouchableOpacity>
+      <View
+        style={[
+          GlobalStyles.flewRow,
+          { justifyContent: "space-between", paddingTop: 8 },
+        ]}
+      >
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate(APP_SCREEN_LIST.SPACE_SEARCH_SCREEN)
+          }
+        >
+          <FontAwesome name="fighter-jet" size={24} color={colors.grey} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate(APP_SCREEN_LIST.HOME_SCREEN)}
+        >
+          <AntDesign name="plus" size={24} color={colors.grey} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate(APP_SCREEN_LIST.CHAT_ICON_TAB)}
+        >
+          <Ionicons name="chatbubbles-outline" size={24} color={colors.grey} />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -220,7 +245,7 @@ function TabViewExample() {
           const opacity = props.position.interpolate({
             inputRange,
             outputRange: inputRange.map((inputIndex: any) =>
-              inputIndex === i ? 1 : 0.5
+              inputIndex === i ? 1 : 0.5,
             ),
           });
           const color =

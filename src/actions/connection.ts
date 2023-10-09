@@ -92,7 +92,7 @@ export const requestConnection = asyncThunkWrapper<
   string
 >(REQUESTS_CONNECTIONS, async (data) => {
   const response = await axiosClient.post<AxiosResponse<any>>(
-    `/api/connect/${data}/follow`
+    `/api/connect/${data}/follow`,
   );
   return response.data;
 });
@@ -102,7 +102,7 @@ export const getRequestConnectionStatus = asyncThunkWrapper<
   string
 >(CONNECTION_STATUS, async (data) => {
   const response = await axiosClient.get<AxiosResponse<any>>(
-    `/api/connect/status/${data}`
+    `/api/connect/status/${data}`,
   );
   return response.data;
 });
@@ -112,7 +112,7 @@ export const undoConnectionRequest = asyncThunkWrapper<
   string
 >(UNDO_CONNECTION_REQUEST, async (data) => {
   const response = await axiosClient.patch<AxiosResponse<any>>(
-    `/api/connect/${data}`
+    `/api/connect/${data}`,
   );
   return response.data;
 });
@@ -122,7 +122,7 @@ export const getConnections = asyncThunkWrapper<
   void
 >(GET_CONNECTION_REQUESTS, async (data) => {
   const response = await axiosClient.get<AxiosResponse<any>>(
-    `/api/connect/me/received-request`
+    `/api/connect/me/received-request`,
   );
   return response.data;
 });
@@ -132,7 +132,7 @@ export const getSingleUserAction = asyncThunkWrapper<
   string
 >(GET_SINGLE_USER, async (data) => {
   const response = await axiosClient.get<AxiosResponse<any>>(
-    `/api/users/${data}`
+    `/api/users/${data}`,
   );
   return response.data;
 });
@@ -145,7 +145,7 @@ export const acceptConnectionRequestAction = asyncThunkWrapper<
     `/api/connect/response/${data.connectionId}`,
     {
       status: data.status,
-    }
+    },
   );
   return response.data;
 });

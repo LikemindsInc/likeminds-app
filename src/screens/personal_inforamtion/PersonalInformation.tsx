@@ -27,10 +27,10 @@ import Sanitizer from "../../utils/sanitizer";
 
 const PersonalInformation = () => {
   const settings = useAppSelector(
-    (state: any) => state.settingReducer
+    (state: any) => state.settingReducer,
   ) as ISettingState;
   const session = useAppSelector(
-    (state: any) => state.sessionReducer
+    (state: any) => state.sessionReducer,
   ) as ISessionState;
   const dispatch = useAppDispatch();
   const getCountries = useCallback(() => {
@@ -40,20 +40,20 @@ const PersonalInformation = () => {
   }, [settings.getCountriesStatus]);
 
   const [firstName, setFirstName] = useState(
-    session.profileData?.personalInformation?.firstName
+    session.profileData?.personalInformation?.firstName,
   );
   const [lastName, setLastName] = useState(
-    session.profileData?.personalInformation?.lastName
+    session.profileData?.personalInformation?.lastName,
   );
   const [city, setCity] = useState(
-    session.profileData?.personalInformation?.city
+    session.profileData?.personalInformation?.city,
   );
   const [bio, setBio] = useState(session.profileData?.personalInformation?.bio);
   const [country, setCountry] = useState(
-    (session.profileData?.personalInformation?.country as string) || ""
+    (session.profileData?.personalInformation?.country as string) || "",
   );
   const [countryOfOrigin, setCountryOfOrigin] = useState(
-    session.profileData?.personalInformation?.countryOfOrigin
+    session.profileData?.personalInformation?.countryOfOrigin,
   );
 
   const [errors, setErrors] = useState<{
@@ -120,7 +120,7 @@ const PersonalInformation = () => {
   }, [getCountries]);
 
   const handleFileSelect = (
-    file: FilePickerFormat | ImagePicker.ImagePickerResult
+    file: FilePickerFormat | ImagePicker.ImagePickerResult,
   ) => {
     setResume(file);
     return null;
@@ -170,8 +170,8 @@ const PersonalInformation = () => {
           country,
           countryOfOrigin,
           resume,
-        })
-      )
+        }),
+      ),
     );
     navigation.navigate(APP_SCREEN_LIST.SIGNUP_PROFILE_PICTURE);
   };

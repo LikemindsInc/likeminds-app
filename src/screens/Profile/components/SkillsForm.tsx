@@ -115,7 +115,7 @@ const SkillsForm = () => {
     const i2 = [...selectedSkills];
 
     const i3 = selectedSkills.filter((item) =>
-      skillsList.includes(item.toLowerCase())
+      skillsList.includes(item.toLowerCase()),
     );
 
     setSelectedSkills(i3);

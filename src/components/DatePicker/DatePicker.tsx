@@ -22,7 +22,7 @@ const DatePicker: FC<IProps> = (props) => {
 
   const onStartDateChange = (
     event: DateTimePickerEvent,
-    selectedDate: Date | undefined
+    selectedDate: Date | undefined,
   ) => {
     const currentDate = selectedDate;
 

@@ -19,7 +19,7 @@ const PeopleSearchForm = () => {
         label: item,
         value: item,
       })),
-    []
+    [],
   );
 
   const radioButtons3: RadioButtonProps[] = useMemo(
@@ -29,7 +29,7 @@ const PeopleSearchForm = () => {
         label: item,
         value: item,
       })),
-    []
+    [],
   );
   return (
     <View style={{ flex: 1 }}>

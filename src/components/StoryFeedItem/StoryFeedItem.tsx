@@ -58,7 +58,7 @@ interface IProps {
 
 const StoryFeedItem: FC<IProps> = ({ item }) => {
   const state = useAppSelector(
-    (state: any) => state.settingReducer
+    (state: any) => state.settingReducer,
   ) as ISettingState;
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["50%", "60%"], []);
@@ -76,7 +76,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
   const [comment, setComment] = useState("");
 
   const postState = useAppSelector(
-    (state: any) => state.postReducer
+    (state: any) => state.postReducer,
   ) as IPostState;
 
   const [isPostLiked, setLiked] = useState(false);

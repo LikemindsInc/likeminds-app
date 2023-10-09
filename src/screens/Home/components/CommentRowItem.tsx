@@ -30,7 +30,7 @@ const CommentRowItem: FC<Props> = ({ item }) => {
   const [commentOnComment, setCommentOnComment] = useState("");
 
   const postState = useAppSelector(
-    (state: any) => state.postReducer
+    (state: any) => state.postReducer,
   ) as IPostState;
 
   const dispatch = useAppDispatch();
@@ -53,7 +53,7 @@ const CommentRowItem: FC<Props> = ({ item }) => {
         commentId: item.id,
         postId: item.postId,
         comment: commentOnComment,
-      })
+      }),
     );
   };
 

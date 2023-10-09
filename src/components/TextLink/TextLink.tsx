@@ -7,30 +7,30 @@ import font from "../../theme/font";
 import { GlobalStyles } from "../../theme/GlobalStyles";
 
 export interface ITextLinkProps extends ButtonProps {
-	linkTo?: string;
-	color?: string;
+  linkTo?: string;
+  color?: string;
 }
 
 const TextLink: FC<ITextLinkProps> = (props) => {
-	const navigation = useNavigation<any>();
-	const hanldeOnLinkPress = (e: any) => {
-		if (props.linkTo) return navigation.navigate(props.linkTo);
+  const navigation = useNavigation<any>();
+  const hanldeOnLinkPress = (e: any) => {
+    if (props.linkTo) return navigation.navigate(props.linkTo);
 
-		return props.onPress && props.onPress(e);
-	};
-	return (
-		<TouchableOpacity onPress={hanldeOnLinkPress}>
-			<Text
-				style={[styles.linkText, props.color ? { color: props.color } : {}]}
-			>
-				{props.title}
-			</Text>
-		</TouchableOpacity>
-	);
+    return props.onPress && props.onPress(e);
+  };
+  return (
+    <TouchableOpacity onPress={hanldeOnLinkPress}>
+      <Text
+        style={[styles.linkText, props.color ? { color: props.color } : {}]}
+      >
+        {props.title}
+      </Text>
+    </TouchableOpacity>
+  );
 };
 
 const styles = StyleSheet.create({
-	linkText: {
+  linkText: {
     color: colors.primary,
     fontSize: 16,
     fontWeight: 700,

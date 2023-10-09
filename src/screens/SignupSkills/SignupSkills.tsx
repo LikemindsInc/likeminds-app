@@ -106,7 +106,7 @@ const SignupSkills = () => {
     const i2 = [...selectedSkills];
 
     const i3 = i2.filter((item) =>
-      skillsList.includes(item.toLowerCase().trim())
+      skillsList.includes(item.toLowerCase().trim()),
     );
 
     console.log("skilss> ", skills);

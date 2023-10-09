@@ -47,7 +47,7 @@ const CreatePassword = () => {
   }, []);
 
   const session = useAppSelector(
-    (state: any) => state.sessionReducer
+    (state: any) => state.sessionReducer,
   ) as ISessionState;
   const isPasswordValid = () => {
     if (PASSWORD_REGEX.test(password)) {
@@ -129,7 +129,7 @@ const CreatePassword = () => {
         [key]: session.otpChannelValue.split("_")[1],
         newPassword: password.trim(),
         code: session.otpCode,
-      })
+      }),
     );
   };
 

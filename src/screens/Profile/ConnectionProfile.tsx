@@ -45,7 +45,7 @@ const ConnectionProfile = () => {
   const dispatch = useAppDispatch();
 
   const state = useAppSelector(
-    (state: any) => state.settingReducer
+    (state: any) => state.settingReducer,
   ) as ISettingState;
 
   const selector = useAppSelector((state) => state.connectionReducer);
@@ -494,7 +494,7 @@ const FirstRoute = () => {
           (item) =>
             item.companyName !== "" &&
             item.responsibilities?.trim() !== "" &&
-            item.jobTitle?.trim() !== ""
+            item.jobTitle?.trim() !== "",
         )
         .map((item) => ({
           title: (
@@ -879,7 +879,7 @@ function TabViewExample() {
           const opacity = props.position.interpolate({
             inputRange,
             outputRange: inputRange.map((inputIndex: any) =>
-              inputIndex === i ? 1 : 0.5
+              inputIndex === i ? 1 : 0.5,
             ),
           });
           const color =

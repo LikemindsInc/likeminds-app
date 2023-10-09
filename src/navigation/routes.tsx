@@ -87,7 +87,7 @@ const Tab = createBottomTabNavigator();
 const AppHome = () => {
   const navigation = useNavigation<NavigationProp<any>>();
   const setting = useAppSelector(
-    (state: any) => state.settingReducer
+    (state: any) => state.settingReducer,
   ) as ISettingState;
 
   const handleBackPress = () => {
@@ -388,7 +388,7 @@ const AppDrawer = () => {
 
 const AppRoutes = () => {
   const errorReducer = useAppSelector(
-    (state: any) => state.errorReducer
+    (state: any) => state.errorReducer,
   ) as IGlobalErrorState;
 
   const state = useAppSelector((state) => state.settingReducer);
@@ -410,7 +410,7 @@ const AppRoutes = () => {
   const navigation = useNavigation<NavigationProp<any>>();
 
   const setting = useAppSelector(
-    (state: any) => state.settingReducer
+    (state: any) => state.settingReducer,
   ) as ISettingState;
 
   return (

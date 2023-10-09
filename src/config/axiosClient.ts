@@ -64,5 +64,5 @@ axiosClient.interceptors.response.use(
     // Sentry.Native.captureException(error);
     // reportError(error?.response?.data as Error);
     return Promise.reject(error);
-  }
+  },
 );

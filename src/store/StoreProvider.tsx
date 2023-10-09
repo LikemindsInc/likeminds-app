@@ -5,8 +5,8 @@ import { PersistGate } from "redux-persist/integration/react";
 
 import { store, persistor } from "./store";
 
-interface IProps{
-  children: any
+interface IProps {
+  children: any;
 }
 
 const Provider: React.FC<IProps> = ({ children }) => (

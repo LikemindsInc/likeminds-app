@@ -3,7 +3,7 @@ import colors from "./colors";
 import font from "./font";
 import Util from "../utils";
 
-const {wp} = Util.responsiveWidthHeight()
+const { wp } = Util.responsiveWidthHeight();
 
 export const GlobalStyles = StyleSheet.create({
   container: {

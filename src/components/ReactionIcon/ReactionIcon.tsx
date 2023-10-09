@@ -51,7 +51,7 @@ const ReactionIcon: FC<Props> = ({ post, handleLikeReactionOnPost }) => {
   useEffect(() => {
     if (state.postReaction.length > 0) {
       const item = state.postReaction.findLast(
-        (item) => item.user.id === data.userInfo?.id && item.postId === post.id
+        (item) => item.user.id === data.userInfo?.id && item.postId === post.id,
       );
 
       if (item) {

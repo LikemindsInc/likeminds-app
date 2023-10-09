@@ -138,8 +138,8 @@ export default function Jobs() {
           location,
           postedDate,
           jobType,
-        })
-      )
+        }),
+      ),
     );
   }, []);
 
@@ -170,8 +170,8 @@ export default function Jobs() {
           location,
           postedDate,
           jobType,
-        })
-      )
+        }),
+      ),
     );
   }, [sortBy]);
 
@@ -209,8 +209,8 @@ export default function Jobs() {
           postedDate,
           tailor,
           jobType,
-        })
-      )
+        }),
+      ),
     );
   }, [experienceLevel]);
 
@@ -225,8 +225,8 @@ export default function Jobs() {
           location,
           postedDate,
           jobType,
-        })
-      )
+        }),
+      ),
     );
   }, [tailor]);
 
@@ -241,8 +241,8 @@ export default function Jobs() {
           location,
           postedDate,
           jobType,
-        })
-      )
+        }),
+      ),
     );
   }, [postedDate]);
 
@@ -257,8 +257,8 @@ export default function Jobs() {
           location,
           postedDate,
           jobType,
-        })
-      )
+        }),
+      ),
     );
   }, [postedDate]);
 
@@ -273,8 +273,8 @@ export default function Jobs() {
           location,
           postedDate,
           jobType,
-        })
-      )
+        }),
+      ),
     );
   }, [jobType]);
 

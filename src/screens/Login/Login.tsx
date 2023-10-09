@@ -22,7 +22,7 @@ const Login = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NavigationProp<any>>();
   const session = useAppSelector(
-    (state: any) => state.sessionReducer
+    (state: any) => state.sessionReducer,
   ) as ISessionState;
 
   const setting = useAppSelector((state) => state.settingReducer);
@@ -33,7 +33,7 @@ const Login = () => {
       loginUserActionAction({
         email: values.email.trim(),
         password: values.password.trim(),
-      })
+      }),
     );
   };
 

@@ -45,7 +45,7 @@ const CommentReactionIcon: FC<Props> = ({ post, isLiked }) => {
       getCommentReaction({
         postId: post.postId,
         commentId: post.id as string,
-      })
+      }),
     );
   }, []);
 
@@ -56,7 +56,7 @@ const CommentReactionIcon: FC<Props> = ({ post, isLiked }) => {
   useEffect(() => {
     if (state.commentReactions.length > 0) {
       const item = state.commentReactions.findLast(
-        (item) => item.user.id === data.userInfo?.id && item.postId === post.id
+        (item) => item.user.id === data.userInfo?.id && item.postId === post.id,
       );
 
       if (item) {
@@ -83,7 +83,7 @@ const CommentReactionIcon: FC<Props> = ({ post, isLiked }) => {
         removeCommentReaction({
           postId: post.postId,
           commentId: post.id as string,
-        })
+        }),
       );
     } else {
       setLikeIcon(reaction);
@@ -92,7 +92,7 @@ const CommentReactionIcon: FC<Props> = ({ post, isLiked }) => {
           postId: post.postId,
           reaction,
           commentId: post.id as string,
-        })
+        }),
       );
     }
     dispatch(handleShowCommentReaction({ show: false, post: null }));

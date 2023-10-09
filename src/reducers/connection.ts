@@ -187,14 +187,14 @@ const connectionSlice = createSlice({
       (state, action) => {
         state.usersByIndustry = action.payload.data;
         state.getUsersByIndustryStatus = "completed";
-      }
+      },
     );
     builder.addCase(
       getUserRecommendationByIndustry.rejected,
       (state, action) => {
         state.getUsersByIndustryStatus = "failed";
         state.getUsersByIndustryError = action.payload?.message as string;
-      }
+      },
     );
 
     builder.addCase(getUserRecommendationBySchool.pending, (state) => {
@@ -205,7 +205,7 @@ const connectionSlice = createSlice({
       (state, action) => {
         state.usersBySchool = action.payload.data;
         state.getUsersBySchoolStatus = "completed";
-      }
+      },
     );
     builder.addCase(getUserRecommendationBySchool.rejected, (state, action) => {
       state.getUsersBySchoolStatus = "failed";
@@ -294,7 +294,7 @@ const connectionSlice = createSlice({
       acceptConnectionRequestAction.fulfilled,
       (state, action) => {
         state.connectionRespondStatus = "completed";
-      }
+      },
     );
     builder.addCase(acceptConnectionRequestAction.rejected, (state, action) => {
       state.connectionRespondStatus = "failed";

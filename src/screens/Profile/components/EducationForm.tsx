@@ -30,7 +30,7 @@ import { AntDesign } from "@expo/vector-icons";
 
 const EducationForm = () => {
   const [startDate, setStartDate] = useState(
-    moment().subtract("7", "days").format("YYYY-MM-DD")
+    moment().subtract("7", "days").format("YYYY-MM-DD"),
   );
   const [endDate, setEndDate] = useState(moment().format("YYYY-MM-DD"));
   const [school, setSchool] = useState("");
@@ -172,7 +172,7 @@ const EducationForm = () => {
     if (query.trim() === "") setSchools(setting.schools);
     else {
       const data = setting.schools.filter((item) =>
-        item.name.toLowerCase().startsWith(query.toLowerCase().trim())
+        item.name.toLowerCase().startsWith(query.toLowerCase().trim()),
       );
 
       setSchools(data);

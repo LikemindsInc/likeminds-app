@@ -90,7 +90,7 @@ export const createPostAction = asyncThunkWrapper<
     {
       content: agrs.content,
       images: [...images, ...videos],
-    }
+    },
   );
 
   return response.data;
@@ -101,7 +101,7 @@ export const getPostFeedAction = asyncThunkWrapper<
   void
 >(GET_POST_FEED, async () => {
   const response = await axiosClient.get<AxiosResponse<any>>(
-    "/api/post/feeds?page=1&limit=50"
+    "/api/post/feeds?page=1&limit=50",
   );
   return response.data;
 });
@@ -111,7 +111,7 @@ export const getPostReactions = asyncThunkWrapper<
   string
 >(GET_POST_FEED_REACTIONS, async (id) => {
   const response = await axiosClient.get<AxiosResponse<any>>(
-    `/api/post/reaction/${id}`
+    `/api/post/reaction/${id}`,
   );
   return response.data;
 });
@@ -121,7 +121,7 @@ export const getCommentReaction = asyncThunkWrapper<
   { postId: string; commentId: string }
 >(GET_COMMENT_REACTIONS, async (data) => {
   const response = await axiosClient.get<AxiosResponse<any>>(
-    `/api/comment/reaction/${data.postId}/${data.commentId}`
+    `/api/comment/reaction/${data.postId}/${data.commentId}`,
   );
 
   return response.data;
@@ -133,7 +133,7 @@ export const reactToCommentAction = asyncThunkWrapper<
 >(REACT_TO_COMMENT, async (data) => {
   const response = await axiosClient.post<AxiosResponse<any>>(
     `/api/comment/reaction/${data.postId}/${data.commentId}`,
-    { reaction: data.reaction }
+    { reaction: data.reaction },
   );
   return response.data;
 });
@@ -143,7 +143,7 @@ export const removeCommentReaction = asyncThunkWrapper<
   { postId: string; commentId: string }
 >(REMOVE_COMMENT_REACTION, async (data) => {
   const response = await axiosClient.delete<AxiosResponse<any>>(
-    `/api/comment/reaction/${data.postId}/${data.commentId}`
+    `/api/comment/reaction/${data.postId}/${data.commentId}`,
   );
   return response.data;
 });
@@ -153,7 +153,7 @@ export const getCurrentUserFeedAction = asyncThunkWrapper<
   void
 >(GET_USER_POST_FEED, async () => {
   const response = await axiosClient.get<AxiosResponse<any>>(
-    "/api/post/me/feeds?page=1&limit=1000"
+    "/api/post/me/feeds?page=1&limit=1000",
   );
   return response.data;
 });
@@ -163,7 +163,7 @@ export const getConnectionPostFeedAction = asyncThunkWrapper<
   string
 >(GET_CONNECTION_POST_FEED, async (userId) => {
   const response = await axiosClient.get<AxiosResponse<any>>(
-    `/api/post/feeds/user/${userId}?page=1&limit=1000`
+    `/api/post/feeds/user/${userId}?page=1&limit=1000`,
   );
   return response.data;
 });
@@ -208,7 +208,7 @@ export const getPostFeedByIdAction = asyncThunkWrapper<
   string
 >(GET_SINGLE_POST_FEED, async (postId) => {
   const response = await axiosClient.get<AxiosResponse<any>>(
-    `/api/post/feeds/${postId}`
+    `/api/post/feeds/${postId}`,
   );
   return response.data;
 });
@@ -218,7 +218,7 @@ export const unReactToPost = asyncThunkWrapper<
   string
 >(UNREACT_TO_POST, async (postId) => {
   const response = await axiosClient.delete<AxiosResponse<any>>(
-    `/api/post/reaction/${postId}`
+    `/api/post/reaction/${postId}`,
   );
   return response.data;
 });
@@ -230,7 +230,7 @@ export const likePostAction = asyncThunkWrapper<
   console.log("called to like a post> ", args);
   const response = await axiosClient.post<AxiosResponse<any>>(
     `/api/post/${args}/like`,
-    {}
+    {},
   );
 
   return response.data;
@@ -243,7 +243,7 @@ export const unlikePostAction = asyncThunkWrapper<
   console.log("called to unklike a post> ", args);
   const response = await axiosClient.post<AxiosResponse<any>>(
     `/api/post/${args}/unlike`,
-    {}
+    {},
   );
 
   return response.data;
@@ -257,7 +257,7 @@ export const reactToPostAction = asyncThunkWrapper<
     `/api/post/reaction/${args.postId}`,
     {
       reaction: args.reaction,
-    }
+    },
   );
 
   return response.data;
@@ -271,7 +271,7 @@ export const commentOnPostAction = asyncThunkWrapper<
     `/api/comment/${args.postId}`,
     {
       comment: args.comment,
-    }
+    },
   );
 
   return response.data;
@@ -282,7 +282,7 @@ export const getCommentsOnPostAction = asyncThunkWrapper<
   string
 >(GET_COMMENT_ON_POST, async (args: string) => {
   const response = await axiosClient.get<AxiosResponse<any>>(
-    `/api/comment/${args}`
+    `/api/comment/${args}`,
   );
 
   return response.data;
@@ -296,7 +296,7 @@ export const commentOnCommentAction = asyncThunkWrapper<
     `/api/comment/${args.postId}/${args.commentId}`,
     {
       comment: args.comment,
-    }
+    },
   );
 
   return response.data;

@@ -20,7 +20,7 @@ import { ISettingState } from "../../reducers/settings";
 import { useEffect, useMemo, useRef } from "react";
 import Util from "../../utils";
 
-const {wp} = Util.responsiveWidthHeight()
+const { wp } = Util.responsiveWidthHeight();
 const slides = [
   {
     key: 1,
@@ -73,7 +73,7 @@ const OnBoarding = () => {
   const navigation = useNavigation<NavigationProp<any>>();
   const bounceValue = useRef(new Animated.Value(0)).current;
   const setting = useAppSelector(
-    (state: any) => state.settingReducer
+    (state: any) => state.settingReducer,
   ) as ISettingState;
 
   const startBounceAnimation = () => {
@@ -99,7 +99,7 @@ const OnBoarding = () => {
     () => ({
       transform: [{ scale: bounceValue }],
     }),
-    [bounceValue]
+    [bounceValue],
   );
 
   const _renderItem = ({ item }: any) => {
@@ -196,9 +196,11 @@ const OnBoarding = () => {
             style={styles.logoImage}
           />
         </View>
-        <View style={{
-          marginBottom: wp(22.68)
-        }}>
+        <View
+          style={{
+            marginBottom: wp(22.68),
+          }}
+        >
           <Text
             style={[
               GlobalStyles.textCenter,

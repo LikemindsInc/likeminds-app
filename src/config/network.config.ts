@@ -51,7 +51,7 @@ network.interceptors.request.use(
   (error: AxiosError) => {
     reportError(error?.response?.data as Error);
     return Promise.reject(error?.response?.data as Error);
-  }
+  },
 );
 
 // Add a response interceptor
@@ -78,5 +78,5 @@ network.interceptors.response.use(
 
     reportError(error?.response?.data as Error);
     return Promise.reject(error?.response?.data as Error);
-  }
+  },
 );

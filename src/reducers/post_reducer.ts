@@ -245,14 +245,14 @@ const PostSlice = createSlice({
   reducers: {
     showReactionView(
       state: IPostState,
-      action: PayloadAction<{ post: IPostFeed | null; show: boolean }>
+      action: PayloadAction<{ post: IPostFeed | null; show: boolean }>,
     ) {
       state.showReactionView = action.payload.show;
       state.postReacted = action.payload.post;
     },
     handleShowCommentReaction(
       state: IPostState,
-      action: PayloadAction<{ post: IPostCommentFeed | null; show: boolean }>
+      action: PayloadAction<{ post: IPostCommentFeed | null; show: boolean }>,
     ) {
       state.showCommentReactionView = action.payload.show;
       state.commentReacted = action.payload.post;

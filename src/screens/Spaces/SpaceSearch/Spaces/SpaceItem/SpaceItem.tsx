@@ -22,7 +22,7 @@ interface IProps {
 const SpaceItem: FC<IProps> = ({ item }) => {
   const dispatch = useAppDispatch();
   const state = useAppSelector(
-    (state: any) => state.spaceReducer
+    (state: any) => state.spaceReducer,
   ) as ISpaceState;
   const toast = useToast();
   const [isLoading, setLoading] = useState(false);

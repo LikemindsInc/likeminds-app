@@ -60,7 +60,7 @@ const Notification = () => {
   useEffect(() => {}, []);
 
   const [connection, setConnection] = useState<IConnectionReceivedDTO | null>(
-    null
+    null,
   );
 
   const handleOnRespond = (item: IConnectionReceivedDTO) => {
@@ -74,7 +74,7 @@ const Notification = () => {
       acceptConnectionRequestAction({
         connectionId: connection.id,
         status: "accepted",
-      })
+      }),
     );
   };
 
@@ -90,7 +90,7 @@ const Notification = () => {
       acceptConnectionRequestAction({
         connectionId: connection.id,
         status: "declined",
-      })
+      }),
     );
   };
 

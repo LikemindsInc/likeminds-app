@@ -31,7 +31,7 @@ const SignupCertificate = () => {
   const errorReducer = useAppSelector((state) => state.errorReducer);
 
   const session = useAppSelector(
-    (state: any) => state.sessionReducer
+    (state: any) => state.sessionReducer,
   ) as ISessionState;
 
   const [file, setFile] = useState<
@@ -39,7 +39,7 @@ const SignupCertificate = () => {
   >(null);
 
   const handleOnFileSelect = (
-    file: FilePickerFormat | ImagePicker.ImagePickerResult
+    file: FilePickerFormat | ImagePicker.ImagePickerResult,
   ) => {
     setFile(file);
     return null;
@@ -48,7 +48,7 @@ const SignupCertificate = () => {
   const handleOnNextPress = () => {
     if (file) {
       dispatch(
-        updateCertificate({ name: name, file: file as FilePickerFormat })
+        updateCertificate({ name: name, file: file as FilePickerFormat }),
       );
     }
     dispatch(completeUserProfileAction(session.profileData));
@@ -64,7 +64,7 @@ const SignupCertificate = () => {
           : (session.completeProfileError as string),
         {
           type: "normal",
-        }
+        },
       );
     }
   }, [session.completeProfileStatus]);

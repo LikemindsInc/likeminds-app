@@ -20,7 +20,7 @@ const SignupProfilePicture = () => {
     DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult | null
   >(null);
   const handleOnFileSelect = (
-    file: DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult
+    file: DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult,
   ) => {
     setFile(file);
     return null;

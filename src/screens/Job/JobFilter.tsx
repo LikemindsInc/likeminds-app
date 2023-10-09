@@ -32,7 +32,7 @@ const JobFilter = () => {
         label: item.label,
         value: item.value,
       })),
-    []
+    [],
   );
 
   const radioButtons2: RadioButtonProps[] = useMemo(
@@ -47,7 +47,7 @@ const JobFilter = () => {
         label: item.label,
         value: item.value,
       })),
-    []
+    [],
   );
 
   const radioButtons3: RadioButtonProps[] = useMemo(
@@ -57,7 +57,7 @@ const JobFilter = () => {
         label: item.label,
         value: item.value,
       })),
-    []
+    [],
   );
 
   const radioButtons4: RadioButtonProps[] = useMemo(
@@ -74,12 +74,12 @@ const JobFilter = () => {
         label: item,
         value: item,
       })),
-    []
+    [],
   );
 
   const applyFilterHandler = () => {
     dispatch(
-      getJobsAction({ sort: sortBy, experienceLevel, postedDate: "anytime" })
+      getJobsAction({ sort: sortBy, experienceLevel, postedDate: "anytime" }),
     );
     navigation.goBack();
   };

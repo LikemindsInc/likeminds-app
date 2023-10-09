@@ -51,7 +51,7 @@ const PostDetail = () => {
   const [showImageZoom, setShowImageZoom] = useState(false);
 
   const state = useAppSelector(
-    (state: any) => state.settingReducer
+    (state: any) => state.settingReducer,
   ) as ISettingState;
 
   const dispatch = useAppDispatch();
@@ -61,7 +61,7 @@ const PostDetail = () => {
   const [comment, setComment] = useState("");
 
   const postState = useAppSelector(
-    (state: any) => state.postReducer
+    (state: any) => state.postReducer,
   ) as IPostState;
 
   const item = postState.postDetail as IPostFeed;

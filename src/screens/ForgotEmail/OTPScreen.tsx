@@ -30,7 +30,7 @@ const OTPScreen = () => {
   const dispatch = useAppDispatch();
 
   const session = useAppSelector(
-    (state: any) => state.sessionReducer
+    (state: any) => state.sessionReducer,
   ) as ISessionState;
 
   const navigation = useNavigation<any>();
@@ -51,7 +51,7 @@ const OTPScreen = () => {
       verifyOTPOnChangePasswordAction({
         phone: session.otpChannelValue.split("_")[1],
         code: `${otp}`,
-      })
+      }),
     );
   };
 
@@ -181,7 +181,7 @@ const OTPScreen = () => {
                   resendOTPAction({
                     phone: session.otpChannelValue.split("_")[1],
                     type: "FORGOT_PASSWORD",
-                  })
+                  }),
                 )
               }
             />

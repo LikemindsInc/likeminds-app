@@ -39,14 +39,14 @@ const CertificateForm = () => {
   const [uploods, setUploads] = useState([{}]);
 
   const session = useAppSelector(
-    (state: any) => state.sessionReducer
+    (state: any) => state.sessionReducer,
   ) as ISessionState;
 
   const [file, setFile] = useState<
     FilePickerFormat | null | ImagePicker.ImagePickerResult
   >(null);
   const handleOnFileSelect = (
-    file: FilePickerFormat | ImagePicker.ImagePickerResult
+    file: FilePickerFormat | ImagePicker.ImagePickerResult,
   ) => {
     setFile(file);
     return null;
@@ -55,7 +55,7 @@ const CertificateForm = () => {
     if (file) {
       console.log("file> ", file);
       dispatch(
-        updateCertificate({ file: file as FilePickerFormat, name: name })
+        updateCertificate({ file: file as FilePickerFormat, name: name }),
       );
       setTimeout(() => {
         dispatch(updateCertificateProfileAction(session.profileData));

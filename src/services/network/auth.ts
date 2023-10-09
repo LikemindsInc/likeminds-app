@@ -11,7 +11,7 @@ import { network } from "../../config/network.config";
 export const login = async (payload: any): Promise<any> => {
   const response = await network.post<ResponseInterface<any>>(
     "/api/v1/auth/login",
-    { ...payload }
+    { ...payload },
   );
 
   return response;

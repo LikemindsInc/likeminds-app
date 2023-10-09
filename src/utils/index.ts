@@ -1,4 +1,7 @@
-import { widthPercentageToDP as wp, heightPercentageToDP as hp} from "react-native-responsive-screen"
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
 export class Util {
   static debounce = (callback: (...args: any) => void, delay: number) => {
@@ -21,15 +24,15 @@ export class Util {
       .join(" ");
   }
 
-  static getNumber(value: string){
-    return value.replace(/[^0-9]/g, '')
+  static getNumber(value: string) {
+    return value.replace(/[^0-9]/g, "");
   }
 
-  static responsiveWidthHeight(){
+  static responsiveWidthHeight() {
     return {
       wp,
-      hp
-    }
+      hp,
+    };
   }
 }
 

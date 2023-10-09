@@ -23,7 +23,7 @@ const RecoverWithPhone = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>("");
   const [phone, setPhone] = useState("");
   const session = useAppSelector(
-    (state: any) => state.sessionReducer
+    (state: any) => state.sessionReducer,
   ) as ISessionState;
   const dispatch = useAppDispatch();
   const [countryCode, setCountryCode] = useState("");

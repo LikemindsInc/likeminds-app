@@ -22,7 +22,7 @@ const ForgotPassword = () => {
   const navigation = useNavigation<NavigationProp<any>>();
   const dispatch = useAppDispatch();
   const session = useAppSelector(
-    (state: any) => state.sessionReducer
+    (state: any) => state.sessionReducer,
   ) as ISessionState;
   const toast = useToast();
   const handleOnNextPress = () => {
