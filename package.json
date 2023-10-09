@@ -4,19 +4,19 @@
   "scripts": {
     "start": "expo start --dev-client",
     "android": "expo run:android",
-    "lint": "eslint --fix App.tsx",
     "format": "prettier -w .",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "lint": "prettier --check ."
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "prettier --write . && git add -A ."
+    }
   },
   "resolutions": {
     "@types/react": "17.0.14",
     "@types/react-dom": "17.0.14"
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "npm run format"
-    }
   },
   "dependencies": {
     "-": "^0.0.1",
