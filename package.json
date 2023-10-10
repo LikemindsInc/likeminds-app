@@ -7,7 +7,9 @@
     "format": "prettier -w .",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "lint": "prettier --check ."
+    "lint": "prettier --check .",
+    "prepare": "husky install",
+    "lint-staged": "prettier --write . && git add -A ."
   },
   "husky": {
     "hooks": {
