@@ -291,6 +291,7 @@ const PersonalInformation = () => {
         <DropZone
           onSelect={handleFileSelect}
           type="all"
+          style={{ height: 60 }}
           emptyIcon={<FileUploadEmptyIcon />}
         />
       </ScrollView>

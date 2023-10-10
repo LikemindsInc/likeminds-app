@@ -43,12 +43,12 @@ const AutoCompleteInput: FC<IProps> = ({ data, value, onChangeText }) => {
               }}
               style={[
                 {
-                  // marginBottom: 10,
+                  marginBottom: 10,
                   borderBottomWidth: StyleSheet.hairlineWidth,
                   borderBottomColor: colors.grey,
-                  // paddingTop: 10,
-                  // paddingLeft: 10,
-                  // paddingBottom: 10,
+                  paddingTop: 10,
+                  paddingLeft: 10,
+                  paddingBottom: 10,
                 },
               ]}
             >

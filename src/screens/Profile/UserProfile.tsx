@@ -21,7 +21,6 @@ import { Box, Pressable, useColorModeValue } from 'native-base';
 import useAppSelector from '../../hooks/useAppSelector';
 import { ISettingState } from '../../reducers/settings';
 import UserPostFeed from './components/UserPostFeed';
-import UserExperience from './components/UserExperience';
 import { useUser } from '../../hooks/userUser';
 import ReadMore from 'react-native-read-more-text';
 import moment from 'moment';
@@ -32,6 +31,7 @@ import SkillsForm from './components/SkillsForm';
 import CertificateForm from './components/CertificateForm';
 import useAppDispatch from '../../hooks/useAppDispatch';
 import { getCurrentUserAction } from '../../actions/auth';
+import TimeLine from '../../components/TimeLine/TimeLine';
 
 // Get the height of the status bar
 const statusBarHeight = StatusBar.currentHeight;
@@ -660,7 +660,10 @@ const FirstRoute = () => {
 
   const getCertifcateTimeLine = () => {
     const timeline =
-      user?.certificates.map((item) => ({
+      [
+        { name: 'Resume', url: user?.resume },
+        ...(user?.certificates || []),
+      ].map((item) => ({
         title: (
           <View
             style={{
@@ -732,7 +735,7 @@ const FirstRoute = () => {
                 GlobalStyles.mb10,
               ]}
             >
-              Certificate
+              Attachements
             </Text>
           </View>
         ),
@@ -771,73 +774,55 @@ const FirstRoute = () => {
     showSkillsModal,
   ]);
 
+  const filterSkills = () => {
+    return [
+      {
+        title: (
+          <View
+            style={{
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+              width: '100%',
+            }}
+          >
+            <Text
+              style={[
+                GlobalStyles.fontInterBlack,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textNavyBlue,
+                GlobalStyles.mb10,
+              ]}
+            >
+              Skills
+            </Text>
+          </View>
+        ),
+        description: (
+          <View style={{ marginBottom: 20, paddingTop: 20 }}>
+            <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textNavyBlue,
+              ]}
+            >
+              {user?.skills.join(',')}
+            </Text>
+          </View>
+        ),
+      },
+    ];
+  };
+
   return (
     <View
       style={[GlobalStyles.mt20, { flex: 1, marginBottom: 0, flexGrow: 1 }]}
     >
-      <UserExperience
+      <TimeLine
         data={[
           ...getExperienceTimeLine(),
           ...getEducationTimeLine(),
-          {
-            title: (
-              <View
-                style={{
-                  justifyContent: 'space-between',
-                  flexDirection: 'row',
-                  width: '100%',
-                }}
-              >
-                <Text
-                  style={[
-                    GlobalStyles.fontInterBlack,
-                    GlobalStyles.fontSize13,
-                    GlobalStyles.textNavyBlue,
-                    GlobalStyles.mb10,
-                  ]}
-                >
-                  Skills
-                </Text>
-              </View>
-            ),
-            description: (
-              <View>
-                {user?.skills.length > 0 ? (
-                  <Text
-                    style={[
-                      GlobalStyles.fontInterRegular,
-                      GlobalStyles.fontSize13,
-                      GlobalStyles.textGrey,
-                      GlobalStyles.mb20,
-                    ]}
-                  >
-                    {user?.skills.join(',')}
-                  </Text>
-                ) : null}
-                <TouchableOpacity
-                  onPress={() => setShowSkillsModal(true)}
-                  style={{
-                    flexDirection: 'row',
-                    gap: 8,
-                    marginBottom: 5,
-                  }}
-                >
-                  <AntDesign name="plus" size={16} color={colors.primary} />
-                  <Text
-                    style={[
-                      GlobalStyles.fontSize13,
-                      GlobalStyles.fontInterRegular,
-                      GlobalStyles.textPrimary,
-                      GlobalStyles.fontWeight400,
-                    ]}
-                  >
-                    Add Skill
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            ),
-          },
-
+          ...filterSkills(),
           ...getCertifcateTimeLine(),
         ]}
       />

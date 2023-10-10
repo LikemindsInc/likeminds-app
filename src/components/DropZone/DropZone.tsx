@@ -90,7 +90,7 @@ const DropZone: FC<IProps> = ({
         <View
           style={{
             flexDirection: 'row',
-            height: '100%',
+            height: 60,
             gap: 8,
           }}
         >

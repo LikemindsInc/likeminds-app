@@ -1,12 +1,10 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { GlobalStyles } from '../../theme/GlobalStyles';
-import Input from '../../components/Input/Input';
 import React, { useEffect, useState } from 'react';
 import Button from '../../components/Button/Button';
 import TextLink from '../../components/TextLink/TextLink';
 import colors from '../../theme/colors';
 import DatePicker from '../../components/DatePicker/DatePicker';
-import { Checkbox } from 'native-base';
 import { APP_SCREEN_LIST, SCHOOL_DEGREES } from '../../constants';
 import { useNavigation } from '@react-navigation/native';
 import DateFormatter from '../../utils/date-formatter';
@@ -247,12 +245,6 @@ const SignupEducation = () => {
             onChangeText={handleOnSchoolFilter}
             value={school}
           />
-          {/* <Input
-            onChangeText={(text) => setSchool(text)}
-            value={school}
-            placeholder="School"
-            errorMessage={errors.school}
-          /> */}
         </View>
       </ScrollView>
       <View>
