@@ -100,7 +100,7 @@ declare module '@app-model' {
     phoneNumber: string;
     personalInformation: IProfileInformation;
     experience: IExperience[];
-    certificates: { file: FilePickerFormat; name: string }[];
+    certificates: { file: FilePickerFormat | null; name: string }[];
     profilePicture:
       | DocumentPicker.DocumentResult
       | ImagePicker.ImagePickerResult
@@ -133,6 +133,7 @@ declare module '@app-model' {
     provider: string | null;
     role: 'user';
     email: string | null;
+    resume: string;
     message: string | null;
     followers: any[] | null;
     id: string;

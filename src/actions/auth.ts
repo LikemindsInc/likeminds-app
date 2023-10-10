@@ -275,17 +275,19 @@ export const updateCertificateProfileAction = asyncThunkWrapper<
   const certificates: { name: string; url: string }[] = [];
 
   for (const item of certificateFile) {
-    const formData = new FormData() as any;
-    formData.append('file', {
-      uri: item.file.uri,
-      type: item.file.type,
-      name: item.file.name,
-    });
+    if (item.file) {
+      const formData = new FormData() as any;
+      formData.append('file', {
+        uri: item.file.uri,
+        type: item.file.type,
+        name: item.file.name,
+      });
 
-    const response = await uploadFile(formData);
-    certificateFileUrl = response.data?.data?.url || '';
+      const response = await uploadFile(formData);
+      certificateFileUrl = response.data?.data?.url || '';
 
-    certificates.push({ name: item.name, url: certificateFileUrl });
+      certificates.push({ name: item.name, url: certificateFileUrl });
+    }
   }
 
   const response = await axiosClient.patch<AxiosResponse<any>>(
@@ -320,13 +322,10 @@ export const completeUserProfileAction = asyncThunkWrapper<
     profilePictureFile.assets &&
     profilePictureFile.assets[0].uri
   ) {
-    // console.log(">>>>>>1");
     const profileImageBlob = Converter.dataURItoBlob(
       profilePictureFile?.assets ? profilePictureFile.assets[0].uri : '',
     );
     const formData = new FormData() as any;
-
-    const file = new File([profileImageBlob], 'file');
 
     const result = await Image.compress(profilePictureFile.assets[0].uri, {
       maxWidth: 1000,
@@ -346,20 +345,20 @@ export const completeUserProfileAction = asyncThunkWrapper<
   const certificates: { name: string; url: string }[] = [];
 
   for (const item of certificateFile) {
-    const formData = new FormData() as any;
-    formData.append('file', {
-      uri: item.file.uri,
-      type: item.file.type,
-      name: item.file.name,
-    });
+    if (item.file) {
+      const formData = new FormData() as any;
+      formData.append('file', {
+        uri: item.file.uri,
+        type: item.file.type,
+        name: item.file.name,
+      });
 
-    const response = await uploadFile(formData);
-    certificateFileUrl = response.data?.data?.url || '';
+      const response = await uploadFile(formData);
+      certificateFileUrl = response.data?.data?.url || '';
 
-    certificates.push({ name: item.name, url: certificateFileUrl });
+      certificates.push({ name: item.name, url: certificateFileUrl });
+    }
   }
-
-  console.log('certificate> ', certificates);
 
   if (resumeFile && resumeFile.uri) {
     const formData = new FormData() as any;
@@ -372,37 +371,6 @@ export const completeUserProfileAction = asyncThunkWrapper<
     const response = await uploadFile(formData);
     resumeUrl = response.data?.data?.url || '';
   }
-
-  console.log('data> ', {
-    firstName: agrs.personalInformation.firstName,
-    lastName: agrs.personalInformation.lastName,
-    country: agrs.personalInformation.country,
-    city: agrs.personalInformation.city,
-    countryOfOrigin: agrs.personalInformation.countryOfOrigin,
-    resume: resumeUrl,
-    bio: agrs.personalInformation.bio,
-    experience: [
-      {
-        startDate: agrs.experience[0]?.startDate,
-        endDate: agrs.experience[0]?.endDate,
-        'stillWorkHere?': agrs.experience[0]?.stillWorkHere,
-        jobTitle: agrs.experience[0]?.jobTitle,
-        companyName: agrs.experience[0]?.companyName,
-        responsibilities: agrs.experience[0]?.responsibilities,
-      },
-    ],
-    education: [
-      {
-        startDate: agrs.education[0]?.startDate,
-        endDate: agrs.education[0]?.endDate,
-        degree: agrs.education[0]?.degree,
-        school: agrs.education[0]?.school,
-      },
-    ],
-    skills: agrs.skills,
-    certificates: certificates,
-    profilePicture: profileResponseUrl,
-  });
 
   const response = await axiosClient.patch<AxiosResponse<any>>(
     '/api/auth/complete-registration',
@@ -433,7 +401,7 @@ export const completeUserProfileAction = asyncThunkWrapper<
         },
       ],
       skills: agrs.skills,
-      certificates: [{ name: 'Certificate', url: certificateFileUrl }],
+      certificates: certificates,
       profilePicture: profileResponseUrl,
     },
   );

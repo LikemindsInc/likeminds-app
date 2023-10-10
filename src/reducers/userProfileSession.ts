@@ -203,12 +203,12 @@ const sessionSlice = createSlice({
     },
     updateCertificate(
       state: ISessionState,
-      action: PayloadAction<{ name: string; file: FilePickerFormat }>,
+      action: PayloadAction<{ name: string; file: FilePickerFormat | null }[]>,
     ) {
       if (action.payload) {
         state.profileData.certificates = [
           ...state.profileData.certificates,
-          { name: action.payload.name, file: action.payload.file },
+          ...action.payload,
         ];
       }
     },

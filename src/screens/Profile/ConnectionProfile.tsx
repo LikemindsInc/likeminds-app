@@ -30,13 +30,12 @@ import {
   requestConnection,
   undoConnectionRequest,
 } from '../../actions/connection';
-import { useToast } from 'react-native-toast-notifications';
 import { clearConnectionProfileData } from '../../reducers/connection';
-import UserExperience from './components/UserExperience';
 import ConnectionPostFeed from './components/ConnectionPostFeed';
 import ReadMore from 'react-native-read-more-text';
 import moment from 'moment';
 import renderExperienceTimelineView from './components/renderExperienceTimelineView';
+import TimeLine from '../../components/TimeLine/TimeLine';
 
 const ConnectionProfile = () => {
   const height = useDimension().height;
@@ -816,35 +815,59 @@ const FirstRoute = () => {
     ];
   };
 
+  const filterSkills = () => {
+    return [
+      {
+        title: (
+          <View
+            style={{
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+              width: '100%',
+            }}
+          >
+            <Text
+              style={[
+                GlobalStyles.fontInterBlack,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textNavyBlue,
+                GlobalStyles.mb10,
+              ]}
+            >
+              Skills
+            </Text>
+          </View>
+        ),
+        description: (
+          <View style={{ marginBottom: 20, paddingTop: 20 }}>
+            <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+                GlobalStyles.textNavyBlue,
+              ]}
+            >
+              {selector.profile?.skills.join(',')}
+            </Text>
+          </View>
+        ),
+      },
+    ];
+  };
+
   return (
     <View style={{ flex: 1, marginTop: 20 }}>
-      {filterExperience().length > 0 && (
-        <UserExperience
-          data={[
-            ...filterExperience(),
+      <TimeLine
+        data={[
+          ...filterExperience(),
 
-            ...filterEducatio(),
-            {
-              title: 'Skills',
-              description: (
-                <View style={{ marginBottom: 20, paddingTop: 20 }}>
-                  <Text
-                    style={[
-                      GlobalStyles.fontInterRegular,
-                      GlobalStyles.fontSize13,
-                      GlobalStyles.textNavyBlue,
-                    ]}
-                  >
-                    {selector.profile?.skills.join(',')}
-                  </Text>
-                </View>
-              ),
-            },
+          ...filterEducatio(),
 
-            ...filterCertificates(),
-          ]}
-        />
-      )}
+          ...filterSkills(),
+
+          ...filterCertificates(),
+        ]}
+      />
     </View>
   );
 };

@@ -21,36 +21,30 @@ import {
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useToast } from 'react-native-toast-notifications';
+import CertificateFormField from '../../components/CertificateFormField/CertificateFormField';
 
 const SignupCertificate = () => {
   const toast = useToast();
   const dispatch = useAppDispatch();
-  const [name, setName] = useState('');
   const navigation = useNavigation<any>();
-  const [uploods, setUploads] = useState([{}]);
-  const errorReducer = useAppSelector((state) => state.errorReducer);
+  const [certifcateForms, setCertifcateForm] = useState<
+    { file: FilePickerFormat | null; fileName: string }[]
+  >([{ fileName: '', file: null }]);
 
   const session = useAppSelector(
     (state: any) => state.sessionReducer,
   ) as ISessionState;
 
-  const [file, setFile] = useState<
-    FilePickerFormat | null | ImagePicker.ImagePickerResult
-  >(null);
-
-  const handleOnFileSelect = (
-    file: FilePickerFormat | ImagePicker.ImagePickerResult,
-  ) => {
-    setFile(file);
-    return null;
-  };
-
   const handleOnNextPress = () => {
-    if (file) {
-      dispatch(
-        updateCertificate({ name: name, file: file as FilePickerFormat }),
-      );
-    }
+    const files = certifcateForms
+      .filter((item) => item.file !== null)
+      .map((item) => ({
+        name: item.fileName.trim() === '' ? 'Certificate' : item.fileName,
+        file: item.file,
+      }));
+
+    dispatch(updateCertificate(files));
+
     dispatch(completeUserProfileAction(session.profileData));
   };
 
@@ -70,12 +64,29 @@ const SignupCertificate = () => {
   }, [session.completeProfileStatus]);
 
   const handleOnSkip = () => {
-    // dispatch(completeUserProfileAction(session.profileData));
-    // navigation.navigate(APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN);
     handleOnNextPress();
   };
 
-  console.log(errorReducer);
+  const handleOnCertificateFormRemove = (index: number) => {
+    const newState = [...certifcateForms];
+    newState.splice(index, 1);
+    setCertifcateForm(newState);
+  };
+
+  const handleOnCertificateFormFileNameChange = (
+    index: number,
+    value: string,
+  ) => {
+    const newState = [...certifcateForms];
+    newState[index].fileName = value;
+    setCertifcateForm(newState);
+  };
+
+  const handleOnCertificateFormFileChange = (index: number, value: any) => {
+    const newState = [...certifcateForms];
+    newState[index].file = value;
+    setCertifcateForm(newState);
+  };
 
   return (
     <View style={[GlobalStyles.container]}>
@@ -95,31 +106,32 @@ const SignupCertificate = () => {
         </Text>
       </View>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-        <View>
-          {uploods.map((item) => (
-            <View>
-              <View style={[GlobalStyles.mb10]}>
-                <Input
-                  editable={true}
-                  placeholder="Certificate, Award, Volunteer"
-                  value={name}
-                  onChangeText={(value) => setName(value)}
-                />
-              </View>
-              <DropZone
-                type="all"
-                style={{ height: 60 }}
-                onSelect={handleOnFileSelect}
-                emptyIcon={<CertificateUploadEmptyIcon />}
-              />
-            </View>
-          ))}
-        </View>
+        {certifcateForms.map((item, i) => (
+          <CertificateFormField
+            key={`${i}`}
+            onRemoveHandler={() => handleOnCertificateFormRemove(i)}
+            fileName={item.fileName}
+            onFileNameChange={(value) =>
+              handleOnCertificateFormFileNameChange(i, value)
+            }
+            onFileSelect={(value) => {
+              handleOnCertificateFormFileChange(i, value);
+              return null;
+            }}
+            isFirst={i === 0}
+          />
+        ))}
+
         <View>
           <Button
             type="outline-primary"
             title="Add Another"
-            onPress={() => setUploads((state) => [...state, {}])}
+            onPress={() =>
+              setCertifcateForm((state) => [
+                ...state,
+                { file: null, fileName: '' },
+              ])
+            }
           />
         </View>
       </ScrollView>

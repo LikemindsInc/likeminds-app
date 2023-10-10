@@ -1,82 +1,67 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { GlobalStyles } from '../../../theme/GlobalStyles';
-import Input from '../../../components/Input/Input';
 import React, { useEffect, useState } from 'react';
 import Button from '../../../components/Button/Button';
-import TextLink from '../../../components/TextLink/TextLink';
 import colors from '../../../theme/colors';
-import DatePicker from '../../../components/DatePicker/DatePicker';
-import DropZone from '../../../components/DropZone/DropZone';
-import { APP_SCREEN_LIST } from '../../../constants';
 import { useNavigation } from '@react-navigation/native';
-import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 import useAppDispatch from '../../../hooks/useAppDispatch';
 import {
   ISessionState,
-  clearCompleteProfileStatus,
   updateCertificate,
 } from '../../../reducers/userProfileSession';
 import useAppSelector from '../../../hooks/useAppSelector';
-import {
-  completeUserProfileAction,
-  updateCertificateProfileAction,
-} from '../../../actions/auth';
+import { updateCertificateProfileAction } from '../../../actions/auth';
 import BackButton from '../../../components/Navigation/BackButton/BackButton';
 import { useToast } from 'react-native-toast-notifications';
 import { FilePickerFormat } from '@app-model';
 import { AntDesign } from '@expo/vector-icons';
+import CertificateFormField from '../../../components/CertificateFormField/CertificateFormField';
 
 const CertificateForm = () => {
-  const navigation = useNavigation<any>();
-
   const dispatch = useAppDispatch();
 
-  const [name, setName] = useState('');
-
-  const toast = useToast();
-
-  const [uploods, setUploads] = useState([{}]);
+  const [certifcateForms, setCertifcateForm] = useState<
+    { file: FilePickerFormat | null; fileName: string }[]
+  >([{ fileName: '', file: null }]);
 
   const session = useAppSelector(
     (state: any) => state.sessionReducer,
   ) as ISessionState;
 
-  const [file, setFile] = useState<
-    FilePickerFormat | null | ImagePicker.ImagePickerResult
-  >(null);
-  const handleOnFileSelect = (
-    file: FilePickerFormat | ImagePicker.ImagePickerResult,
-  ) => {
-    setFile(file);
-    return null;
-  };
   const handleOnNextPress = () => {
-    if (file) {
-      console.log('file> ', file);
-      dispatch(
-        updateCertificate({ file: file as FilePickerFormat, name: name }),
-      );
-      setTimeout(() => {
-        dispatch(updateCertificateProfileAction(session.profileData));
-      }, 500);
-    }
+    const files = certifcateForms
+      .filter((item) => item.file !== null)
+      .map((item) => ({
+        name: item.fileName.trim() === '' ? 'Certificate' : item.fileName,
+        file: item.file,
+      }));
+    dispatch(updateCertificate(files));
+    setTimeout(() => {
+      dispatch(updateCertificateProfileAction(session.profileData));
+    }, 500);
   };
 
-  // useEffect(() => {
-  //   if (session.completeProfileStatus === "completed") {
-  //     toast.show("Certificate added successfully", {
-  //       animationType: "slide-in",
-  //       placement: "top",
-  //     });
-  //   } else if (session.completeProfileStatus === "failed") {
-  //     toast.show(
-  //       session.completeProfileError ||
-  //         "Unable to complete action please try again"
-  //     );
-  //   }
-  //   dispatch(clearCompleteProfileStatus());
-  // }, [session.completeProfileStatus]);
+  const handleOnCertificateFormRemove = (index: number) => {
+    const newState = [...certifcateForms];
+    newState.splice(index, 1);
+    setCertifcateForm(newState);
+  };
+
+  const handleOnCertificateFormFileNameChange = (
+    index: number,
+    value: string,
+  ) => {
+    const newState = [...certifcateForms];
+    newState[index].fileName = value;
+    setCertifcateForm(newState);
+  };
+
+  const handleOnCertificateFormFileChange = (index: number, value: any) => {
+    const newState = [...certifcateForms];
+    newState[index].file = value;
+    setCertifcateForm(newState);
+  };
 
   return (
     <View style={[GlobalStyles.container, { paddingHorizontal: 0 }]}>
@@ -93,26 +78,21 @@ const CertificateForm = () => {
         </Text>
       </View>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-        <View>
-          {uploods.map((item) => (
-            <View>
-              <View style={[GlobalStyles.mb10]}>
-                <Input
-                  editable={true}
-                  placeholder="Certificate, Award, Volunteer"
-                  value={name}
-                  onChangeText={(value) => setName(value)}
-                />
-              </View>
-              <DropZone
-                type="all"
-                style={{ height: 60 }}
-                onSelect={handleOnFileSelect}
-                emptyIcon={<CertificateUploadEmptyIcon />}
-              />
-            </View>
-          ))}
-        </View>
+        {certifcateForms.map((item, i) => (
+          <CertificateFormField
+            key={`${i}`}
+            onRemoveHandler={() => handleOnCertificateFormRemove(i)}
+            fileName={item.fileName}
+            onFileNameChange={(value) =>
+              handleOnCertificateFormFileNameChange(i, value)
+            }
+            onFileSelect={(value) => {
+              handleOnCertificateFormFileChange(i, value);
+              return null;
+            }}
+            isFirst={i === 0}
+          />
+        ))}
       </ScrollView>
       <View>
         <Button
