@@ -24,7 +24,7 @@ import { initialSignupValues, signupValidator } from './validator';
 import Util from '../../utils';
 
 const Signup = () => {
-  const toast = useToast();
+  // const toast = useToast();
   const dispatch = useAppDispatch();
   const session = useAppSelector(
     (state: any) => state.sessionReducer,
@@ -45,7 +45,9 @@ const Signup = () => {
           phone: `${values.countryCode}${values.phone}`.trim(),
         }),
       );
+
     } catch (error: any) {
+      console.log("catch side",errorReducer?.message)
       reportError(error);
     }
   };
@@ -77,18 +79,24 @@ const Signup = () => {
     ) {
       dispatch(updatePhoneNumber(`${values.countryCode}${values.phone}`));
       handleNextNavigation();
-      dispatch(clearSignupStatus());
+      // dispatch(clearSignupStatus());
       // 12;
+    }
+
+    return () => {
+      // dispatch(clearNetworkError())
     }
   }, [session.signingUpStatus]);
 
   const navigation = useNavigation<NavigationProp<any>>();
 
-  // handle numbers only no text
-  const handlePhoneTextChange = (newText: string) => {
-    const numericText = Util.getNumber(newText);
-    setFieldValue('phone', numericText);
-  };
+	// handle numbers only no text
+	const handlePhoneTextChange = (newText: string) => {
+		const numericText = Util.getNumber(newText)
+		setFieldValue('phone', numericText);
+	}
+
+  console.log("try-side",errorReducer)
 
   return (
     <View style={[GlobalStyles.container]}>
@@ -107,7 +115,7 @@ const Signup = () => {
           Enter the following information to create a new account
         </Text>
       </View>
-      {errorReducer.message ? (
+      {errorReducer?.message ? (
         <View style={[GlobalStyles.mb20]}>
           <Text
             style={[

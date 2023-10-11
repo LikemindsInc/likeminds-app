@@ -1,21 +1,19 @@
-import { Text, View } from 'native-base';
-import { GlobalStyles } from '../../theme/GlobalStyles';
-import Input from '../../components/Input/Input';
-import TextLink from '../../components/TextLink/TextLink';
-import { StyleSheet } from 'react-native';
-import Button from '../../components/Button/Button';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { APP_SCREEN_LIST } from '../../constants';
-import { useEffect, useState } from 'react';
-import { requestOTPEmailAction } from '../../actions/auth';
-import useAppDispatch from '../../hooks/useAppDispatch';
-import useAppSelector from '../../hooks/useAppSelector';
-import {
-  ISessionState,
-  storeOTPChannelValue,
-} from '../../reducers/userProfileSession';
-import BackButton from '../../components/Navigation/BackButton/BackButton';
-import { useToast } from 'react-native-toast-notifications';
+import { Text, View } from "native-base";
+import { GlobalStyles } from "../../theme/GlobalStyles";
+import Input from "../../components/Input/Input";
+import TextLink from "../../components/TextLink/TextLink";
+import { StyleSheet } from "react-native";
+import Button from "../../components/Button/Button";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { APP_SCREEN_LIST } from "../../constants";
+import { useEffect, useState } from "react";
+import { requestOTPEmailAction } from "../../actions/auth";
+import useAppDispatch from "../../hooks/useAppDispatch";
+import useAppSelector from "../../hooks/useAppSelector";
+import { ISessionState, storeOTPChannelValue } from "../../reducers/session";
+import BackButton from "../../components/Navigation/BackButton/BackButton";
+import { useToast } from "react-native-toast-notifications";
+import { clearNetworkError } from "../../reducers/errorHanlder";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -35,6 +33,10 @@ const ForgotPassword = () => {
     if (session.requestOTPEmailStatus === 'completed') {
       navigation.navigate(APP_SCREEN_LIST.FORGOT_EMAIL_OTP_SCREEN);
     } else if (session.requestOTPEmailStatus === 'failed') {
+    }
+
+    return () => {
+      dispatch(clearNetworkError());
     }
   }, [session.requestOTPEmailStatus]);
   return (

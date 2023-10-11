@@ -70,6 +70,10 @@ const Login = () => {
       navigation.navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
       dispatch(clearNetworkError());
     }
+    // console.log("error> ", errorReducer.message);
+    return () => {
+      dispatch(clearNetworkError());
+    }
   }, [errorReducer.message]);
 
   return (
@@ -90,7 +94,7 @@ const Login = () => {
         </Text>
       </View>
 
-      {errorReducer.message ? (
+      {errorReducer?.message ? (
         <View style={[GlobalStyles.mb20]}>
           <Text style={[GlobalStyles.textRed, GlobalStyles.fontInterRegular]}>
             {errorReducer.message}

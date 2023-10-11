@@ -28,10 +28,11 @@ const errorSlice = createSlice({
     });
     builder.addMatcher(isRejected, (state, action: any) => {
       // global error handle reducer
-      console.log('rejected', action);
-
+      // console.log("rejected", action);
+      console.log({data: action?.payload});
       if (action.payload?.message && _.isArray(action.payload.message)) {
-        state.message = action.payload?.message?.join(',');
+        
+        state.message = action.payload?.message?.join(",");
       } else if (
         action.payload?.message &&
         action.payload.message.trim() !== ''

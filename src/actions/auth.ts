@@ -53,7 +53,7 @@ export const loginUserActionAction = asyncThunkWrapper<
     agrs,
   );
 
-  console.log(response.data);
+  // console.log(response.data);
 
   return response.data;
 });
@@ -122,12 +122,11 @@ export const signupUserActionAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
   ISignUp
 >(SIGNUP, async (agrs: ISignUp) => {
-  console.log('args> ', agrs);
+  // console.log("args> ", agrs);
   const response = await axiosClient.post<AxiosResponse<any>>(
     '/api/auth/sign-up',
     agrs,
   );
-
   return response.data;
 });
 
