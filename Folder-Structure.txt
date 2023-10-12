@@ -1,0 +1,185 @@
+./src
+├── PeopleSearchResultCard
+│   └── PeopleSearchResultCard.tsx
+├── actions
+│   ├── auth.ts
+│   ├── connection.ts
+│   ├── post.ts
+│   ├── settings.ts
+│   └── space.ts
+├── app-model.d.ts
+├── components
+│   ├── AutoCompleteInput
+│   │   └── AutoCompleteInput.tsx
+│   ├── Button
+│   │   └── Button.tsx
+│   ├── ConnectionNotificationItem
+│   │   └── ConnectionNotificationItem.tsx
+│   ├── DatePicker
+│   │   └── DatePicker.tsx
+│   ├── DraggableModal
+│   │   └── PeopleFilterDraggableModal.tsx
+│   ├── DropZone
+│   │   └── DropZone.tsx
+│   ├── Dropdown
+│   │   └── Dropdown.tsx
+│   ├── EventDismisser
+│   │   └── EventDismisser.tsx
+│   ├── FullScreenImageCarousel
+│   │   └── FullScreenImageCarousel.tsx
+│   ├── Header
+│   │   └── HomeHeader
+│   │       └── HomeHeader.tsx
+│   ├── Input
+│   │   └── Input.tsx
+│   ├── IntroListItem
+│   │   └── IntroListItem.tsx
+│   ├── JobItem
+│   │   └── JobItem.tsx
+│   ├── KeyboardDismisser
+│   │   └── KeyboardDismisser.tsx
+│   ├── LiveFeedItem
+│   │   └── LiveFeedItem.tsx
+│   ├── Modal
+│   │   └── AppModal.tsx
+│   ├── Navigation
+│   │   └── BackButton
+│   │       └── BackButton.tsx
+│   ├── PeopleSearchForm
+│   │   └── PeopleSearchForm.tsx
+│   ├── RadioGroup
+│   │   ├── RadioButton.tsx
+│   │   ├── RadioGroup.tsx
+│   │   ├── index.ts
+│   │   └── types.ts
+│   ├── ReactionIcon
+│   │   ├── CommentReactionIcon.tsx
+│   │   └── ReactionIcon.tsx
+│   ├── ReactionsViewModal
+│   │   └── ReactionsViewModal.tsx
+│   ├── StoryFeedItem
+│   │   └── StoryFeedItem.tsx
+│   └── TextLink
+│       └── TextLink.tsx
+├── config
+│   ├── axiosClient.ts
+│   └── network.config.ts
+├── constants
+│   └── index.ts
+├── helpers
+│   ├── asyncThunkErrorWrapper.ts
+│   └── asyncThunkWrapper.ts
+├── hooks
+│   ├── useAppDispatch.ts
+│   ├── useAppSelector.ts
+│   ├── useDimension.ts
+│   ├── useProfileNavigation.ts
+│   └── userUser.ts
+├── navigation
+│   └── routes.tsx
+├── reducers
+│   ├── connection.ts
+│   ├── constants.ts
+│   ├── errorHanlder.ts
+│   ├── post_reducer.ts
+│   ├── session.ts
+│   ├── settings.ts
+│   └── space_reducer.ts
+├── screens
+│   ├── CreatePassword
+│   │   └── CreatePassword.tsx
+│   ├── CreatePost
+│   │   └── CreatePost.tsx
+│   ├── CreateSpace
+│   │   ├── CreateSpace.tsx
+│   │   └── CreateSpaceAddPicture.tsx
+│   ├── ForgotEmail
+│   │   ├── OTPScreen.tsx
+│   │   └── RecoverWithPhone.tsx
+│   ├── ForgotPassword
+│   │   ├── ForgotPassword.tsx
+│   │   └── OTPScreen.tsx
+│   ├── Home
+│   │   ├── Home.tsx
+│   │   └── components
+│   │       ├── CommentRowItem.tsx
+│   │       ├── IntroList.tsx
+│   │       ├── LiveFeedList.tsx
+│   │       ├── PostDetail.tsx
+│   │       └── StoryFeedList.tsx
+│   ├── Job
+│   │   ├── JobFilter.tsx
+│   │   └── PostJob
+│   │       ├── Jobs.tsx
+│   │       └── PostJob.tsx
+│   ├── Login
+│   │   ├── Login.tsx
+│   │   └── validator.ts
+│   ├── Message
+│   │   ├── IndividualList.tsx
+│   │   └── Messages.tsx
+│   ├── Notification
+│   │   └── Notification.tsx
+│   ├── Profile
+│   │   ├── ConnectionProfile.tsx
+│   │   ├── UserProfile.tsx
+│   │   └── components
+│   │       ├── CertificateForm.tsx
+│   │       ├── ConnectionPostFeed.tsx
+│   │       ├── EducationForm.tsx
+│   │       ├── ExperienceForm.tsx
+│   │       ├── SkillsForm.tsx
+│   │       ├── UserExperience.tsx
+│   │       ├── UserPostFeed.tsx
+│   │       └── renderExperienceTimelineView.tsx
+│   ├── Signup
+│   │   ├── Signup.tsx
+│   │   └── validator.ts
+│   ├── SignupCertificate
+│   │   └── SignupCertiifcate.tsx
+│   ├── SignupComplete
+│   │   └── SignupComplete.tsx
+│   ├── SignupEducation
+│   │   └── SignupEducation.tsx
+│   ├── SignupExperience
+│   │   └── SignupExperience.tsx
+│   ├── SignupProfilePicture
+│   │   └── SignupProfilePicture.tsx
+│   ├── SignupSkills
+│   │   └── SignupSkills.tsx
+│   ├── Spaces
+│   │   ├── SpaceProfile.tsx
+│   │   └── SpaceSearch
+│   │       ├── PeopleList
+│   │       │   └── PeopleList.tsx
+│   │       ├── SpaceSearch.tsx
+│   │       └── Spaces
+│   │           ├── SpaceItem
+│   │           │   └── SpaceItem.tsx
+│   │           └── Spaces.tsx
+│   ├── onboarding
+│   │   └── OnBoarding.tsx
+│   ├── otp_verification
+│   │   └── OTPVerification.tsx
+│   └── personal_inforamtion
+│       └── PersonalInformation.tsx
+├── services
+│   └── network
+│       └── auth.ts
+├── store
+│   ├── StoreProvider.tsx
+│   ├── constants.ts
+│   └── store.ts
+├── theme
+│   ├── GlobalStyles.tsx
+│   ├── colors.ts
+│   └── font.ts
+├── types.d.ts
+└── utils
+    ├── Converters.ts
+    ├── date-formatter.ts
+    ├── index.ts
+    ├── reportError.ts
+    └── sanitizer.ts
+
+70 directories, 113 files

@@ -16,6 +16,7 @@ import {
 } from '../../reducers/userProfileSession';
 import BackButton from '../../components/Navigation/BackButton/BackButton';
 import { useToast } from 'react-native-toast-notifications';
+import { clearNetworkError } from '../../reducers/errorHanlder';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -36,6 +37,10 @@ const ForgotPassword = () => {
       navigation.navigate(APP_SCREEN_LIST.FORGOT_EMAIL_OTP_SCREEN);
     } else if (session.requestOTPEmailStatus === 'failed') {
     }
+
+    return () => {
+      dispatch(clearNetworkError());
+    };
   }, [session.requestOTPEmailStatus]);
   return (
     <View style={[GlobalStyles.container]}>

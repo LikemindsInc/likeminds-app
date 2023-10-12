@@ -1,10 +1,4 @@
-import {
-  NativeSyntheticEvent,
-  StyleSheet,
-  TextInput,
-  TextInputKeyPressEventData,
-  View,
-} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { GlobalStyles } from '../../theme/GlobalStyles';
 import BackButton from '../../components/Navigation/BackButton/BackButton';
 import colors from '../../theme/colors';
@@ -28,6 +22,8 @@ import { clearNetworkError } from '../../reducers/errorHanlder';
 
 const OTPVerification = () => {
   const errorReducer = useAppSelector((state) => state.errorReducer);
+  const signUpStateValues = useAppSelector((state) => state.signupReducer);
+
   const [information, setInformation] = useState('');
 
   const dispatch = useAppDispatch();
@@ -35,10 +31,6 @@ const OTPVerification = () => {
   const session = useAppSelector(
     (state: any) => state.sessionReducer,
   ) as ISessionState;
-
-  // const ref1 = React.createRef<TextInput>();
-  // const ref2 = React.createRef<TextInput>();
-  // const ref3 = React.createRef<TextInput>();
 
   const navigation = useNavigation<any>();
   const [otp, setOTP] = useState('');
@@ -80,8 +72,8 @@ const OTPVerification = () => {
   }, [session.resendOtpStatus]);
 
   const phone =
-    session && session?.profileData?.phoneNumber
-      ? session?.profileData?.phoneNumber
+    signUpStateValues && signUpStateValues?.data?.phone
+      ? signUpStateValues?.data?.phone
       : 'your phone number';
 
   return (

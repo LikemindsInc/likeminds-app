@@ -14,6 +14,7 @@ import { NativeBaseProvider, extendTheme } from 'native-base';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import KeyboardDismisser from './src/components/KeyboardDismisser/KeyboardDismisser';
+import { setTopLevelNavigator } from './src/utils/NavigateUtil';
 // import * as Sentry from "sentry-expo";
 // import { SENTRY_DNS } from "./src/constants";
 
@@ -111,13 +112,17 @@ function App() {
               // }}
             >
               <NavigationContainer
-              // ref={navigation}
-              // onReady={() => {
-              //   // Register the navigation container with the instrumentation
-              //   routingInstrumentation.registerNavigationContainer(
-              //     navigation
-              //   );
-              // }}
+                // ref={navigation}
+                ref={(navigatorRef) => {
+                  setTopLevelNavigator(navigatorRef);
+                }}
+
+                // onReady={() => {
+                //   // Register the navigation container with the instrumentation
+                //   routingInstrumentation.registerNavigationContainer(
+                //     navigation
+                //   );
+                // }}
               >
                 <AppRoutes />
               </NavigationContainer>

@@ -97,6 +97,7 @@ const Input: FC<ITextInputProps> = (props) => {
               props.onCountryCodeSelect(item.dial_code);
             setShow(false);
           }}
+          onBackdropPress={() => setShow(!show)}
         />
         {props.errorMessage && (
           <View style={[GlobalStyles.pl4]}>

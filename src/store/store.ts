@@ -1,19 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persistStore, persistReducer } from 'redux-persist';
 
-import { CACHE_VERSION, __ROOT_REDUX_STATE_KEY__ } from './constants';
+import { __ROOT_REDUX_STATE_KEY__ } from './constants';
 import {
   __SETTINGS__REDUX__STATE_KEY__,
   __SESSION__REDUX__STATE_KEY__,
 } from '../reducers/constants';
-import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2';
-import {
-  configureStore,
-  combineReducers,
-  isRejectedWithValue,
-  createListenerMiddleware,
-  isRejected,
-} from '@reduxjs/toolkit';
+// import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { Reducer } from 'redux';
 import sessionReducer from '../reducers/userProfileSession';
 import errorReducer from '../reducers/errorHanlder';
@@ -22,6 +16,9 @@ import settingReducer from '../reducers/settings';
 import spaceReducer from '../reducers/space_reducer';
 import postReducer from '../reducers/post_reducer';
 import connectionReducer from '../reducers/connection';
+import signupReducer from './slice/signup';
+import loginReducer from './slice/login';
+import settings from './slice/appSettings';
 
 const rootPersistConfig = {
   storage: AsyncStorage,
@@ -48,6 +45,9 @@ const persistedReducer = persistReducer(
     spaceReducer,
     postReducer,
     connectionReducer,
+    signupReducer,
+    loginReducer,
+    settings,
   }),
 );
 // create the saga middleware

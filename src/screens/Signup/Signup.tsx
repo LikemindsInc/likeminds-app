@@ -1,58 +1,53 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { View } from 'react-native';
 import { Text } from 'react-native';
 import { useFormik } from 'formik';
-import { useToast } from 'react-native-toast-notifications';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+// import { useToast } from 'react-native-toast-notifications';
+// import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { GlobalStyles } from '../../theme/GlobalStyles';
 import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button';
 import TextLink from '../../components/TextLink/TextLink';
 import { APP_SCREEN_LIST } from '../../constants';
-import reportError from '../../utils/reportError';
+// import reportError from '../../utils/reportError';
 // import { err } from "react-native-svg/lib/typescript/xml";
 import useAppDispatch from '../../hooks/useAppDispatch';
 import useAppSelector from '../../hooks/useAppSelector';
-import {
-  ISessionState,
-  clearSignupStatus,
-  updatePhoneNumber,
-} from '../../reducers/userProfileSession';
-import { signupUserActionAction } from '../../actions/auth';
+// import {
+//   ISessionState,
+//   // clearSignupStatus,
+//   // updatePhoneNumber,
+// } from '../../reducers/userProfileSession';
+// import { signupUserActionAction } from '../../actions/auth';
 import BackButton from '../../components/Navigation/BackButton/BackButton';
 import { initialSignupValues, signupValidator } from './validator';
 import Util from '../../utils';
+import { clearSignUpError, signup } from '../../store/slice/signup';
+import TextInputElement from '../../components/Input/TextInput';
+// import PhoneNumberInput from '../../components/Input/PhoneNumberInput';
+import { navigate } from '../../utils/NavigateUtil';
 
 const Signup = () => {
-  const toast = useToast();
   const dispatch = useAppDispatch();
-  const session = useAppSelector(
-    (state: any) => state.sessionReducer,
-  ) as ISessionState;
-  const errorReducer = useAppSelector((state) => state.errorReducer);
+  const signupStateValues = useAppSelector((state) => state.signupReducer);
 
   const handleSubmitAccount = () => {
     if (!values.countryCode) {
       setFieldError('phone', 'Country code is required');
       return;
     }
-    try {
-      dispatch(
-        signupUserActionAction({
-          email: values.email.trim(),
-          password: values.password.trim(),
-          confirmPassword: values.confirmPassword.trim(),
-          phone: `${values.countryCode}${values.phone}`.trim(),
-        }),
-      );
-    } catch (error: any) {
-      reportError(error);
-    }
+    dispatch(
+      signup({
+        email: values.email.trim(),
+        password: values.password.trim(),
+        confirmPassword: values.confirmPassword.trim(),
+        phone: `${values.countryCode}${values.phone}`.trim(),
+      }),
+    );
   };
 
   const {
     errors,
-    isValid,
     values,
     handleChange,
     handleSubmit,
@@ -66,23 +61,14 @@ const Signup = () => {
     onSubmit: handleSubmitAccount,
   });
 
-  const handleNextNavigation = () => {
-    navigation.navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
-  };
-
   useEffect(() => {
-    if (
-      session.signingUpStatus === 'completed' &&
-      session.signingUpSuccess !== ''
-    ) {
-      dispatch(updatePhoneNumber(`${values.countryCode}${values.phone}`));
-      handleNextNavigation();
-      dispatch(clearSignupStatus());
-      // 12;
+    if (signupStateValues.isSignup) {
+      navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
     }
-  }, [session.signingUpStatus]);
-
-  const navigation = useNavigation<NavigationProp<any>>();
+    return () => {
+      dispatch(clearSignUpError());
+    };
+  }, [signupStateValues.isSignup]);
 
   // handle numbers only no text
   const handlePhoneTextChange = (newText: string) => {
@@ -107,7 +93,7 @@ const Signup = () => {
           Enter the following information to create a new account
         </Text>
       </View>
-      {errorReducer.message ? (
+      {signupStateValues && signupStateValues?.error ? (
         <View style={[GlobalStyles.mb20]}>
           <Text
             style={[
@@ -116,13 +102,13 @@ const Signup = () => {
               GlobalStyles.textRed,
             ]}
           >
-            {errorReducer.message}
+            {signupStateValues?.error}
           </Text>
         </View>
       ) : null}
 
       <View style={[GlobalStyles.mb20]}>
-        <Input
+        <TextInputElement
           placeholder="Email Address"
           autoCorrect={false}
           autoCapitalize={'none'}
@@ -131,12 +117,16 @@ const Signup = () => {
           onBlur={handleBlur('email')}
           onChangeText={handleChange('email')}
           returnKeyType="done"
-          errorMessage={touched.email ? errors.email : null}
+          error={touched.email ? errors.email : null}
         />
         <Input
           placeholder="8163113450"
           autoCorrect={false}
           autoCapitalize={'none'}
+          inputViewStyle={{
+            marginBottom: 6,
+            marginVertical: 6,
+          }}
           keyboardType="numeric"
           maxLength={10}
           value={values.phone}
@@ -147,36 +137,38 @@ const Signup = () => {
           errorMessage={touched.phone ? errors.phone : null}
           onCountryCodeSelect={(value) => setFieldValue('countryCode', value)}
         />
-        <Input
+        <TextInputElement
+          showHidePassword={true}
+          secureTextEntry={true}
           placeholder="Password"
           autoCorrect={false}
           autoCapitalize={'none'}
           keyboardType="default"
-          secureTextEntry
           value={values.password}
           onBlur={handleBlur('password')}
-          errorMessage={touched.password ? errors.password : null}
+          error={touched.password ? errors.password : null}
           onChangeText={handleChange('password')}
           returnKeyType="done"
         />
-        <Input
+        <TextInputElement
+          showHidePassword={true}
+          secureTextEntry={true}
           placeholder="Confirm Password"
           autoCorrect={false}
           autoCapitalize={'none'}
           keyboardType="default"
-          secureTextEntry
           value={values.confirmPassword}
           onBlur={handleBlur('confirmPassword')}
-          errorMessage={touched.confirmPassword ? errors.confirmPassword : null}
+          error={touched.confirmPassword ? errors.confirmPassword : null}
           onChangeText={handleChange('confirmPassword')}
           returnKeyType="done"
         />
       </View>
       <Button
         title="Create Account"
-        loading={session.signingUpStatus === 'loading'}
+        loading={signupStateValues.loading}
         onPress={() => handleSubmit()}
-        disabled={!isValid}
+        disabled={signupStateValues.loading}
       />
       <View style={[GlobalStyles.mt20, GlobalStyles.mb20]}>
         <Text
