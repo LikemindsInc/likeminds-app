@@ -17,6 +17,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import BackButton from '../../components/Navigation/BackButton/BackButton';
 import { initialLoginValue, loginValidator } from './validator';
 import { clearNetworkError } from '../../reducers/errorHanlder';
+import { login } from '../../store/slice/login';
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -28,12 +29,19 @@ const Login = () => {
   const setting = useAppSelector((state) => state.settingReducer);
   const errorReducer = useAppSelector((state) => state.errorReducer);
 
+  const { data, error, loading, isLogin } = useAppSelector(
+    (state) => state.loginReducer,
+  );
+
   const handleOnLogin = () => {
+    // dispatch(
+    //   loginUserActionAction({
+    //     email: values.email.trim(),
+    //     password: values.password.trim(),
+    //   }),
+    // );
     dispatch(
-      loginUserActionAction({
-        email: values.email.trim(),
-        password: values.password.trim(),
-      }),
+      login({ email: values.email.trim(), password: values.password.trim() }),
     );
   };
 
@@ -65,16 +73,16 @@ const Login = () => {
     }
   }, [session.signingInStatus]);
 
-  useEffect(() => {
-    if (errorReducer.message === PENDING_OTP_MESSAGE) {
-      navigation.navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
-      dispatch(clearNetworkError());
-    }
-    // console.log("error> ", errorReducer.message);
-    return () => {
-      dispatch(clearNetworkError());
-    }
-  }, [errorReducer.message]);
+  // useEffect(() => {
+  //   if (errorReducer.message === PENDING_OTP_MESSAGE) {
+  //     navigation.navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
+  //     dispatch(clearNetworkError());
+  //   }
+  //   // console.log("error> ", errorReducer.message);
+  //   return () => {
+  //     dispatch(clearNetworkError());
+  //   }
+  // }, [errorReducer.message]);
 
   return (
     <View style={[GlobalStyles.container]}>
@@ -94,10 +102,10 @@ const Login = () => {
         </Text>
       </View>
 
-      {errorReducer?.message ? (
+      {error ? (
         <View style={[GlobalStyles.mb20]}>
           <Text style={[GlobalStyles.textRed, GlobalStyles.fontInterRegular]}>
-            {errorReducer.message}
+            {error}
           </Text>
         </View>
       ) : null}
@@ -137,7 +145,6 @@ const Login = () => {
         >
           <Text
             style={[
-              // GlobalStyles.fontInterMedium,
               GlobalStyles.fontSize13,
               GlobalStyles.fontWeight700,
               GlobalStyles.textPrimary,
@@ -152,23 +159,7 @@ const Login = () => {
           title="Login"
           disabled={!isValid}
         />
-        {/* <View style={[GlobalStyles.mt40]}>
-        <Text
-          style={[
-            GlobalStyles.textGrey,
-            GlobalStyles.fontSize15,
-            GlobalStyles.fontInterRegular,
-            GlobalStyles.fontWeight400,
-          ]}
-        >
-          Or continue with
-        </Text>
-      </View>
-      <View style={[GlobalStyles.mt20, GlobalStyles.flewRow]}>
-        <IconButton image={require("../../../assets/linkedln.png")} />
-        <IconButton image={require("../../../assets/facebook.png")} />
-        <IconButton image={require("../../../assets/instagram.png")} />
-      </View> */}
+
         <View style={[GlobalStyles.mt20]}>
           <Text
             style={[
@@ -191,16 +182,5 @@ const Login = () => {
     </View>
   );
 };
-
-// const styles = StyleSheet.create({
-//   iconButtonStyle: {
-//     backgroundColor: "#F3F5F7",
-//     width: 60,
-//     height: 60,
-//     borderRadius: 10,
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-// });
 
 export default Login;

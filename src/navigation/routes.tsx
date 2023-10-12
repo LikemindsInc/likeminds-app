@@ -79,6 +79,7 @@ import { getCurrentUserSpace } from '../actions/space';
 import { persistor } from '../store/store';
 import JobFilter from '../screens/Job/JobFilter';
 import ReactionsViewModal from '../components/ReactionsViewModal/ReactionsViewModal';
+import { firstLaunch } from '../store/slice/appSettings';
 
 const Stack = createNativeStackNavigator();
 
@@ -391,8 +392,9 @@ const AppRoutes = () => {
     (state: any) => state.errorReducer,
   ) as IGlobalErrorState;
 
-  const state = useAppSelector((state) => state.settingReducer);
-  const toast = useToast();
+  const settingValues = useAppSelector((state) => state.settings);
+  console.log(settingValues);
+
   useEffect(() => {
     if (errorReducer.message?.trim() !== '') {
       // toast.show({ description: errorReducer.message });
@@ -407,11 +409,10 @@ const AppRoutes = () => {
   }, [errorReducer.message]);
 
   const dispatch = useAppDispatch();
-  const navigation = useNavigation<NavigationProp<any>>();
 
-  const setting = useAppSelector(
-    (state: any) => state.settingReducer,
-  ) as ISettingState;
+  useEffect(() => {
+    dispatch(firstLaunch());
+  }, []);
 
   return (
     <View style={{ flex: 1 }}>
