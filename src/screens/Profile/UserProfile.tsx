@@ -44,6 +44,8 @@ const UserProfile = () => {
     (state: any) => state.settingReducer,
   ) as ISettingState;
 
+  const login = useAppSelector((state) => state.loginReducer);
+
   const _renderTruncatedFooter = (handlePress: any) => {
     return (
       <Text
@@ -79,6 +81,8 @@ const UserProfile = () => {
   const initials = state?.userInfo?.email
     ? `${state?.userInfo?.email[0]}${state?.userInfo?.email[1]}`.toLocaleUpperCase()
     : 'IN';
+
+  console.log(login);
 
   return (
     <View

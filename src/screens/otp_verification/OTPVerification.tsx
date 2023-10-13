@@ -39,10 +39,9 @@ const OTPVerification = () => {
     setInformation('');
     dispatch(clearNetworkError());
     if (otp.length < 4) return setInformation('Incomplete OTP');
-
     dispatch(
       verifyOTPActionAction({
-        phone: session.profileData.phoneNumber,
+        phone: signUpStateValues.data?.phone,
         code: otp,
       }),
     );

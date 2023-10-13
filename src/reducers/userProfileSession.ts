@@ -25,6 +25,7 @@ import {
 import { PURGE, REHYDRATE } from 'redux-persist';
 import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
+import { addExperience } from '../store/slice/addExperience';
 
 export interface ISessionState {
   signingInStatus: IThunkAPIStatus;
@@ -435,6 +436,10 @@ const sessionSlice = createSlice({
         state.verifyPhoneEmailOTPError = action.payload?.message as string;
       },
     );
+
+    builder.addCase(addExperience.pending, (state, action) => {});
+    builder.addCase(addExperience.fulfilled, (state, action) => {});
+    builder.addCase(addExperience.rejected, (state, action) => {});
   },
 });
 

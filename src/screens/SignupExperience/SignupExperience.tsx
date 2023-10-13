@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { GlobalStyles } from '../../theme/GlobalStyles';
 import Input from '../../components/Input/Input';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Button from '../../components/Button/Button';
 import TextLink from '../../components/TextLink/TextLink';
 import colors from '../../theme/colors';
@@ -29,6 +29,8 @@ import BackButton from '../../components/Navigation/BackButton/BackButton';
 import moment from 'moment';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { getAllIndustriesAction } from '../../actions/auth';
+import AddExperienceForm from './AddExperienceForm';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const SignupExperience = () => {
   const navigation = useNavigation<any>();
@@ -41,6 +43,7 @@ const SignupExperience = () => {
   const [companyName, setCompanyName] = useState('');
   const [industry, setIndustry] = useState('');
   const [responsibilities, setResponsibilities] = useState('');
+  const bottomSheetRef = useRef(null);
 
   const settings = useAppSelector((state) => state.settingReducer);
 
@@ -208,133 +211,39 @@ const SignupExperience = () => {
       keyboardVerticalOffset={50}
       // keyboardShouldPersistTaps={"always"}
     >
-      <View style={[GlobalStyles.container]}>
-        <View style={{ marginBottom: 20 }}>
-          <BackButton title="Experience" />
-        </View>
-        <View style={[GlobalStyles.mb40]}>
-          <Text
-            style={[
-              GlobalStyles.fontInterRegular,
-              GlobalStyles.fontSize13,
-              GlobalStyles.fontWeight700,
-              GlobalStyles.textGrey,
-            ]}
+      <View
+        style={[
+          GlobalStyles.container,
+          {
+            flex: 1,
+            justifyContent: 'space-between',
+          },
+        ]}
+      >
+        <View>
+          <View style={{ marginBottom: 20 }}>
+            <BackButton title="Experience" />
+          </View>
+          <View style={[GlobalStyles.mb40]}>
+            <Text
+              style={[
+                GlobalStyles.fontInterRegular,
+                GlobalStyles.fontSize13,
+                GlobalStyles.fontWeight700,
+                GlobalStyles.textGrey,
+              ]}
+            >
+              Add a work experience, you may skip if you don’t have any
+            </Text>
+          </View>
+
+          <TouchableOpacity
+            style={{}}
+            onPress={() => bottomSheetRef.current?.expand()}
           >
-            Add a work experience, you may skip if you don’t have any
-          </Text>
+            <Text style={styles.add}>Add Experience</Text>
+          </TouchableOpacity>
         </View>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={styles.container}
-        >
-          <View style={[styles.inputDouble]}>
-            <DatePicker
-              onDateChange={(date) =>
-                setStartDate(DateFormatter.format(date, 'YYYY-MM-DD'))
-              }
-              placeholder="Start Date"
-              style={styles.inputFlex}
-              errorMessage={errors.startDate}
-            />
-            {!stillWorkHere && (
-              <DatePicker
-                onDateChange={(date) =>
-                  setEndDate(DateFormatter.format(date, 'YYYY-MM-DD'))
-                }
-                placeholder="End Date"
-                style={styles.inputFlex}
-                errorMessage={errors.endDate}
-              />
-            )}
-          </View>
-          <View
-            style={[
-              GlobalStyles.mb20,
-              GlobalStyles.displayRow,
-              { alignItems: 'center' },
-            ]}
-          >
-            <Checkbox
-              value="STILL_WORK_HERE"
-              accessibilityLabel="choose numbers"
-              onChange={(value) => setStillWorkHere((state) => !state)}
-            />
-            <View style={{ paddingLeft: 8 }}>
-              <Text
-                style={[
-                  GlobalStyles.fontInterRegular,
-                  GlobalStyles.textGrey,
-                  GlobalStyles.fontSize15,
-                ]}
-              >
-                I still work here
-              </Text>
-            </View>
-          </View>
-          <View style={[GlobalStyles.mb10]}>
-            <Input
-              value={jobTitle}
-              onChangeText={(text) => setJobTitle(text)}
-              placeholder="Job Title"
-              errorMessage={errors.jobTitle}
-            />
-          </View>
-          <View style={[GlobalStyles.mb10]}>
-            <Input
-              value={companyName}
-              onChangeText={(text) => setCompanyName(text)}
-              placeholder="Company Name"
-              errorMessage={errors.companyName}
-            />
-          </View>
-          {/* <View style={[GlobalStyles.mb10]}>
-          <Input
-            value={industry}
-            onChangeText={(text) => setIndustry(text)}
-            placeholder="Industry"
-            errorMessage={errors.industry}
-          />
-        </View> */}
-          <View style={[GlobalStyles.mb30]}>
-            <SelectList
-              boxStyles={{
-                borderWidth: 0,
-                paddingVertical: 21,
-                backgroundColor: colors.white,
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 4,
-                },
-                shadowOpacity: 0.1,
-                shadowRadius: 16,
-                elevation: 4,
-              }}
-              save="key"
-              setSelected={(val: string) => setIndustry(val)}
-              data={(settings.industries || []).map((item) => ({
-                key: item.name,
-                value: item.name,
-              }))}
-              placeholder="Industry"
-              fontFamily="Inter-Regular"
-              arrowicon={
-                <AntDesign name="caretdown" size={20} color={colors.primary} />
-              }
-            />
-          </View>
-          <View style={[GlobalStyles.mb10]}>
-            <Input
-              value={responsibilities}
-              onChangeText={(text) => setResponsibilities(text)}
-              placeholder="Responsibilities"
-              multiline
-              errorMessage={errors.responsibilities}
-              inputContainer={{ height: 100, paddingVertical: 8 }}
-            />
-          </View>
-        </ScrollView>
         <View>
           <View style={[GlobalStyles.mb20, GlobalStyles.displayRowCenter]}>
             <TextLink
@@ -346,6 +255,7 @@ const SignupExperience = () => {
           <Button title="Continue" onPress={handleOnNextPress} />
         </View>
       </View>
+      <AddExperienceForm bottomSheetRef={bottomSheetRef} />
     </KeyboardAvoidingView>
   );
 };
@@ -353,6 +263,7 @@ const SignupExperience = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'space-between',
   },
   inputDouble: {
     flexDirection: 'row',
@@ -360,6 +271,11 @@ const styles = StyleSheet.create({
   },
   inputFlex: {
     flex: 1,
+  },
+  add: {
+    fontSize: 18,
+    color: GlobalStyles.textPrimary.color,
+    textDecorationLine: 'underline',
   },
 });
 
