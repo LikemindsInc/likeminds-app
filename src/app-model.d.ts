@@ -66,7 +66,7 @@ declare module '@app-model' {
     city: string;
   }
 
-  interface IExperience {
+  export interface IExperience {
     startDate: string;
     endDate: string;
     stillWorkHere: boolean;
@@ -97,16 +97,20 @@ declare module '@app-model' {
   }
 
   interface IUserProfileData {
-    phoneNumber: string;
-    personalInformation: IProfileInformation;
-    experience: IExperience[];
-    certificates: { file: FilePickerFormat | null; name: string }[];
-    profilePicture:
+    phoneNumber?: string;
+    personalInformation?: IProfileInformation;
+    experience?: IExperience[];
+    certificates?: { file: FilePickerFormat | null; name: string }[];
+    profilePicture?:
       | DocumentPicker.DocumentResult
       | ImagePicker.ImagePickerResult
       | null;
-    skills: string[];
-    education: IEducation[];
+    skills?: string[];
+    education?: IEducation[];
+
+    isAddExperienceLoading?: boolean;
+    isAddExperienceSuccessfully?: boolean;
+    addExperienceError?: string;
   }
 
   interface IVerifyOtpPaylod {

@@ -34,6 +34,15 @@ export class Util {
       hp,
     };
   }
+
+  static convertToLong = (date: Date) => {
+    const dateOption = {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    } as Intl.DateTimeFormatOptions;
+    return date?.toLocaleDateString('en-us', dateOption);
+  };
 }
 
 export default Util;

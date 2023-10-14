@@ -1,27 +1,16 @@
-import { ILogin } from '@app-model';
+import { IUserProfileData } from '@app-model';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-
-interface ExperienceDoc {
-  experience: {
-    startDate: string;
-    endDate: string;
-    stillWorkHere?: boolean;
-    jobTitle: string;
-    companyName: string;
-    responsibilities: string;
-    industry: string;
-  }[];
-}
+import axiosClient from '../../config/axiosClient';
 
 export const addExperience = createAsyncThunk(
-  'signup/post',
-  async (payload: ExperienceDoc, { rejectWithValue }) => {
+  'experience/post',
+  async (payload: IUserProfileData, { rejectWithValue }) => {
     try {
-      const res = await axiosClient.post(
+      const res = await axiosClient.patch(
         '/api/auth/complete-registration',
         payload,
       );
-      return res.data;
+      return res.data?.data;
     } catch (error) {
       const errorValue: string | [] = error?.response?.data?.message;
       if (Array.isArray(errorValue)) {

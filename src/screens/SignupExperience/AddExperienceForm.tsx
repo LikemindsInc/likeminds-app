@@ -1,4 +1,4 @@
-import React, { RefObject, useRef, useState } from 'react';
+import React, { RefObject, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,7 +9,6 @@ import {
 import BottomSheet from '@gorhom/bottom-sheet';
 import Button from '../../components/Button/Button';
 import { GlobalStyles } from '../../theme/GlobalStyles';
-import Input from '../../components/Input/Input';
 import colors from '../../theme/colors';
 import DatePicker from '../../components/DatePicker/DatePicker';
 import { Checkbox } from 'native-base';
@@ -18,15 +17,20 @@ import DateFormatter from '../../utils/date-formatter';
 import { SelectList } from 'react-native-dropdown-select-list';
 import useAppSelector from '../../hooks/useAppSelector';
 import { useFormik } from 'formik';
-import { initialSignupValues, signupValidator } from './validator';
+import { experienceValidator, initialExperienceValues } from './validator';
+import { addExperience } from '../../store/slice/addExperience';
+import TextInputElement from '../../components/Input/TextInput';
+import useAppDispatch from '../../hooks/useAppDispatch';
+import { resetAddExperienceSuccess } from '../../reducers/userProfileSession';
 
 const AddExperienceForm = ({
   bottomSheetRef,
 }: {
   bottomSheetRef: RefObject<null>;
 }) => {
-  const [stillWorkHere, setStillWorkHere] = useState(false);
+  const dispatch = useAppDispatch();
   const settings = useAppSelector((state) => state.settingReducer);
+  const session = useAppSelector((state) => state.sessionReducer.profileData);
   const snapPoints = ['100%'];
 
   const renderHeader = () => (
@@ -51,11 +55,38 @@ const AddExperienceForm = ({
     </TouchableOpacity>
   );
 
-  const {} = useFormik({
-    initialValues: initialSignupValues,
-    validationSchema: signupValidator,
-    onSubmit: () => {},
+  const {
+    touched,
+    values,
+    handleChange,
+    setFieldValue,
+    errors,
+    handleSubmit,
+    resetForm,
+  } = useFormik({
+    initialValues: initialExperienceValues,
+    validationSchema: experienceValidator,
+    onSubmit: () => handleAddExperience(),
   });
+
+  const handleAddExperience = () => {
+    dispatch(
+      addExperience({
+        experience: [values],
+      }),
+    );
+  };
+
+  useEffect(() => {
+    if (session.isAddExperienceSuccessfully) {
+      bottomSheetRef.current?.close();
+    }
+    // resetAddExperienceSuccess
+    return () => {
+      resetForm();
+      dispatch(resetAddExperienceSuccess());
+    };
+  }, [session.isAddExperienceSuccessfully]);
 
   return (
     <BottomSheet
@@ -72,23 +103,31 @@ const AddExperienceForm = ({
           <Text style={styles.title}>Add Experience</Text>
           <View style={[styles.inputDouble]}>
             <DatePicker
-              onDateChange={
-                (date) => {}
-                // setStartDate(DateFormatter.format(date, 'YYYY-MM-DD'))
+              defaultValue={values.startDate}
+              value={values.startDate}
+              onDateChange={(date) =>
+                setFieldValue(
+                  'startDate',
+                  DateFormatter.format(date, 'YYYY-MM-DD'),
+                )
               }
               placeholder="Start Date"
               style={styles.inputFlex}
-              //   errorMessage={errors.startDate}
+              errorMessage={touched.startDate ? errors.startDate : null}
             />
-            {!stillWorkHere && (
+            {!values.stillWorkHere && (
               <DatePicker
-                onDateChange={
-                  (date) => {}
-                  //   setEndDate(DateFormatter.format(date, 'YYYY-MM-DD'))
+                defaultValue={values.endDate}
+                value={values.endDate}
+                onDateChange={(date) =>
+                  setFieldValue(
+                    'endDate',
+                    DateFormatter.format(date, 'YYYY-MM-DD'),
+                  )
                 }
                 placeholder="End Date"
                 style={styles.inputFlex}
-                // errorMessage={errors.endDate}
+                errorMessage={touched.endDate ? errors.endDate : null}
               />
             )}
           </View>
@@ -102,7 +141,9 @@ const AddExperienceForm = ({
             <Checkbox
               value="STILL_WORK_HERE"
               accessibilityLabel="choose numbers"
-              onChange={(value) => setStillWorkHere((state) => !state)}
+              onChange={(value) =>
+                setFieldValue('stillWorkHere', !values.stillWorkHere)
+              }
             />
             <View style={{ paddingLeft: 8 }}>
               <Text
@@ -117,29 +158,29 @@ const AddExperienceForm = ({
             </View>
           </View>
           <View style={[GlobalStyles.mb10]}>
-            <Input
-            //   value={jobTitle}
-            //   onChangeText={(text) => setJobTitle(text)}
-            //   placeholder="Job Title"
-            //   errorMessage={errors.jobTitle}
+            <TextInputElement
+              placeholder="Job Title"
+              autoCorrect={false}
+              autoCapitalize={'none'}
+              keyboardType="default"
+              value={values.jobTitle}
+              error={touched.jobTitle ? errors.jobTitle : null}
+              onChangeText={handleChange('jobTitle')}
+              returnKeyType="done"
             />
           </View>
           <View style={[GlobalStyles.mb10]}>
-            <Input
-            //   value={companyName}
-            //   onChangeText={(text) => setCompanyName(text)}
-            //   placeholder="Company Name"
-            //   errorMessage={errors.companyName}
+            <TextInputElement
+              placeholder="Company name"
+              autoCorrect={false}
+              autoCapitalize={'none'}
+              keyboardType="default"
+              value={values.companyName}
+              error={touched.companyName ? errors.companyName : null}
+              onChangeText={handleChange('companyName')}
+              returnKeyType="done"
             />
           </View>
-          {/* <View style={[GlobalStyles.mb10]}>
-          <Input
-            value={industry}
-            onChangeText={(text) => setIndustry(text)}
-            placeholder="Industry"
-            errorMessage={errors.industry}
-          />
-        </View> */}
           <View style={[GlobalStyles.mb30]}>
             <SelectList
               boxStyles={{
@@ -156,7 +197,7 @@ const AddExperienceForm = ({
                 elevation: 4,
               }}
               save="key"
-              setSelected={(val: string) => {}}
+              setSelected={(val: string) => setFieldValue('industry', val)}
               data={(settings.industries || []).map((item) => ({
                 key: item.name,
                 value: item.name,
@@ -169,16 +210,27 @@ const AddExperienceForm = ({
             />
           </View>
           <View style={[GlobalStyles.mb10]}>
-            <Input
-              //   value={responsibilities}
-              //   onChangeText={(text) => setResponsibilities(text)}
-              //   placeholder="Responsibilities"
+            <TextInputElement
+              placeholder="Type in your job description"
+              autoCorrect={false}
               multiline
-              //   errorMessage={errors.responsibilities}
-              inputContainer={{ height: 100, paddingVertical: 8 }}
+              autoCapitalize={'none'}
+              keyboardType="default"
+              value={values.responsibilities}
+              error={touched.responsibilities ? errors.responsibilities : null}
+              onChangeText={handleChange('responsibilities')}
+              returnKeyType="done"
+              style={{
+                height: 100,
+                padding: 16,
+              }}
             />
 
-            <Button title="Add Experience" onPress={() => {}} />
+            <Button
+              loading={session.isAddExperienceLoading}
+              title="Add Experience"
+              onPress={() => handleSubmit()}
+            />
           </View>
         </ScrollView>
       </View>
