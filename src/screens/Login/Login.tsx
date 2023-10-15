@@ -34,12 +34,12 @@ const Login = () => {
   );
 
   const handleOnLogin = () => {
-    // dispatch(
-    //   loginUserActionAction({
-    //     email: values.email.trim(),
-    //     password: values.password.trim(),
-    //   }),
-    // );
+    dispatch(
+      loginUserActionAction({
+        email: values.email.trim(),
+        password: values.password.trim(),
+      }),
+    );
     dispatch(
       login({ email: values.email.trim(), password: values.password.trim() }),
     );
@@ -73,16 +73,16 @@ const Login = () => {
     }
   }, [session.signingInStatus]);
 
-  // useEffect(() => {
-  //   if (errorReducer.message === PENDING_OTP_MESSAGE) {
-  //     navigation.navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
-  //     dispatch(clearNetworkError());
-  //   }
-  //   // console.log("error> ", errorReducer.message);
-  //   return () => {
-  //     dispatch(clearNetworkError());
-  //   }
-  // }, [errorReducer.message]);
+  useEffect(() => {
+    if (errorReducer.message === PENDING_OTP_MESSAGE) {
+      navigation.navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
+      dispatch(clearNetworkError());
+    }
+    // console.log("error> ", errorReducer.message);
+    return () => {
+      dispatch(clearNetworkError());
+    };
+  }, [errorReducer.message]);
 
   return (
     <View style={[GlobalStyles.container]}>

@@ -25,6 +25,7 @@ import {
 import { PURGE, REHYDRATE } from 'redux-persist';
 import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
+import { addExperience } from '../store/slice/addExperience';
 
 export interface ISessionState {
   signingInStatus: IThunkAPIStatus;
@@ -113,6 +114,10 @@ const initialState: ISessionState = {
     certificates: [],
     profilePicture: null,
     skills: [],
+
+    isAddExperienceLoading: false,
+    isAddExperienceSuccessfully: false,
+    addExperienceError: '',
   },
 
   otpVerificationStatus: 'idle',
@@ -136,6 +141,10 @@ const sessionSlice = createSlice({
       state.signingInStatus = 'idle';
       state.signingInSuccess = '';
       state.signingInError = '';
+    },
+
+    resetAddExperienceSuccess: (state) => {
+      state.profileData.isAddExperienceSuccessfully = false;
     },
 
     clearSignupStatus(state: ISessionState) {
@@ -435,6 +444,21 @@ const sessionSlice = createSlice({
         state.verifyPhoneEmailOTPError = action.payload?.message as string;
       },
     );
+
+    builder.addCase(addExperience.pending, (state, action) => {
+      state.profileData.isAddExperienceLoading = true;
+      state.profileData.addExperienceError = '';
+    });
+    builder.addCase(addExperience.fulfilled, (state, action) => {
+      state.profileData = action.payload;
+      state.profileData.isAddExperienceLoading = false;
+      state.profileData.isAddExperienceSuccessfully = true;
+    });
+    builder.addCase(addExperience.rejected, (state, action) => {
+      state.profileData.isAddExperienceLoading = false;
+      state.profileData.addExperienceError = action?.payload as string;
+      state.profileData.isAddExperienceSuccessfully = false;
+    });
   },
 });
 
@@ -455,6 +479,7 @@ export const {
   clearCompleteProfileStatus,
   clearResendOtpStatus,
   clearChangePasswordError,
+  resetAddExperienceSuccess,
 } = sessionSlice.actions;
 
 export default sessionSlice.reducer;

@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
   container: {
     height: 700,
     paddingLeft: 15,
+    flex: 1,
   },
   contentWrapper: {
     flexDirection: 'row',

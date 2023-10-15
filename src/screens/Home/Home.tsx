@@ -214,6 +214,7 @@ const Home = () => {
   return (
     <View style={[GlobalStyles.flexOne]}>
       <HomeHeader />
+
       <EventDismisser>
         <IOScrollView
           // contentContainerStyle={{ flex: 1 }}
