@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import RadioButton from './RadioButton';
@@ -14,11 +14,28 @@ export const RadioGroup = ({
   color,
   width,
   descriptionStyle,
+  onChange,
+  items,
+  isMultiple,
 }: any) => {
+  const [selectedItems, setSelectedItem] = useState<string[]>(items || []);
+
   function handlePress(id: string) {
-    if (id !== selectedId && onPress) {
-      onPress(id);
+    let newState = [...selectedItems];
+    if (isMultiple) {
+      const index = newState.findIndex((item) => item === id);
+      if (index !== -1) {
+        newState.splice(index, 1);
+      } else {
+        newState.push(id);
+      }
+    } else {
+      newState = [id];
     }
+
+    setSelectedItem(newState);
+
+    onChange && onChange(newState);
   }
 
   return (
@@ -26,12 +43,12 @@ export const RadioGroup = ({
       style={[styles.container, { flexDirection: layout }, containerStyle]}
       testID={testID}
     >
-      {radioButtons.map((button) => (
-        <View style={[descriptionStyle]}>
+      {radioButtons.map((button: any) => (
+        <View style={[descriptionStyle]} key={button.id}>
           <RadioButton
             {...button}
             key={button.id}
-            selected={button.id === selectedId}
+            selected={selectedItems.includes(button.id)}
             onPress={() => handlePress(button.id)}
             color={color}
           />

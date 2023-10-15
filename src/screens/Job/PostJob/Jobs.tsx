@@ -35,7 +35,7 @@ import {
   JOB_TYPES,
   TAILOR_JOBS,
 } from '../../../constants';
-import { IndustryItem, JobType } from './PostJob';
+import { IndustryItem } from './PostJob';
 import Button from '../../../components/Button/Button';
 import {
   setJobDateFilterValue,
@@ -124,7 +124,7 @@ export default function Jobs() {
 
   const [selectedIndustry, setSelectedIndustry] = useState('');
   const [selected, setSelected] = useState('');
-  const [experienceLevel, setExprienceLevel] = useState('');
+  const [experienceLevel, setExprienceLevel] = useState<string[]>([]);
   const [searchValue, setSearchValue] = useState('');
   const handleSheetChanges = useCallback((index: number) => {}, []);
   const getJobs = useCallback(() => {
@@ -150,7 +150,7 @@ export default function Jobs() {
 
   const handleSetExperienceLevel = (text: string) => {
     dispatch(setJobExperienceFilterValue(text));
-    setExprienceLevel(text);
+    setExprienceLevel([text]);
   };
 
   useEffect(() => {
@@ -176,22 +176,11 @@ export default function Jobs() {
   }, [sortBy]);
 
   const filterSearchQuery = (data: IGetJobDTO) => {
-    if (data.experienceLevel?.trim().toLowerCase() === 'all')
-      data.experienceLevel = '';
-
     if (data.tailor?.trim().toLowerCase() === 'all') data.tailor = '';
 
     if (data.location?.trim().toLowerCase() === 'all') data.location = '';
 
     return data;
-  };
-
-  const handleChangeSortBy = () => {
-    if (sortBy === 'recent') {
-      setSortBy('relevant');
-      return;
-    }
-    setSortBy('recent');
   };
 
   useEffect(() => {
@@ -386,14 +375,10 @@ export default function Jobs() {
             style={{ flex: 1, flexGrow: 1, flexBasis: 1 }}
           >
             <View style={[GlobalStyles.container]}>
-              {[...TAILOR_JOBS].map((item, i) => (
-                <IndustryItem
-                  text={item.value}
-                  key={i}
-                  handleOnSelect={() => handleOnTailor(item.value)}
-                  isSelected={item.value === tailor}
-                />
-              ))}
+              <IndustryItem
+                handleOnSelect={(item: string) => handleOnTailor(item)}
+                options={[...TAILOR_JOBS]}
+              />
             </View>
           </ScrollView>
           <View
@@ -423,16 +408,12 @@ export default function Jobs() {
             style={{ flex: 1, flexGrow: 1, flexBasis: 1 }}
           >
             <View style={[GlobalStyles.container]}>
-              {JOB_DATE.map((item, i) => (
-                <IndustryItem
-                  text={item.label}
-                  key={i}
-                  handleOnSelect={() =>
-                    handleOnDateSelected(item.value as IPostedDate)
-                  }
-                  isSelected={item.value === postedDate}
-                />
-              ))}
+              <IndustryItem
+                handleOnSelect={(item: string) =>
+                  handleOnDateSelected(item as IPostedDate)
+                }
+                options={JOB_DATE}
+              />
             </View>
           </ScrollView>
           <View
@@ -462,14 +443,10 @@ export default function Jobs() {
             style={{ flex: 1, flexGrow: 1, flexBasis: 1 }}
           >
             <View style={[GlobalStyles.container]}>
-              {JOB_TYPES.map((item, i) => (
-                <IndustryItem
-                  text={item.label}
-                  key={i}
-                  handleOnSelect={() => handleOnJobTypeSelect(item.value)}
-                  isSelected={item.value === jobType}
-                />
-              ))}
+              <IndustryItem
+                handleOnSelect={(item: string) => handleOnJobTypeSelect(item)}
+                options={JOB_TYPES}
+              />
             </View>
           </ScrollView>
           <View
@@ -499,14 +476,12 @@ export default function Jobs() {
             style={{ flex: 1, flexGrow: 1, flexBasis: 1 }}
           >
             <View style={[GlobalStyles.container]}>
-              {[...JOB_EXPERIENCE].map((item, i) => (
-                <IndustryItem
-                  text={item.label}
-                  key={i}
-                  handleOnSelect={() => handleSetExperienceLevel(item.value)}
-                  isSelected={item.value === experienceLevel}
-                />
-              ))}
+              <IndustryItem
+                handleOnSelect={(item: string) =>
+                  handleSetExperienceLevel(item)
+                }
+                options={JOB_EXPERIENCE}
+              />
             </View>
           </ScrollView>
           <View
@@ -536,14 +511,10 @@ export default function Jobs() {
             style={{ flex: 1, flexGrow: 1, flexBasis: 1 }}
           >
             <View style={[GlobalStyles.container]}>
-              {[...JOB_LOCATION].map((item, i) => (
-                <IndustryItem
-                  text={item.label}
-                  key={i}
-                  handleOnSelect={() => handleOnLocationSelect(item.value)}
-                  isSelected={item.value === location}
-                />
-              ))}
+              <IndustryItem
+                handleOnSelect={(item: string) => handleOnLocationSelect(item)}
+                options={JOB_LOCATION}
+              />
             </View>
           </ScrollView>
           <View

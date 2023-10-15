@@ -17,7 +17,6 @@ import useAppDispatch from '../../../hooks/useAppDispatch';
 import { commentOnCommentAction } from '../../../actions/post';
 import useAppSelector from '../../../hooks/useAppSelector';
 import { IPostState } from '../../../reducers/post_reducer';
-import ReactionIcon from '../../../components/ReactionIcon/ReactionIcon';
 import CommentReactionIcon from '../../../components/ReactionIcon/CommentReactionIcon';
 
 interface Props {
@@ -153,18 +152,6 @@ const CommentRowItem: FC<Props> = ({ item }) => {
                 {item.reactionCount}{' '}
                 {item.reactionCount > 1 ? 'reactions' : 'reaction'}
               </Text>
-              {/* <TouchableOpacity onPress={handleCommentOnComment}>
-                <Text
-                  style={[
-                    GlobalStyles.fontInterMedium,
-                    GlobalStyles.fontWeight700,
-                    GlobalStyles.fontSize10,
-                    { color: "#284453" },
-                  ]}
-                >
-                  Reply
-                </Text>
-              </TouchableOpacity> */}
             </View>
             {shouldCommentOnComment && (
               <Input
@@ -178,9 +165,6 @@ const CommentRowItem: FC<Props> = ({ item }) => {
             )}
           </View>
           <CommentReactionIcon post={item} />
-          {/* <TouchableOpacity>
-            <AntDesign name={"hearto"} size={14} color={colors.navyBlue} />
-          </TouchableOpacity> */}
         </View>
       </View>
     </View>

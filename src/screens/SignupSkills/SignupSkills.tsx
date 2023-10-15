@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { GlobalStyles } from '../../theme/GlobalStyles';
 import Input from '../../components/Input/Input';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Button from '../../components/Button/Button';
 import TextLink from '../../components/TextLink/TextLink';
 import colors from '../../theme/colors';
@@ -20,6 +20,7 @@ import { useToast } from 'react-native-toast-notifications';
 import useAppDispatch from '../../hooks/useAppDispatch';
 import { completeUserProfileAction } from '../../actions/auth';
 import { updateSkills } from '../../reducers/userProfileSession';
+import MultiSelect from 'react-native-multiple-select';
 
 const SUGGESTIONS = [
   'App Design',
@@ -29,90 +30,76 @@ const SUGGESTIONS = [
   'Adobe',
   'Sketch',
   'Wireframes',
-];
+].map((item, i) => ({ id: `${i}`, name: item }));
 
 const SignupSkills = () => {
   const navigation = useNavigation<any>();
   const session = useAppSelector((state: any) => state.sessionReducer);
-  const [skills, setSkills] = useState('');
-  const toast = useToast();
+
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
-  const [skillsValue, setSkillsValue] = useState('');
+
+  const [items, setItems] = useState(SUGGESTIONS);
+
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   const dispatch = useAppDispatch();
   const handleOnNextPress = () => {
-    if (skillsValue.trim() === '')
-      return toast.show('Please provide skills', { type: 'normal' });
-
     navigation.navigate(APP_SCREEN_LIST.SIGNUP_CERTIFICATE_SCREEN);
-    dispatch(updateSkills(skillsValue.split(',')));
-    // dispatch(completeUserProfileAction(session.profileData));
+    dispatch(updateSkills(selectedSkills));
+    dispatch(completeUserProfileAction(session.profileData));
   };
-
-  const addSelectedSkill = (item: string) => {
-    const state = [...selectedSkills];
-
-    const index = state.findIndex((skill) => skill === item);
-
-    if (index !== -1) {
-      const addedSkills = skills
-        .split(',')
-        .map((item) => item.trim())
-        .filter((item) => item !== selectedSkills[index])
-        .join(', ');
-
-      state.splice(index, 1);
-
-      setSkills(addedSkills);
-    } else state.push(item);
-
-    setSelectedSkills(state);
-  };
-
-  useEffect(() => {
-    const allSkills = selectedSkills;
-
-    const addedSkills = skills
-      .split(',')
-      .map((item) => item.trim())
-      .filter((item) => !allSkills.includes(item));
-
-    const filtered = [...addedSkills, ...allSkills]
-
-      .map((item) => item.trim())
-      .filter((item) => item !== ',' && item.trim() !== '');
-
-    const set = new Set([
-      ...skills
-        .split(',')
-        .map((item) => item.trim())
-        .filter((item) => item !== ''),
-      ...filtered.map((item) => item.trim()).filter((item) => item !== ''),
-    ]);
-
-    console.log('set> ', set);
-
-    let newSkills = Array.from(set).join(', ');
-
-    // newSkills += ",";
-
-    setSkillsValue(newSkills);
-  }, [selectedSkills]);
-
-  useEffect(() => {
-    const skillsList = skills
-      .split(',')
-      .map((item) => item.toLowerCase().trim());
-    const i2 = [...selectedSkills];
-
-    const i3 = i2.filter((item) =>
-      skillsList.includes(item.toLowerCase().trim()),
+  const onSelectedItemsChange = (selectedItems: any[]) => {
+    const numberIndexedItems = selectedItems.filter((item) => !isNaN(item));
+    const stringItems = selectedItems.filter((item) => isNaN(item));
+    const mappedToStringIndexItems = numberIndexedItems.map(
+      (item) => items[item].name,
     );
 
-    console.log('skilss> ', skills);
-    if (!skills.endsWith(',')) setSelectedSkills(i3);
-    setSkillsValue(skills);
-  }, [skills]);
+    setSelectedSkills([...mappedToStringIndexItems, ...stringItems]);
+
+    setSelectedItems(selectedItems);
+  };
+
+  const renderSelectedItems = () => {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          alignSelf: 'flex-start',
+          gap: 10,
+          marginTop: 20,
+        }}
+      >
+        {selectedSkills.map((item, i) => (
+          <TouchableOpacity
+            style={{
+              paddingHorizontal: 16,
+              paddingVertical: 8,
+              borderRadius: 30,
+              borderColor: colors.primary,
+              borderWidth: 1,
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              alignSelf: 'flex-start',
+            }}
+            key={i}
+          >
+            <Text
+              style={[
+                GlobalStyles.fontSize13,
+                GlobalStyles.fontInterMedium,
+                GlobalStyles.textGrey,
+                { color: colors.primary },
+              ]}
+            >
+              {item}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    );
+  };
   return (
     <View style={[GlobalStyles.container]}>
       <View style={{ marginBottom: 20 }}>
@@ -131,68 +118,36 @@ const SignupSkills = () => {
         </Text>
       </View>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-        <View style={[]}>
-          <Input
-            placeholder="Skill1, Skill2"
-            value={skillsValue}
-            onChangeText={(value) => setSkills(value)}
-            inputViewStyle={{ marginBottom: 5 }}
-          />
-        </View>
-        <View style={[GlobalStyles.mb20]}>
-          <Text
-            style={[
-              GlobalStyles.fontInterMedium,
-              GlobalStyles.textNavyBlue,
-              GlobalStyles.fontSize10,
-            ]}
-          >
-            Suggestion
-          </Text>
-        </View>
+        <MultiSelect
+          hideTags
+          items={items}
+          uniqueKey="id"
+          onSelectedItemsChange={onSelectedItemsChange}
+          selectedItems={selectedItems}
+          searchInputPlaceholderText="Select skills..."
+          tagRemoveIconColor="#CCC"
+          tagBorderColor="#CCC"
+          tagTextColor="#CCC"
+          selectedItemTextColor="#CCC"
+          fontFamily="Inter-Medium"
+          noItemsText="Skill1, Skill2"
+          selectedItemIconColor={colors.navyBlue}
+          itemTextColor="#000"
+          canAddItems
+          displayKey="name"
+          searchInputStyle={{ color: '#CCC' }}
+          hideSubmitButton
+          onAddItem={(data: { id: any; name: string }[]) => {
+            const newItem = data.find((item) => isNaN(item.id));
+            if (!newItem) return;
 
-        <View
-          style={{
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            alignSelf: 'flex-start',
-            gap: 10,
-            // marginBottom: 20,
+            newItem.id = `${data.length}`;
+            console.log(newItem);
+            setItems([...data, newItem]);
           }}
-        >
-          {SUGGESTIONS.map((item, i) => (
-            <TouchableOpacity
-              style={{
-                paddingHorizontal: 16,
-                paddingVertical: 8,
-                borderRadius: 30,
-                borderColor: selectedSkills.includes(item)
-                  ? colors.primary
-                  : '#88969D',
-                borderWidth: 1,
-
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-                alignSelf: 'flex-start',
-              }}
-              key={i}
-              onPress={() => addSelectedSkill(item)}
-            >
-              <Text
-                style={[
-                  GlobalStyles.fontSize13,
-                  GlobalStyles.fontInterMedium,
-                  GlobalStyles.textGrey,
-                  selectedSkills.includes(item)
-                    ? { color: colors.primary }
-                    : {},
-                ]}
-              >
-                {item}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+          styleRowList={{ paddingTop: 10, paddingBottom: 10 }}
+        />
+        <View>{renderSelectedItems()}</View>
       </ScrollView>
       <View>
         <View style={[GlobalStyles.mb20, GlobalStyles.displayRowCenter]}>

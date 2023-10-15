@@ -82,8 +82,6 @@ const UserProfile = () => {
     ? `${state?.userInfo?.email[0]}${state?.userInfo?.email[1]}`.toLocaleUpperCase()
     : 'IN';
 
-  console.log(login);
-
   return (
     <View
       style={[
@@ -682,7 +680,7 @@ const FirstRoute = () => {
           <View style={[{ marginBottom: 25 }]}>
             <TouchableOpacity
               style={{ flex: 1, flexDirection: 'row', gap: 12 }}
-              onPress={() => handleFileDownload(item.url)}
+              onPress={() => handleFileDownload(item.url as string)}
             >
               <View
                 style={{
@@ -802,16 +800,34 @@ const FirstRoute = () => {
           </View>
         ),
         description: (
-          <View style={{ marginBottom: 20, paddingTop: 20 }}>
-            <Text
-              style={[
-                GlobalStyles.fontInterRegular,
-                GlobalStyles.fontSize13,
-                GlobalStyles.textNavyBlue,
-              ]}
+          <View>
+            <View style={{ marginBottom: 30, paddingTop: 20 }}>
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textNavyBlue,
+                ]}
+              >
+                {user?.skills.join(',')}
+              </Text>
+            </View>
+            <TouchableOpacity
+              onPress={() => setShowSkillsModal(true)}
+              style={{ flexDirection: 'row', gap: 8 }}
             >
-              {user?.skills.join(',')}
-            </Text>
+              <AntDesign name="plus" size={16} color={colors.primary} />
+              <Text
+                style={[
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.textPrimary,
+                  GlobalStyles.fontWeight400,
+                ]}
+              >
+                Add Skill
+              </Text>
+            </TouchableOpacity>
           </View>
         ),
       },

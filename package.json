@@ -69,6 +69,7 @@
     "react-native-intersection-observer": "^0.2.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-modal": "^13.0.1",
+    "react-native-multiple-select": "^0.5.12",
     "react-native-otp-textinput": "^1.0.1",
     "react-native-pager-view": "6.1.2",
     "react-native-paper": "^5.7.2",

@@ -51,7 +51,6 @@ const PostJob = () => {
 
   const dispatch = useAppDispatch();
 
-  // variables
   const snapPoints = useMemo(() => ['50%', '60%'], []);
   const radioButtons: any[] = useMemo(
     () =>
@@ -117,15 +116,6 @@ const PostJob = () => {
       jobExperience,
       salary,
     };
-    const isInComplete = Object.values(payload).some(
-      (value) => value.trim() === '',
-    );
-
-    if (isInComplete)
-      return toast.show({
-        description: 'Please fill all fields',
-        variant: 'contained',
-      });
 
     dispatch(
       createJobAction({
@@ -159,20 +149,10 @@ const PostJob = () => {
       setJobType('');
       setLocationAddress('');
 
-      toast.show({
-        description: 'Job posted successfully',
-        variant: 'contained',
-      });
-
       naviation.goBack();
 
       dispatch(clearCreateJobStatus());
     } else if (state.createJobStatus === 'failed') {
-      toast.show({
-        description:
-          state.createJobError || 'Unable to post Job. Please try again',
-        variant: 'contained',
-      });
       dispatch(clearCreateJobStatus());
     }
   }, [state.createJobStatus]);
@@ -502,34 +482,64 @@ const PostJob = () => {
 };
 
 export const IndustryItem = (props: any) => {
+  const [items, setItems] = useState<string[]>([]);
+
+  const handleOnSelect = (text: string) => {
+    let newItems = [...items];
+    if (props.isMultiple) {
+      const index = newItems.findIndex((item) => item === text);
+      if (index !== -1) {
+        newItems.splice(index, 1);
+      } else {
+        newItems.push(text);
+      }
+      setItems(newItems);
+      props.handleOnSelect(newItems);
+    } else {
+      const shouldDeSelect = newItems[0] === text;
+
+      newItems = newItems[0] === text ? [] : [text];
+
+      props.handleOnSelect(shouldDeSelect ? '' : text);
+      setItems(newItems);
+    }
+  };
+
   return (
-    <TouchableOpacity
-      onPress={() => props.handleOnSelect(props.text)}
-      style={[GlobalStyles.flewRow, styles.industryRowItem]}
-    >
-      <View
-        style={[
-          styles.checkWrapper,
-          props.isSelected ? { backgroundColor: colors.primary } : {},
-        ]}
-      >
-        <Feather
-          name="check"
-          size={20}
-          color={props.isSelected ? colors.white : '#88969D'}
-        />
-      </View>
-      <Text
-        style={[
-          GlobalStyles.pl4,
-          GlobalStyles.fontInterMedium,
-          GlobalStyles.textNavyBlue,
-          GlobalStyles.fontSize15,
-        ]}
-      >
-        {props.text}
-      </Text>
-    </TouchableOpacity>
+    <View>
+      {(props.options || []).map((item: { label: string; value: string }) => (
+        <TouchableOpacity
+          onPress={() => handleOnSelect(item.value)}
+          style={[GlobalStyles.flewRow, styles.industryRowItem]}
+          key={item.value}
+        >
+          <View
+            style={[
+              styles.checkWrapper,
+              items.includes(item.value)
+                ? { backgroundColor: colors.primary }
+                : {},
+            ]}
+          >
+            <Feather
+              name="check"
+              size={20}
+              color={items.includes(item.value) ? colors.white : '#88969D'}
+            />
+          </View>
+          <Text
+            style={[
+              GlobalStyles.pl4,
+              GlobalStyles.fontInterMedium,
+              GlobalStyles.textNavyBlue,
+              GlobalStyles.fontSize15,
+            ]}
+          >
+            {item.label}
+          </Text>
+        </TouchableOpacity>
+      ))}
+    </View>
   );
 };
 

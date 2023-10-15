@@ -17,7 +17,7 @@ const JobFilter = () => {
   const columnWidth = (width - 80) / 2;
   const [sortBy, setSortBy] = useState<'recent' | 'relevant' | undefined>();
   const [datePosted, setDatePosted] = useState('');
-  const [experienceLevel, setExperienceLevel] = useState('');
+  const [experienceLevel, setExperienceLevel] = useState<string[]>([]);
   const [company, setCompany] = useState('');
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NavigationProp<any>>();
@@ -119,7 +119,7 @@ const JobFilter = () => {
                   flexDirection: 'row',
                   gap: 20,
                 }}
-                onPress={(value: any) => setSortBy(value)}
+                onChange={(value: any) => setSortBy(value[0])}
                 selectedId={sortBy}
               />
             </View>
@@ -149,7 +149,7 @@ const JobFilter = () => {
                 flexWrap: 'wrap',
                 gap: 20,
               }}
-              onPress={(value: string) => setDatePosted(value)}
+              onChange={(value: string) => setDatePosted(value[0])}
               selectedId={datePosted}
             />
           </View>
@@ -178,8 +178,9 @@ const JobFilter = () => {
                 flexWrap: 'wrap',
                 gap: 20,
               }}
-              onPress={(value: string) => setExperienceLevel(value)}
+              onChange={(value: string[]) => setExperienceLevel(value)}
               selectedId={experienceLevel}
+              isMultiple
             />
           </View>
         </View>
