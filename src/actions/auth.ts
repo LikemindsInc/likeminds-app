@@ -192,7 +192,6 @@ export const verifyOTPOnChangePasswordAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
   IVerifyPhoneEmailOTP
 >(VERIFY_PHONE_EMAIL_OTP, async (agrs: IVerifyPhoneEmailOTP) => {
-  console.log('valled to verify otp ', agrs);
   const response = await axiosClient.post<AxiosResponse<any>>(
     '/api/auth/verify-otp',
     agrs,
@@ -205,18 +204,11 @@ export const updateEducationProfileAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
   IUserProfileData
 >(COMPLETE_EDUCATION_PROFILE, async (agrs: IUserProfileData) => {
-  const education = store.getState().sessionReducer.profileData.education;
+  const education = store.getState().sessionReducer.profileData.education || [];
   const response = await axiosClient.patch<AxiosResponse<any>>(
     '/api/auth/complete-registration',
     {
-      education: [
-        {
-          startDate: education[0].startDate,
-          endDate: education[0].endDate,
-          degree: education[0].degree,
-          school: education[0].school,
-        },
-      ],
+      education: education,
     },
   );
 
@@ -227,21 +219,12 @@ export const updateExperienceProfileAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
   IUserProfileData
 >(COMPLETE_EXPERIENCE_PROFILE, async (agrs: IUserProfileData) => {
-  const experiences = store.getState().sessionReducer.profileData.experience;
+  const experiences =
+    store.getState().sessionReducer.profileData.experience || [];
   const response = await axiosClient.patch<AxiosResponse<any>>(
     '/api/auth/complete-registration',
     {
-      experience: [
-        {
-          startDate: experiences[0]?.startDate,
-          endDate: experiences[0]?.endDate,
-          stillWorkHere: experiences[0]?.stillWorkHere,
-          jobTitle: experiences[0]?.jobTitle,
-          companyName: experiences[0]?.companyName,
-          responsibilities: experiences[0]?.responsibilities,
-          industry: experiences[0]?.industry,
-        },
-      ],
+      experience: experiences,
     },
   );
 
@@ -268,7 +251,7 @@ export const updateCertificateProfileAction = asyncThunkWrapper<
   IUserProfileData
 >(COMPLETE_CERTIFICATE_PROFILE, async (agrs: IUserProfileData) => {
   const certificateFile =
-    store.getState().sessionReducer.profileData.certificates;
+    store.getState().sessionReducer.profileData.certificates || [];
   let certificateFileUrl = '';
 
   const certificates: { name: string; url: string }[] = [];
@@ -306,10 +289,11 @@ export const completeUserProfileAction = asyncThunkWrapper<
   const profilePictureFile =
     agrs.profilePicture as ImagePicker.ImagePickerResult;
 
-  const resumeFile = agrs.personalInformation.resume as FilePickerFormat;
+  const resumeFile =
+    (agrs.personalInformation?.resume as FilePickerFormat) || {};
 
   const certificateFile =
-    store.getState().sessionReducer.profileData.certificates;
+    store.getState().sessionReducer.profileData.certificates || [];
 
   let certificateFileUrl = '';
 
@@ -374,31 +358,18 @@ export const completeUserProfileAction = asyncThunkWrapper<
   const response = await axiosClient.patch<AxiosResponse<any>>(
     '/api/auth/complete-registration',
     {
-      firstName: agrs.personalInformation.firstName,
-      lastName: agrs.personalInformation.lastName,
-      country: agrs.personalInformation.country,
-      city: agrs.personalInformation.city,
-      countryOfOrigin: agrs.personalInformation.countryOfOrigin,
+      firstName: agrs.personalInformation?.firstName,
+      lastName: agrs.personalInformation?.lastName,
+      country: agrs.personalInformation?.country,
+      city: agrs.personalInformation?.city,
+      countryOfOrigin: agrs.personalInformation?.countryOfOrigin,
       resume: resumeUrl,
-      bio: agrs.personalInformation.bio,
-      experience: [
-        {
-          startDate: agrs.experience[0]?.startDate,
-          endDate: agrs.experience[0]?.endDate,
-          'stillWorkHere?': agrs.experience[0]?.stillWorkHere,
-          jobTitle: agrs.experience[0]?.jobTitle,
-          companyName: agrs.experience[0]?.companyName,
-          responsibilities: agrs.experience[0]?.responsibilities,
-        },
-      ],
-      education: [
-        {
-          startDate: agrs.education[0]?.startDate,
-          endDate: agrs.education[0]?.endDate,
-          degree: agrs.education[0]?.degree,
-          school: agrs.education[0]?.school,
-        },
-      ],
+      bio: agrs.personalInformation?.bio,
+      experience: (agrs.experience || []).map((item) => ({
+        ...item,
+        'stillWorkHere?': item.stillWorkHere,
+      })),
+      education: agrs.education || [],
       skills: agrs.skills,
       certificates: certificates,
       profilePicture: profileResponseUrl,

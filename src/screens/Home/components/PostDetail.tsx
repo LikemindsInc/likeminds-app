@@ -78,8 +78,6 @@ const PostDetail = () => {
 
   const onPress = (url: any, index: any, event: any) => {
     // url and index of the image you have clicked alongwith onPress event.
-    console.log('url> ', url);
-    console.log('index> ', index);
     setShowImageZoom(true);
   };
 
@@ -121,7 +119,6 @@ const PostDetail = () => {
 
   const handleLikeReactionOnPost = () => {
     if (isPostLiked) {
-      console.log('unliking a post');
       dispatch(unlikePostAction(item.id));
       // setLiked(false);
     } else {
@@ -259,11 +256,7 @@ const PostDetail = () => {
               >
                 <View>
                   <Image
-                    source={
-                      item.user?.profilePicture
-                        ? { uri: item.user.profilePicture }
-                        : require('../../../../assets/imageAvatar.jpeg')
-                    }
+                    source={{ uri: item.user.profilePicture as string }}
                     style={{ width: 40, height: 40, borderRadius: 20 }}
                   />
                 </View>
@@ -284,13 +277,30 @@ const PostDetail = () => {
                 <Feather name="more-horizontal" size={24} color={colors.grey} />
               </TouchableOpacity>
             </View>
-            <View style={{ width: '100%', height: 300 }}>
+            <View>
+              {item.content && item.content.trim() !== '' ? (
+                <Text
+                  style={[
+                    GlobalStyles.fontInterRegular,
+                    GlobalStyles.fontSize13,
+                  ]}
+                >
+                  {item.content}
+                </Text>
+              ) : null}
               {item.images && item.images.length > 0 ? (
-                <FbGrid images={item.images} onPress={onPress} />
+                <View style={{ width: '100%', height: 300 }}>
+                  <FbGrid images={item.images} onPress={onPress} />
+                </View>
               ) : null}
               {item.videos && item.videos.length > 0
                 ? item.videos.map((item) => (
-                    <View style={[GlobalStyles.mb20]}>
+                    <View
+                      style={[
+                        GlobalStyles.mb20,
+                        { width: '100%', height: 300 },
+                      ]}
+                    >
                       <Video
                         style={{ width: '100%', height: 300 }}
                         source={{

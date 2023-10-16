@@ -82,8 +82,6 @@ const UserProfile = () => {
     ? `${state?.userInfo?.email[0]}${state?.userInfo?.email[1]}`.toLocaleUpperCase()
     : 'IN';
 
-  console.log(login);
-
   return (
     <View
       style={[
@@ -258,8 +256,8 @@ const UserProfile = () => {
                 GlobalStyles.mb10,
               ]}
             >
-              From {state.userInfo?.city}, {state.userInfo?.country}. Lives in{' '}
-              {state.userInfo?.countryOfOrigin}
+              From {state.userInfo?.city}, {state.userInfo?.countryOfOrigin}.
+              Lives in {state.userInfo?.country}
             </Text>
             <ReadMore
               renderTruncatedFooter={_renderTruncatedFooter}
@@ -475,14 +473,14 @@ const FirstRoute = () => {
 
         description: [
           ...timeline.map((item) => (
-            <View style={{ marginBottom: 10 }}>
+            <View style={{}}>
               {item.title}
               {item.description}
             </View>
           )),
           <TouchableOpacity
             onPress={() => setShowExprienceModal(true)}
-            style={{ flexDirection: 'row', gap: 8 }}
+            style={{ flexDirection: 'row', gap: 8, marginTop: 20 }}
           >
             <AntDesign name="plus" size={16} color={colors.primary} />
             <Text
@@ -682,7 +680,7 @@ const FirstRoute = () => {
           <View style={[{ marginBottom: 25 }]}>
             <TouchableOpacity
               style={{ flex: 1, flexDirection: 'row', gap: 12 }}
-              onPress={() => handleFileDownload(item.url)}
+              onPress={() => handleFileDownload(item.url as string)}
             >
               <View
                 style={{
@@ -802,16 +800,36 @@ const FirstRoute = () => {
           </View>
         ),
         description: (
-          <View style={{ marginBottom: 20, paddingTop: 20 }}>
-            <Text
-              style={[
-                GlobalStyles.fontInterRegular,
-                GlobalStyles.fontSize13,
-                GlobalStyles.textNavyBlue,
-              ]}
+          <View>
+            {user?.skills && user.skills.length > 0 && (
+              <View style={{ paddingTop: 20 }}>
+                <Text
+                  style={[
+                    GlobalStyles.fontInterRegular,
+                    GlobalStyles.fontSize13,
+                    GlobalStyles.textNavyBlue,
+                  ]}
+                >
+                  {user?.skills.join(',')}
+                </Text>
+              </View>
+            )}
+            <TouchableOpacity
+              onPress={() => setShowSkillsModal(true)}
+              style={{ flexDirection: 'row', gap: 8, marginTop: 20 }}
             >
-              {user?.skills.join(',')}
-            </Text>
+              <AntDesign name="plus" size={16} color={colors.primary} />
+              <Text
+                style={[
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.textPrimary,
+                  GlobalStyles.fontWeight400,
+                ]}
+              >
+                Add Skill
+              </Text>
+            </TouchableOpacity>
           </View>
         ),
       },

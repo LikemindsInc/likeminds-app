@@ -122,6 +122,8 @@ export interface IPostState {
 
   postReaction: IPostReaction[];
 
+  reactionsOnComment: IPostReaction[];
+
   commentReactions: IPostReaction[];
 
   showReactionList: boolean;
@@ -228,6 +230,8 @@ const initialState: IPostState = {
   currentUserPostFeeds: [],
 
   postReaction: [],
+
+  reactionsOnComment: [],
 
   connectionPostFeeds: [],
   showReactionList: false,
@@ -457,6 +461,7 @@ const PostSlice = createSlice({
     });
     builder.addCase(removeCommentReaction.fulfilled, (state, action) => {
       state.reactToCommentStatus = 'completed';
+      state.reactionsOnComment = [];
     });
     builder.addCase(removeCommentReaction.rejected, (state, action) => {
       state.reactToCommentStatus = 'failed';
@@ -467,6 +472,7 @@ const PostSlice = createSlice({
     });
     builder.addCase(getCommentReaction.fulfilled, (state, action) => {
       state.getCommentReactionStatus = 'completed';
+      state.reactionsOnComment = action.payload.data;
     });
     builder.addCase(getCommentReaction.rejected, (state, action) => {
       state.getCommentReactionStatus = 'failed';

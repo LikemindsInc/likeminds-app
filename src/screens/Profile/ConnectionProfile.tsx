@@ -365,8 +365,9 @@ const ConnectionProfile = () => {
               ]}
             >
               From {selector.profile?.city}
-              {selector.profile?.country}
-              {selector.profile?.countryOfOrigin}.
+              {', '}
+              {selector.profile?.countryOfOrigin}. Lives in{' '}
+              {selector.profile?.country}.
             </Text>
             <ReadMore
               renderTruncatedFooter={_renderTruncatedFooter}
@@ -605,74 +606,76 @@ const FirstRoute = () => {
 
   const filterEducatio = () => {
     const timeline =
-      selector.profile?.education.map((item) => ({
-        title: (
-          <View
-            style={{
-              justifyContent: 'space-between',
-              flexDirection: 'row',
-              width: '100%',
-            }}
-          >
-            <Text
-              style={[
-                GlobalStyles.fontInterMedium,
-                GlobalStyles.fontSize13,
-                GlobalStyles.textNavyBlue,
-              ]}
-            ></Text>
-          </View>
-        ),
-        description: (
-          <View style={[{ marginTop: -5 }]}>
+      selector.profile?.education
+        .filter((item) => item.school.trim() !== '')
+        .map((item) => ({
+          title: (
             <View
               style={{
-                flexDirection: 'row',
                 justifyContent: 'space-between',
-                marginTop: 10,
-                marginBottom: 20,
+                flexDirection: 'row',
+                width: '100%',
               }}
             >
               <Text
                 style={[
-                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontInterMedium,
                   GlobalStyles.fontSize13,
-                  GlobalStyles.textPrimary,
-                  {
-                    maxWidth: 0.45 * width,
-                  },
+                  GlobalStyles.textNavyBlue,
                 ]}
+              ></Text>
+            </View>
+          ),
+          description: (
+            <View style={[{ marginTop: -5 }]}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginTop: 10,
+                  marginBottom: 20,
+                }}
               >
-                {item.degree}
-              </Text>
+                <Text
+                  style={[
+                    GlobalStyles.fontInterRegular,
+                    GlobalStyles.fontSize13,
+                    GlobalStyles.textPrimary,
+                    {
+                      maxWidth: 0.45 * width,
+                    },
+                  ]}
+                >
+                  {item.degree}
+                </Text>
+                <Text
+                  style={[
+                    GlobalStyles.fontInterRegular,
+                    GlobalStyles.fontSize13,
+                    GlobalStyles.textGrey,
+                    GlobalStyles.fontWeight700,
+                  ]}
+                >
+                  <Text>
+                    {moment(item.startDate).format('MMM YYYY')} -{' '}
+                    {moment(item.endDate).format('MMM YYYY')}
+                  </Text>
+                </Text>
+              </View>
+
               <Text
                 style={[
                   GlobalStyles.fontInterRegular,
                   GlobalStyles.fontSize13,
                   GlobalStyles.textGrey,
-                  GlobalStyles.fontWeight700,
+                  GlobalStyles.mb10,
                 ]}
               >
-                <Text>
-                  {moment(item.startDate).format('MMM YYYY')} -{' '}
-                  {moment(item.endDate).format('MMM YYYY')}
-                </Text>
+                {item.school}
               </Text>
             </View>
-
-            <Text
-              style={[
-                GlobalStyles.fontInterRegular,
-                GlobalStyles.fontSize13,
-                GlobalStyles.textGrey,
-                GlobalStyles.mb10,
-              ]}
-            >
-              {item.school}
-            </Text>
-          </View>
-        ),
-      })) ||
+          ),
+        })) ||
       renderExperienceTimelineView({
         showExperienceModal: null,
         title: 'Education',
@@ -839,16 +842,20 @@ const FirstRoute = () => {
           </View>
         ),
         description: (
-          <View style={{ marginBottom: 20, paddingTop: 20 }}>
-            <Text
-              style={[
-                GlobalStyles.fontInterRegular,
-                GlobalStyles.fontSize13,
-                GlobalStyles.textNavyBlue,
-              ]}
-            >
-              {selector.profile?.skills.join(',')}
-            </Text>
+          <View>
+            {selector.profile?.skills && selector.profile.skills.length > 0 && (
+              <View style={{ marginBottom: 20, paddingTop: 20 }}>
+                <Text
+                  style={[
+                    GlobalStyles.fontInterRegular,
+                    GlobalStyles.fontSize13,
+                    GlobalStyles.textNavyBlue,
+                  ]}
+                >
+                  {selector.profile?.skills.join(',')}
+                </Text>
+              </View>
+            )}
           </View>
         ),
       },

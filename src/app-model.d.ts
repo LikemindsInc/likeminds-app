@@ -231,6 +231,7 @@ declare module '@app-model' {
     reaction: string;
     createdAt: string;
     updatedAt: string;
+    commentId?: string;
     user: {
       id: string;
       firstName: string;
@@ -280,7 +281,7 @@ declare module '@app-model' {
   export type IPostedDate = 'anytime' | 'oneday' | 'week' | 'month';
 
   interface IGetJobDTO {
-    experienceLevel?: string;
+    experienceLevel?: string[];
     postedDate?: IPostedDate;
     sort?: 'recent' | 'relevant';
     search?: string;

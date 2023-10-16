@@ -42,7 +42,7 @@ const CreatePost = () => {
   const postState = useAppSelector(
     (state: any) => state.postReducer,
   ) as IPostState;
-  const toast = useToast();
+
   const handleMediaSelect = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -73,12 +73,6 @@ const CreatePost = () => {
     } catch (error) {}
   };
   const handleCreatePost = () => {
-    // if (content.trim() === "")
-    //   return toast.show({
-    //     description: "Please provide your post content",
-    //     variant: "contained",
-    //   });
-
     dispatch(
       createPostAction({
         content: content.trim(),
@@ -91,23 +85,15 @@ const CreatePost = () => {
   useEffect(() => {
     if (postState.createPostStatus === 'completed') {
       setContent('');
-      // toast.show({
-      //   description: "Post creared successfully",
-      //   variant: "contained",
-      // });
+
       setImages([]);
       setVideoSelected([]);
       navigation.navigate(APP_SCREEN_LIST.HOME_SCREEN);
       dispatch(clearCreatePostStatus());
     } else if (postState.createPostStatus === 'failed') {
-      toast.show(postState.createPostError as string, {
-        animationType: 'slide-in',
-        swipeEnabled: true,
-      });
-      setTimeout(() => {
-        dispatch(clearNetworkError());
-        dispatch(clearCreatePostStatus());
-      }, 2500);
+      console.log('error> ', postState.createPostError);
+      dispatch(clearNetworkError());
+      dispatch(clearCreatePostStatus());
     }
   }, [postState.createPostStatus]);
 

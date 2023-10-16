@@ -47,36 +47,30 @@ export const createPostAction = asyncThunkWrapper<
 
   const images: string[] = [];
   const videos = [];
-  for (let i = 0; i < videoAssets.length; i++) {
-    const result = await Video.compress(videoAssets[i].uri, {
-      compressionMethod: 'auto',
-    });
-
+  for (const element of videoAssets) {
     const formData = new FormData() as any;
     formData.append('file', {
-      uri: result,
-      type: videoAssets[i].type,
-      name: videoAssets[i].fileName,
+      uri: element.uri,
+      type: element.type,
+      name: element.fileName,
     });
 
     const response = await uploadFile(formData);
 
     const videoUrl = response.data?.data?.url || '';
-
     videos.push(videoUrl);
   }
-  for (let i = 0; i < imageAssets.length; i++) {
-    const result = await Image.compress(imageAssets[i].uri, {
+  for (const element of imageAssets) {
+    const result = await Image.compress(element.uri, {
       maxWidth: 1000,
       quality: 0.8,
     });
 
-    console.log('result of compressing> ', result);
     const formData = new FormData() as any;
     formData.append('file', {
       uri: result,
-      type: imageAssets[i].type,
-      name: imageAssets[i].fileName,
+      type: element.type,
+      name: element.fileName,
     });
 
     const response = await uploadFile(formData);
@@ -85,6 +79,7 @@ export const createPostAction = asyncThunkWrapper<
 
     images.push(imageUrl);
   }
+  console.log(videos);
   const response = await axiosClient.post<AxiosResponse<any>>(
     '/api/post/create',
     {

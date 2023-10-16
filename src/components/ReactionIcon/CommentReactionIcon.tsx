@@ -14,6 +14,7 @@ import {
 import { GlobalStyles } from '../../theme/GlobalStyles';
 import {
   getCommentReaction,
+  getCommentsOnPostAction,
   getPostFeedAction,
   reactToCommentAction,
   removeCommentReaction,
@@ -49,35 +50,24 @@ const CommentReactionIcon: FC<Props> = ({ post, isLiked }) => {
     );
   }, []);
 
-  const toast = useToast();
-
   const data = useAppSelector((state) => state.settingReducer);
 
   useEffect(() => {
-    if (state.commentReactions.length > 0) {
-      const item = state.commentReactions.findLast(
-        (item) => item.user.id === data.userInfo?.id && item.postId === post.id,
+    if (state.reactionsOnComment.length > 0) {
+      const item = state.reactionsOnComment.findLast(
+        (item) =>
+          item.user.id === data.userInfo?.id && item.commentId === post.id,
       );
 
       if (item) {
         setLikeIcon(item.reaction);
       }
     }
-  }, [state.postReaction]);
-
-  useEffect(() => {
-    if (state.reactToCommentStatus === 'completed') {
-    } else if (state.reactToCommentStatus === 'failed') {
-      toast.show({
-        description: state.reactToCommentError,
-        variant: 'contained',
-      });
-    }
-    dispatch(clearPostRactionStatus());
-  }, [state.reactToCommentStatus]);
+  }, [state.reactionsOnComment]);
 
   const handleReactions = (reaction: string) => {
     if (likedIcon === reaction) {
+      console.log('likednIcon> ');
       setLikeIcon(null);
       dispatch(
         removeCommentReaction({
@@ -87,6 +77,7 @@ const CommentReactionIcon: FC<Props> = ({ post, isLiked }) => {
       );
     } else {
       setLikeIcon(reaction);
+
       dispatch(
         reactToCommentAction({
           postId: post.postId,
@@ -98,6 +89,7 @@ const CommentReactionIcon: FC<Props> = ({ post, isLiked }) => {
     dispatch(handleShowCommentReaction({ show: false, post: null }));
 
     dispatch(getPostFeedAction());
+    dispatch(getCommentsOnPostAction(post.postId));
   };
 
   return (
