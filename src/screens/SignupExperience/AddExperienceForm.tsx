@@ -117,7 +117,6 @@ const AddExperienceForm = ({
             />
             {!values.stillWorkHere && (
               <DatePicker
-                defaultValue={values.endDate}
                 value={values.endDate}
                 onDateChange={(date) =>
                   setFieldValue(
@@ -144,6 +143,7 @@ const AddExperienceForm = ({
               onChange={(value) =>
                 setFieldValue('stillWorkHere', !values.stillWorkHere)
               }
+              isChecked={values.stillWorkHere}
             />
             <View style={{ paddingLeft: 8 }}>
               <Text
