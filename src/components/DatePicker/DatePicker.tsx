@@ -59,6 +59,7 @@ const DatePicker: FC<IProps> = (props) => {
           pointerEvents="none"
           placeholder={props.placeholder}
           errorMessage={props.errorMessage}
+          value={props.value}
         />
       </View>
 
@@ -80,7 +81,7 @@ const DatePicker: FC<IProps> = (props) => {
           >
             <Button
               title="Ok"
-              style={{ paddingVertical: 8 }}
+              style={{ paddingVertical: 8, paddingHorizontal: 10 }}
               onPress={() => setShow(false)}
             />
           </View>
