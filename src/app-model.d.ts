@@ -91,7 +91,7 @@ declare module '@app-model' {
   interface IEducation {
     startDate: string;
     endDate: string;
-
+    major?: string;
     degree: string;
     school: string;
   }
