@@ -149,10 +149,9 @@ export const ExperienceLevel: FC<IProps> = ({ bottomSheetRef }) => {
           GlobalStyles.textGrey,
         ]}
       >
-        {state.jobExperienceFilterValue &&
-        state.jobExperienceFilterValue?.trim() !== 'All'
-          ? state.jobExperienceFilterValue
-          : 'Experience Level'}
+        {state.jobExperienceFilterValue.length > 1
+          ? `${state.jobExperienceFilterValue[0]}...`
+          : state.jobExperienceFilterValue[0]}
       </Text>
       <AntDesign name="caretdown" size={12} color={colors.grey} />
     </TouchableOpacity>

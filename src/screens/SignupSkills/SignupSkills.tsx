@@ -141,8 +141,16 @@ const SignupSkills = () => {
             const newItem = data.find((item) => isNaN(item.id));
             if (!newItem) return;
 
+            const itemExists = items.find(
+              (item) =>
+                item.name.toLowerCase().trim() ===
+                newItem.name.toLowerCase().trim(),
+            );
+
+            if (itemExists) return;
+
             newItem.id = `${data.length}`;
-            console.log(newItem);
+
             setItems([...data, newItem]);
           }}
           styleRowList={{ paddingTop: 10, paddingBottom: 10 }}

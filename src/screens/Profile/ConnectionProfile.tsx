@@ -71,6 +71,9 @@ const ConnectionProfile = () => {
   };
 
   const handleConnectToUser = () => {
+    if (selector.connectionStatus === 'accepted') {
+      return;
+    }
     dispatch(requestConnection(selector.profile?.id as string));
   };
 
@@ -84,7 +87,7 @@ const ConnectionProfile = () => {
     if (!selector.connectionStatus) return 'primary';
 
     switch (selector.connectionStatus) {
-      case 'approved':
+      case 'accepted':
         return 'outline-primary';
       case 'pending':
         return 'tertiary';
@@ -106,7 +109,7 @@ const ConnectionProfile = () => {
     if (!selector.connectionStatus) return 'Connect';
 
     switch (selector.connectionStatus) {
-      case 'approved':
+      case 'accepted':
         return 'Following';
       case 'pending':
         return 'Pending';

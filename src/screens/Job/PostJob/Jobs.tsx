@@ -61,24 +61,19 @@ export default function Jobs() {
   const [sortBy, setSortBy] = useState<'recent' | 'relevant'>('recent');
   const snapPoints = useMemo(() => ['50%', '60%'], []);
 
-  const [tailor, setTailor] = useState('');
+  const [tailor, setTailor] = useState<string[]>([]);
 
-  const [location, setLocation] = useState('');
-  const [jobType, setJobType] = useState('');
+  const [location, setLocation] = useState<string[]>([]);
+  const [jobType, setJobType] = useState<string[]>([]);
 
   const [postedDate, setValueDate] = useState<IPostedDate>('anytime');
 
-  const handleOnIndustrySelect = (industry: string) => {
-    // dispatch(setJobFilterTailorValue(industry));
-    setSelectedIndustry(industry);
-  };
-
-  const handleOnTailor = (industry: string) => {
+  const handleOnTailor = (industry: string[]) => {
     dispatch(setJobFilterTailorValue(industry));
     setTailor(industry);
   };
 
-  const handleOnLocationSelect = (value: string) => {
+  const handleOnLocationSelect = (value: string[]) => {
     setLocation(value);
     dispatch(setJobLocationFilterValue(value));
   };
@@ -122,7 +117,7 @@ export default function Jobs() {
     }
   }, [searchMode]);
 
-  const [selectedIndustry, setSelectedIndustry] = useState('');
+  const [selectedIndustry, setSelectedIndustry] = useState<string[]>([]);
   const [selected, setSelected] = useState('');
   const [experienceLevel, setExprienceLevel] = useState<string[]>([]);
   const [searchValue, setSearchValue] = useState('');
@@ -143,14 +138,14 @@ export default function Jobs() {
     );
   }, []);
 
-  const handleOnJobTypeSelect = (text: string) => {
+  const handleOnJobTypeSelect = (text: string[]) => {
     dispatch(setJobTypeFilterValue(text));
     setJobType(text);
   };
 
-  const handleSetExperienceLevel = (text: string) => {
+  const handleSetExperienceLevel = (text: string[]) => {
     dispatch(setJobExperienceFilterValue(text));
-    setExprienceLevel([text]);
+    setExprienceLevel(text);
   };
 
   useEffect(() => {
@@ -176,10 +171,6 @@ export default function Jobs() {
   }, [sortBy]);
 
   const filterSearchQuery = (data: IGetJobDTO) => {
-    if (data.tailor?.trim().toLowerCase() === 'all') data.tailor = '';
-
-    if (data.location?.trim().toLowerCase() === 'all') data.location = '';
-
     return data;
   };
 
@@ -376,8 +367,9 @@ export default function Jobs() {
           >
             <View style={[GlobalStyles.container]}>
               <IndustryItem
-                handleOnSelect={(item: string) => handleOnTailor(item)}
+                handleOnSelect={(item: string[]) => handleOnTailor(item)}
                 options={[...TAILOR_JOBS]}
+                isMultiple
               />
             </View>
           </ScrollView>
@@ -444,8 +436,9 @@ export default function Jobs() {
           >
             <View style={[GlobalStyles.container]}>
               <IndustryItem
-                handleOnSelect={(item: string) => handleOnJobTypeSelect(item)}
+                handleOnSelect={(item: string[]) => handleOnJobTypeSelect(item)}
                 options={JOB_TYPES}
+                isMultiple
               />
             </View>
           </ScrollView>
@@ -477,10 +470,11 @@ export default function Jobs() {
           >
             <View style={[GlobalStyles.container]}>
               <IndustryItem
-                handleOnSelect={(item: string) =>
+                handleOnSelect={(item: string[]) =>
                   handleSetExperienceLevel(item)
                 }
                 options={JOB_EXPERIENCE}
+                isMultiple
               />
             </View>
           </ScrollView>
@@ -512,8 +506,11 @@ export default function Jobs() {
           >
             <View style={[GlobalStyles.container]}>
               <IndustryItem
-                handleOnSelect={(item: string) => handleOnLocationSelect(item)}
+                handleOnSelect={(item: string[]) =>
+                  handleOnLocationSelect(item)
+                }
                 options={JOB_LOCATION}
+                isMultiple
               />
             </View>
           </ScrollView>

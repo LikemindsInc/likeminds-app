@@ -1,4 +1,4 @@
-import { IFlatListProps } from 'native-base/lib/typescript/components/basic/FlatList';
+import * as ScreenOrientation from 'expo-screen-orientation';
 import {
   FC,
   LegacyRef,
@@ -61,7 +61,6 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
     (state: any) => state.settingReducer,
   ) as ISettingState;
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ['50%', '60%'], []);
 
   const handleSheetChanges = useCallback((index: number) => {}, []);
 
@@ -70,6 +69,8 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
   const [showImageZoom, setShowImageZoom] = useState(false);
 
   const videoRef = useRef(null) as any;
+
+  const [inFullscreen, setInFullsreen] = useState(false);
 
   const navigation = useNavigation<NavigationProp<any>>();
 
@@ -335,11 +336,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
           >
             <View>
               <Image
-                source={
-                  item.user?.profilePicture
-                    ? { uri: item.user.profilePicture }
-                    : require('../../../assets/imageAvatar.jpeg')
-                }
+                source={{ uri: item.user.profilePicture as string }}
                 style={{ width: 40, height: 40, borderRadius: 20 }}
               />
             </View>
@@ -392,7 +389,6 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
                     videoProps={{
                       shouldPlay: false,
                       resizeMode: ResizeMode.CONTAIN,
-                      // ❗ source is required https://docs.expo.io/versions/latest/sdk/video/#props
                       source: {
                         uri: item,
                       },
@@ -403,22 +399,22 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
                       },
                       useNativeControls: true,
                       isLooping: false,
+                      ref: videoRef,
                     }}
                     autoHidePlayer={false}
                     defaultControlsVisible={true}
                     style={{ height: 300 }}
-                  />
-                  {/* <Video
-                    style={{ width: "100%", height: 300, borderRadius: 16 }}
-                    source={{
-                      uri: item,
+                    fullscreen={{
+                      visible: false,
+                      enterFullscreen: async () => {
+                        setInFullsreen(!inFullscreen);
+                      },
+                      exitFullscreen: async () => {
+                        setInFullsreen(!inFullscreen);
+                      },
+                      inFullscreen,
                     }}
-                    ref={videoRef}
-                    useNativeControls={true}
-                    resizeMode={ResizeMode.CONTAIN}
-                    isLooping={false}
-                    shouldPlay={false}
-                  /> */}
+                  />
                 </View>
               </InView>
             ))
