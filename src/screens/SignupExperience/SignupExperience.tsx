@@ -91,6 +91,7 @@ const SignupExperience = () => {
             <TouchableOpacity
               style={{
                 marginBottom: 40,
+                marginTop: 20,
               }}
               onPress={() => bottomSheetRef.current?.expand()}
             >

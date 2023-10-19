@@ -14,17 +14,18 @@ export default function ExperienceCard({
 }) {
   const startDate = Util.convertToLong(new Date(experience.startDate));
   const endDate = Util.convertToLong(new Date(experience.endDate));
+  const { companyName, jobTitle, stillWorkHere } = experience;
 
   return (
     <View style={styles.container}>
       <View style={styles.info}>
         <FontAwesome name="building" size={48} color="#c2c2c2" />
         <View style={styles.roleContainer}>
-          <Text style={styles.role}>{experience.jobTitle}</Text>
-          <Text>{experience.companyName}</Text>
+          <Text style={styles.role}>{jobTitle}</Text>
+          <Text>{companyName}</Text>
           <Text>
             {startDate}
-            {endDate ? ' - ' + endDate : ''}
+            {endDate && !stillWorkHere ? ' - ' + endDate : ' - PRESENT'}
           </Text>
         </View>
       </View>
