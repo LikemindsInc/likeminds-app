@@ -735,59 +735,66 @@ const FirstRoute = () => {
 
   const filterCertificates = () => {
     const timeline =
-      selector.profile?.certificates.map((item) => ({
-        title: (
-          <View
-            style={{
-              justifyContent: 'space-between',
-              flexDirection: 'row',
-              width: '100%',
-              marginBottom: 10,
-            }}
-          ></View>
-        ),
-        description: (
-          <View style={[{ marginBottom: 10 }]}>
-            <TouchableOpacity
-              style={{ flex: 1, flexDirection: 'row', gap: 12 }}
-              onPress={() => handleFileDownload(item.url)}
-            >
-              <View
-                style={{
-                  backgroundColor: colors.navyBlue,
-                  width: 40,
-                  height: 40,
-                  borderRadius: 4,
-                  paddingHorizontal: 8,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
+      [
+        selector?.profile?.resume.trim() === ''
+          ? null
+          : { name: 'Resume', url: selector?.profile?.resume },
+        ...(selector.profile?.certificates || []),
+      ]
+        .filter((item) => item)
+        .map((item) => ({
+          title: (
+            <View
+              style={{
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+                width: '100%',
+                marginBottom: 10,
+              }}
+            ></View>
+          ),
+          description: (
+            <View style={[{ marginBottom: 10 }]}>
+              <TouchableOpacity
+                style={{ flex: 1, flexDirection: 'row', gap: 12 }}
+                onPress={() => handleFileDownload(item.url)}
               >
+                <View
+                  style={{
+                    backgroundColor: colors.navyBlue,
+                    width: 40,
+                    height: 40,
+                    borderRadius: 4,
+                    paddingHorizontal: 8,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text
+                    style={[
+                      GlobalStyles.fontInterBlack,
+                      GlobalStyles.fontSize10,
+                      { color: colors.white },
+                    ]}
+                  >
+                    PDF
+                  </Text>
+                </View>
                 <Text
                   style={[
-                    GlobalStyles.fontInterBlack,
-                    GlobalStyles.fontSize10,
-                    { color: colors.white },
+                    GlobalStyles.fontInterRegular,
+                    GlobalStyles.fontSize13,
+                    GlobalStyles.textGrey,
+                    GlobalStyles.mb10,
+                    GlobalStyles.mt10,
                   ]}
                 >
-                  PDF
+                  {item.name}
                 </Text>
-              </View>
-              <Text
-                style={[
-                  GlobalStyles.fontInterRegular,
-                  GlobalStyles.fontSize13,
-                  GlobalStyles.textGrey,
-                  GlobalStyles.mb10,
-                  GlobalStyles.mt10,
-                ]}
-              >
-                {item.name}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        ),
-      })) || [];
+              </TouchableOpacity>
+            </View>
+          ),
+        })) || [];
 
     return [
       {
@@ -807,7 +814,7 @@ const FirstRoute = () => {
                 GlobalStyles.mb10,
               ]}
             >
-              Certificate
+              Attachments
             </Text>
           </View>
         ),

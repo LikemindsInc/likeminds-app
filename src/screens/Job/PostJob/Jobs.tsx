@@ -12,7 +12,6 @@ import colors from '../../../theme/colors';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
   Tailor,
-  Industry,
   Location,
   Type,
   Company,
@@ -52,7 +51,6 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 export default function Jobs() {
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state.postReducer);
-  const [isRefreshing, setRefresh] = useState(false);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const bottomSheetRef2 = useRef<BottomSheet>(null);
   const bottomSheetRef3 = useRef<BottomSheet>(null);
@@ -209,6 +207,22 @@ export default function Jobs() {
       ),
     );
   }, [tailor]);
+
+  useEffect(() => {
+    dispatch(
+      getJobsAction(
+        filterSearchQuery({
+          search: searchValue,
+          sort: sortBy,
+          experienceLevel,
+          tailor,
+          location,
+          postedDate,
+          jobType,
+        }),
+      ),
+    );
+  }, [location]);
 
   useEffect(() => {
     dispatch(

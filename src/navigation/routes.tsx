@@ -509,6 +509,7 @@ const AppRoutes = () => {
         <Stack.Screen
           name={APP_SCREEN_LIST.CREATE_PASSWORD_SCREEN}
           component={CreatePassword}
+          options={{ gestureEnabled: false }}
         />
         <Stack.Screen
           name={APP_SCREEN_LIST.CREATE_SPACE_SCREEN}

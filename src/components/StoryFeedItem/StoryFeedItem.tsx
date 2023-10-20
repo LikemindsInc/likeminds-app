@@ -35,8 +35,6 @@ import {
   getCommentsOnPostAction,
   getPostFeedAction,
   getPostReactions,
-  likePostAction,
-  unlikePostAction,
 } from '../../actions/post';
 import ReadMore from 'react-native-read-more-text';
 import Input from '../Input/Input';
@@ -60,9 +58,6 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
   const state = useAppSelector(
     (state: any) => state.settingReducer,
   ) as ISettingState;
-  const bottomSheetRef = useRef<BottomSheet>(null);
-
-  const handleSheetChanges = useCallback((index: number) => {}, []);
 
   const dispatch = useAppDispatch();
 
@@ -156,15 +151,11 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
   };
 
   const handleOnViewChange = (inView: boolean) => {
-    // if (inView) {
-    //   if (videoRef && videoRef.current) {
-    //     videoRef.current.playAsync();
-    //   }
-    // } else {
-    //   if (videoRef && videoRef.current) {
-    //     videoRef.current.pauseAsync();
-    //   }
-    // }
+    if (!inView) {
+      videoRef.current.setStatusAsync({
+        shouldPlay: false,
+      });
+    }
   };
 
   const _renderRevealedFooter = (handlePress: any) => {

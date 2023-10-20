@@ -45,6 +45,8 @@ const SignupCertificate = () => {
 
     dispatch(updateCertificate(files));
 
+    console.log(session.profileData);
+
     dispatch(completeUserProfileAction(session.profileData));
   };
 
@@ -52,14 +54,6 @@ const SignupCertificate = () => {
     if (session.completeProfileStatus === 'completed') {
       navigation.navigate(APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN);
     } else if (session.completeProfileStatus === 'failed') {
-      toast.show(
-        session.completeProfileError?.trim() === ''
-          ? 'Unable to complete request. Please try again later'
-          : (session.completeProfileError as string),
-        {
-          type: 'normal',
-        },
-      );
     }
   }, [session.completeProfileStatus]);
 

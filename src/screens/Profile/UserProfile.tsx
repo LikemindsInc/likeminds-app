@@ -480,7 +480,7 @@ const FirstRoute = () => {
           )),
           <TouchableOpacity
             onPress={() => setShowExprienceModal(true)}
-            style={{ flexDirection: 'row', gap: 8, marginTop: 20 }}
+            style={{ flexDirection: 'row', gap: 8 }}
           >
             <AntDesign name="plus" size={16} color={colors.primary} />
             <Text
@@ -663,61 +663,65 @@ const FirstRoute = () => {
   const getCertifcateTimeLine = () => {
     const timeline =
       [
-        { name: 'Resume', url: user?.resume },
+        user?.resume.trim() === ''
+          ? null
+          : { name: 'Resume', url: user?.resume },
         ...(user?.certificates || []),
-      ].map((item) => ({
-        title: (
-          <View
-            style={{
-              justifyContent: 'space-between',
-              flexDirection: 'row',
-              width: '100%',
-              marginBottom: 10,
-            }}
-          ></View>
-        ),
-        description: (
-          <View style={[{ marginBottom: 25 }]}>
-            <TouchableOpacity
-              style={{ flex: 1, flexDirection: 'row', gap: 12 }}
-              onPress={() => handleFileDownload(item.url as string)}
-            >
-              <View
-                style={{
-                  backgroundColor: colors.navyBlue,
-                  width: 40,
-                  height: 40,
-                  borderRadius: 4,
-                  paddingHorizontal: 8,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
+      ]
+        .filter((item) => item)
+        .map((item) => ({
+          title: (
+            <View
+              style={{
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+                width: '100%',
+                marginBottom: 10,
+              }}
+            ></View>
+          ),
+          description: (
+            <View style={[{ marginBottom: 25 }]}>
+              <TouchableOpacity
+                style={{ flex: 1, flexDirection: 'row', gap: 12 }}
+                onPress={() => handleFileDownload(item.url as string)}
               >
+                <View
+                  style={{
+                    backgroundColor: colors.navyBlue,
+                    width: 40,
+                    height: 40,
+                    borderRadius: 4,
+                    paddingHorizontal: 8,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text
+                    style={[
+                      GlobalStyles.fontInterBlack,
+                      GlobalStyles.fontSize10,
+                      { color: colors.white },
+                    ]}
+                  >
+                    PDF
+                  </Text>
+                </View>
                 <Text
                   style={[
-                    GlobalStyles.fontInterBlack,
-                    GlobalStyles.fontSize10,
-                    { color: colors.white },
+                    GlobalStyles.fontInterRegular,
+                    GlobalStyles.fontSize13,
+                    GlobalStyles.textGrey,
+                    GlobalStyles.mb10,
+                    GlobalStyles.mt10,
                   ]}
                 >
-                  PDF
+                  {item.name}
                 </Text>
-              </View>
-              <Text
-                style={[
-                  GlobalStyles.fontInterRegular,
-                  GlobalStyles.fontSize13,
-                  GlobalStyles.textGrey,
-                  GlobalStyles.mb10,
-                  GlobalStyles.mt10,
-                ]}
-              >
-                {item.name}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        ),
-      })) || [];
+              </TouchableOpacity>
+            </View>
+          ),
+        })) || [];
 
     return [
       {
@@ -816,7 +820,7 @@ const FirstRoute = () => {
             )}
             <TouchableOpacity
               onPress={() => setShowSkillsModal(true)}
-              style={{ flexDirection: 'row', gap: 8, marginTop: 20 }}
+              style={{ flexDirection: 'row', gap: 8, marginTop: 30 }}
             >
               <AntDesign name="plus" size={16} color={colors.primary} />
               <Text

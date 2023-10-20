@@ -171,9 +171,6 @@ const CreatePost = () => {
             <TouchableOpacity onPress={handleMediaSelect}>
               <FontAwesome name="photo" size={24} color={colors.navyBlue} />
             </TouchableOpacity>
-            <TouchableOpacity>
-              <Entypo name="attachment" size={24} color={colors.navyBlue} />
-            </TouchableOpacity>
           </View>
           <ScrollView style={{ flex: 1, flexGrow: 1 }}>
             <View style={styles.imagesWrapper}>

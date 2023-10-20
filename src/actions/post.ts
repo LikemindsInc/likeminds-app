@@ -15,6 +15,7 @@ import {
   IReactionToPostDTO,
 } from '@app-model';
 import { uploadFile } from './auth';
+import _ from 'lodash';
 
 const CREATE_POST = 'post:CREATE_POST';
 const COMMENT_ON_POST = 'post:COMMENT_ON_POST';
@@ -169,18 +170,21 @@ export const getJobsAction = asyncThunkWrapper<
 >(GET_JOBS, async (data: any) => {
   let url = '/api/job?page=1&limit=1000';
 
-  const { tailor, ...rest } = data;
+  console.log('data> ', data);
+
+  const { ...rest } = data;
 
   if (rest) {
     Object.keys(rest).forEach((key) => {
-      if (!rest[key] && rest[key].trim() === '') return;
-
-      url += `&${key}=${rest[key]}`;
+      if (_.isArray(rest[key])) {
+        if (rest[key].length > 0) {
+          url += `&${key}=${rest[key].join(',')}`;
+        }
+      } else {
+        if (!rest[key] && rest[key].trim() === '') return;
+        url += `&${key}=${rest[key]}`;
+      }
     });
-  }
-
-  if (tailor) {
-    url += `&tailor=${tailor}`;
   }
 
   console.log('url> ', url);

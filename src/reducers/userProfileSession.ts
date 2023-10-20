@@ -183,6 +183,7 @@ const sessionSlice = createSlice({
       action: PayloadAction<IProfileInformation>,
     ) {
       state.profileData.personalInformation = action.payload;
+      console.log('stat> ', state.profileData);
     },
 
     updateProfilePicture(
@@ -205,6 +206,12 @@ const sessionSlice = createSlice({
     },
 
     updateExperience(state: ISessionState, action: PayloadAction<IExperience>) {
+      if (action.payload) {
+        state.profileData.experience = [
+          ...(state.profileData.experience || []),
+          action.payload,
+        ];
+      }
       state.profileData.experience = [action.payload];
     },
     updateEducation(state: ISessionState, action: PayloadAction<IEducation>) {
@@ -216,7 +223,7 @@ const sessionSlice = createSlice({
     ) {
       if (action.payload) {
         state.profileData.certificates = [
-          ...state.profileData.certificates,
+          ...(state.profileData.certificates || []),
           ...action.payload,
         ];
       }

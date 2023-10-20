@@ -1,5 +1,7 @@
-import { IUserData } from '@app-model';
-import { FC, useEffect, useState } from 'react';
+import { GlobalStyles } from '../../theme/GlobalStyles';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { Text } from 'native-base';
+import { useState } from 'react';
 import {
   Image,
   StyleSheet,
@@ -7,64 +9,17 @@ import {
   View,
   ScrollView,
 } from 'react-native';
-import { GlobalStyles } from '../../theme/GlobalStyles';
-import colors from '../../theme/colors';
-import { Text, useToast } from 'native-base';
-import Button from '../../components/Button/Button';
-import useAppDispatch from '../../hooks/useAppDispatch';
-import useAppSelector from '../../hooks/useAppSelector';
-import {
-  ISpaceState,
-  clearFollowSpaceStatus,
-} from '../../reducers/space_reducer';
-import { followSpaceAction } from '../../actions/space';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { APP_SCREEN_LIST } from '../../constants';
-import { createEntityAdapter } from '@reduxjs/toolkit';
-import { ISO_8601, RFC_2822 } from 'moment';
 
-const items = [
-  {
-    profilePicture:
-      'https://unsplash.com/photos/iFgRcqHznqg/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NXx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8fHwxNjg5ODg3MjMzfDA&force=true',
-    title: 'Abdul Ibrahim',
-    message: "Thanks! I'll check the space out",
-    ticket: '3345',
-    CreatedAt: '10 mins ago',
-  },
-  {
-    profilePicture:
-      'https://unsplash.com/photos/iFgRcqHznqg/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NXx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8fHwxNjg5ODg3MjMzfDA&force=true',
-    title: 'Abdul Ibrahim',
-    message: "Thanks! I'll check the space out",
-    ticket: '3346',
-    CreatedAt: '10 mins ago',
-  },
-  {
-    profilePicture:
-      'https://unsplash.com/photos/iFgRcqHznqg/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NXx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8fHwxNjg5ODg3MjMzfDA&force=true',
-    title: 'Abdul Ibrahim',
-    message: "Thanks! I'll check the space out",
-    ticket: '3347',
-    CreatedAt: '10 mins ago',
-  },
-  {
-    profilePicture:
-      'https://unsplash.com/photos/iFgRcqHznqg/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NXx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8fHwxNjg5ODg3MjMzfDA&force=true',
-    title: 'Abdul Ibrahim',
-    message: "Thanks! I'll check the space out",
-    ticket: '3348',
-    CreatedAt: '10 mins ago',
-  },
-  {
-    profilePicture:
-      'https://unsplash.com/photos/iFgRcqHznqg/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NXx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8fHwxNjg5ODg3MjMzfDA&force=true',
-    title: 'Abdul Ibrahim',
-    message: "Thanks! I'll check the space out",
-    ticket: '3349',
-    CreatedAt: '10 mins ago',
-  },
-];
+// const items = [
+//   {
+//     profilePicture:
+//       'https://unsplash.com/photos/iFgRcqHznqg/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NXx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8fHwxNjg5ODg3MjMzfDA&force=true',
+//     title: 'Abdul Ibrahim',
+//     message: "Thanks! I'll check the space out",
+//     ticket: '3345',
+//     CreatedAt: '10 mins ago',
+//   },
+// ];
 
 const IndividualList = () => {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -78,7 +33,7 @@ const IndividualList = () => {
 
   return (
     <ScrollView>
-      {items.map((item) => (
+      {[].map((item: any) => (
         <TouchableOpacity
           style={[GlobalStyles.flewRow, styles.container]}
           onPress={() => readMessage(item.ticket)}

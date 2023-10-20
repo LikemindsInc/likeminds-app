@@ -46,7 +46,6 @@ const SignupSkills = () => {
   const handleOnNextPress = () => {
     navigation.navigate(APP_SCREEN_LIST.SIGNUP_CERTIFICATE_SCREEN);
     dispatch(updateSkills(selectedSkills));
-    dispatch(completeUserProfileAction(session.profileData));
   };
   const onSelectedItemsChange = (selectedItems: any[]) => {
     const numberIndexedItems = selectedItems.filter((item) => !isNaN(item));
@@ -151,7 +150,7 @@ const SignupSkills = () => {
 
             newItem.id = `${data.length}`;
 
-            setItems([...data, newItem]);
+            setItems([...items, newItem]);
           }}
           styleRowList={{ paddingTop: 10, paddingBottom: 10 }}
         />
