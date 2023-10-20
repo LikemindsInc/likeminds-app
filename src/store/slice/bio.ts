@@ -8,7 +8,6 @@ export const deleteBio = createAsyncThunk(
       const response = await axiosClient.delete(
         `/api/auth/bio/${payload.id}/${payload.type}`,
       );
-      console.log(response.data.data);
       return response.data.data;
     } catch (error) {
       const errorValue: string | [] = error?.response?.data?.message;
