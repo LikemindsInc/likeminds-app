@@ -10,11 +10,11 @@ export default function EducationCard({
   degree,
 }: {
   degree: IEducation;
-  handleDelete?: () => void;
+  handleDelete?: (id: string) => void;
 }) {
   const startDate = Util.convertToLong(new Date(degree.startDate));
   const endDate = Util.convertToLong(new Date(degree.endDate));
-  const { major, degree: study, school } = degree;
+  const { major, degree: study, school, id } = degree;
 
   return (
     <View style={styles.container}>
@@ -30,7 +30,10 @@ export default function EducationCard({
           </Text>
         </View>
       </View>
-      <TouchableOpacity onPress={handleDelete} style={[styles.deleteHandler]}>
+      <TouchableOpacity
+        onPress={() => handleDelete(id)}
+        style={[styles.deleteHandler]}
+      >
         <AntDesign name="close" size={20} color={'black'} />
       </TouchableOpacity>
     </View>

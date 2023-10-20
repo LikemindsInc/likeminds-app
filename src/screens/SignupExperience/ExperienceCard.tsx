@@ -10,11 +10,11 @@ export default function ExperienceCard({
   experience,
 }: {
   experience: IExperience;
-  handleDelete?: () => void;
+  handleDelete?: (id: string) => void;
 }) {
   const startDate = Util.convertToLong(new Date(experience.startDate));
   const endDate = Util.convertToLong(new Date(experience.endDate));
-  const { companyName, jobTitle, stillWorkHere } = experience;
+  const { companyName, jobTitle, stillWorkHere, id } = experience;
 
   return (
     <View style={styles.container}>
@@ -29,7 +29,10 @@ export default function ExperienceCard({
           </Text>
         </View>
       </View>
-      <TouchableOpacity onPress={handleDelete} style={[styles.deleteHandler]}>
+      <TouchableOpacity
+        onPress={() => handleDelete(id)}
+        style={[styles.deleteHandler]}
+      >
         <AntDesign name="close" size={20} color={'black'} />
       </TouchableOpacity>
     </View>

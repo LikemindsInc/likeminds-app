@@ -13,6 +13,8 @@ import useAppSelector from '../../hooks/useAppSelector';
 import AddEducationForm from './AddEducationForm';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import EducationCard from './EducationCard';
+import { deleteBio } from '../../store/slice/bio';
+import { clearBioErrors } from '../../reducers/userProfileSession';
 
 const SignupEducation = () => {
   const bottomSheetRef = useRef(null);
@@ -29,6 +31,16 @@ const SignupEducation = () => {
   const handleOnNextPress = () => {
     navigation.navigate(APP_SCREEN_LIST.SIGNUP_SKILLS_SCREEN);
   };
+
+  const handleDelete = (id: string) => {
+    dispatch(deleteBio({ id, type: 'EDUCATION' }));
+  };
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearBioErrors());
+    };
+  }, []);
 
   const education = sessionReducer?.profileData?.education || [];
 
@@ -57,7 +69,7 @@ const SignupEducation = () => {
                 <EducationCard
                   key={'key-' + index}
                   degree={degree}
-                  handleDelete={() => {}}
+                  handleDelete={handleDelete}
                 />
               ))}
             </View>
