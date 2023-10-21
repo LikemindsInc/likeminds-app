@@ -80,7 +80,6 @@ export const createPostAction = asyncThunkWrapper<
 
     images.push(imageUrl);
   }
-  console.log(videos);
   const response = await axiosClient.post<AxiosResponse<any>>(
     '/api/post/create',
     {
@@ -170,8 +169,6 @@ export const getJobsAction = asyncThunkWrapper<
 >(GET_JOBS, async (data: any) => {
   let url = '/api/job?page=1&limit=1000';
 
-  console.log('data> ', data);
-
   const { ...rest } = data;
 
   if (rest) {
@@ -226,7 +223,6 @@ export const likePostAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
   string
 >(LIKE_POST, async (args: string) => {
-  console.log('called to like a post> ', args);
   const response = await axiosClient.post<AxiosResponse<any>>(
     `/api/post/${args}/like`,
     {},

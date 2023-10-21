@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
   useWindowDimensions,
 } from 'react-native';
@@ -32,6 +33,7 @@ import CertificateForm from './components/CertificateForm';
 import useAppDispatch from '../../hooks/useAppDispatch';
 import { getCurrentUserAction } from '../../actions/auth';
 import TimeLine from '../../components/TimeLine/TimeLine';
+import FullScreenImageCarousel from '../../components/FullScreenImageCarousel/FullScreenImageCarousel';
 
 // Get the height of the status bar
 const statusBarHeight = StatusBar.currentHeight;
@@ -44,7 +46,7 @@ const UserProfile = () => {
     (state: any) => state.settingReducer,
   ) as ISettingState;
 
-  const login = useAppSelector((state) => state.loginReducer);
+  const [showImageZoom, setShowImageZoom] = useState(false);
 
   const _renderTruncatedFooter = (handlePress: any) => {
     return (
@@ -95,50 +97,47 @@ const UserProfile = () => {
       >
         <View>
           {state.userInfo?.profilePicture ? (
-            <ImageBackground
-              resizeMode="cover"
-              source={
-                state.userInfo?.profilePicture &&
-                state.userInfo.profilePicture.trim() !== ''
-                  ? { uri: state.userInfo.profilePicture }
-                  : require('../../../assets/image9.png')
-              }
-              style={[
-                styles.imageBg,
-                height * 0.4 > 240
-                  ? { height: 240 }
-                  : { height: height * 0.4, position: 'relative' },
-              ]}
-            >
-              <View
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  height: '100%',
-                  width: '100%',
-                  backgroundColor: 'rgba(0,0,0,0.4)',
-                }}
-              ></View>
-              <View>
-                <TouchableOpacity
-                  onPress={() => navigation.goBack()}
-                  style={[styles.imageHeaderWrapper]}
-                >
-                  <AntDesign
-                    name="arrowleft"
-                    size={24}
-                    style={{
-                      textShadowColor: 'rgba(0, 0, 0, 0.75)',
-                      textShadowRadius: 10,
-                      textShadowOffset: { width: 2, height: 2 },
-                      color: colors.white,
-                    }}
-                    // color={colors.white}
-                  />
-                </TouchableOpacity>
-              </View>
-            </ImageBackground>
+            <TouchableOpacity onPress={() => setShowImageZoom(true)}>
+              <ImageBackground
+                resizeMode="cover"
+                source={{ uri: state.userInfo.profilePicture }}
+                style={[
+                  styles.imageBg,
+                  height * 0.4 > 240
+                    ? { height: 240 }
+                    : { height: height * 0.4, position: 'relative' },
+                ]}
+              >
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    height: '100%',
+                    width: '100%',
+                    backgroundColor: 'rgba(0,0,0,0.4)',
+                  }}
+                ></View>
+                <View>
+                  <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    style={[styles.imageHeaderWrapper]}
+                  >
+                    <AntDesign
+                      name="arrowleft"
+                      size={24}
+                      style={{
+                        textShadowColor: 'rgba(0, 0, 0, 0.75)',
+                        textShadowRadius: 10,
+                        textShadowOffset: { width: 2, height: 2 },
+                        color: colors.white,
+                      }}
+                      // color={colors.white}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </ImageBackground>
+            </TouchableOpacity>
           ) : initials ? (
             <View
               style={[
@@ -256,8 +255,8 @@ const UserProfile = () => {
                 GlobalStyles.mb10,
               ]}
             >
-              From {state.userInfo?.city}, {state.userInfo?.countryOfOrigin}.
-              Lives in {state.userInfo?.country}
+              From {state.userInfo?.countryOfOrigin}. Lives in{' '}
+              {state.userInfo?.country}, {state.userInfo?.city}
             </Text>
             <ReadMore
               renderTruncatedFooter={_renderTruncatedFooter}
@@ -351,15 +350,17 @@ const UserProfile = () => {
               </Text>
             </View>
           </View>
-          {/* <View style={[GlobalStyles.flewRow, GlobalStyles.mb30, { gap: 20 }]}>
-          <Button containerStyle={{ flex: 1 }} title="Connect" />
-          <Button type="cancel" containerStyle={{ flex: 1 }} title="Chat" />
-        </View> */}
-          <View style={{ height: 600 }}>
+
+          <View style={{ height: 800 }}>
             <TabViewExample />
           </View>
         </View>
       </ScrollView>
+      <FullScreenImageCarousel
+        images={[{ uri: state.userInfo?.profilePicture as string }]}
+        isVisible={showImageZoom}
+        onRequestClose={() => setShowImageZoom(false)}
+      />
     </View>
   );
 };
@@ -503,15 +504,38 @@ const FirstRoute = () => {
 
   useEffect(() => {
     if (
-      session.completeProfileStatus === 'completed' ||
-      session.completeProfileStatus === 'failed'
+      session.updateEducationHistoryStatus === 'completed' ||
+      session.updateEducationHistoryStatus === 'failed'
     ) {
       setShowEducationModal(false);
+    }
+  }, [session.updateEducationHistoryStatus]);
+  useEffect(() => {
+    if (
+      session.updateEducationHistoryStatus === 'completed' ||
+      session.updateEducationHistoryStatus === 'failed'
+    ) {
       setShowExprienceModal(false);
-      setshowCerticatesModal(false);
+    }
+  }, [session.updateExperienceStatus]);
+
+  useEffect(() => {
+    if (
+      session.updateUserSkillsStatus === 'completed' ||
+      session.updateUserSkillsStatus === 'failed'
+    ) {
       setShowSkillsModal(false);
     }
-  }, [session.completeProfileStatus]);
+  }, [session.updateUserSkillsStatus]);
+
+  useEffect(() => {
+    if (
+      session.updateUserCertificatesStatus === 'completed' ||
+      session.updateUserCertificatesStatus === 'failed'
+    ) {
+      setshowCerticatesModal(false);
+    }
+  }, [session.updateUserCertificatesStatus]);
   const getEducationTimeLine = () => {
     const timeline =
       user?.education && user.education.length > 0

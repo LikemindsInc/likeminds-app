@@ -120,9 +120,8 @@ const PostDetail = () => {
     }
   }, [postState.commentOnPostStatus]);
 
-  const isCaptionOnlyPost = useCallback(() => {
-    return item.images.length === 0 && item.videos?.length === 0;
-  }, [item]);
+  const isCaptionOnlyPost = () =>
+    item.images.length === 0 && item.videos?.length === 0;
 
   useEffect(() => {
     setImageMedia(item.images.filter((item) => !item.endsWith('.mp4')));
@@ -300,10 +299,10 @@ const PostDetail = () => {
               </TouchableOpacity>
             </View>
             <View>
-              {!isCaptionOnlyPost() &&
+              {isCaptionOnlyPost() &&
               item.content &&
               item.content.trim() !== '' ? (
-                <View style={{ marginBottom: 20 }}>
+                <View style={{ marginBottom: isCaptionOnlyPost() ? 0 : 20 }}>
                   <ReadMore
                     renderTruncatedFooter={_renderTruncatedFooter}
                     renderRevealedFooter={_renderRevealedFooter}
@@ -423,7 +422,7 @@ const PostDetail = () => {
             </View>
           </View>
           <TouchableOpacity onPress={handleLoadComments} style={{}}>
-            {isCaptionOnlyPost() && (
+            {!isCaptionOnlyPost() && (
               <ReadMore
                 renderTruncatedFooter={_renderTruncatedFooter}
                 renderRevealedFooter={_renderRevealedFooter}

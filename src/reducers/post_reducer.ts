@@ -407,7 +407,6 @@ const PostSlice = createSlice({
     });
     builder.addCase(getCurrentUserFeedAction.rejected, (state, action) => {
       state.getCurrentUserPostStatus = 'failed';
-      console.log('action.payload?.messag> ', action.payload?.message);
       state.getCurrentUserPostError = action.payload?.message as string;
     });
 
@@ -440,7 +439,6 @@ const PostSlice = createSlice({
     });
     builder.addCase(getConnectionPostFeedAction.rejected, (state, action) => {
       state.getConnectionPostFeedStatus = 'failed';
-      console.log('action.payload?.messag> ', action.payload?.message);
       state.getConnectionPostFeedError = action.payload?.message as string;
     });
 

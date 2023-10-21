@@ -17,7 +17,6 @@ import {
 } from '../constants';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import {
   MaterialCommunityIcons,
@@ -28,7 +27,6 @@ import {
 import {
   DrawerContentComponentProps,
   DrawerContentScrollView,
-  DrawerItem,
   DrawerNavigationProp,
   createDrawerNavigator,
 } from '@react-navigation/drawer';
@@ -91,15 +89,7 @@ const AppHome = () => {
     (state: any) => state.settingReducer,
   ) as ISettingState;
 
-  const handleBackPress = () => {
-    // Add your logic to decide whether to prevent navigation
-    // For example, return true to prevent navigation, or false to allow it
-    //  if (shouldPreventNavigation) {
-    //    return true; // Prevent navigation
-    //  }
-    return true;
-    // return false; // Allow navigation
-  };
+  const handleBackPress = () => true;
 
   const handleBackNavigation = (e: any) => {
     // Add your logic to decide whether to prevent navigation
@@ -348,8 +338,8 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
                 console.log('CALLED');
                 dispatch(logoutUserAction());
                 dispatch(logoutAction());
-                persistor.purge();
                 navigation.navigate(APP_SCREEN_LIST.ONBOARDING_SCREEN);
+                persistor.purge();
               }}
               type="tertiary"
               title="Logout"
@@ -392,18 +382,11 @@ const AppRoutes = () => {
     (state: any) => state.errorReducer,
   ) as IGlobalErrorState;
 
-  const settingValues = useAppSelector((state) => state.settings);
-  console.log(settingValues);
-
   useEffect(() => {
     if (errorReducer.message?.trim() !== '') {
-      // toast.show({ description: errorReducer.message });
       if (UNHANDLED_GLOBAL_ERRORS.includes(errorReducer.message)) {
         dispatch(clearNetworkError());
         return;
-      } else {
-        // toast.show(errorReducer.message, { type: "normal" });
-        // dispatch(clearNetworkError());
       }
     }
   }, [errorReducer.message]);

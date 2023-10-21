@@ -18,7 +18,9 @@ import {
   updateCertificateProfileAction,
   updateEducationProfileAction,
   updateExperienceProfileAction,
+  updatePersonalInformationAction,
   updateSkillsProfileAction,
+  updateUserProfilePictureAction,
   verifyOTPActionAction,
   verifyOTPOnChangePasswordAction,
 } from '../actions/auth';
@@ -64,6 +66,30 @@ export interface ISessionState {
   completeProfileStatus: IThunkAPIStatus;
   completeProfileSuccess: string;
   completeProfileError?: string;
+
+  updatePersonalInformationStatus: IThunkAPIStatus;
+  updatePersonalInformationSuccess: string;
+  updatePersonalInformationError?: string;
+
+  updateProfiePictureStatus: IThunkAPIStatus;
+  updateProfiePictureSuccess: string;
+  updateProfiePictureError?: string;
+
+  updateEducationHistoryStatus: IThunkAPIStatus;
+  updateEducationHistorySuccess: string;
+  updateEducationHistoryError?: string;
+
+  updateExperienceStatus: IThunkAPIStatus;
+  updateExperienceSuccess: string;
+  updateExperienceError?: string;
+
+  updateUserSkillsStatus: IThunkAPIStatus;
+  updateUserSkillsSuccess: string;
+  updateUserSkillsError?: string;
+
+  updateUserCertificatesStatus: IThunkAPIStatus;
+  updateUserCertificatesSuccess: string;
+  updateUserCertificatesError?: string;
 
   otpChannelValue: string;
   otpCode: string;
@@ -131,6 +157,30 @@ const initialState: ISessionState = {
   otpChannelValue: '',
 
   otpCode: '',
+
+  updatePersonalInformationStatus: 'idle',
+  updatePersonalInformationSuccess: '',
+  updatePersonalInformationError: '',
+
+  updateProfiePictureStatus: 'idle',
+  updateProfiePictureSuccess: '',
+  updateProfiePictureError: '',
+
+  updateEducationHistoryStatus: 'idle',
+  updateEducationHistorySuccess: '',
+  updateEducationHistoryError: '',
+
+  updateExperienceStatus: 'idle',
+  updateExperienceSuccess: '',
+  updateExperienceError: '',
+
+  updateUserSkillsStatus: 'idle',
+  updateUserSkillsSuccess: '',
+  updateUserSkillsError: '',
+
+  updateUserCertificatesStatus: 'idle',
+  updateUserCertificatesSuccess: '',
+  updateUserCertificatesError: '',
 };
 
 const sessionSlice = createSlice({
@@ -338,65 +388,103 @@ const sessionSlice = createSlice({
     });
 
     builder.addCase(updateEducationProfileAction.pending, (state) => {
-      state.completeProfileStatus = 'loading';
+      state.updateEducationHistoryStatus = 'loading';
     });
     builder.addCase(updateEducationProfileAction.fulfilled, (state, action) => {
-      state.completeProfileSuccess = action.payload.message;
-      state.completeProfileStatus = 'completed';
+      state.updateEducationHistorySuccess = action.payload.message;
+      state.updateEducationHistoryStatus = 'completed';
     });
     builder.addCase(updateEducationProfileAction.rejected, (state, action) => {
-      state.completeProfileStatus = 'failed';
-      state.completeProfileError =
+      state.updateEducationHistoryStatus = 'failed';
+      state.updateEducationHistoryError =
         (action.payload?.message as string) || action.error.message || '';
     });
 
     builder.addCase(updateExperienceProfileAction.pending, (state) => {
-      state.completeProfileStatus = 'loading';
+      state.updateExperienceStatus = 'loading';
     });
     builder.addCase(
       updateExperienceProfileAction.fulfilled,
       (state, action) => {
-        state.completeProfileSuccess = action.payload.message;
-        state.completeProfileStatus = 'completed';
+        state.updateExperienceSuccess = action.payload.message;
+        state.updateExperienceStatus = 'completed';
       },
     );
     builder.addCase(updateExperienceProfileAction.rejected, (state, action) => {
-      state.completeProfileStatus = 'failed';
-      state.completeProfileError =
+      state.updateExperienceStatus = 'failed';
+      state.updateExperienceError =
         (action.payload?.message as string) || action.error.message || '';
     });
 
     builder.addCase(updateCertificateProfileAction.pending, (state) => {
-      state.completeProfileStatus = 'loading';
+      state.updateUserCertificatesStatus = 'loading';
     });
     builder.addCase(
       updateCertificateProfileAction.fulfilled,
       (state, action) => {
-        state.completeProfileSuccess = action.payload.message;
-        state.completeProfileStatus = 'completed';
+        state.updateUserCertificatesSuccess = action.payload.message;
+        state.updateUserCertificatesStatus = 'completed';
       },
     );
     builder.addCase(
       updateCertificateProfileAction.rejected,
       (state, action) => {
-        state.completeProfileStatus = 'failed';
-        state.completeProfileError =
+        state.updateUserCertificatesStatus = 'failed';
+        state.updateUserCertificatesError =
           (action.payload?.message as string) || action.error.message || '';
       },
     );
 
     builder.addCase(updateSkillsProfileAction.pending, (state) => {
-      state.completeProfileStatus = 'loading';
+      state.updateUserSkillsStatus = 'loading';
     });
     builder.addCase(updateSkillsProfileAction.fulfilled, (state, action) => {
-      state.completeProfileSuccess = action.payload.message;
-      state.completeProfileStatus = 'completed';
+      state.updateUserSkillsSuccess = action.payload.message;
+      state.updateUserSkillsStatus = 'completed';
     });
     builder.addCase(updateSkillsProfileAction.rejected, (state, action) => {
-      state.completeProfileStatus = 'failed';
+      state.updateUserSkillsError = 'failed';
       state.completeProfileError =
         (action.payload?.message as string) || action.error.message || '';
     });
+
+    builder.addCase(updatePersonalInformationAction.pending, (state) => {
+      state.updatePersonalInformationStatus = 'loading';
+    });
+    builder.addCase(
+      updatePersonalInformationAction.fulfilled,
+      (state, action) => {
+        state.updatePersonalInformationSuccess = action.payload.message;
+        state.updatePersonalInformationStatus = 'completed';
+      },
+    );
+    builder.addCase(
+      updatePersonalInformationAction.rejected,
+      (state, action) => {
+        state.updatePersonalInformationStatus = 'failed';
+        state.updatePersonalInformationError =
+          (action.payload?.message as string) || action.error.message || '';
+      },
+    );
+
+    builder.addCase(updateUserProfilePictureAction.pending, (state) => {
+      state.updateProfiePictureStatus = 'loading';
+    });
+    builder.addCase(
+      updateUserProfilePictureAction.fulfilled,
+      (state, action) => {
+        state.updateProfiePictureSuccess = action.payload.message;
+        state.updateProfiePictureStatus = 'completed';
+      },
+    );
+    builder.addCase(
+      updateUserProfilePictureAction.rejected,
+      (state, action) => {
+        state.updateProfiePictureStatus = 'failed';
+        state.updateProfiePictureError =
+          (action.payload?.message as string) || action.error.message || '';
+      },
+    );
 
     builder.addCase(requestOTPEmailAction.pending, (state) => {
       state.requestOTPEmailStatus = 'loading';

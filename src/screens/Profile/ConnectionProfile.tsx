@@ -36,12 +36,15 @@ import ReadMore from 'react-native-read-more-text';
 import moment from 'moment';
 import renderExperienceTimelineView from './components/renderExperienceTimelineView';
 import TimeLine from '../../components/TimeLine/TimeLine';
+import FullScreenImageCarousel from '../../components/FullScreenImageCarousel/FullScreenImageCarousel';
 
 const ConnectionProfile = () => {
   const height = useDimension().height;
   const navigation = useNavigation<NavigationProp<any>>();
 
   const dispatch = useAppDispatch();
+
+  const [showImageZoom, setShowImageZoom] = useState(false);
 
   const state = useAppSelector(
     (state: any) => state.settingReducer,
@@ -211,47 +214,49 @@ const ConnectionProfile = () => {
       >
         <View>
           {selector.profile?.profilePicture ? (
-            <ImageBackground
-              resizeMode="cover"
-              source={
-                selector.profile?.profilePicture &&
-                selector.profile.profilePicture.trim() !== ''
-                  ? { uri: selector.profile.profilePicture }
-                  : require('../../../assets/image9.png')
-              }
-              style={[
-                styles.imageBg,
-                height * 0.4 > 240
-                  ? { height: 240 }
-                  : { height: height * 0.4, position: 'relative' },
-              ]}
-            >
-              <View
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  height: '100%',
-                  width: '100%',
-                  backgroundColor: 'rgba(0,0,0,0.5)',
-                }}
-              ></View>
-              <TouchableOpacity
-                onPress={handleBackNavigation}
-                style={[styles.imageHeaderWrapper]}
+            <TouchableOpacity onPress={() => setShowImageZoom(true)}>
+              <ImageBackground
+                resizeMode="cover"
+                source={
+                  selector.profile?.profilePicture &&
+                  selector.profile.profilePicture.trim() !== ''
+                    ? { uri: selector.profile.profilePicture }
+                    : require('../../../assets/image9.png')
+                }
+                style={[
+                  styles.imageBg,
+                  height * 0.4 > 240
+                    ? { height: 240 }
+                    : { height: height * 0.4, position: 'relative' },
+                ]}
               >
-                <AntDesign
-                  name="arrowleft"
-                  size={24}
+                <View
                   style={{
-                    textShadowColor: 'rgba(0, 0, 0, 0.75)',
-                    textShadowRadius: 10,
-                    textShadowOffset: { width: 2, height: 2 },
-                    color: colors.white,
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    height: '100%',
+                    width: '100%',
+                    backgroundColor: 'rgba(0,0,0,0.5)',
                   }}
-                />
-              </TouchableOpacity>
-            </ImageBackground>
+                ></View>
+                <TouchableOpacity
+                  onPress={handleBackNavigation}
+                  style={[styles.imageHeaderWrapper]}
+                >
+                  <AntDesign
+                    name="arrowleft"
+                    size={24}
+                    style={{
+                      textShadowColor: 'rgba(0, 0, 0, 0.75)',
+                      textShadowRadius: 10,
+                      textShadowOffset: { width: 2, height: 2 },
+                      color: colors.white,
+                    }}
+                  />
+                </TouchableOpacity>
+              </ImageBackground>
+            </TouchableOpacity>
           ) : initials ? (
             <View
               style={[
@@ -347,6 +352,19 @@ const ConnectionProfile = () => {
             </TouchableOpacity>
           </View>
           <View style={[GlobalStyles.mb20]}>
+            {selector.profile?.experience[0].jobTitle && (
+              <Text
+                style={[
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.textPrimary,
+                  GlobalStyles.fontWeight400,
+                  GlobalStyles.mb10,
+                ]}
+              >
+                {selector.profile?.experience[0]?.jobTitle}
+              </Text>
+            )}
             <Text
               style={[
                 GlobalStyles.fontInterRegular,
@@ -356,21 +374,9 @@ const ConnectionProfile = () => {
                 GlobalStyles.mb10,
               ]}
             >
-              {selector.profile?.experience[0]?.jobTitle}
-            </Text>
-            <Text
-              style={[
-                GlobalStyles.fontInterRegular,
-                GlobalStyles.fontSize13,
-                GlobalStyles.textPrimary,
-                GlobalStyles.fontWeight400,
-                GlobalStyles.mb10,
-              ]}
-            >
-              From {selector.profile?.city}
-              {', '}
+              From
               {selector.profile?.countryOfOrigin}. Lives in{' '}
-              {selector.profile?.country}.
+              {selector.profile?.country}, {selector.profile?.city}.
             </Text>
             <ReadMore
               renderTruncatedFooter={_renderTruncatedFooter}
@@ -473,6 +479,11 @@ const ConnectionProfile = () => {
           </View>
         </View>
       </ScrollView>
+      <FullScreenImageCarousel
+        images={[{ uri: selector.profile?.profilePicture as string }]}
+        isVisible={showImageZoom}
+        onRequestClose={() => setShowImageZoom(false)}
+      />
     </View>
   );
 };

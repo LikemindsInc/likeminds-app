@@ -11,10 +11,15 @@ import { APP_SCREEN_LIST } from '../../constants';
 import { useNavigation } from '@react-navigation/native';
 import useAppDispatch from '../../hooks/useAppDispatch';
 import { updateProfilePicture } from '../../reducers/userProfileSession';
+import { updateUserProfilePictureAction } from '../../actions/auth';
+import useAppSelector from '../../hooks/useAppSelector';
 
 const SignupProfilePicture = () => {
   const navigation = useNavigation<any>();
   const [isDisabled, setDisabled] = useState(true);
+
+  const session = useAppSelector((state) => state.sessionReducer);
+
   const dispatch = useAppDispatch();
   const [file, setFile] = useState<
     DocumentPicker.DocumentResult | ImagePicker.ImagePickerResult | null
@@ -34,8 +39,14 @@ const SignupProfilePicture = () => {
 
   const handleOnNextPress = () => {
     dispatch(updateProfilePicture(file));
-    navigation.navigate(APP_SCREEN_LIST.SIGNUP_EXPERIENCE_SCREEN);
+    dispatch(updateUserProfilePictureAction(session.profileData));
   };
+
+  useEffect(() => {
+    if (session.updateProfiePictureStatus === 'completed') {
+      navigation.navigate(APP_SCREEN_LIST.SIGNUP_EXPERIENCE_SCREEN);
+    }
+  }, [session.updateProfiePictureStatus]);
   return (
     <View style={[GlobalStyles.container]}>
       <View style={[GlobalStyles.mb20, GlobalStyles.mt20]}>
@@ -60,6 +71,7 @@ const SignupProfilePicture = () => {
       <Button
         disabled={isDisabled}
         title="Continue"
+        loading={session.updateProfiePictureStatus === 'loading'}
         onPress={handleOnNextPress}
       />
     </View>

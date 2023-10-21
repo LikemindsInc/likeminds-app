@@ -67,7 +67,6 @@ const CommentReactionIcon: FC<Props> = ({ post, isLiked }) => {
 
   const handleReactions = (reaction: string) => {
     if (likedIcon === reaction) {
-      console.log('likednIcon> ');
       setLikeIcon(null);
       dispatch(
         removeCommentReaction({

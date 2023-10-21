@@ -16,7 +16,10 @@ import { useNavigation } from '@react-navigation/native';
 import useAppSelector from '../../hooks/useAppSelector';
 import useAppDispatch from '../../hooks/useAppDispatch';
 import BackButton from '../../components/Navigation/BackButton/BackButton';
-import { getAllIndustriesAction } from '../../actions/auth';
+import {
+  getAllIndustriesAction,
+  updateExperienceProfileAction,
+} from '../../actions/auth';
 import AddExperienceForm from './AddExperienceForm';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import ExperienceCard from './ExperienceCard';
@@ -32,10 +35,16 @@ const SignupExperience = () => {
   }, []);
 
   const handleOnNextPress = () => {
-    navigation.navigate(APP_SCREEN_LIST.SIGNUP_EDUCATION_SCREEN);
+    dispatch(updateExperienceProfileAction(sessionReducer.profileData));
   };
 
   const experience = sessionReducer?.profileData?.experience || [];
+
+  useEffect(() => {
+    if (sessionReducer.updateExperienceStatus === 'completed') {
+      navigation.navigate(APP_SCREEN_LIST.SIGNUP_EDUCATION_SCREEN);
+    }
+  }, [sessionReducer.updateExperienceStatus]);
 
   return (
     <KeyboardAvoidingView
@@ -102,11 +111,17 @@ const SignupExperience = () => {
             <View style={[GlobalStyles.mb20, GlobalStyles.displayRowCenter]}>
               <TextLink
                 title="Skip For Now"
-                onPress={handleOnNextPress}
+                onPress={() =>
+                  navigation.navigate(APP_SCREEN_LIST.SIGNUP_EDUCATION_SCREEN)
+                }
                 color={colors.black}
               />
             </View>
-            <Button title="Continue" onPress={handleOnNextPress} />
+            <Button
+              loading={sessionReducer.updateExperienceStatus === 'loading'}
+              title="Continue"
+              onPress={handleOnNextPress}
+            />
           </View>
         </ScrollView>
       </View>

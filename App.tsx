@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 
-import { LogBox, SafeAreaView, StyleSheet } from 'react-native';
+import { LogBox, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import Provider from './src/store/StoreProvider';
 import { NavigationContainer } from '@react-navigation/native';
 import { ToastProvider } from 'react-native-toast-notifications';
@@ -32,7 +32,6 @@ const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function App() {
-  const navigation = useRef() as any;
   const [fontsLoaded] = useFonts({
     'Inter-Black': require('./assets/fonts/Inter-Black.ttf'),
     'Inter-Bold': require('./assets/fonts/Inter-Bold.ttf'),

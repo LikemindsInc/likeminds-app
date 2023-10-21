@@ -24,6 +24,7 @@ import {
 } from '../../../../actions/connection';
 import { AntDesign } from '@expo/vector-icons';
 import colors from '../../../../theme/colors';
+import useDimension from '../../../../hooks/useDimension';
 
 const PeopleList: FC<any> = ({ item, searchText = '' }) => {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -235,6 +236,8 @@ interface IProps {
 const Suggestion: FC<IProps> = (props) => {
   const navigation = useNavigation<NavigationProp<any>>();
   const dispatch = useAppDispatch();
+
+  const width = useDimension().width;
   const handleOnProfilePress = () => {
     dispatch(getProfile(props.data?.id as string));
     navigation.navigate(APP_SCREEN_LIST.CONNECTION_PROFILE_SCREEN);
@@ -269,17 +272,20 @@ const Suggestion: FC<IProps> = (props) => {
           >
             {props?.data?.firstName} {props?.data?.lastName}
           </Text>
-          <View style={{ marginTop: 5 }}>
-            <Text
-              style={[
-                GlobalStyles.fontSize13,
-                GlobalStyles.fontInterRegular,
-                GlobalStyles.textGrey,
-              ]}
-            >
-              {props?.data?.experience[0]?.jobTitle || props?.data?.skills[0]}
-            </Text>
-          </View>
+          {props?.data?.experience[0]?.jobTitle || props?.data?.skills[0] ? (
+            <View style={{ marginTop: 5 }}>
+              <Text
+                style={[
+                  GlobalStyles.fontSize13,
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.textGrey,
+                  { maxWidth: 0.5 * width },
+                ]}
+              >
+                {props?.data?.experience[0]?.jobTitle || props?.data?.skills[0]}
+              </Text>
+            </View>
+          ) : null}
         </TouchableOpacity>
         {props.showViewButton && (
           <Button

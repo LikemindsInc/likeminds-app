@@ -105,13 +105,13 @@ const SignupComplete = () => {
             of Like Minds
           </Text>
         </View>
-        <Button
+        {/* <Button
           onPress={() =>
             navigation.navigate(APP_SCREEN_LIST.CREATE_SPACE_SCREEN)
           }
           title="Become A Space"
           type="outline-primary"
-        />
+        /> */}
       </View>
       <View style={[]}>
         <Button

@@ -13,7 +13,10 @@ import { updateEducation } from '../../reducers/userProfileSession';
 import BackButton from '../../components/Navigation/BackButton/BackButton';
 import moment from 'moment';
 import AutoCompleteInput from '../../components/AutoCompleteInput/AutoCompleteInput';
-import { getAllSchoolAction } from '../../actions/auth';
+import {
+  getAllSchoolAction,
+  updateEducationProfileAction,
+} from '../../actions/auth';
 import useAppSelector from '../../hooks/useAppSelector';
 import { ISchool } from '@app-model';
 import { SelectList } from 'react-native-dropdown-select-list';
@@ -109,6 +112,8 @@ const SignupEducation = () => {
     validateStartDate();
   }, [startDate, endDate]);
 
+  const session = useAppSelector((state) => state.sessionReducer);
+
   useEffect(() => {
     validateEndDate();
   }, [endDate, startDate]);
@@ -131,8 +136,14 @@ const SignupEducation = () => {
         startDate: 'start date is required',
       }));
     dispatch(updateEducation({ school, startDate, endDate, degree }));
-    navigation.navigate(APP_SCREEN_LIST.SIGNUP_SKILLS_SCREEN);
+    dispatch(updateEducationProfileAction(session.profileData));
   };
+
+  useEffect(() => {
+    if (session.updateEducationHistoryStatus === 'completed') {
+      navigation.navigate(APP_SCREEN_LIST.SIGNUP_SKILLS_SCREEN);
+    }
+  }, [session.updateEducationHistoryStatus]);
 
   useEffect(() => {
     if (degree.trim() !== '')
@@ -159,7 +170,6 @@ const SignupEducation = () => {
 
   const handleOnSkip = () => {
     navigation.navigate(APP_SCREEN_LIST.SIGNUP_SKILLS_SCREEN);
-    dispatch(updateEducation({ school, startDate, endDate, degree }));
   };
   return (
     <View style={[GlobalStyles.container]}>
@@ -244,7 +254,11 @@ const SignupEducation = () => {
             color={colors.black}
           />
         </View>
-        <Button title="Continue" onPress={handleOnNextPress} />
+        <Button
+          loading={session.updateEducationHistoryStatus === 'loading'}
+          title="Continue"
+          onPress={handleOnNextPress}
+        />
       </View>
     </View>
   );

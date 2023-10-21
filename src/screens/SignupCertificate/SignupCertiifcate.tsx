@@ -10,7 +10,10 @@ import useAppDispatch from '../../hooks/useAppDispatch';
 import useAppSelector from '../../hooks/useAppSelector';
 import { APP_SCREEN_LIST } from '../../constants';
 import { CertificateUploadEmptyIcon } from '../Profile/components/CertificateForm';
-import { completeUserProfileAction } from '../../actions/auth';
+import {
+  completeUserProfileAction,
+  updateCertificateProfileAction,
+} from '../../actions/auth';
 import { FilePickerFormat } from '@app-model';
 import { FileUploadEmptyIcon } from '../personal_inforamtion/PersonalInformation';
 import { GlobalStyles } from '../../theme/GlobalStyles';
@@ -45,20 +48,17 @@ const SignupCertificate = () => {
 
     dispatch(updateCertificate(files));
 
-    console.log(session.profileData);
-
-    dispatch(completeUserProfileAction(session.profileData));
+    dispatch(updateCertificateProfileAction(session.profileData));
   };
 
   useEffect(() => {
-    if (session.completeProfileStatus === 'completed') {
+    if (session.updateUserCertificatesStatus === 'completed') {
       navigation.navigate(APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN);
-    } else if (session.completeProfileStatus === 'failed') {
     }
-  }, [session.completeProfileStatus]);
+  }, [session.updateUserCertificatesStatus]);
 
   const handleOnSkip = () => {
-    handleOnNextPress();
+    navigation.navigate(APP_SCREEN_LIST.SIGNUP_COMPLETE_SCREEN);
   };
 
   const handleOnCertificateFormRemove = (index: number) => {
@@ -138,7 +138,7 @@ const SignupCertificate = () => {
           />
         </View>
         <Button
-          loading={session.completeProfileStatus === 'loading'}
+          loading={session.updateUserCertificatesStatus === 'loading'}
           title="Continue"
           onPress={handleOnNextPress}
         />

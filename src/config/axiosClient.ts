@@ -44,16 +44,12 @@ export default axiosClient;
 axiosClient.interceptors.response.use(
   (response) => response,
   async (error: AxiosError<any>) => {
-    // console.log("error> ", error.response?.data);
     if (
       error?.response?.status === 403 ||
       error?.response?.data?.statusCode === 403 ||
       error?.response?.status === 401 ||
       error?.response?.data?.statusCode === 401
     ) {
-      //   const state = store.getState();
-      //   const refresh_token = state?.session?.userData?.token;
-
       const state = (store.getState() as any).settingReducer as ISettingState;
       const token = state.userInfo?.refreshToken as string;
 

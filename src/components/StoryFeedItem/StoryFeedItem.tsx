@@ -38,7 +38,7 @@ import {
 } from '../../actions/post';
 import ReadMore from 'react-native-read-more-text';
 import Input from '../Input/Input';
-import { Spinner, useToast } from 'native-base';
+import { Spinner } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { APP_SCREEN_LIST } from '../../constants';
@@ -85,8 +85,6 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
     setLiked(isLiked);
   }, [postState.postDetail]);
 
-  const toast = useToast();
-
   const [reactionCount, setReactionCount] = useState(item.reactionCount);
 
   useEffect(() => {
@@ -107,19 +105,11 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
   }, [showComments]);
 
   useEffect(() => {
-    if (postState.commentOnPostStatus === 'failed') {
-      toast.show({ description: postState.commentOnPostError });
-    } else if (postState.commentOnPostStatus === 'completed') {
+    if (postState.commentOnPostStatus === 'completed') {
       setComment('');
       dispatch(clearCreateCommentOnPostState());
     }
   }, [postState.commentOnPostStatus]);
-
-  useEffect(() => {
-    if (postState.getCommentOnPostStatus === 'failed') {
-      toast.show({ description: postState.commentOnPostError });
-    }
-  }, [postState.getCommentOnPostStatus]);
 
   const handleLikeReactionOnPost = (isLiked: boolean) => {
     if (isLiked) {

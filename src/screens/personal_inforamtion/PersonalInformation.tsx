@@ -27,6 +27,10 @@ import {
   initialPersonalInformationValue,
   personalInformationValidationSchema,
 } from './validator';
+import {
+  updateCertificateProfileAction,
+  updatePersonalInformationAction,
+} from '../../actions/auth';
 
 const PersonalInformation = () => {
   const settings = useAppSelector(
@@ -85,7 +89,7 @@ const PersonalInformation = () => {
 
   const handleOnNextPress = (values: any) => {
     const { firstName, lastName, city, bio, resume } = values;
-    console.log({
+    console.log('values> ', {
       firstName,
       lastName,
       city,
@@ -107,8 +111,14 @@ const PersonalInformation = () => {
         }),
       ),
     );
-    navigation.navigate(APP_SCREEN_LIST.SIGNUP_PROFILE_PICTURE);
+    dispatch(updatePersonalInformationAction(session.profileData));
   };
+
+  useEffect(() => {
+    if (session.updatePersonalInformationStatus === 'completed') {
+      navigation.navigate(APP_SCREEN_LIST.SIGNUP_PROFILE_PICTURE);
+    }
+  }, [session.updatePersonalInformationStatus]);
 
   const {
     errors,
@@ -251,6 +261,7 @@ const PersonalInformation = () => {
       <Button
         disabled={!isValid}
         title="Continue"
+        loading={session.updatePersonalInformationStatus === 'loading'}
         onPress={() => handleSubmit()}
       />
     </View>

@@ -40,6 +40,8 @@ const COMPLETE_EDUCATION_PROFILE = 'profile:COMPLETE_EDUCATION_PROFILE';
 const COMPLETE_EXPERIENCE_PROFILE = 'profile:COMPLETE_EXPERIENCE_PROFILE';
 const COMPLETE_SKILLS_PROFILE = 'profile:COMPLETE_SKILLS_PROFILE';
 const COMPLETE_CERTIFICATE_PROFILE = 'profile:COMPLETE_CERTIFICATE_PROFILE';
+const UPDATE_PERSONAL_INFORMATION = 'profile:UPDATE_PERSONAL_INFORMATION';
+const UPDATE_PROFILE_PICTURE = 'profile:UPDATE_PROFILE_PICTURE';
 
 const GET_INDUSTRY = 'authentication:GET_INDUSTRY';
 const GET_SCHOOLS = 'authentication:GET_SCHOOLS';
@@ -52,8 +54,6 @@ export const loginUserActionAction = asyncThunkWrapper<
     '/api/auth/login',
     agrs,
   );
-
-  // console.log(response.data);
 
   return response.data;
 });
@@ -122,7 +122,6 @@ export const signupUserActionAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
   ISignUp
 >(SIGNUP, async (agrs: ISignUp) => {
-  // console.log("args> ", agrs);
   const response = await axiosClient.post<AxiosResponse<any>>(
     '/api/auth/sign-up',
     agrs,
@@ -240,6 +239,85 @@ export const updateSkillsProfileAction = asyncThunkWrapper<
     '/api/auth/complete-registration',
     {
       skills: skills,
+    },
+  );
+
+  return response.data;
+});
+
+export const updatePersonalInformationAction = asyncThunkWrapper<
+  ApiResponseSuccess<any>,
+  IUserProfileData
+>(UPDATE_PERSONAL_INFORMATION, async (args: IUserProfileData) => {
+  const resumeFile =
+    (args.personalInformation?.resume as FilePickerFormat) || {};
+  let resumeUrl = '';
+  if (resumeFile && resumeFile.uri) {
+    const formData = new FormData() as any;
+    formData.append('file', {
+      uri: resumeFile.uri,
+      type: resumeFile.type,
+      name: resumeFile.name,
+    });
+
+    const response = await uploadFile(formData);
+    resumeUrl = response.data?.data?.url || '';
+  }
+
+  const info = store.getState().sessionReducer.profileData.personalInformation;
+
+  const response = await axiosClient.patch<AxiosResponse<any>>(
+    '/api/auth/complete-registration',
+    {
+      firstName: info?.firstName,
+      lastName: info?.lastName,
+      country: info?.country,
+      city: info?.city,
+      countryOfOrigin: info?.countryOfOrigin,
+      resume: resumeUrl,
+      bio: info?.bio,
+    },
+  );
+
+  return response.data;
+});
+
+export const updateUserProfilePictureAction = asyncThunkWrapper<
+  ApiResponseSuccess<any>,
+  IUserProfileData
+>(UPDATE_PROFILE_PICTURE, async (args: IUserProfileData) => {
+  const profilePictureFile =
+    store.getState().sessionReducer.profileData.profilePicture ||
+    Object.create(null);
+
+  let profileResponseUrl = '';
+
+  if (
+    profilePictureFile &&
+    profilePictureFile.assets &&
+    profilePictureFile.assets[0].uri
+  ) {
+    const formData = new FormData() as any;
+
+    const result = await Image.compress(profilePictureFile.assets[0].uri, {
+      maxWidth: 1000,
+      quality: 0.8,
+    });
+
+    formData.append('file', {
+      uri: result,
+      type: profilePictureFile.assets[0].type,
+      name: profilePictureFile.assets[0].fileName,
+    });
+    const response = await uploadFile(formData);
+
+    profileResponseUrl = response.data?.data?.url || '';
+  }
+
+  const response = await axiosClient.patch<AxiosResponse<any>>(
+    '/api/auth/complete-registration',
+    {
+      profilePicture: profileResponseUrl,
     },
   );
 

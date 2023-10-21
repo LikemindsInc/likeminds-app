@@ -34,17 +34,12 @@ const DropZone: FC<IProps> = ({
     if (type !== 'document') requestPermission();
   }, []);
 
-  //   useEffect(() => {
-  //     console.log("permission stauts> ", status);
-  //   }, [status]);
   const [file, setFile] = useState<FilePickerFormat>();
   const handleFileSelect = async () => {
     try {
       const result = (await DocumentPicker.getDocumentAsync({
         copyToCacheDirectory: true,
       })) as FilePickerFormat;
-
-      // console.log("result > ", result);
 
       setFile(result);
 

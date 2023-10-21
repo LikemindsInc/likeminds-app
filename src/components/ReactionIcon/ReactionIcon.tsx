@@ -55,7 +55,6 @@ const ReactionIcon: FC<Props> = ({ post, handleLikeReactionOnPost }) => {
       );
 
       if (item) {
-        // console.log(item.reaction);
         setLikeIcon(item.reaction);
       }
     }
