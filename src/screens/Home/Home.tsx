@@ -237,7 +237,7 @@ const Home = () => {
           }
           rootMargin={{ top: 0 }}
         >
-          {/* {DATA.map((item) => renderItems({ item }))} */}
+          {DATA.map((item) => renderItems({ item }))}
         </IOScrollView>
       </EventDismisser>
     </View>

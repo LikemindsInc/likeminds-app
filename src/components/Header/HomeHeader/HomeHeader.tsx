@@ -65,7 +65,7 @@ const HomeHeader = () => {
           style={[{ paddingLeft: 30 }]}
         >
           <View style={{ paddingRight: 30, paddingBottom: 40 }}>
-            {/* <Image
+            <Image
               source={renderProfilePicture()}
               indicator={require('../../../../assets/loader.gif')}
               resizeMethod="auto"
@@ -75,7 +75,7 @@ const HomeHeader = () => {
                 borderWidth: 0,
               }}
               imageStyle={{ width: 40, height: 40, borderRadius: 20 }}
-            /> */}
+            />
           </View>
         </TouchableOpacity>
       </View>

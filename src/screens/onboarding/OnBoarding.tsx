@@ -1,6 +1,14 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
-// import AppIntroSlider from 'react-native-app-intro-slider';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Animated,
+} from 'react-native';
+import AppIntroSlider from 'react-native-app-intro-slider';
+import font from '../../theme/font';
 import { GlobalStyles } from '../../theme/GlobalStyles';
 import { AntDesign } from '@expo/vector-icons';
 import colors from '../../theme/colors';
@@ -12,6 +20,7 @@ import { ISettingState } from '../../reducers/settings';
 import { useEffect, useMemo, useRef } from 'react';
 import Util from '../../utils';
 
+const { wp } = Util.responsiveWidthHeight();
 const slides = [
   {
     key: 1,
@@ -62,19 +71,19 @@ const slides = [
 
 const OnBoarding = () => {
   const navigation = useNavigation<NavigationProp<any>>();
-  // const bounceValue = useRef(new Animated.Value(0)).current;
+  const bounceValue = useRef(new Animated.Value(0)).current;
   const setting = useAppSelector(
     (state: any) => state.settingReducer,
   ) as ISettingState;
 
   const startBounceAnimation = () => {
     // Configure the animation
-    // Animated.spring(bounceValue, {
-    //   toValue: 1,
-    //   friction: 5,
-    //   tension: 45,
-    //   useNativeDriver: false,
-    // }).start(); // Start the animation
+    Animated.spring(bounceValue, {
+      toValue: 1,
+      friction: 5,
+      tension: 45,
+      useNativeDriver: false,
+    }).start(); // Start the animation
   };
 
   useEffect(() => {
@@ -86,33 +95,25 @@ const OnBoarding = () => {
     startBounceAnimation();
   }, []);
 
-  // const animatedStyle = useMemo(
-  //   () => ({
-  //     transform: [{ scale: bounceValue }],
-  //   }),
-  //   [bounceValue],
-  // );
+  const animatedStyle = useMemo(
+    () => ({
+      transform: [{ scale: bounceValue }],
+    }),
+    [bounceValue],
+  );
 
   const _renderItem = ({ item }: any) => {
     return (
       <View>
         <View style={{ alignItems: 'center' }}>
-          {/* <Animated.Image
+          <Animated.Image
             style={[styles.groupImage, animatedStyle]}
             source={item.image}
             resizeMethod="auto"
             resizeMode="contain"
-          /> */}
-        </View>
-        {/* <View style={[GlobalStyles.alignHorizontalCenter, GlobalStyles.mb20]}>
-          <Image
-            source={item.image}
-            resizeMethod="auto"
-            resizeMode="contain"
-            style={styles.groupImage}
           />
-           </View> 
-        </Animated.View> */}
+        </View>
+
         <View style={[GlobalStyles.mb40, GlobalStyles.mt40]}>
           <Text
             style={[
@@ -131,7 +132,7 @@ const OnBoarding = () => {
   };
 
   const handleNext = () => {
-    // bounceValue.setValue(0);
+    bounceValue.setValue(0);
     startBounceAnimation();
   };
 
@@ -189,7 +190,7 @@ const OnBoarding = () => {
         </View>
         <View
           style={{
-            marginBottom: 20,
+            marginBottom: wp(22.68),
           }}
         >
           <Text
@@ -206,7 +207,7 @@ const OnBoarding = () => {
           </Text>
         </View>
       </View>
-      {/* <AppIntroSlider
+      <AppIntroSlider
         activeDotStyle={{ backgroundColor: '#284453', width: 24 }}
         bottomButton
         data={slides}
@@ -216,7 +217,8 @@ const OnBoarding = () => {
         onDone={handleOnDone}
         scrollEnabled
         onSlideChange={(a) => handleNext()}
-      /> */}
+      />
+      <StatusBar style="dark" />
     </View>
   );
 };
