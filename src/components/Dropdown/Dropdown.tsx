@@ -103,32 +103,16 @@ export const Location: FC<IProps> = ({ bottomSheetRef }) => {
           GlobalStyles.textGrey,
         ]}
       >
-        {state.jobLocationFilterValue && state.jobLocationFilterValue !== 'All'
-          ? state.jobLocationFilterValue
-          : 'Location'}
+        {state.jobLocationFilterValue?.length === 0
+          ? 'Location'
+          : (state.jobLocationFilterValue || [])[0]}
       </Text>
       <AntDesign name="caretdown" size={12} color={colors.grey} />
     </TouchableOpacity>
-    // <SelectList
-    //   setSelected={(val: string) => setSelected(val)}
-    //   data={data}
-    //   save="value"
-    //   defaultOption={{ key: "0", value: "Location" }}
-    //   inputStyles={{
-    //     color: "#88969D",
-    //   }}
-    //   boxStyles={{
-    //     backgroundColor: "#F3F5F7",
-    //     borderColor: "#F3F5F7",
-    //     borderRadius: 40,
-    //   }}
-    // />
   );
 };
 
 export const ExperienceLevel: FC<IProps> = ({ bottomSheetRef }) => {
-  const [selected, setSelected] = React.useState('');
-
   const handleOpenIndustrySelectPicker = () => {
     if (!bottomSheetRef) return;
 
@@ -149,9 +133,8 @@ export const ExperienceLevel: FC<IProps> = ({ bottomSheetRef }) => {
           GlobalStyles.textGrey,
         ]}
       >
-        {state.jobExperienceFilterValue &&
-        state.jobExperienceFilterValue?.trim() !== 'All'
-          ? state.jobExperienceFilterValue
+        {state.jobExperienceFilterValue.length > 1
+          ? `${state.jobExperienceFilterValue[0]}...`
           : 'Experience Level'}
       </Text>
       <AntDesign name="caretdown" size={12} color={colors.grey} />
@@ -201,8 +184,8 @@ export const Type: FC<IProps> = ({ bottomSheetRef }) => {
           GlobalStyles.textGrey,
         ]}
       >
-        {state.jobTypeFilterValue && state.jobTypeFilterValue?.trim() !== 'All'
-          ? state.jobTypeFilterValue
+        {state.jobTypeFilterValue.length > 0
+          ? state.jobTypeFilterValue[0]
           : 'Type'}
       </Text>
       <AntDesign name="caretdown" size={12} color={colors.grey} />

@@ -26,6 +26,9 @@ import { clearSignUpError, signup } from '../../store/slice/signup';
 import TextInputElement from '../../components/Input/TextInput';
 // import PhoneNumberInput from '../../components/Input/PhoneNumberInput';
 import { navigate } from '../../utils/NavigateUtil';
+import { useNavigation } from '@react-navigation/native';
+import { clearNetworkError } from '../../reducers/errorHanlder';
+import { clearLoginError } from '../../store/slice/login';
 
 const Signup = () => {
   const dispatch = useAppDispatch();
@@ -74,6 +77,20 @@ const Signup = () => {
   const handlePhoneTextChange = (newText: string) => {
     const numericText = Util.getNumber(newText);
     setFieldValue('phone', numericText);
+  };
+
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    navigation.addListener('blur', clearState);
+    return () => {
+      navigation.removeListener('blur', clearState);
+    };
+  }, []);
+
+  const clearState = () => {
+    dispatch(clearNetworkError());
+    dispatch(clearLoginError());
   };
 
   return (

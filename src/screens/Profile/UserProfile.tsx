@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
   useWindowDimensions,
 } from 'react-native';
@@ -32,6 +33,7 @@ import CertificateForm from './components/CertificateForm';
 import useAppDispatch from '../../hooks/useAppDispatch';
 import { getCurrentUserAction } from '../../actions/auth';
 import TimeLine from '../../components/TimeLine/TimeLine';
+import FullScreenImageCarousel from '../../components/FullScreenImageCarousel/FullScreenImageCarousel';
 
 // Get the height of the status bar
 const statusBarHeight = StatusBar.currentHeight;
@@ -44,7 +46,7 @@ const UserProfile = () => {
     (state: any) => state.settingReducer,
   ) as ISettingState;
 
-  const login = useAppSelector((state) => state.loginReducer);
+  const [showImageZoom, setShowImageZoom] = useState(false);
 
   const _renderTruncatedFooter = (handlePress: any) => {
     return (
@@ -95,50 +97,47 @@ const UserProfile = () => {
       >
         <View>
           {state.userInfo?.profilePicture ? (
-            <ImageBackground
-              resizeMode="cover"
-              source={
-                state.userInfo?.profilePicture &&
-                state.userInfo.profilePicture.trim() !== ''
-                  ? { uri: state.userInfo.profilePicture }
-                  : require('../../../assets/image9.png')
-              }
-              style={[
-                styles.imageBg,
-                height * 0.4 > 240
-                  ? { height: 240 }
-                  : { height: height * 0.4, position: 'relative' },
-              ]}
-            >
-              <View
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  height: '100%',
-                  width: '100%',
-                  backgroundColor: 'rgba(0,0,0,0.4)',
-                }}
-              ></View>
-              <View>
-                <TouchableOpacity
-                  onPress={() => navigation.goBack()}
-                  style={[styles.imageHeaderWrapper]}
-                >
-                  <AntDesign
-                    name="arrowleft"
-                    size={24}
-                    style={{
-                      textShadowColor: 'rgba(0, 0, 0, 0.75)',
-                      textShadowRadius: 10,
-                      textShadowOffset: { width: 2, height: 2 },
-                      color: colors.white,
-                    }}
-                    // color={colors.white}
-                  />
-                </TouchableOpacity>
-              </View>
-            </ImageBackground>
+            <TouchableOpacity onPress={() => setShowImageZoom(true)}>
+              <ImageBackground
+                resizeMode="cover"
+                source={{ uri: state.userInfo.profilePicture }}
+                style={[
+                  styles.imageBg,
+                  height * 0.4 > 240
+                    ? { height: 240 }
+                    : { height: height * 0.4, position: 'relative' },
+                ]}
+              >
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    height: '100%',
+                    width: '100%',
+                    backgroundColor: 'rgba(0,0,0,0.4)',
+                  }}
+                ></View>
+                <View>
+                  <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    style={[styles.imageHeaderWrapper]}
+                  >
+                    <AntDesign
+                      name="arrowleft"
+                      size={24}
+                      style={{
+                        textShadowColor: 'rgba(0, 0, 0, 0.75)',
+                        textShadowRadius: 10,
+                        textShadowOffset: { width: 2, height: 2 },
+                        color: colors.white,
+                      }}
+                      // color={colors.white}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </ImageBackground>
+            </TouchableOpacity>
           ) : initials ? (
             <View
               style={[
@@ -256,8 +255,8 @@ const UserProfile = () => {
                 GlobalStyles.mb10,
               ]}
             >
-              From {state.userInfo?.city}, {state.userInfo?.countryOfOrigin}.
-              Lives in {state.userInfo?.country}
+              From {state.userInfo?.countryOfOrigin}. Lives in{' '}
+              {state.userInfo?.country}, {state.userInfo?.city}
             </Text>
             <ReadMore
               renderTruncatedFooter={_renderTruncatedFooter}
@@ -351,15 +350,17 @@ const UserProfile = () => {
               </Text>
             </View>
           </View>
-          {/* <View style={[GlobalStyles.flewRow, GlobalStyles.mb30, { gap: 20 }]}>
-          <Button containerStyle={{ flex: 1 }} title="Connect" />
-          <Button type="cancel" containerStyle={{ flex: 1 }} title="Chat" />
-        </View> */}
-          <View style={{ height: 600 }}>
+
+          <View style={{ height: 800 }}>
             <TabViewExample />
           </View>
         </View>
       </ScrollView>
+      <FullScreenImageCarousel
+        images={[{ uri: state.userInfo?.profilePicture as string }]}
+        isVisible={showImageZoom}
+        onRequestClose={() => setShowImageZoom(false)}
+      />
     </View>
   );
 };
@@ -480,7 +481,7 @@ const FirstRoute = () => {
           )),
           <TouchableOpacity
             onPress={() => setShowExprienceModal(true)}
-            style={{ flexDirection: 'row', gap: 8, marginTop: 20 }}
+            style={{ flexDirection: 'row', gap: 8 }}
           >
             <AntDesign name="plus" size={16} color={colors.primary} />
             <Text
@@ -503,15 +504,38 @@ const FirstRoute = () => {
 
   useEffect(() => {
     if (
-      session.completeProfileStatus === 'completed' ||
-      session.completeProfileStatus === 'failed'
+      session.updateEducationHistoryStatus === 'completed' ||
+      session.updateEducationHistoryStatus === 'failed'
     ) {
       setShowEducationModal(false);
+    }
+  }, [session.updateEducationHistoryStatus]);
+  useEffect(() => {
+    if (
+      session.updateEducationHistoryStatus === 'completed' ||
+      session.updateEducationHistoryStatus === 'failed'
+    ) {
       setShowExprienceModal(false);
-      setshowCerticatesModal(false);
+    }
+  }, [session.updateExperienceStatus]);
+
+  useEffect(() => {
+    if (
+      session.updateUserSkillsStatus === 'completed' ||
+      session.updateUserSkillsStatus === 'failed'
+    ) {
       setShowSkillsModal(false);
     }
-  }, [session.completeProfileStatus]);
+  }, [session.updateUserSkillsStatus]);
+
+  useEffect(() => {
+    if (
+      session.updateUserCertificatesStatus === 'completed' ||
+      session.updateUserCertificatesStatus === 'failed'
+    ) {
+      setshowCerticatesModal(false);
+    }
+  }, [session.updateUserCertificatesStatus]);
   const getEducationTimeLine = () => {
     const timeline =
       user?.education && user.education.length > 0
@@ -663,61 +687,65 @@ const FirstRoute = () => {
   const getCertifcateTimeLine = () => {
     const timeline =
       [
-        { name: 'Resume', url: user?.resume },
+        user?.resume.trim() === ''
+          ? null
+          : { name: 'Resume', url: user?.resume },
         ...(user?.certificates || []),
-      ].map((item) => ({
-        title: (
-          <View
-            style={{
-              justifyContent: 'space-between',
-              flexDirection: 'row',
-              width: '100%',
-              marginBottom: 10,
-            }}
-          ></View>
-        ),
-        description: (
-          <View style={[{ marginBottom: 25 }]}>
-            <TouchableOpacity
-              style={{ flex: 1, flexDirection: 'row', gap: 12 }}
-              onPress={() => handleFileDownload(item.url as string)}
-            >
-              <View
-                style={{
-                  backgroundColor: colors.navyBlue,
-                  width: 40,
-                  height: 40,
-                  borderRadius: 4,
-                  paddingHorizontal: 8,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
+      ]
+        .filter((item) => item)
+        .map((item) => ({
+          title: (
+            <View
+              style={{
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+                width: '100%',
+                marginBottom: 10,
+              }}
+            ></View>
+          ),
+          description: (
+            <View style={[{ marginBottom: 25 }]}>
+              <TouchableOpacity
+                style={{ flex: 1, flexDirection: 'row', gap: 12 }}
+                onPress={() => handleFileDownload(item.url as string)}
               >
+                <View
+                  style={{
+                    backgroundColor: colors.navyBlue,
+                    width: 40,
+                    height: 40,
+                    borderRadius: 4,
+                    paddingHorizontal: 8,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text
+                    style={[
+                      GlobalStyles.fontInterBlack,
+                      GlobalStyles.fontSize10,
+                      { color: colors.white },
+                    ]}
+                  >
+                    PDF
+                  </Text>
+                </View>
                 <Text
                   style={[
-                    GlobalStyles.fontInterBlack,
-                    GlobalStyles.fontSize10,
-                    { color: colors.white },
+                    GlobalStyles.fontInterRegular,
+                    GlobalStyles.fontSize13,
+                    GlobalStyles.textGrey,
+                    GlobalStyles.mb10,
+                    GlobalStyles.mt10,
                   ]}
                 >
-                  PDF
+                  {item.name}
                 </Text>
-              </View>
-              <Text
-                style={[
-                  GlobalStyles.fontInterRegular,
-                  GlobalStyles.fontSize13,
-                  GlobalStyles.textGrey,
-                  GlobalStyles.mb10,
-                  GlobalStyles.mt10,
-                ]}
-              >
-                {item.name}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        ),
-      })) || [];
+              </TouchableOpacity>
+            </View>
+          ),
+        })) || [];
 
     return [
       {
@@ -816,7 +844,7 @@ const FirstRoute = () => {
             )}
             <TouchableOpacity
               onPress={() => setShowSkillsModal(true)}
-              style={{ flexDirection: 'row', gap: 8, marginTop: 20 }}
+              style={{ flexDirection: 'row', gap: 8, marginTop: 30 }}
             >
               <AntDesign name="plus" size={16} color={colors.primary} />
               <Text

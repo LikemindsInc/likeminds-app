@@ -27,7 +27,7 @@ const Notification = () => {
   const dispatch = useAppDispatch();
 
   const bottomSheetRef2 = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ['50%', '60%'], []);
+  const snapPoints = useMemo(() => ['30%', '40%'], []);
 
   const handleSheetChanges = useCallback((index: number) => {}, []);
 
@@ -35,20 +35,9 @@ const Notification = () => {
 
   const navigation = useNavigation<NavigationProp<any>>();
 
-  const toast = useToast();
-
-  useEffect(() => {
-    if (state.connectionRespondStatus === 'completed') {
-      dispatch(getConnections());
-      toast.show('Connection accepted successfully', {
-        placement: 'top',
-        type: 'normal',
-        animationType: 'slide-in',
-      });
-    }
-
-    dispatch(clearConnectionRespondStatus());
-  }, [state.connectionRespondStatus]);
+  const [connectionAcceptType, setConnectionAcceptType] = useState<
+    'accepted' | 'declined' | 'none'
+  >('none');
 
   const getConnectionRequests = useCallback(() => {
     dispatch(getConnections());
@@ -67,9 +56,20 @@ const Notification = () => {
     setConnection(item);
   };
 
+  useEffect(() => {
+    if (
+      state.connectionRespondStatus === 'completed' ||
+      state.connectionRespondStatus === 'failed'
+    ) {
+      setConnectionAcceptType('none');
+      bottomSheetRef2.current?.close();
+    }
+  }, [state.connectionRespondStatus]);
+
   const handleApproveRequest = () => {
     if (!connection) return;
 
+    setConnectionAcceptType('accepted');
     dispatch(
       acceptConnectionRequestAction({
         connectionId: connection.id,
@@ -86,6 +86,7 @@ const Notification = () => {
 
   const handleDeclineRequest = () => {
     if (!connection) return;
+    setConnectionAcceptType('declined');
     dispatch(
       acceptConnectionRequestAction({
         connectionId: connection.id,
@@ -117,81 +118,104 @@ const Notification = () => {
         backdropComponent={(props: any) => (
           <BottomSheetBackdrop {...props} pressBehavior={'close'} />
         )}
+        enablePanDownToClose
       >
-        <View style={{ flex: 1 }}>
-          <View style={[GlobalStyles.container, { backgroundColor: '#fff' }]}>
+        <View style={{ flex: 1, paddingHorizontal: 16 }}>
+          <ScrollView style={{ flex: 1 }}>
+            <View style={[{ backgroundColor: colors.white }]}>
+              <View
+                style={[
+                  { flexDirection: 'row' },
+                  { gap: 12, alignItems: 'center', marginBottom: 20 },
+                ]}
+              >
+                <Image
+                  style={{ width: 50, height: 50, borderRadius: 25 }}
+                  source={{ uri: connection?.author?.profilePicture as string }}
+                />
+                <Text
+                  style={[
+                    GlobalStyles.fontInterMedium,
+                    GlobalStyles.fontSize15,
+                    GlobalStyles.textNavyBlue,
+                  ]}
+                >
+                  {connection?.author?.firstName} {connection?.author?.lastName}
+                </Text>
+              </View>
+            </View>
+
             <View
               style={[
                 GlobalStyles.flewRow,
                 { gap: 12, alignItems: 'center', marginBottom: 20 },
               ]}
             >
-              <Image
-                style={{ width: 80, height: 80, borderRadius: 20 }}
-                source={{ uri: connection?.user?.profilePicture as string }}
-              />
               <Text
                 style={[
-                  GlobalStyles.fontInterBlack,
-                  GlobalStyles.fontSize13,
-                  GlobalStyles.textNavyBlue,
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.textGrey,
+                  GlobalStyles.fontSize15,
                 ]}
               >
-                {connection?.user?.firstName} {connection?.user?.lastName}
+                Hi I am {connection?.author?.firstName} and I am looking forward
+                to connecting with you.”
               </Text>
             </View>
-          </View>
 
-          <View
-            style={[
-              GlobalStyles.flewRow,
-              { gap: 12, alignItems: 'center', marginBottom: 20 },
-            ]}
-          >
-            <Image
-              style={{ width: 80, height: 80, borderRadius: 20 }}
-              source={{ uri: connection?.user?.profilePicture as string }}
-            />
-            <Text
+            <View
               style={[
-                GlobalStyles.fontInterRegular,
-                GlobalStyles.textGrey,
-                GlobalStyles.fontSize10,
+                GlobalStyles.flewRow,
+                { gap: 12, alignItems: 'center', marginBottom: 30 },
               ]}
             >
-              Hi I am {connection?.user?.firstName} and I am looking forward to
-              connecting with you.”
-            </Text>
-          </View>
+              <TextLink
+                title="View Profile"
+                onPress={() => {
+                  dispatch(getProfile(connection?.author?.id as string));
+                  navigation.navigate(
+                    APP_SCREEN_LIST.CONNECTION_PROFILE_SCREEN,
+                  );
+                }}
+                textStyle={{ textDecorationLine: 'none', fontWeight: '500' }}
+              />
+            </View>
+          </ScrollView>
 
           <View
             style={[
               GlobalStyles.flewRow,
-              { gap: 12, alignItems: 'center', marginBottom: 30 },
+
+              {
+                width: '100%',
+                gap: 12,
+                alignItems: 'center',
+                marginBottom: 20,
+              },
             ]}
           >
-            <TextLink
-              title="View Profile"
-              onPress={() => {
-                dispatch(getProfile(connection?.user?.id as string));
-                navigation.navigate(APP_SCREEN_LIST.CONNECTION_PROFILE_SCREEN);
-              }}
-            />
-          </View>
+            <View style={{ flex: 1 }}>
+              <Button
+                onPress={handleDeclineRequest}
+                type="cancel"
+                title="Decline"
+                loading={
+                  state.connectionRespondStatus === 'loading' &&
+                  connectionAcceptType === 'declined'
+                }
+              />
+            </View>
 
-          <View
-            style={[
-              GlobalStyles.flewRow,
-              { gap: 12, alignItems: 'center', marginBottom: 20 },
-            ]}
-          >
-            <Button
-              onPress={handleDeclineRequest}
-              type="tertiary"
-              title="Decline"
-            />
-
-            <Button title="Allow" onPress={handleApproveRequest} />
+            <View style={{ flex: 1 }}>
+              <Button
+                title="Accept"
+                onPress={handleApproveRequest}
+                loading={
+                  state.connectionRespondStatus === 'loading' &&
+                  connectionAcceptType === 'accepted'
+                }
+              />
+            </View>
           </View>
         </View>
       </BottomSheet>

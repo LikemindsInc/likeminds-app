@@ -1,4 +1,23 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import colors from '../../../theme/colors';
+import CommentRowItem from './CommentRowItem';
+import EventDismisser from '../../../components/EventDismisser/EventDismisser';
+import FbGrid from 'react-native-fb-image-grid';
+import FullScreenImageCarousel from '../../../components/FullScreenImageCarousel/FullScreenImageCarousel';
+import Input from '../../../components/Input/Input';
+import ReactionIcon from '../../../components/ReactionIcon/ReactionIcon';
+import ReadMore from 'react-native-read-more-text';
+import useAppDispatch from '../../../hooks/useAppDispatch';
+import useAppSelector from '../../../hooks/useAppSelector';
+import VideoPlayer from 'expo-video-player';
+import { AntDesign, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { GlobalStyles } from '../../../theme/GlobalStyles';
+import { IPostFeed, IPostReaction } from '@app-model';
+import { ISettingState } from '../../../reducers/settings';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { ResizeMode } from 'expo-av';
+import { ScrollView } from 'react-native-gesture-handler';
+import { Spinner, useToast } from 'native-base';
 import {
   Image,
   KeyboardAvoidingView,
@@ -9,8 +28,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Feather, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
-import { IPostFeed, IPostReaction } from '@app-model';
 
 import {
   commentOnPostAction,
@@ -21,34 +38,21 @@ import {
   likePostAction,
   unlikePostAction,
 } from '../../../actions/post';
-import ReadMore from 'react-native-read-more-text';
-import { Spinner, useToast } from 'native-base';
-import { ScrollView } from 'react-native-gesture-handler';
 import {
   IPostState,
   clearCreateCommentOnPostState,
   openReactionList,
 } from '../../../reducers/post_reducer';
-import Input from '../../../components/Input/Input';
-import useAppDispatch from '../../../hooks/useAppDispatch';
-import { ISettingState } from '../../../reducers/settings';
-import useAppSelector from '../../../hooks/useAppSelector';
-import { GlobalStyles } from '../../../theme/GlobalStyles';
-import colors from '../../../theme/colors';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import CommentRowItem from './CommentRowItem';
-import FbGrid from 'react-native-fb-image-grid';
-import ReactionIcon from '../../../components/ReactionIcon/ReactionIcon';
-import { Video, ResizeMode } from 'expo-av';
-import EventDismisser from '../../../components/EventDismisser/EventDismisser';
-import FullScreenImageCarousel from '../../../components/FullScreenImageCarousel/FullScreenImageCarousel';
-
 interface IProps {
   item: IPostFeed;
 }
 
 const PostDetail = () => {
   const [showImageZoom, setShowImageZoom] = useState(false);
+
+  const videoRef = useRef(null) as any;
+
+  const [inFullscreen, setInFullsreen] = useState(false);
 
   const state = useAppSelector(
     (state: any) => state.settingReducer,
@@ -60,6 +64,9 @@ const PostDetail = () => {
 
   const [comment, setComment] = useState('');
 
+  const [imageMedia, setImageMedia] = useState<string[]>([]);
+  const [videoMedia, setVideoMedia] = useState<string[]>([]);
+
   const postState = useAppSelector(
     (state: any) => state.postReducer,
   ) as IPostState;
@@ -67,8 +74,6 @@ const PostDetail = () => {
   const item = postState.postDetail as IPostFeed;
 
   const [isPostLiked, setLiked] = useState(false);
-
-  const [showComments, setShowComments] = useState(true);
 
   const isPostLikedByUser = useCallback(() => {
     const isLiked = item.likedBy.includes(state?.userInfo?.id as string);
@@ -84,12 +89,25 @@ const PostDetail = () => {
   const toast = useToast();
 
   useEffect(() => {
+    navigation.addListener('blur', clearState);
+    return () => {
+      navigation.removeListener('blur', clearState);
+    };
+  }, []);
+
+  const clearState = () => {
+    videoRef.current.setStatusAsync({
+      shouldPlay: false,
+    });
+  };
+
+  useEffect(() => {
     isPostLikedByUser();
   }, [isPostLikedByUser]);
 
   useEffect(() => {
-    if (showComments) dispatch(getCommentsOnPostAction(item.id));
-  }, [showComments]);
+    dispatch(getCommentsOnPostAction(item.id));
+  }, []);
 
   useEffect(() => {
     if (postState.commentOnPostStatus === 'failed') {
@@ -101,6 +119,19 @@ const PostDetail = () => {
       dispatch(getPostFeedAction());
     }
   }, [postState.commentOnPostStatus]);
+
+  const isCaptionOnlyPost = () =>
+    item.images.length === 0 && item.videos?.length === 0;
+
+  useEffect(() => {
+    setImageMedia(item.images.filter((item) => !item.endsWith('.mp4')));
+
+    setVideoMedia(
+      item.images
+        .filter((item) => item.endsWith('.mp4'))
+        .concat(item.videos || []),
+    );
+  }, [item]);
 
   useEffect(() => {
     if (
@@ -125,13 +156,6 @@ const PostDetail = () => {
       dispatch(likePostAction(item.id));
       // setLiked(true);
     }
-  };
-
-  const renderProfilePicture = (item: IPostReaction) => {
-    if (item.user.profilePicture && item.user.profilePicture.trim() !== '') {
-      return { uri: item.user.profilePicture };
-    }
-    return require('../../../../assets/imageAvatar.jpeg');
   };
 
   const handleLoadComments = () => {};
@@ -193,8 +217,6 @@ const PostDetail = () => {
   };
 
   const renderComments = () => {
-    if (!showComments) return null;
-
     return (
       <View style={styles.commentWrapper}>
         <View style={[GlobalStyles.flewRow, GlobalStyles.mb20]}>
@@ -267,7 +289,6 @@ const PostDetail = () => {
                     GlobalStyles.fontSize15,
                     GlobalStyles.fontWeight700,
                     GlobalStyles.pl4,
-                    GlobalStyles.mb20,
                   ]}
                 >
                   {item?.user?.firstName} {item?.user?.lastName}
@@ -278,38 +299,69 @@ const PostDetail = () => {
               </TouchableOpacity>
             </View>
             <View>
-              {item.content && item.content.trim() !== '' ? (
-                <Text
-                  style={[
-                    GlobalStyles.fontInterRegular,
-                    GlobalStyles.fontSize13,
-                  ]}
-                >
-                  {item.content}
-                </Text>
-              ) : null}
-              {item.images && item.images.length > 0 ? (
-                <View style={{ width: '100%', height: 300 }}>
-                  <FbGrid images={item.images} onPress={onPress} />
+              {isCaptionOnlyPost() &&
+              item.content &&
+              item.content.trim() !== '' ? (
+                <View style={{ marginBottom: isCaptionOnlyPost() ? 0 : 20 }}>
+                  <ReadMore
+                    renderTruncatedFooter={_renderTruncatedFooter}
+                    renderRevealedFooter={_renderRevealedFooter}
+                    numberOfLines={3}
+                  >
+                    <Text
+                      style={[
+                        GlobalStyles.fontInterRegular,
+                        GlobalStyles.fontSize13,
+                        GlobalStyles.fontWeight400,
+                      ]}
+                    >
+                      {item.content}
+                    </Text>
+                  </ReadMore>
                 </View>
               ) : null}
-              {item.videos && item.videos.length > 0
-                ? item.videos.map((item) => (
+              {imageMedia.length > 0 ? (
+                <View style={{ width: '100%', height: 300 }}>
+                  <FbGrid images={imageMedia} onPress={onPress} />
+                </View>
+              ) : null}
+              {videoMedia.length > 0
+                ? videoMedia.map((item) => (
                     <View
                       style={[
                         GlobalStyles.mb20,
                         { width: '100%', height: 300 },
                       ]}
                     >
-                      <Video
-                        style={{ width: '100%', height: 300 }}
-                        source={{
-                          uri: item,
+                      <VideoPlayer
+                        videoProps={{
+                          shouldPlay: false,
+                          resizeMode: ResizeMode.CONTAIN,
+                          source: {
+                            uri: item,
+                          },
+                          style: {
+                            width: '100%',
+                            height: 300,
+                            borderRadius: 16,
+                          },
+                          useNativeControls: true,
+                          isLooping: false,
+                          ref: videoRef,
                         }}
-                        useNativeControls
-                        resizeMode={ResizeMode.CONTAIN}
-                        isLooping
-                        shouldPlay={false}
+                        autoHidePlayer={false}
+                        defaultControlsVisible={true}
+                        style={{ height: 300 }}
+                        fullscreen={{
+                          visible: false,
+                          enterFullscreen: async () => {
+                            setInFullsreen(!inFullscreen);
+                          },
+                          exitFullscreen: async () => {
+                            setInFullsreen(!inFullscreen);
+                          },
+                          inFullscreen,
+                        }}
                       />
                     </View>
                   ))
@@ -370,21 +422,23 @@ const PostDetail = () => {
             </View>
           </View>
           <TouchableOpacity onPress={handleLoadComments} style={{}}>
-            <ReadMore
-              renderTruncatedFooter={_renderTruncatedFooter}
-              renderRevealedFooter={_renderRevealedFooter}
-              numberOfLines={3}
-            >
-              <Text
-                style={[
-                  GlobalStyles.fontInterRegular,
-                  GlobalStyles.fontSize13,
-                  GlobalStyles.fontWeight400,
-                ]}
+            {!isCaptionOnlyPost() && (
+              <ReadMore
+                renderTruncatedFooter={_renderTruncatedFooter}
+                renderRevealedFooter={_renderRevealedFooter}
+                numberOfLines={3}
               >
-                {item.content}
-              </Text>
-            </ReadMore>
+                <Text
+                  style={[
+                    GlobalStyles.fontInterRegular,
+                    GlobalStyles.fontSize13,
+                    GlobalStyles.fontWeight400,
+                  ]}
+                >
+                  {item.content}
+                </Text>
+              </ReadMore>
+            )}
           </TouchableOpacity>
           <View style={{ paddingBottom: 200 }}>{renderComments()}</View>
         </ScrollView>

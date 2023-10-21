@@ -21,7 +21,10 @@ import { experienceValidator, initialExperienceValues } from './validator';
 import { addExperience } from '../../store/slice/addExperience';
 import TextInputElement from '../../components/Input/TextInput';
 import useAppDispatch from '../../hooks/useAppDispatch';
-import { resetAddExperienceSuccess } from '../../reducers/userProfileSession';
+import {
+  resetAddExperienceSuccess,
+  updateExperience,
+} from '../../reducers/userProfileSession';
 
 const AddExperienceForm = ({
   bottomSheetRef,
@@ -70,16 +73,13 @@ const AddExperienceForm = ({
   });
 
   const handleAddExperience = () => {
-    dispatch(
-      addExperience({
-        experience: [values],
-      }),
-    );
+    dispatch(updateExperience(values));
+    if (bottomSheetRef.current) bottomSheetRef.current?.close();
   };
 
   useEffect(() => {
     if (session.isAddExperienceSuccessfully) {
-      bottomSheetRef.current?.close();
+      if (bottomSheetRef.current) bottomSheetRef.current?.close();
     }
     // resetAddExperienceSuccess
     return () => {

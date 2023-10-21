@@ -1,4 +1,4 @@
-import { IFlatListProps } from 'native-base/lib/typescript/components/basic/FlatList';
+import * as ScreenOrientation from 'expo-screen-orientation';
 import {
   FC,
   LegacyRef,
@@ -35,12 +35,10 @@ import {
   getCommentsOnPostAction,
   getPostFeedAction,
   getPostReactions,
-  likePostAction,
-  unlikePostAction,
 } from '../../actions/post';
 import ReadMore from 'react-native-read-more-text';
 import Input from '../Input/Input';
-import { Spinner, useToast } from 'native-base';
+import { Spinner } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { APP_SCREEN_LIST } from '../../constants';
@@ -60,16 +58,14 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
   const state = useAppSelector(
     (state: any) => state.settingReducer,
   ) as ISettingState;
-  const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ['50%', '60%'], []);
-
-  const handleSheetChanges = useCallback((index: number) => {}, []);
 
   const dispatch = useAppDispatch();
 
   const [showImageZoom, setShowImageZoom] = useState(false);
 
   const videoRef = useRef(null) as any;
+
+  const [inFullscreen, setInFullsreen] = useState(false);
 
   const navigation = useNavigation<NavigationProp<any>>();
 
@@ -88,8 +84,6 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
 
     setLiked(isLiked);
   }, [postState.postDetail]);
-
-  const toast = useToast();
 
   const [reactionCount, setReactionCount] = useState(item.reactionCount);
 
@@ -111,19 +105,11 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
   }, [showComments]);
 
   useEffect(() => {
-    if (postState.commentOnPostStatus === 'failed') {
-      toast.show({ description: postState.commentOnPostError });
-    } else if (postState.commentOnPostStatus === 'completed') {
+    if (postState.commentOnPostStatus === 'completed') {
       setComment('');
       dispatch(clearCreateCommentOnPostState());
     }
   }, [postState.commentOnPostStatus]);
-
-  useEffect(() => {
-    if (postState.getCommentOnPostStatus === 'failed') {
-      toast.show({ description: postState.commentOnPostError });
-    }
-  }, [postState.getCommentOnPostStatus]);
 
   const handleLikeReactionOnPost = (isLiked: boolean) => {
     if (isLiked) {
@@ -155,15 +141,11 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
   };
 
   const handleOnViewChange = (inView: boolean) => {
-    // if (inView) {
-    //   if (videoRef && videoRef.current) {
-    //     videoRef.current.playAsync();
-    //   }
-    // } else {
-    //   if (videoRef && videoRef.current) {
-    //     videoRef.current.pauseAsync();
-    //   }
-    // }
+    if (!inView) {
+      videoRef.current.setStatusAsync({
+        shouldPlay: false,
+      });
+    }
   };
 
   const _renderRevealedFooter = (handlePress: any) => {
@@ -335,11 +317,7 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
           >
             <View>
               <Image
-                source={
-                  item.user?.profilePicture
-                    ? { uri: item.user.profilePicture }
-                    : require('../../../assets/imageAvatar.jpeg')
-                }
+                source={{ uri: item.user.profilePicture as string }}
                 style={{ width: 40, height: 40, borderRadius: 20 }}
               />
             </View>
@@ -392,7 +370,6 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
                     videoProps={{
                       shouldPlay: false,
                       resizeMode: ResizeMode.CONTAIN,
-                      // ❗ source is required https://docs.expo.io/versions/latest/sdk/video/#props
                       source: {
                         uri: item,
                       },
@@ -403,22 +380,22 @@ const StoryFeedItem: FC<IProps> = ({ item }) => {
                       },
                       useNativeControls: true,
                       isLooping: false,
+                      ref: videoRef,
                     }}
                     autoHidePlayer={false}
                     defaultControlsVisible={true}
                     style={{ height: 300 }}
-                  />
-                  {/* <Video
-                    style={{ width: "100%", height: 300, borderRadius: 16 }}
-                    source={{
-                      uri: item,
+                    fullscreen={{
+                      visible: false,
+                      enterFullscreen: async () => {
+                        setInFullsreen(!inFullscreen);
+                      },
+                      exitFullscreen: async () => {
+                        setInFullsreen(!inFullscreen);
+                      },
+                      inFullscreen,
                     }}
-                    ref={videoRef}
-                    useNativeControls={true}
-                    resizeMode={ResizeMode.CONTAIN}
-                    isLooping={false}
-                    shouldPlay={false}
-                  /> */}
+                  />
                 </View>
               </InView>
             ))

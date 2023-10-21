@@ -131,7 +131,7 @@ export interface IPostState {
   jobLocationFilterValue: string | null;
   jobDateFilterValue: string | null;
 
-  jobTypeFilterValue: string;
+  jobTypeFilterValue: string[];
   jobExperienceFilterValue: string;
   showCommentReactionView: boolean;
   commentReacted: IPostCommentFeed | null;
@@ -237,7 +237,7 @@ const initialState: IPostState = {
   showReactionList: false,
   jobLocationFilterValue: '',
   jobDateFilterValue: '',
-  jobTypeFilterValue: '',
+  jobTypeFilterValue: [],
   jobExperienceFilterValue: '',
   showCommentReactionView: false,
   commentReacted: null,
@@ -407,7 +407,6 @@ const PostSlice = createSlice({
     });
     builder.addCase(getCurrentUserFeedAction.rejected, (state, action) => {
       state.getCurrentUserPostStatus = 'failed';
-      console.log('action.payload?.messag> ', action.payload?.message);
       state.getCurrentUserPostError = action.payload?.message as string;
     });
 
@@ -440,7 +439,6 @@ const PostSlice = createSlice({
     });
     builder.addCase(getConnectionPostFeedAction.rejected, (state, action) => {
       state.getConnectionPostFeedStatus = 'failed';
-      console.log('action.payload?.messag> ', action.payload?.message);
       state.getConnectionPostFeedError = action.payload?.message as string;
     });
 

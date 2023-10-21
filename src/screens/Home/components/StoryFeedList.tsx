@@ -1,12 +1,11 @@
 import { FlatList, useToast } from 'native-base';
 import StoryFeedItem from '../../../components/StoryFeedItem/StoryFeedItem';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import useAppDispatch from '../../../hooks/useAppDispatch';
 import { getPostFeedAction } from '../../../actions/post';
 import useAppSelector from '../../../hooks/useAppSelector';
 import { IPostState } from '../../../reducers/post_reducer';
 import { ScrollView } from 'react-native-gesture-handler';
-import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { GlobalStyles } from '../../../theme/GlobalStyles';
 import {
   Image,
@@ -21,7 +20,7 @@ import colors, { addOpacity } from '../../../theme/colors';
 import { LinearGradient } from 'expo-linear-gradient';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { APP_SCREEN_LIST } from '../../../constants';
-import FullScreenImageCarousel from '../../../components/FullScreenImageCarousel/FullScreenImageCarousel';
+// import SkeletonContent from 'react-native-skeleton-content';
 
 const StoryFeedList = () => {
   const dispatch = useAppDispatch();
@@ -64,6 +63,8 @@ const StoryFeedList = () => {
     setRefresh(true);
     getPostFeeds();
   };
+
+  console.log('called here');
 
   if (state.getPostFeedStatus === 'loading' && state.postFeeds.length === 0)
     return null;

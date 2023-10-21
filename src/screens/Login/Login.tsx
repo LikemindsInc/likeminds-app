@@ -17,7 +17,8 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import BackButton from '../../components/Navigation/BackButton/BackButton';
 import { initialLoginValue, loginValidator } from './validator';
 import { clearNetworkError } from '../../reducers/errorHanlder';
-import { login } from '../../store/slice/login';
+import { clearLoginError, login } from '../../store/slice/login';
+import { clearSignUpError } from '../../store/slice/signup';
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -78,11 +79,20 @@ const Login = () => {
       navigation.navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
       dispatch(clearNetworkError());
     }
-    // console.log("error> ", errorReducer.message);
-    return () => {
-      dispatch(clearNetworkError());
-    };
   }, [errorReducer.message]);
+
+  useEffect(() => {
+    navigation.addListener('blur', clearState);
+    return () => {
+      navigation.removeListener('blur', clearState);
+    };
+  }, []);
+
+  const clearState = () => {
+    dispatch(clearNetworkError());
+    dispatch(clearLoginError());
+    dispatch(clearSignUpError());
+  };
 
   return (
     <View style={[GlobalStyles.container]}>

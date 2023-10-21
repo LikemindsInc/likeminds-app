@@ -19,6 +19,12 @@
         {
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
         }
+      ],
+      [
+        "expo-screen-orientation",
+        {
+          "initialOrientation": "DEFAULT"
+        }
       ]
     ],
     "name": "likemindsAppTest",
@@ -35,7 +41,8 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.charlesinto.likeminds"
+      "bundleIdentifier": "com.charlesinto.likeminds",
+      "requireFullScreen": true
     },
     "android": {
       "adaptiveIcon": {

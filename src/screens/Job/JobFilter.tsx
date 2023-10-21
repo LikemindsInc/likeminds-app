@@ -11,6 +11,7 @@ import { JOB_EXPERIENCE } from '../../constants';
 import useAppDispatch from '../../hooks/useAppDispatch';
 import { getJobsAction } from '../../actions/post';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { IPostedDate } from '@app-model';
 
 const JobFilter = () => {
   const { width } = useDimension();
@@ -79,7 +80,11 @@ const JobFilter = () => {
 
   const applyFilterHandler = () => {
     dispatch(
-      getJobsAction({ sort: sortBy, experienceLevel, postedDate: 'anytime' }),
+      getJobsAction({
+        sort: sortBy,
+        experienceLevel,
+        postedDate: datePosted as IPostedDate,
+      }),
     );
     navigation.goBack();
   };

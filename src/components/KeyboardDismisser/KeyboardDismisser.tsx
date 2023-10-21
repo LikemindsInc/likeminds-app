@@ -7,7 +7,6 @@ const KeyboardDismisser = (props: any) => {
   const dispatch = useAppDispatch();
   const handleCloseKeyboard = () => {
     Keyboard.dismiss();
-    console.log('called to close');
     dispatch(showReactionView({ show: false, post: null }));
   };
   return (

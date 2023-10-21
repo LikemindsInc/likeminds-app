@@ -113,15 +113,7 @@ const OnBoarding = () => {
             resizeMode="contain"
           />
         </View>
-        {/* <View style={[GlobalStyles.alignHorizontalCenter, GlobalStyles.mb20]}>
-          <Image
-            source={item.image}
-            resizeMethod="auto"
-            resizeMode="contain"
-            style={styles.groupImage}
-          />
-           </View> 
-        </Animated.View> */}
+
         <View style={[GlobalStyles.mb40, GlobalStyles.mt40]}>
           <Text
             style={[

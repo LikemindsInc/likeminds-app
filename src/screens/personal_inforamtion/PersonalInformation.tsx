@@ -2,7 +2,6 @@ import { BackHandler, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { GlobalStyles } from '../../theme/GlobalStyles';
 import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button';
-import { CheckIcon, Select } from 'native-base';
 import { AntDesign } from '@expo/vector-icons';
 import colors from '../../theme/colors';
 import DropZone from '../../components/DropZone/DropZone';
@@ -18,12 +17,20 @@ import {
   ISessionState,
   updatePersonalInformation,
 } from '../../reducers/userProfileSession';
-import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { FilePickerFormat } from '@app-model';
 import { useToast } from 'react-native-toast-notifications';
 import Sanitizer from '../../utils/sanitizer';
+import { useFormik } from 'formik';
+import {
+  initialPersonalInformationValue,
+  personalInformationValidationSchema,
+} from './validator';
+import {
+  updateCertificateProfileAction,
+  updatePersonalInformationAction,
+} from '../../actions/auth';
 
 const PersonalInformation = () => {
   const settings = useAppSelector(
@@ -39,52 +46,12 @@ const PersonalInformation = () => {
     }
   }, [settings.getCountriesStatus]);
 
-  const [firstName, setFirstName] = useState(
-    session.profileData?.personalInformation?.firstName,
-  );
-  const [lastName, setLastName] = useState(
-    session.profileData?.personalInformation?.lastName,
-  );
-  const [city, setCity] = useState(
-    session.profileData?.personalInformation?.city,
-  );
-  const [bio, setBio] = useState(session.profileData?.personalInformation?.bio);
   const [country, setCountry] = useState(
     (session.profileData?.personalInformation?.country as string) || '',
   );
   const [countryOfOrigin, setCountryOfOrigin] = useState(
     session.profileData?.personalInformation?.countryOfOrigin,
   );
-
-  const [errors, setErrors] = useState<{
-    firstName: null | string;
-    lastName: null | string;
-    city: string | null;
-    bio: string | null;
-  }>({ firstName: null, lastName: null, city: null, bio: null });
-
-  useEffect(() => {
-    setErrors({ firstName: null, lastName: null, city: null, bio: null });
-  }, []);
-
-  useEffect(() => {
-    if (firstName.trim() !== '')
-      setErrors((state) => ({ ...state, firstName: null }));
-    // else
-    //   setErrors((state) => ({ ...state, firstName: "First name is required" }));
-  }, [firstName]);
-
-  useEffect(() => {
-    if (lastName.trim() !== '')
-      setErrors((state) => ({ ...state, lastName: null }));
-    // else
-    //   setErrors((state) => ({ ...state, lastName: "Last name is required" }));
-  }, [lastName]);
-
-  useEffect(() => {
-    if (bio.trim() !== '') setErrors((state) => ({ ...state, bio: null }));
-    // else setErrors((state) => ({ ...state, bio: "Bio is required" }));
-  }, [bio]);
 
   const navigation = useNavigation<any>();
 
@@ -105,15 +72,9 @@ const PersonalInformation = () => {
       navigation.removeListener('beforeRemove', handleBackNavigation);
     };
   }, [navigation]);
-
-  useEffect(() => {
-    if (city.trim() !== '') setErrors((state) => ({ ...state, city: null }));
-    // else setErrors((state) => ({ ...state, city: "City is required" }));
-  }, [city]);
-
   const [resume, setResume] = useState<
     FilePickerFormat | ImagePicker.ImagePickerResult | null
-  >(session.profileData?.personalInformation?.resume);
+  >();
 
   useEffect(() => {
     getCountries();
@@ -126,40 +87,17 @@ const PersonalInformation = () => {
     return null;
   };
 
-  // console.log("user>", settings.userInfo);
-
-  const toast = useToast();
-
-  const handleOnNextPress = () => {
-    if (firstName.trim() === '')
-      return setErrors((state) => ({
-        ...state,
-        firstName: 'First name is Required',
-      }));
-    if (lastName.trim() === '')
-      return setErrors((state) => ({
-        ...state,
-        lastName: 'Last name is Required',
-      }));
-
-    if (city.trim() === '')
-      return setErrors((state) => ({
-        ...state,
-        city: 'City is Required',
-      }));
-
-    if (bio.trim() === '')
-      return setErrors((state) => ({
-        ...state,
-        bio: 'Bio is Required',
-      }));
-
-    if (country.trim() === '')
-      return toast.show('Please provide your country of resident');
-
-    if (countryOfOrigin.trim() === '')
-      return toast.show('Please provide your country of origin');
-
+  const handleOnNextPress = (values: any) => {
+    const { firstName, lastName, city, bio, resume } = values;
+    console.log('values> ', {
+      firstName,
+      lastName,
+      city,
+      bio,
+      country,
+      countryOfOrigin,
+      resume,
+    });
     dispatch(
       updatePersonalInformation(
         Sanitizer.sanitize({
@@ -173,8 +111,29 @@ const PersonalInformation = () => {
         }),
       ),
     );
-    navigation.navigate(APP_SCREEN_LIST.SIGNUP_PROFILE_PICTURE);
+    dispatch(updatePersonalInformationAction(session.profileData));
   };
+
+  useEffect(() => {
+    if (session.updatePersonalInformationStatus === 'completed') {
+      navigation.navigate(APP_SCREEN_LIST.SIGNUP_PROFILE_PICTURE);
+    }
+  }, [session.updatePersonalInformationStatus]);
+
+  const {
+    errors,
+    isValid,
+    values,
+    handleChange,
+    handleSubmit,
+    touched,
+    handleBlur,
+  } = useFormik({
+    initialValues: initialPersonalInformationValue,
+    validationSchema: personalInformationValidationSchema,
+    onSubmit: handleOnNextPress,
+  });
+
   return (
     <View style={[GlobalStyles.container]}>
       <View style={[GlobalStyles.mb20, GlobalStyles.mt10, GlobalStyles.mb30]}>
@@ -185,28 +144,30 @@ const PersonalInformation = () => {
             GlobalStyles.fontWeight700,
           ]}
         >
-          Personal Informations
+          Personal Information
         </Text>
       </View>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         <View style={[styles.inputDouble, GlobalStyles.mb10]}>
           <Input
-            onChangeText={(text) => setFirstName(text)}
             style={styles.inputFlex}
             placeholder="First Name"
-            value={firstName}
-            errorMessage={errors.firstName}
+            onChangeText={handleChange('firstName')}
+            onBlur={handleBlur('firstName')}
+            value={values.firstName}
+            errorMessage={touched.firstName ? errors.firstName : null}
             autoCorrect={false}
-            inputViewStyle={{ width: '50%' }}
+            inputViewStyle={{ flex: 1 }}
           />
           <Input
-            onChangeText={(text) => setLastName(text)}
             style={styles.inputFlex}
             placeholder="Last Name"
-            value={lastName}
             autoCorrect={false}
-            errorMessage={errors.lastName}
-            inputViewStyle={{ width: '50%' }}
+            onChangeText={handleChange('lastName')}
+            onBlur={handleBlur('lastName')}
+            value={values.lastName}
+            errorMessage={touched.lastName ? errors.lastName : null}
+            inputViewStyle={{ flex: 1 }}
           />
         </View>
         <View style={[GlobalStyles.mb30]}>
@@ -239,11 +200,12 @@ const PersonalInformation = () => {
         </View>
         <View style={[styles.inputDouble, GlobalStyles.mb10]}>
           <Input
-            onChangeText={(text) => setCity(text)}
             style={styles.inputFlex}
             placeholder="City"
-            errorMessage={errors.city}
-            value={city}
+            onChangeText={handleChange('city')}
+            onBlur={handleBlur('city')}
+            value={values.city}
+            errorMessage={touched.city ? errors.city : null}
             autoCorrect={false}
           />
         </View>
@@ -254,10 +216,11 @@ const PersonalInformation = () => {
             placeholder="Bio"
             textAlignVertical="top"
             autoCorrect={false}
-            onChangeText={(text) => setBio(text)}
             autoCapitalize="none"
-            errorMessage={errors.bio}
-            value={bio}
+            onChangeText={handleChange('bio')}
+            onBlur={handleBlur('bio')}
+            value={values.bio}
+            errorMessage={touched.bio ? errors.bio : null}
           />
         </View>
         <View style={[GlobalStyles.mb30]}>
@@ -295,7 +258,12 @@ const PersonalInformation = () => {
           emptyIcon={<FileUploadEmptyIcon />}
         />
       </ScrollView>
-      <Button title="Continue" onPress={handleOnNextPress} />
+      <Button
+        disabled={!isValid}
+        title="Continue"
+        loading={session.updatePersonalInformationStatus === 'loading'}
+        onPress={() => handleSubmit()}
+      />
     </View>
   );
 };

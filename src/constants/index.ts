@@ -223,6 +223,7 @@ export const SCHOOL_DEGREES = [
   'A-Levels',
   'Diploma',
   'Etc',
+  'Others',
 ];
 
 export const PASSWORD_REGEX =

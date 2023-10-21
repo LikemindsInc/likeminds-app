@@ -25,13 +25,7 @@ interface IProps {
 
 const ConnectionNotificationItem: FC<IProps> = ({ item, handleOnRespond }) => {
   const renderImageSource = () => {
-    if (
-      !item.user ||
-      !item.user.profilePicture ||
-      item.user?.profilePicture.trim() === ''
-    )
-      return require('../../../assets/image20.png');
-    return { uri: item.user.profilePicture };
+    return { uri: item?.author?.profilePicture as string };
   };
   const navigation = useNavigation<NavigationProp<any>>();
   const dispatch = useAppDispatch();
@@ -46,11 +40,6 @@ const ConnectionNotificationItem: FC<IProps> = ({ item, handleOnRespond }) => {
   useEffect(() => {
     if (state.connectionRespondStatus === 'completed') {
       dispatch(getConnections());
-      toast.show('Connection accepted successfully', {
-        placement: 'top',
-        type: 'success',
-        animationType: 'slide-in',
-      });
     }
 
     dispatch(clearConnectionRespondStatus());
@@ -86,10 +75,18 @@ const ConnectionNotificationItem: FC<IProps> = ({ item, handleOnRespond }) => {
             <Text
               style={[GlobalStyles.textNavyBlue, GlobalStyles.fontWeight700]}
             >
-              {item.user?.firstName} {item.user?.lastName}
+              {item.author?.firstName} {item.author?.lastName}
+            </Text>
+            <Text
+              style={[
+                GlobalStyles.textNavyBlue,
+                GlobalStyles.fontWeight400,
+                GlobalStyles.textGrey,
+              ]}
+            >
+              wants to connect with you
             </Text>
           </View>
-          wants to connect with you
         </Text>
         <View style={{ paddingTop: 4 }}>
           <Text
@@ -104,7 +101,11 @@ const ConnectionNotificationItem: FC<IProps> = ({ item, handleOnRespond }) => {
           </Text>
         </View>
       </View>
-      <Button onPress={handleRespond} title="Respond" />
+      <Button
+        style={{ paddingVertical: 10, paddingHorizontal: 8 }}
+        onPress={handleRespond}
+        title="Respond"
+      />
     </TouchableOpacity>
   );
 };

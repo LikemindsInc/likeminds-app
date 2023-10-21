@@ -20,10 +20,7 @@ const ReactionsViewModal = () => {
   const session = useAppSelector((state) => state.settingReducer);
   const dispatch = useAppDispatch();
   const renderProfilePicture = (item: IPostReaction) => {
-    if (item.user.profilePicture && item.user.profilePicture.trim() !== '') {
-      return { uri: item.user.profilePicture };
-    }
-    return require('../../../assets/imageAvatar.jpeg');
+    return { uri: item.user.profilePicture as string };
   };
   const state = useAppSelector((state) => state.postReducer);
 

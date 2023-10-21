@@ -285,12 +285,12 @@ declare module '@app-model' {
     postedDate?: IPostedDate;
     sort?: 'recent' | 'relevant';
     search?: string;
-    companyName?: string;
+    companyName?: string[];
     page?: number;
     size?: number;
-    tailor?: string;
-    location?: string;
-    jobType?: string;
+    tailor?: string[];
+    location?: string[];
+    jobType?: string[];
   }
 
   interface ISearchDTO {
@@ -355,7 +355,7 @@ declare module '@app-model' {
     status: string;
     createdAt: string;
     updatedAt: string;
-    user?: {
+    author?: {
       id: string;
       firstName: string | null;
       lastName: string | null;

@@ -135,10 +135,6 @@ const CreatePassword = () => {
 
   useEffect(() => {
     if (session.changePasswordOTpStatus === 'completed') {
-      toast.show({
-        description: 'Password changed successfully. Please login with your',
-        variant: 'contained',
-      });
       navigation.navigate(APP_SCREEN_LIST.LOGIN_SCREEN);
     } else if (session.changePasswordOTpStatus === 'failed') {
     }

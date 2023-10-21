@@ -155,7 +155,7 @@ const OTPVerification = () => {
               onPress={() =>
                 dispatch(
                   resendOTPAction({
-                    phone: session.profileData.phoneNumber,
+                    phone,
                     type: 'SIGNUP',
                   }),
                 )

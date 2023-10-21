@@ -18,7 +18,10 @@ import BackButton from '../../components/Navigation/BackButton/BackButton';
 import useAppSelector from '../../hooks/useAppSelector';
 import { useToast } from 'react-native-toast-notifications';
 import useAppDispatch from '../../hooks/useAppDispatch';
-import { completeUserProfileAction } from '../../actions/auth';
+import {
+  completeUserProfileAction,
+  updateSkillsProfileAction,
+} from '../../actions/auth';
 import { updateSkills } from '../../reducers/userProfileSession';
 import MultiSelect from 'react-native-multiple-select';
 
@@ -34,7 +37,7 @@ const SUGGESTIONS = [
 
 const SignupSkills = () => {
   const navigation = useNavigation<any>();
-  const session = useAppSelector((state: any) => state.sessionReducer);
+  const session = useAppSelector((state) => state.sessionReducer);
 
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
 
@@ -44,9 +47,9 @@ const SignupSkills = () => {
 
   const dispatch = useAppDispatch();
   const handleOnNextPress = () => {
-    navigation.navigate(APP_SCREEN_LIST.SIGNUP_CERTIFICATE_SCREEN);
     dispatch(updateSkills(selectedSkills));
-    dispatch(completeUserProfileAction(session.profileData));
+
+    dispatch(updateSkillsProfileAction(session.profileData));
   };
   const onSelectedItemsChange = (selectedItems: any[]) => {
     const numberIndexedItems = selectedItems.filter((item) => !isNaN(item));
@@ -59,6 +62,12 @@ const SignupSkills = () => {
 
     setSelectedItems(selectedItems);
   };
+
+  useEffect(() => {
+    if (session.updateUserSkillsStatus === 'completed') {
+      navigation.navigate(APP_SCREEN_LIST.SIGNUP_CERTIFICATE_SCREEN);
+    }
+  }, [session.updateUserSkillsStatus]);
 
   const renderSelectedItems = () => {
     return (
@@ -141,9 +150,17 @@ const SignupSkills = () => {
             const newItem = data.find((item) => isNaN(item.id));
             if (!newItem) return;
 
+            const itemExists = items.find(
+              (item) =>
+                item.name.toLowerCase().trim() ===
+                newItem.name.toLowerCase().trim(),
+            );
+
+            if (itemExists) return;
+
             newItem.id = `${data.length}`;
-            console.log(newItem);
-            setItems([...data, newItem]);
+
+            setItems([...items, newItem]);
           }}
           styleRowList={{ paddingTop: 10, paddingBottom: 10 }}
         />
@@ -160,7 +177,7 @@ const SignupSkills = () => {
           />
         </View>
         <Button
-          loading={session.completeProfileStatus === 'loading'}
+          loading={session.updateUserSkillsStatus === 'loading'}
           title="Continue"
           onPress={handleOnNextPress}
         />

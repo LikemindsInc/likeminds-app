@@ -113,7 +113,11 @@ const OTPScreen = () => {
             >
               Enter the 4 digit code sent to{' '}
               <Text
-                style={[GlobalStyles.fontWeight700, GlobalStyles.textBlack]}
+                style={[
+                  GlobalStyles.fontWeight700,
+                  GlobalStyles.fontInterRegular,
+                  GlobalStyles.textBlack,
+                ]}
               >
                 {phone}
               </Text>
@@ -179,7 +183,7 @@ const OTPScreen = () => {
               onPress={() =>
                 dispatch(
                   resendOTPAction({
-                    phone: session.otpChannelValue.split('_')[1],
+                    phone,
                     type: 'FORGOT_PASSWORD',
                   }),
                 )
