@@ -2150,7 +2150,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gorhom/bottom-sheet@npm:^4.4.7":
+"@gorhom/bottom-sheet@npm:^4.5.1":
   version: 4.5.1
   resolution: "@gorhom/bottom-sheet@npm:4.5.1"
   dependencies:
@@ -7192,6 +7192,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-screen-orientation@npm:~5.1.1":
+  version: 5.1.1
+  resolution: "expo-screen-orientation@npm:5.1.1"
+  peerDependencies:
+    expo: "*"
+  checksum: 5e647c1ed2e30a6db1741e5bfda581f957c113110a4f916c82b3c6220a96807880cc3aab189427e9ee4a61649de2c81d1332c75537271f9f9ac52467df4317c8
+  languageName: node
+  linkType: hard
+
 "expo-splash-screen@npm:~0.18.2":
   version: 0.18.2
   resolution: "expo-splash-screen@npm:0.18.2"
@@ -9228,7 +9237,7 @@ __metadata:
   dependencies:
     "-": ^0.0.1
     "@babel/core": ^7.20.0
-    "@gorhom/bottom-sheet": ^4.4.7
+    "@gorhom/bottom-sheet": ^4.5.1
     "@react-native-async-storage/async-storage": 1.17.11
     "@react-native-community/datetimepicker": 6.7.3
     "@react-native-community/netinfo": ^9.4.1
@@ -9264,6 +9273,7 @@ __metadata:
     expo-font: ~11.1.1
     expo-image-picker: ~14.1.1
     expo-linear-gradient: ~12.1.2
+    expo-screen-orientation: ~5.1.1
     expo-splash-screen: ~0.18.2
     expo-status-bar: ~1.4.4
     expo-video-player: ^2.2.0
