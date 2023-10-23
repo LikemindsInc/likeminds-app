@@ -78,12 +78,12 @@ const SpaceSearch = () => {
             onChangeText={(value) => setSearchText(value)}
           />
         </View>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => setModal(true)}
           style={styles.searchButton}
         >
           <Feather name="sliders" size={24} color={colors.grey} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <View style={[GlobalStyles.mt20, { flex: 1, paddingHorizontal: 0 }]}>
         <SpacePeopleTabView searchText={searchText} />
