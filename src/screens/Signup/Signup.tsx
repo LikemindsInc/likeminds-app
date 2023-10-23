@@ -26,7 +26,7 @@ import { clearSignUpError, signup } from '../../store/slice/signup';
 import TextInputElement from '../../components/Input/TextInput';
 // import PhoneNumberInput from '../../components/Input/PhoneNumberInput';
 import { navigate } from '../../utils/NavigateUtil';
-import { useNavigation } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import { clearNetworkError } from '../../reducers/errorHanlder';
 import { clearLoginError } from '../../store/slice/login';
 
@@ -66,7 +66,10 @@ const Signup = () => {
 
   useEffect(() => {
     if (signupStateValues.isSignup) {
-      navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
+      // navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
+      navigation.dispatch(
+        StackActions.push(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN),
+      );
     }
     return () => {
       dispatch(clearSignUpError());
