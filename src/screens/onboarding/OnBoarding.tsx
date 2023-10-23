@@ -16,6 +16,7 @@ import { StatusBar } from 'expo-status-bar';
 import {
   CommonActions,
   NavigationProp,
+  StackActions,
   useNavigation,
 } from '@react-navigation/native';
 import { APP_SCREEN_LIST, INavigationProps } from '../../constants';
@@ -166,13 +167,7 @@ const OnBoarding = () => {
 
   const handleOnDone = () => {
     try {
-      navigation.dispatch(
-        CommonActions.navigate({
-          key: APP_SCREEN_LIST.LOGIN_SCREEN,
-          name: APP_SCREEN_LIST.LOGIN_SCREEN,
-        }),
-      );
-      console.log('called oo');
+      navigation.dispatch(StackActions.push(APP_SCREEN_LIST.LOGIN_SCREEN));
     } catch (error) {
       console.log('navigation error> ', error);
     }

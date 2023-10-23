@@ -13,7 +13,11 @@ import {
 } from '../../reducers/userProfileSession';
 import useAppDispatch from '../../hooks/useAppDispatch';
 import { loginUserActionAction } from '../../actions/auth';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import {
+  NavigationProp,
+  StackActions,
+  useNavigation,
+} from '@react-navigation/native';
 import BackButton from '../../components/Navigation/BackButton/BackButton';
 import { initialLoginValue, loginValidator } from './validator';
 import { clearNetworkError } from '../../reducers/errorHanlder';
@@ -72,7 +76,7 @@ const Login = () => {
 
         return;
       }
-      navigation.navigate(APP_SCREEN_LIST.MAIN_SCREEN);
+      navigation.dispatch(StackActions.push(APP_SCREEN_LIST.MAIN_SCREEN));
     } else if (session.signingInStatus === 'failed') {
     }
   }, [session.signingInStatus]);

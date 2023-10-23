@@ -54,6 +54,7 @@ import {
   CommonActions,
   DrawerActions,
   NavigationProp,
+  StackActions,
   useNavigation,
 } from '@react-navigation/native';
 import { ISettingState, logoutUserAction } from '../reducers/settings';
@@ -115,8 +116,16 @@ const AppHome = () => {
 
   useEffect(() => {
     const logout = async () => {
+      console.log('seeting> ', setting.userInfo);
       if (!setting.userInfo) {
-        navigation.navigate(APP_SCREEN_LIST.ONBOARDING_SCREEN);
+        console.log('logout bro');
+        try {
+          navigation.dispatch(
+            StackActions.push(APP_SCREEN_LIST.ONBOARDING_SCREEN),
+          );
+        } catch (error) {
+          console.log('error navigating>', error);
+        }
       }
     };
 
