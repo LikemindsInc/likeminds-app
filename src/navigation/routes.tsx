@@ -116,7 +116,6 @@ const AppHome = () => {
   useEffect(() => {
     const logout = async () => {
       if (!setting.userInfo) {
-        console.log('CALLED TOO');
         navigation.navigate(APP_SCREEN_LIST.ONBOARDING_SCREEN);
       }
     };

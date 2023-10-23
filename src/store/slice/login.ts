@@ -39,6 +39,7 @@ const loginSlice = createSlice({
   reducers: {
     clearLoginError(state: any) {
       state.error = undefined;
+      state.isLogin = false;
     },
   },
   extraReducers: (builder) => {

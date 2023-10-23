@@ -165,12 +165,17 @@ const OnBoarding = () => {
   );
 
   const handleOnDone = () => {
-    navigation.dispatch(
-      CommonActions.navigate({
-        key: APP_SCREEN_LIST.LOGIN_SCREEN,
-        name: APP_SCREEN_LIST.LOGIN_SCREEN,
-      }),
-    );
+    try {
+      navigation.dispatch(
+        CommonActions.navigate({
+          key: APP_SCREEN_LIST.LOGIN_SCREEN,
+          name: APP_SCREEN_LIST.LOGIN_SCREEN,
+        }),
+      );
+      console.log('called oo');
+    } catch (error) {
+      console.log('navigation error> ', error);
+    }
   };
 
   return (

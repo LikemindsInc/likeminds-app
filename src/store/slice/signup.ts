@@ -69,6 +69,7 @@ const signupSlice = createSlice({
 
     updateSignupPhoneNumber: (state, action: PayloadAction<string>) => {
       state.data.phone = action.payload;
+      state.isSignup = false;
     },
   },
 });
