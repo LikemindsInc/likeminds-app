@@ -16,7 +16,7 @@ const initialState: {
 
 // actions
 export const login = createAsyncThunk(
-  'signup/post',
+  'login/post',
   async (payload: ILogin, { rejectWithValue }) => {
     try {
       const res = await axiosClient.post('/api/auth/login', payload);
@@ -34,7 +34,7 @@ export const login = createAsyncThunk(
 
 // slice
 const loginSlice = createSlice({
-  name: 'signup',
+  name: 'login',
   initialState,
   reducers: {
     clearLoginError(state: any) {

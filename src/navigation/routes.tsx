@@ -13,6 +13,7 @@ import SignupSkills from '../screens/SignupSkills/SignupSkills';
 import {
   APP_SCREEN_LIST,
   DRAWER_WIDTH,
+  NAVIGATION_PERSISTENCE_KEY,
   UNHANDLED_GLOBAL_ERRORS,
 } from '../constants';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -50,6 +51,7 @@ import { PURGE } from 'redux-persist';
 import { __ROOT_REDUX_STATE_KEY__ } from '../store/constants';
 import { logoutAction } from '../actions/auth';
 import {
+  CommonActions,
   DrawerActions,
   NavigationProp,
   useNavigation,
@@ -78,6 +80,7 @@ import { persistor } from '../store/store';
 import JobFilter from '../screens/Job/JobFilter';
 import ReactionsViewModal from '../components/ReactionsViewModal/ReactionsViewModal';
 import { firstLaunch } from '../store/slice/appSettings';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 
@@ -111,8 +114,14 @@ const AppHome = () => {
   }, [navigation, setting.userInfo]);
 
   useEffect(() => {
-    if (!setting.userInfo)
-      return navigation.navigate(APP_SCREEN_LIST.ONBOARDING_SCREEN);
+    const logout = async () => {
+      if (!setting.userInfo) {
+        console.log('CALLED TOO');
+        navigation.navigate(APP_SCREEN_LIST.ONBOARDING_SCREEN);
+      }
+    };
+
+    logout();
   }, [setting.userInfo]);
 
   return (
@@ -336,9 +345,10 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
             <Button
               onPress={() => {
                 console.log('CALLED');
+
                 dispatch(logoutUserAction());
                 dispatch(logoutAction());
-                navigation.navigate(APP_SCREEN_LIST.ONBOARDING_SCREEN);
+
                 persistor.purge();
               }}
               type="tertiary"

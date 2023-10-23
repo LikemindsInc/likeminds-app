@@ -18,7 +18,10 @@ import BackButton from '../../components/Navigation/BackButton/BackButton';
 import { initialLoginValue, loginValidator } from './validator';
 import { clearNetworkError } from '../../reducers/errorHanlder';
 import { clearLoginError, login } from '../../store/slice/login';
-import { clearSignUpError } from '../../store/slice/signup';
+import {
+  clearSignUpError,
+  updateSignupPhoneNumber,
+} from '../../store/slice/signup';
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -64,7 +67,7 @@ const Login = () => {
   useEffect(() => {
     if (session.signingInStatus === 'completed') {
       if (!setting.userInfo?.isVerified) {
-        dispatch(updatePhoneNumber(setting.userInfo?.phone as string));
+        dispatch(updateSignupPhoneNumber(setting.userInfo?.phone as string));
         navigation.navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
 
         return;
@@ -77,6 +80,7 @@ const Login = () => {
   useEffect(() => {
     if (errorReducer.message === PENDING_OTP_MESSAGE) {
       navigation.navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
+
       dispatch(clearNetworkError());
     }
   }, [errorReducer.message]);

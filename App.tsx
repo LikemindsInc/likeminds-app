@@ -1,12 +1,20 @@
 import 'react-native-gesture-handler';
 
-import { LogBox, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import {
+  Linking,
+  LogBox,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import Provider from './src/store/StoreProvider';
 import { NavigationContainer } from '@react-navigation/native';
 import { ToastProvider } from 'react-native-toast-notifications';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { GlobalStyles } from './src/theme/GlobalStyles';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AppRoutes from './src/navigation/routes';
@@ -14,6 +22,8 @@ import { NativeBaseProvider, extendTheme } from 'native-base';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { setTopLevelNavigator } from './src/utils/NavigateUtil';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { APP_SCREEN_LIST, NAVIGATION_PERSISTENCE_KEY } from './src/constants';
 
 SplashScreen.preventAutoHideAsync();
 LogBox.ignoreLogs([
@@ -32,6 +42,8 @@ const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function App() {
+  const [isReady, setIsReady] = useState(false);
+  const [initialState, setInitialState] = useState();
   const [fontsLoaded] = useFonts({
     'Inter-Black': require('./assets/fonts/Inter-Black.ttf'),
     'Inter-Bold': require('./assets/fonts/Inter-Bold.ttf'),
@@ -39,13 +51,43 @@ function App() {
     'Inter-Regular': require('./assets/fonts/Inter-Regular.ttf'),
   });
 
+  useEffect(() => {
+    const restoreState = async () => {
+      try {
+        const initialUrl = await Linking.getInitialURL();
+
+        if (Platform.OS !== 'web' && initialUrl == null) {
+          // Only restore state if there's no deep link and we're not on web
+          const savedStateString = await AsyncStorage.getItem(
+            NAVIGATION_PERSISTENCE_KEY,
+          );
+          const state = savedStateString
+            ? JSON.parse(savedStateString)
+            : undefined;
+
+          if (state !== undefined) {
+            setInitialState(state);
+          }
+        }
+      } finally {
+        setIsReady(true);
+      }
+    };
+
+    if (!isReady) restoreState();
+  }, [isReady]);
+
   const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
+    if (fontsLoaded && isReady) {
       await SplashScreen.hideAsync();
     }
-  }, [fontsLoaded]);
+  }, [fontsLoaded, isReady]);
 
   if (!fontsLoaded) {
+    return null;
+  }
+
+  if (!isReady) {
     return null;
   }
 
@@ -94,6 +136,13 @@ function App() {
               <NavigationContainer
                 ref={(navigatorRef) => {
                   setTopLevelNavigator(navigatorRef);
+                }}
+                initialState={initialState}
+                onStateChange={(state) => {
+                  AsyncStorage.setItem(
+                    NAVIGATION_PERSISTENCE_KEY,
+                    JSON.stringify(state),
+                  );
                 }}
               >
                 <AppRoutes />

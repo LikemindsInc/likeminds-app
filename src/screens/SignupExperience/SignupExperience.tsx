@@ -23,6 +23,7 @@ import {
 import AddExperienceForm from './AddExperienceForm';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import ExperienceCard from './ExperienceCard';
+import { removeExperienceItemActionLocal } from '../../reducers/userProfileSession';
 
 const SignupExperience = () => {
   const dispatch = useAppDispatch();
@@ -45,6 +46,10 @@ const SignupExperience = () => {
       navigation.navigate(APP_SCREEN_LIST.SIGNUP_EDUCATION_SCREEN);
     }
   }, [sessionReducer.updateExperienceStatus]);
+
+  const removeItem = (id: number) => {
+    dispatch(removeExperienceItemActionLocal(id));
+  };
 
   return (
     <KeyboardAvoidingView
@@ -88,14 +93,14 @@ const SignupExperience = () => {
                 {experience.map((experience, index) => (
                   <ExperienceCard
                     key={'key-' + index}
+                    itemId={index}
                     experience={experience}
-                    handleDelete={() => {}}
+                    handleDelete={(id) => removeItem(id)}
                   />
                 ))}
               </View>
             ) : null}
             {experience.length == 0 ? <Text>No Experience Added</Text> : null}
-            {/* </ScrollView> */}
 
             <TouchableOpacity
               style={{

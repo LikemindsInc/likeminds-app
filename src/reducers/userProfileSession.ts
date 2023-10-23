@@ -264,6 +264,16 @@ const sessionSlice = createSlice({
       }
       state.profileData.experience = [action.payload];
     },
+    removeExperienceItemActionLocal(
+      state: ISessionState,
+      action: PayloadAction<number>,
+    ) {
+      const replica = [...(state.profileData.experience || [])];
+
+      replica.splice(action.payload, 1);
+
+      state.profileData.experience = replica;
+    },
     updateEducation(state: ISessionState, action: PayloadAction<IEducation>) {
       state.profileData.education = [action.payload];
     },
@@ -328,6 +338,24 @@ const sessionSlice = createSlice({
       state.otpVerificationStatus = 'idle';
       state.otpVerificationSuccess = '';
       state.otpVerificationError = '';
+
+      state.profileData = {
+        phoneNumber: '',
+        personalInformation: {
+          firstName: '',
+          lastName: '',
+          country: '',
+          countryOfOrigin: '',
+          resume: null,
+          bio: '',
+          city: '',
+        },
+        education: [],
+        experience: [],
+        certificates: [],
+        profilePicture: null,
+        skills: [],
+      };
     });
     builder.addCase(loginUserActionAction.pending, (state) => {
       state.signingInStatus = 'loading';
@@ -575,6 +603,7 @@ export const {
   clearResendOtpStatus,
   clearChangePasswordError,
   resetAddExperienceSuccess,
+  removeExperienceItemActionLocal,
 } = sessionSlice.actions;
 
 export default sessionSlice.reducer;

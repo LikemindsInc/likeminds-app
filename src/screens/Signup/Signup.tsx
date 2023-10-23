@@ -91,6 +91,7 @@ const Signup = () => {
   const clearState = () => {
     dispatch(clearNetworkError());
     dispatch(clearLoginError());
+    dispatch(clearSignUpError());
   };
 
   return (

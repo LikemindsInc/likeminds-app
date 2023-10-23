@@ -35,13 +35,20 @@ const OTPVerification = () => {
   const navigation = useNavigation<any>();
   const [otp, setOTP] = useState('');
 
+  const phone =
+    signUpStateValues && signUpStateValues?.data?.phone
+      ? signUpStateValues?.data?.phone
+      : session.profileData.phoneNumber
+      ? session.profileData.phoneNumber
+      : 'your phone number';
+
   const handleOnVerify = () => {
     setInformation('');
     dispatch(clearNetworkError());
     if (otp.length < 4) return setInformation('Incomplete OTP');
     dispatch(
       verifyOTPActionAction({
-        phone: signUpStateValues.data?.phone,
+        phone: phone,
         code: otp,
       }),
     );
@@ -69,11 +76,6 @@ const OTPVerification = () => {
       dispatch(clearResendOtpStatus());
     }
   }, [session.resendOtpStatus]);
-
-  const phone =
-    signUpStateValues && signUpStateValues?.data?.phone
-      ? signUpStateValues?.data?.phone
-      : 'your phone number';
 
   return (
     <KeyboardDismisser style={{ flex: 1 }}>

@@ -8,9 +8,11 @@ import Util from '../../utils';
 export default function ExperienceCard({
   handleDelete,
   experience,
+  itemId,
 }: {
   experience: IExperience;
-  handleDelete?: () => void;
+  handleDelete?: (id: number) => void;
+  itemId: number;
 }) {
   const startDate = Util.convertToLong(new Date(experience.startDate));
   const endDate = Util.convertToLong(new Date(experience.endDate));
@@ -29,7 +31,10 @@ export default function ExperienceCard({
           </Text>
         </View>
       </View>
-      <TouchableOpacity onPress={handleDelete} style={[styles.deleteHandler]}>
+      <TouchableOpacity
+        onPress={() => handleDelete && handleDelete(itemId)}
+        style={[styles.deleteHandler]}
+      >
         <AntDesign name="close" size={20} color={'black'} />
       </TouchableOpacity>
     </View>
