@@ -9,16 +9,8 @@ import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button';
 import TextLink from '../../components/TextLink/TextLink';
 import { APP_SCREEN_LIST } from '../../constants';
-// import reportError from '../../utils/reportError';
-// import { err } from "react-native-svg/lib/typescript/xml";
 import useAppDispatch from '../../hooks/useAppDispatch';
 import useAppSelector from '../../hooks/useAppSelector';
-// import {
-//   ISessionState,
-//   // clearSignupStatus,
-//   // updatePhoneNumber,
-// } from '../../reducers/userProfileSession';
-// import { signupUserActionAction } from '../../actions/auth';
 import BackButton from '../../components/Navigation/BackButton/BackButton';
 import { initialSignupValues, signupValidator } from './validator';
 import Util from '../../utils';
@@ -39,6 +31,7 @@ const Signup = () => {
       setFieldError('phone', 'Country code is required');
       return;
     }
+    dispatch(clearSignUpError());
     dispatch(
       signup({
         email: values.email.trim(),
@@ -65,11 +58,13 @@ const Signup = () => {
   });
 
   useEffect(() => {
+    console.log(signupStateValues.isSignup);
     if (signupStateValues.isSignup) {
+      console.log('called to nevai');
       // navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
-      navigation.dispatch(
-        StackActions.push(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN),
-      );
+      navigation.dispatch({
+        ...StackActions.replace(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN),
+      });
     }
     return () => {
       dispatch(clearSignUpError());

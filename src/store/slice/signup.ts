@@ -47,6 +47,7 @@ const signupSlice = createSlice({
     });
     // fulfilled state
     builder.addCase(signup.fulfilled, (state, action) => {
+      console.log('called');
       state.loading = false;
       state.error = undefined;
       state.isSignup = true;
@@ -65,6 +66,7 @@ const signupSlice = createSlice({
   reducers: {
     clearSignUpError: (state) => {
       state.error = undefined;
+      state.isSignup = false;
     },
 
     updateSignupPhoneNumber: (state, action: PayloadAction<string>) => {
