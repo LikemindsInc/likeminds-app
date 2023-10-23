@@ -60,8 +60,6 @@ const Signup = () => {
   useEffect(() => {
     console.log(signupStateValues.isSignup);
     if (signupStateValues.isSignup) {
-      console.log('called to nevai');
-      // navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
       navigation.dispatch({
         ...StackActions.replace(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN),
       });
