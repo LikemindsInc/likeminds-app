@@ -48,7 +48,7 @@ const SignupExperience = () => {
   };
 
   const handleOnNextPress = () => {
-    dispatch(updateExperienceProfileAction(sessionReducer.profileData));
+    dispatch(updateExperienceProfileAction());
   };
 
   const experience = sessionReducer?.profileData?.experience || [];

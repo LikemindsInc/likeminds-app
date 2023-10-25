@@ -271,7 +271,6 @@ const sessionSlice = createSlice({
           action.payload,
         ];
       }
-      state.profileData.experience = [action.payload];
     },
     removeExperienceItemActionLocal(
       state: ISessionState,
@@ -283,8 +282,21 @@ const sessionSlice = createSlice({
 
       state.profileData.experience = replica;
     },
+    removeEducationItemActionLocal(
+      state: ISessionState,
+      action: PayloadAction<number>,
+    ) {
+      const replica = [...(state.profileData.education || [])];
+
+      replica.splice(action.payload, 1);
+
+      state.profileData.education = replica;
+    },
     updateEducation(state: ISessionState, action: PayloadAction<IEducation>) {
-      state.profileData.education = [action.payload];
+      state.profileData.education = [
+        ...(state.profileData.education || []),
+        action.payload,
+      ];
     },
     updateCertificate(
       state: ISessionState,
@@ -630,6 +642,7 @@ export const {
   clearChangePasswordError,
   resetAddExperienceSuccess,
   removeExperienceItemActionLocal,
+  removeEducationItemActionLocal,
   clearBioErrors,
 } = sessionSlice.actions;
 

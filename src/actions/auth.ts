@@ -201,8 +201,8 @@ export const verifyOTPOnChangePasswordAction = asyncThunkWrapper<
 
 export const updateEducationProfileAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
-  IUserProfileData
->(COMPLETE_EDUCATION_PROFILE, async (agrs: IUserProfileData) => {
+  void
+>(COMPLETE_EDUCATION_PROFILE, async () => {
   const education = store.getState().sessionReducer.profileData.education || [];
   const response = await axiosClient.patch<AxiosResponse<any>>(
     '/api/auth/complete-registration',
@@ -216,10 +216,11 @@ export const updateEducationProfileAction = asyncThunkWrapper<
 
 export const updateExperienceProfileAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
-  IUserProfileData
->(COMPLETE_EXPERIENCE_PROFILE, async (agrs: IUserProfileData) => {
+  void
+>(COMPLETE_EXPERIENCE_PROFILE, async () => {
   const experiences =
     store.getState().sessionReducer.profileData.experience || [];
+  console.log('experiences> ', experiences);
   const response = await axiosClient.patch<AxiosResponse<any>>(
     '/api/auth/complete-registration',
     {
@@ -232,8 +233,8 @@ export const updateExperienceProfileAction = asyncThunkWrapper<
 
 export const updateSkillsProfileAction = asyncThunkWrapper<
   ApiResponseSuccess<any>,
-  IUserProfileData
->(COMPLETE_SKILLS_PROFILE, async (agrs: IUserProfileData) => {
+  void
+>(COMPLETE_SKILLS_PROFILE, async () => {
   const skills = store.getState().sessionReducer.profileData.skills;
   const response = await axiosClient.patch<AxiosResponse<any>>(
     '/api/auth/complete-registration',
