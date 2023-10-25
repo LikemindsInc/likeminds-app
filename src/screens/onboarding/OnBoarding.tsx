@@ -13,7 +13,12 @@ import { GlobalStyles } from '../../theme/GlobalStyles';
 import { AntDesign } from '@expo/vector-icons';
 import colors from '../../theme/colors';
 import { StatusBar } from 'expo-status-bar';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import {
+  CommonActions,
+  NavigationProp,
+  StackActions,
+  useNavigation,
+} from '@react-navigation/native';
 import { APP_SCREEN_LIST, INavigationProps } from '../../constants';
 import useAppSelector from '../../hooks/useAppSelector';
 import { ISettingState } from '../../reducers/settings';
@@ -86,10 +91,10 @@ const OnBoarding = () => {
     }).start(); // Start the animation
   };
 
-  useEffect(() => {
-    if (setting.userInfo)
-      return navigation.navigate(APP_SCREEN_LIST.MAIN_SCREEN);
-  }, []);
+  // useEffect(() => {
+  //   if (setting.userInfo)
+  //     return navigation.navigate(APP_SCREEN_LIST.MAIN_SCREEN);
+  // }, []);
 
   useEffect(() => {
     startBounceAnimation();
@@ -161,7 +166,11 @@ const OnBoarding = () => {
   );
 
   const handleOnDone = () => {
-    navigation.navigate(APP_SCREEN_LIST.LOGIN_SCREEN);
+    try {
+      navigation.dispatch(StackActions.push(APP_SCREEN_LIST.LOGIN_SCREEN));
+    } catch (error) {
+      console.log('navigation error> ', error);
+    }
   };
 
   return (

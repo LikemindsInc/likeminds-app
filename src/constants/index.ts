@@ -243,3 +243,5 @@ export const PHONE_NUMBER_REGEX = /[0-9]/;
 export const UNHANDLED_GLOBAL_ERRORS = [
   'AxiosError: Request failed with status code 401',
 ];
+
+export const NAVIGATION_PERSISTENCE_KEY = 'NAVIGATION_PERSISTENCE_KEY_V1';

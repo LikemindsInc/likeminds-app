@@ -11,6 +11,7 @@ import useAppDispatch from '../../hooks/useAppDispatch';
 import useAppSelector from '../../hooks/useAppSelector';
 import {
   ISessionState,
+  clearRequestOtpStatus,
   storeOTPChannelValue,
 } from '../../reducers/userProfileSession';
 import { requestOTPPhoneAction } from '../../actions/auth';
@@ -31,7 +32,6 @@ const RecoverWithPhone = () => {
   const errorReducer = useAppSelector((state) => state.errorReducer);
 
   const handleOnNextPress = () => {
-    let formattedPhone = '';
     dispatch(clearNetworkError());
     if (!countryCode.trim()) return setErrorMessage('Please select country');
 
@@ -40,7 +40,7 @@ const RecoverWithPhone = () => {
 
     setErrorMessage(null);
 
-    dispatch(storeOTPChannelValue(`phone_${countryCode}${formattedPhone}`));
+    dispatch(storeOTPChannelValue(`phone_${countryCode}${phone}`));
     dispatch(requestOTPPhoneAction({ phone: `${countryCode}${phone}` }));
   };
 
@@ -59,6 +59,19 @@ const RecoverWithPhone = () => {
     if (text.length > 10) return;
     const newNumberText = Util.getNumber(text);
     setPhone(newNumberText);
+  };
+
+  useEffect(() => {
+    navigation.addListener('blur', clearState);
+    return () => {
+      navigation.removeListener('blur', clearState);
+    };
+  }, []);
+
+  const clearState = () => {
+    dispatch(clearNetworkError());
+
+    dispatch(clearRequestOtpStatus());
   };
 
   return (

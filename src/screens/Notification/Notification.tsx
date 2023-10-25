@@ -119,6 +119,9 @@ const Notification = () => {
           <BottomSheetBackdrop {...props} pressBehavior={'close'} />
         )}
         enablePanDownToClose
+        onClose={() => {
+          setConnection(null);
+        }}
       >
         <View style={{ flex: 1, paddingHorizontal: 16 }}>
           <ScrollView style={{ flex: 1 }}>

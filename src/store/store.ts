@@ -24,7 +24,7 @@ const rootPersistConfig = {
   storage: AsyncStorage,
   key: __ROOT_REDUX_STATE_KEY__,
   // stateReconciler: autoMergeLevel2,
-  whitelist: ['settingReducer'],
+  whitelist: ['settingReducer', 'signupReducer'],
   blacklist: ['errorReducer', 'sessionReducer'], // only settings and other state stores will be persisted
 };
 

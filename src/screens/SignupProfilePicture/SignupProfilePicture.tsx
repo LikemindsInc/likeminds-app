@@ -8,7 +8,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 import { useEffect, useState } from 'react';
 import { APP_SCREEN_LIST } from '../../constants';
-import { useNavigation } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import useAppDispatch from '../../hooks/useAppDispatch';
 import { updateProfilePicture } from '../../reducers/userProfileSession';
 import { updateUserProfilePictureAction } from '../../actions/auth';
@@ -44,7 +44,9 @@ const SignupProfilePicture = () => {
 
   useEffect(() => {
     if (session.updateProfiePictureStatus === 'completed') {
-      navigation.navigate(APP_SCREEN_LIST.SIGNUP_EXPERIENCE_SCREEN);
+      navigation.dispatch(
+        StackActions.replace(APP_SCREEN_LIST.SIGNUP_EXPERIENCE_SCREEN),
+      );
     }
   }, [session.updateProfiePictureStatus]);
   return (

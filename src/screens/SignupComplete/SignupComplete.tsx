@@ -4,7 +4,11 @@ import { Text } from 'react-native';
 import TextLink from '../../components/TextLink/TextLink';
 import colors from '../../theme/colors';
 import Button from '../../components/Button/Button';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import {
+  NavigationProp,
+  StackActions,
+  useNavigation,
+} from '@react-navigation/native';
 import { APP_SCREEN_LIST } from '../../constants';
 
 const SignupComplete = () => {
@@ -115,7 +119,11 @@ const SignupComplete = () => {
       </View>
       <View style={[]}>
         <Button
-          onPress={() => navigation.navigate(APP_SCREEN_LIST.MAIN_SCREEN)}
+          onPress={() =>
+            navigation.dispatch(
+              StackActions.replace(APP_SCREEN_LIST.MAIN_SCREEN),
+            )
+          }
           title="Let’s Go!"
         />
       </View>

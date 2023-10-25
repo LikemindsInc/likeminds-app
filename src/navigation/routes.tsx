@@ -13,6 +13,7 @@ import SignupSkills from '../screens/SignupSkills/SignupSkills';
 import {
   APP_SCREEN_LIST,
   DRAWER_WIDTH,
+  NAVIGATION_PERSISTENCE_KEY,
   UNHANDLED_GLOBAL_ERRORS,
 } from '../constants';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -50,15 +51,17 @@ import { PURGE } from 'redux-persist';
 import { __ROOT_REDUX_STATE_KEY__ } from '../store/constants';
 import { logoutAction } from '../actions/auth';
 import {
+  CommonActions,
   DrawerActions,
   NavigationProp,
+  StackActions,
   useNavigation,
 } from '@react-navigation/native';
 import { ISettingState, logoutUserAction } from '../reducers/settings';
-import ForgotPassword from '../screens/ForgotPassword/ForgotPassword';
-import RecoverWithPhone from '../screens/ForgotEmail/RecoverWithPhone';
-import OTPScreen from '../screens/ForgotEmail/OTPScreen';
-import OTPEmailScreen from '../screens/ForgotPassword/OTPScreen';
+import ForgotPassword from '../screens/AccountRecoveryWithEmail/ForgotPassword';
+import RecoverWithPhone from '../screens/AccountRecoveryWithPhone/RecoverWithPhone';
+import OTPScreen from '../screens/AccountRecoveryWithPhone/OTPScreen';
+import OTPEmailScreen from '../screens/AccountRecoveryWithEmail/OTPScreen';
 import CreatePassword from '../screens/CreatePassword/CreatePassword';
 import CreateSpace from '../screens/CreateSpace/CreateSpace';
 import CreateSpaceAddPicture from '../screens/CreateSpace/CreateSpaceAddPicture';
@@ -78,6 +81,7 @@ import { persistor } from '../store/store';
 import JobFilter from '../screens/Job/JobFilter';
 import ReactionsViewModal from '../components/ReactionsViewModal/ReactionsViewModal';
 import { firstLaunch } from '../store/slice/appSettings';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 
@@ -111,8 +115,21 @@ const AppHome = () => {
   }, [navigation, setting.userInfo]);
 
   useEffect(() => {
-    if (!setting.userInfo)
-      return navigation.navigate(APP_SCREEN_LIST.ONBOARDING_SCREEN);
+    const logout = async () => {
+      console.log('seeting> ', setting.userInfo);
+      if (!setting.userInfo) {
+        console.log('logout bro');
+        try {
+          navigation.dispatch(
+            StackActions.push(APP_SCREEN_LIST.ONBOARDING_SCREEN),
+          );
+        } catch (error) {
+          console.log('error navigating>', error);
+        }
+      }
+    };
+
+    logout();
   }, [setting.userInfo]);
 
   return (
@@ -336,9 +353,10 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
             <Button
               onPress={() => {
                 console.log('CALLED');
+
                 dispatch(logoutUserAction());
                 dispatch(logoutAction());
-                navigation.navigate(APP_SCREEN_LIST.ONBOARDING_SCREEN);
+
                 persistor.purge();
               }}
               type="tertiary"

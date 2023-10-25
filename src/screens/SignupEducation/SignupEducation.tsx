@@ -5,16 +5,22 @@ import Button from '../../components/Button/Button';
 import TextLink from '../../components/TextLink/TextLink';
 import colors from '../../theme/colors';
 import { APP_SCREEN_LIST } from '../../constants';
-import { useNavigation } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import useAppDispatch from '../../hooks/useAppDispatch';
 import BackButton from '../../components/Navigation/BackButton/BackButton';
-import { getAllSchoolAction } from '../../actions/auth';
+import {
+  getAllSchoolAction,
+  updateEducationProfileAction,
+} from '../../actions/auth';
 import useAppSelector from '../../hooks/useAppSelector';
 import AddEducationForm from './AddEducationForm';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import EducationCard from './EducationCard';
 import { deleteBio } from '../../store/slice/bio';
-import { clearBioErrors } from '../../reducers/userProfileSession';
+import {
+  clearBioErrors,
+  removeEducationItemActionLocal,
+} from '../../reducers/userProfileSession';
 
 const SignupEducation = () => {
   const bottomSheetRef = useRef(null);
@@ -29,11 +35,11 @@ const SignupEducation = () => {
   const dispatch = useAppDispatch();
 
   const handleOnNextPress = () => {
-    navigation.navigate(APP_SCREEN_LIST.SIGNUP_SKILLS_SCREEN);
+    dispatch(updateEducationProfileAction());
   };
 
-  const handleDelete = (id: string) => {
-    dispatch(deleteBio({ id, type: 'EDUCATION' }));
+  const handleDelete = (id: number) => {
+    dispatch(removeEducationItemActionLocal(id));
   };
 
   useEffect(() => {
@@ -41,6 +47,18 @@ const SignupEducation = () => {
       dispatch(clearBioErrors());
     };
   }, []);
+
+  const handleOnSkip = () => {
+    navigation.dispatch(
+      StackActions.replace(APP_SCREEN_LIST.SIGNUP_SKILLS_SCREEN),
+    );
+  };
+
+  useEffect(() => {
+    if (sessionReducer.updateEducationHistoryStatus === 'completed') {
+      handleOnSkip();
+    }
+  }, [sessionReducer.updateEducationHistoryStatus]);
 
   const education = sessionReducer?.profileData?.education || [];
 
@@ -69,7 +87,8 @@ const SignupEducation = () => {
                 <EducationCard
                   key={'key-' + index}
                   degree={degree}
-                  handleDelete={handleDelete}
+                  itemId={index}
+                  handleDelete={() => handleDelete(index)}
                 />
               ))}
             </View>
@@ -90,12 +109,12 @@ const SignupEducation = () => {
         <View style={[GlobalStyles.mb20, GlobalStyles.displayRowCenter]}>
           <TextLink
             title="Skip For Now"
-            onPress={handleOnNextPress}
+            onPress={handleOnSkip}
             color={colors.black}
           />
         </View>
         <Button
-          loading={session.updateEducationHistoryStatus === 'loading'}
+          loading={sessionReducer.updateEducationHistoryStatus === 'loading'}
           title="Continue"
           onPress={handleOnNextPress}
         />

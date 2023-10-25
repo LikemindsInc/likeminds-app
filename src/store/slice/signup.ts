@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { ISignUp } from '@app-model';
 import axiosClient from '../../config/axiosClient';
 import { navigate } from '../../utils/NavigateUtil';
@@ -6,7 +6,7 @@ import { APP_SCREEN_LIST } from '../../constants';
 import axios from 'axios';
 
 const initialState: {
-  data: object;
+  data: any;
   loading: boolean;
   error: any;
   isSignup: boolean;
@@ -24,7 +24,7 @@ export const signup = createAsyncThunk(
     try {
       const res = await axiosClient.post('/api/auth/sign-up', payload);
       return res.data;
-    } catch (error) {
+    } catch (error: any) {
       const errorValue: string | [] = error?.response?.data?.message;
       if (Array.isArray(errorValue)) {
         const message = errorValue as Array<string>;
@@ -47,6 +47,7 @@ const signupSlice = createSlice({
     });
     // fulfilled state
     builder.addCase(signup.fulfilled, (state, action) => {
+      console.log('called');
       state.loading = false;
       state.error = undefined;
       state.isSignup = true;
@@ -65,11 +66,18 @@ const signupSlice = createSlice({
   reducers: {
     clearSignUpError: (state) => {
       state.error = undefined;
+      state.isSignup = false;
+    },
+
+    updateSignupPhoneNumber: (state, action: PayloadAction<string>) => {
+      state.data.phone = action.payload;
+      state.isSignup = false;
     },
   },
 });
 
 // Generate reducer
-export const { clearSignUpError } = signupSlice.actions;
+export const { clearSignUpError, updateSignupPhoneNumber } =
+  signupSlice.actions;
 const signupReducer = signupSlice.reducer;
 export default signupReducer;

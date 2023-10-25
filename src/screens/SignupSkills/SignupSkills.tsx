@@ -39,27 +39,17 @@ const SignupSkills = () => {
   const navigation = useNavigation<any>();
   const session = useAppSelector((state) => state.sessionReducer);
 
-  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
-
   const [items, setItems] = useState(SUGGESTIONS);
 
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   const dispatch = useAppDispatch();
   const handleOnNextPress = () => {
-    dispatch(updateSkills(selectedSkills));
+    dispatch(updateSkills(selectedItems));
 
-    dispatch(updateSkillsProfileAction(session.profileData));
+    dispatch(updateSkillsProfileAction());
   };
   const onSelectedItemsChange = (selectedItems: any[]) => {
-    const numberIndexedItems = selectedItems.filter((item) => !isNaN(item));
-    const stringItems = selectedItems.filter((item) => isNaN(item));
-    const mappedToStringIndexItems = numberIndexedItems.map(
-      (item) => items[item].name,
-    );
-
-    setSelectedSkills([...mappedToStringIndexItems, ...stringItems]);
-
     setSelectedItems(selectedItems);
   };
 
@@ -80,7 +70,7 @@ const SignupSkills = () => {
           marginTop: 20,
         }}
       >
-        {selectedSkills.map((item, i) => (
+        {selectedItems.map((item, i) => (
           <TouchableOpacity
             style={{
               paddingHorizontal: 16,
@@ -130,7 +120,7 @@ const SignupSkills = () => {
         <MultiSelect
           hideTags
           items={items}
-          uniqueKey="id"
+          uniqueKey="name"
           onSelectedItemsChange={onSelectedItemsChange}
           selectedItems={selectedItems}
           searchInputPlaceholderText="Select skills..."

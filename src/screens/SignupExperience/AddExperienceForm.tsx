@@ -91,6 +91,7 @@ const AddExperienceForm = ({
   return (
     <BottomSheet
       ref={bottomSheetRef}
+      index={-1}
       snapPoints={snapPoints}
       enablePanDownToClose={true} // Enable pan down to close the sheet
       handleComponent={renderHeader}

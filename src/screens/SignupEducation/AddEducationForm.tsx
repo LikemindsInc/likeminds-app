@@ -17,7 +17,10 @@ import { useFormik } from 'formik';
 import { educationValidator, initialEducationValues } from './validator';
 import { addExperience } from '../../store/slice/addExperience';
 import useAppDispatch from '../../hooks/useAppDispatch';
-import { resetAddExperienceSuccess } from '../../reducers/userProfileSession';
+import {
+  resetAddExperienceSuccess,
+  updateEducation,
+} from '../../reducers/userProfileSession';
 
 import { ISchool } from '@app-model';
 import { SCHOOL_DEGREES } from '../../constants';
@@ -81,14 +84,6 @@ const AddEducationForm = ({
     </TouchableOpacity>
   );
 
-  const handleAddEduction = () => {
-    dispatch(
-      addExperience({
-        education: [values],
-      }),
-    );
-  };
-
   const {
     touched,
     values,
@@ -103,22 +98,16 @@ const AddEducationForm = ({
     onSubmit: () => handleAddEduction(),
   });
 
-  useEffect(() => {
-    if (session.isAddExperienceSuccessfully) {
-      bottomSheetRef.current?.close();
-    }
-    return () => {
-      resetForm();
-      dispatch(resetAddExperienceSuccess());
-    };
-  }, [session.isAddExperienceSuccessfully]);
-
-  console.log(session.education);
+  const handleAddEduction = () => {
+    dispatch(updateEducation(values));
+    bottomSheetRef.current?.close();
+  };
 
   return (
     <BottomSheet
       ref={bottomSheetRef}
       snapPoints={snapPoints}
+      index={-1}
       enablePanDownToClose={true} // Enable pan down to close the sheet
       handleComponent={renderHeader}
     >
