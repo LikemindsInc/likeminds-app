@@ -45,7 +45,7 @@ const SignupProfilePicture = () => {
   useEffect(() => {
     if (session.updateProfiePictureStatus === 'completed') {
       navigation.dispatch(
-        StackActions.push(APP_SCREEN_LIST.SIGNUP_EXPERIENCE_SCREEN),
+        StackActions.replace(APP_SCREEN_LIST.SIGNUP_EXPERIENCE_SCREEN),
       );
     }
   }, [session.updateProfiePictureStatus]);
