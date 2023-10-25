@@ -1,36 +1,39 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { AntDesign, FontAwesome } from '@expo/vector-icons';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { IExperience } from '@app-model';
+import { IEducation, IExperience } from '@app-model';
 import Util from '../../utils';
 
-export default function ExperienceCard({
+export default function EducationCard({
   handleDelete,
-  experience,
+  degree,
+  itemId,
 }: {
-  experience: IExperience;
-  handleDelete?: (id: string) => void;
+  degree: IEducation;
+  itemId: number;
+  handleDelete?: (id: number) => void;
 }) {
-  const startDate = Util.convertToLong(new Date(experience.startDate));
-  const endDate = Util.convertToLong(new Date(experience.endDate));
-  const { companyName, jobTitle, stillWorkHere, id } = experience;
+  const startDate = Util.convertToLong(new Date(degree.startDate));
+  const endDate = Util.convertToLong(new Date(degree.endDate));
+  const { major, degree: study, school, id } = degree;
 
   return (
     <View style={styles.container}>
       <View style={styles.info}>
-        <FontAwesome name="building" size={48} color="#c2c2c2" />
+        <Ionicons name="school" size={44} color="#c2c2c2" />
         <View style={styles.roleContainer}>
-          <Text style={styles.role}>{jobTitle}</Text>
-          <Text>{companyName}</Text>
+          <Text style={styles.role}>{major}</Text>
+          <Text>{study}</Text>
+          <Text>{school}</Text>
           <Text>
             {startDate}
-            {endDate && !stillWorkHere ? ' - ' + endDate : ' - PRESENT'}
+            {endDate ? ' - ' + endDate : ''}
           </Text>
         </View>
       </View>
       <TouchableOpacity
-        onPress={() => handleDelete && handleDelete(id as string)}
+        onPress={() => handleDelete && handleDelete(itemId)}
         style={[styles.deleteHandler]}
       >
         <AntDesign name="close" size={20} color={'black'} />

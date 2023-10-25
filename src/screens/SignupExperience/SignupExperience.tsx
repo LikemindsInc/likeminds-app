@@ -24,6 +24,8 @@ import AddExperienceForm from './AddExperienceForm';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import ExperienceCard from './ExperienceCard';
 import { removeExperienceItemActionLocal } from '../../reducers/userProfileSession';
+import { clearBioErrors } from '../../reducers/userProfileSession';
+import { deleteBio } from '../../store/slice/bio';
 
 const SignupExperience = () => {
   const dispatch = useAppDispatch();
@@ -34,6 +36,16 @@ const SignupExperience = () => {
   useEffect(() => {
     dispatch(getAllIndustriesAction());
   }, []);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearBioErrors());
+    };
+  }, []);
+
+  const handleDelete = (id: string) => {
+    dispatch(deleteBio({ id, type: 'EXPERIENCE' }));
+  };
 
   const handleOnNextPress = () => {
     dispatch(updateExperienceProfileAction(sessionReducer.profileData));
@@ -93,9 +105,8 @@ const SignupExperience = () => {
                 {experience.map((experience, index) => (
                   <ExperienceCard
                     key={'key-' + index}
-                    itemId={index}
                     experience={experience}
-                    handleDelete={(id) => removeItem(id)}
+                    handleDelete={(id) => removeItem(index)}
                   />
                 ))}
               </View>

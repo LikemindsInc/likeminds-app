@@ -67,6 +67,7 @@ declare module '@app-model' {
   }
 
   export interface IExperience {
+    id?: string;
     startDate: string;
     endDate: string;
     stillWorkHere: boolean;
@@ -89,9 +90,10 @@ declare module '@app-model' {
   }
 
   interface IEducation {
+    id?: string;
     startDate: string;
     endDate: string;
-
+    major?: string;
     degree: string;
     school: string;
   }
@@ -111,6 +113,10 @@ declare module '@app-model' {
     isAddExperienceLoading?: boolean;
     isAddExperienceSuccessfully?: boolean;
     addExperienceError?: string;
+
+    isBioLoading?: boolean;
+    isBioSuccessfully?: boolean;
+    bioError?: string;
   }
 
   interface IVerifyOtpPaylod {

@@ -28,6 +28,7 @@ import { PURGE, REHYDRATE } from 'redux-persist';
 import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
 import { addExperience } from '../store/slice/addExperience';
+import { deleteBio } from '../store/slice/bio';
 
 export interface ISessionState {
   signingInStatus: IThunkAPIStatus;
@@ -144,6 +145,10 @@ const initialState: ISessionState = {
     isAddExperienceLoading: false,
     isAddExperienceSuccessfully: false,
     addExperienceError: '',
+
+    isBioLoading: false,
+    isBioSuccessfully: false,
+    bioError: '',
   },
 
   otpVerificationStatus: 'idle',
@@ -191,6 +196,10 @@ const sessionSlice = createSlice({
       state.signingInStatus = 'idle';
       state.signingInSuccess = '';
       state.signingInError = '';
+    },
+    clearBioErrors(state) {
+      state.profileData.bioError = '';
+      state.profileData.isBioSuccessfully = false;
     },
 
     resetAddExperienceSuccess: (state) => {
@@ -582,6 +591,23 @@ const sessionSlice = createSlice({
       state.profileData.addExperienceError = action?.payload as string;
       state.profileData.isAddExperienceSuccessfully = false;
     });
+
+    builder.addCase(deleteBio.pending, (state, action) => {
+      state.profileData.isBioLoading = true;
+    });
+    builder.addCase(deleteBio.fulfilled, (state, action) => {
+      state.profileData = {
+        ...state.profileData,
+        ...action.payload,
+      };
+      state.profileData.isBioSuccessfully = true;
+      state.profileData.isBioLoading = false;
+    });
+    builder.addCase(deleteBio.rejected, (state, action) => {
+      state.profileData.isBioLoading = false;
+      state.profileData.isBioSuccessfully = false;
+      state.profileData.bioError = action.payload as string;
+    });
   },
 });
 
@@ -604,6 +630,7 @@ export const {
   clearChangePasswordError,
   resetAddExperienceSuccess,
   removeExperienceItemActionLocal,
+  clearBioErrors,
 } = sessionSlice.actions;
 
 export default sessionSlice.reducer;
