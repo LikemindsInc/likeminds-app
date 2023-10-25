@@ -95,7 +95,11 @@ const OTPVerification = () => {
     <KeyboardDismisser style={{ flex: 1 }}>
       <View style={[GlobalStyles.container]}>
         <View style={[styles.container]}>
-          <BackButton title="Verification" iconColor={colors.primary} />
+          <BackButton
+            title="Verification"
+            iconColor={colors.primary}
+            disabled={true}
+          />
           <View style={[GlobalStyles.mb40, GlobalStyles.mt30]}>
             <Text
               style={[
