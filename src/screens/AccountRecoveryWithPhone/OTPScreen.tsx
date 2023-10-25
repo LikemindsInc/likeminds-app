@@ -41,7 +41,6 @@ const OTPScreen = () => {
 
   const handleOnVerify = () => {
     setInformation('');
-    console.log('handleOnVerify');
     if (otp.length < 4) return setInformation('Incomplete OTP');
 
     dispatch(clearEmailPhoneOtpVerificationStatus());
@@ -62,14 +61,9 @@ const OTPScreen = () => {
   useEffect(() => {
     setInformation('');
     if (session.resendOtpStatus === 'completed') {
-      // toast.show("OTP sent successfully");
       dispatch(clearResendOtpStatus());
       dispatch(clearNetworkError());
     } else if (session.resendOtpStatus === 'failed') {
-      // toast.show(session.resendOtpError as string, {
-      //   type: "error",
-      //   animationType: "slide-in",
-      // });
       setTimeout(() => {
         dispatch(clearResendOtpStatus());
         dispatch(clearNetworkError());
@@ -183,7 +177,7 @@ const OTPScreen = () => {
               onPress={() =>
                 dispatch(
                   resendOTPAction({
-                    phone,
+                    phone: phone,
                     type: 'FORGOT_PASSWORD',
                   }),
                 )

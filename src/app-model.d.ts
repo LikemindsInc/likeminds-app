@@ -204,7 +204,8 @@ declare module '@app-model' {
   }
 
   interface ResendOTPDTO {
-    phone: string;
+    phone?: string;
+    email?: string;
     type: 'SIGNUP' | 'FORGOT_PASSWORD';
   }
 

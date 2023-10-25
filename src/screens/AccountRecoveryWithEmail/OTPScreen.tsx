@@ -13,6 +13,7 @@ import useAppSelector from '../../hooks/useAppSelector';
 import {
   ISessionState,
   clearEmailPhoneOtpVerificationStatus,
+  clearRequestOtpStatus,
   clearResendOtpStatus,
   storeOtpCode,
 } from '../../reducers/userProfileSession';
@@ -60,6 +61,7 @@ const OTPEmailScreen = () => {
   };
 
   useEffect(() => {
+    console.log('called ooo');
     if (session.verifyPhoneEmailOTPStatus === 'completed') {
       navigation.navigate(APP_SCREEN_LIST.CREATE_PASSWORD_SCREEN);
       dispatch(clearNetworkError());
@@ -89,6 +91,19 @@ const OTPEmailScreen = () => {
     session && Object.keys(session).length > 0
       ? session?.otpChannelValue.split('_')[1]
       : 'your email';
+
+  useEffect(() => {
+    navigation.addListener('blur', clearState);
+    return () => {
+      navigation.removeListener('blur', clearState);
+    };
+  }, []);
+
+  const clearState = () => {
+    dispatch(clearNetworkError());
+
+    dispatch(clearRequestOtpStatus());
+  };
 
   return (
     <KeyboardDismisser style={{ flex: 1 }}>
@@ -175,7 +190,7 @@ const OTPEmailScreen = () => {
               onPress={() =>
                 dispatch(
                   resendOTPAction({
-                    phone: session.otpChannelValue.split('_')[1],
+                    email: session.otpChannelValue.split('_')[1],
                     type: 'FORGOT_PASSWORD',
                   }),
                 )

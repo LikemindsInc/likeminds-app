@@ -13,6 +13,7 @@ import OTPTextInput from 'react-native-otp-textinput';
 import useAppSelector from '../../hooks/useAppSelector';
 import {
   ISessionState,
+  clearRequestOtpStatus,
   clearResendOtpStatus,
 } from '../../reducers/userProfileSession';
 import useAppDispatch from '../../hooks/useAppDispatch';
@@ -65,6 +66,19 @@ const OTPVerification = () => {
 
     return () => {};
   }, [session.otpVerificationStatus]);
+
+  useEffect(() => {
+    navigation.addListener('blur', clearState);
+    return () => {
+      navigation.removeListener('blur', clearState);
+    };
+  }, []);
+
+  const clearState = () => {
+    dispatch(clearNetworkError());
+
+    dispatch(clearRequestOtpStatus());
+  };
 
   useEffect(() => {
     setInformation('');

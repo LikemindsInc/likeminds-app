@@ -58,10 +58,10 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import { ISettingState, logoutUserAction } from '../reducers/settings';
-import ForgotPassword from '../screens/ForgotPassword/ForgotPassword';
-import RecoverWithPhone from '../screens/ForgotEmail/RecoverWithPhone';
-import OTPScreen from '../screens/ForgotEmail/OTPScreen';
-import OTPEmailScreen from '../screens/ForgotPassword/OTPScreen';
+import ForgotPassword from '../screens/AccountRecoveryWithEmail/ForgotPassword';
+import RecoverWithPhone from '../screens/AccountRecoveryWithPhone/RecoverWithPhone';
+import OTPScreen from '../screens/AccountRecoveryWithPhone/OTPScreen';
+import OTPEmailScreen from '../screens/AccountRecoveryWithEmail/OTPScreen';
 import CreatePassword from '../screens/CreatePassword/CreatePassword';
 import CreateSpace from '../screens/CreateSpace/CreateSpace';
 import CreateSpaceAddPicture from '../screens/CreateSpace/CreateSpaceAddPicture';

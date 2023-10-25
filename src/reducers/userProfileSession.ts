@@ -218,6 +218,13 @@ const sessionSlice = createSlice({
       state.resendOtpError = '';
     },
 
+    clearRequestOtpStatus(state: ISessionState) {
+      state.requestOTPEmailStatus = 'idle';
+      state.requestOTPPhoneStatus = 'idle';
+      state.otpVerificationStatus = 'idle';
+      state.changePasswordOTpStatus = 'idle';
+    },
+
     clearOtpVerificationStatus(state: ISessionState) {
       state.otpVerificationStatus = 'idle';
       state.otpVerificationSuccess = '';
@@ -644,6 +651,7 @@ export const {
   removeExperienceItemActionLocal,
   removeEducationItemActionLocal,
   clearBioErrors,
+  clearRequestOtpStatus,
 } = sessionSlice.actions;
 
 export default sessionSlice.reducer;
