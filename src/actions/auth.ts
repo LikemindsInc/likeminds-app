@@ -307,8 +307,8 @@ export const updateUserProfilePictureAction = asyncThunkWrapper<
 
     formData.append('file', {
       uri: result,
-      type: profilePictureFile.assets[0].type,
-      name: profilePictureFile.assets[0].fileName,
+      type: profilePictureFile.assets[0].type || 'png',
+      name: profilePictureFile.assets[0].fileName || 'picture',
     });
     const response = await uploadFile(formData);
 
