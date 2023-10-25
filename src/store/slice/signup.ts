@@ -3,7 +3,6 @@ import { ISignUp } from '@app-model';
 import axiosClient from '../../config/axiosClient';
 import { navigate } from '../../utils/NavigateUtil';
 import { APP_SCREEN_LIST } from '../../constants';
-import axios from 'axios';
 
 const initialState: {
   data: object;
@@ -25,6 +24,9 @@ export const signup = createAsyncThunk(
       const res = await axiosClient.post('/api/auth/sign-up', payload);
       return res.data;
     } catch (error) {
+      if (error?.response?.data?.statusCode == 409) {
+        navigate(APP_SCREEN_LIST.LOGIN_SCREEN);
+      }
       const errorValue: string | [] = error?.response?.data?.message;
       if (Array.isArray(errorValue)) {
         const message = errorValue as Array<string>;
@@ -58,13 +60,16 @@ const signupSlice = createSlice({
     // error handling
     builder.addCase(signup.rejected, (state, action) => {
       state.loading = false;
-      state.data = {};
+      state.data = {
+        ...action.meta.arg,
+      };
       state.error = action.payload;
     });
   },
   reducers: {
     clearSignUpError: (state) => {
       state.error = undefined;
+      state.data = {};
     },
   },
 });
