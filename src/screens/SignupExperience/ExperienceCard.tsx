@@ -30,7 +30,7 @@ export default function ExperienceCard({
         </View>
       </View>
       <TouchableOpacity
-        onPress={() => handleDelete(id)}
+        onPress={() => handleDelete && handleDelete(id as string)}
         style={[styles.deleteHandler]}
       >
         <AntDesign name="close" size={20} color={'black'} />

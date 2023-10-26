@@ -8,9 +8,11 @@ import Util from '../../utils';
 export default function EducationCard({
   handleDelete,
   degree,
+  itemId,
 }: {
   degree: IEducation;
-  handleDelete?: (id: string) => void;
+  itemId: number;
+  handleDelete?: (id: number) => void;
 }) {
   const startDate = Util.convertToLong(new Date(degree.startDate));
   const endDate = Util.convertToLong(new Date(degree.endDate));
@@ -31,7 +33,7 @@ export default function EducationCard({
         </View>
       </View>
       <TouchableOpacity
-        onPress={() => handleDelete(id)}
+        onPress={() => handleDelete && handleDelete(itemId)}
         style={[styles.deleteHandler]}
       >
         <AntDesign name="close" size={20} color={'black'} />

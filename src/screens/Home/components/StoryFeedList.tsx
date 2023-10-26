@@ -64,8 +64,6 @@ const StoryFeedList = () => {
     getPostFeeds();
   };
 
-  console.log('called here');
-
   if (state.getPostFeedStatus === 'loading' && state.postFeeds.length === 0)
     return null;
 

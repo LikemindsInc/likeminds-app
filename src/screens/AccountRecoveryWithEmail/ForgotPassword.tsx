@@ -12,6 +12,9 @@ import useAppDispatch from '../../hooks/useAppDispatch';
 import useAppSelector from '../../hooks/useAppSelector';
 import {
   ISessionState,
+  clearEmailPhoneOtpVerificationStatus,
+  clearRequestOtpStatus,
+  clearResendOtpStatus,
   storeOTPChannelValue,
 } from '../../reducers/userProfileSession';
 import BackButton from '../../components/Navigation/BackButton/BackButton';
@@ -42,6 +45,19 @@ const ForgotPassword = () => {
       dispatch(clearNetworkError());
     };
   }, [session.requestOTPEmailStatus]);
+
+  useEffect(() => {
+    navigation.addListener('blur', clearState);
+    return () => {
+      navigation.removeListener('blur', clearState);
+    };
+  }, []);
+
+  const clearState = () => {
+    dispatch(clearNetworkError());
+
+    dispatch(clearRequestOtpStatus());
+  };
   return (
     <View style={[GlobalStyles.container]}>
       <View style={styles.container}>

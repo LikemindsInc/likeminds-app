@@ -13,6 +13,7 @@ import OTPTextInput from 'react-native-otp-textinput';
 import useAppSelector from '../../hooks/useAppSelector';
 import {
   ISessionState,
+  clearRequestOtpStatus,
   clearResendOtpStatus,
 } from '../../reducers/userProfileSession';
 import useAppDispatch from '../../hooks/useAppDispatch';
@@ -35,13 +36,20 @@ const OTPVerification = () => {
   const navigation = useNavigation<any>();
   const [otp, setOTP] = useState('');
 
+  const phone =
+    signUpStateValues && signUpStateValues?.data?.phone
+      ? signUpStateValues?.data?.phone
+      : session.profileData.phoneNumber
+      ? session.profileData.phoneNumber
+      : 'your phone number';
+
   const handleOnVerify = () => {
     setInformation('');
     dispatch(clearNetworkError());
     if (otp.length < 4) return setInformation('Incomplete OTP');
     dispatch(
       verifyOTPActionAction({
-        phone: signUpStateValues.data?.phone,
+        phone: phone,
         code: otp,
       }),
     );
@@ -60,6 +68,19 @@ const OTPVerification = () => {
   }, [session.otpVerificationStatus]);
 
   useEffect(() => {
+    navigation.addListener('blur', clearState);
+    return () => {
+      navigation.removeListener('blur', clearState);
+    };
+  }, []);
+
+  const clearState = () => {
+    dispatch(clearNetworkError());
+
+    dispatch(clearRequestOtpStatus());
+  };
+
+  useEffect(() => {
     setInformation('');
     if (session.resendOtpStatus === 'completed') {
       setInformation('OTP sent successfully');
@@ -70,16 +91,15 @@ const OTPVerification = () => {
     }
   }, [session.resendOtpStatus]);
 
-  const phone =
-    signUpStateValues && signUpStateValues?.data?.phone
-      ? signUpStateValues?.data?.phone
-      : 'your phone number';
-
   return (
     <KeyboardDismisser style={{ flex: 1 }}>
       <View style={[GlobalStyles.container]}>
         <View style={[styles.container]}>
-          <BackButton title="Verification" iconColor={colors.primary} />
+          <BackButton
+            title="Verification"
+            iconColor={colors.primary}
+            disabled={true}
+          />
           <View style={[GlobalStyles.mb40, GlobalStyles.mt30]}>
             <Text
               style={[

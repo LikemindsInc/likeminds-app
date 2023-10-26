@@ -19,11 +19,13 @@ import useAppSelector from '../../hooks/useAppSelector';
 import {
   ISessionState,
   clearChangePasswordError,
+  clearRequestOtpStatus,
 } from '../../reducers/userProfileSession';
 import { useEffect, useState } from 'react';
 import { changePasswordAction } from '../../actions/auth';
 import { AntDesign } from '@expo/vector-icons';
 import colors from '../../theme/colors';
+import { clearNetworkError } from '../../reducers/errorHanlder';
 
 const CreatePassword = () => {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -137,10 +139,24 @@ const CreatePassword = () => {
     if (session.changePasswordOTpStatus === 'completed') {
       navigation.navigate(APP_SCREEN_LIST.LOGIN_SCREEN);
     } else if (session.changePasswordOTpStatus === 'failed') {
+      navigation.navigate(APP_SCREEN_LIST.LOGIN_SCREEN);
     }
 
     return () => {};
   }, [session.changePasswordOTpStatus]);
+
+  useEffect(() => {
+    navigation.addListener('blur', clearState);
+    return () => {
+      navigation.removeListener('blur', clearState);
+    };
+  }, []);
+
+  const clearState = () => {
+    dispatch(clearNetworkError());
+
+    dispatch(clearRequestOtpStatus());
+  };
 
   useEffect(() => {
     setErrors((state) => ({

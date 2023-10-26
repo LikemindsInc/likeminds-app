@@ -32,10 +32,6 @@ const SUGGESTIONS = [
 const SkillsForm = () => {
   const navigation = useNavigation<any>();
   const session = useAppSelector((state: any) => state.sessionReducer);
-  const [skills, setSkills] = useState('');
-  const toast = useToast();
-
-  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
 
   const [items, setItems] = useState(SUGGESTIONS);
 
@@ -43,21 +39,13 @@ const SkillsForm = () => {
 
   const dispatch = useAppDispatch();
   const handleOnNextPress = () => {
-    dispatch(updateSkills(skills.split(',')));
+    dispatch(updateSkills(selectedItems));
     setTimeout(() => {
-      dispatch(updateSkillsProfileAction(session.profileData));
+      dispatch(updateSkillsProfileAction());
     }, 300);
   };
 
   const onSelectedItemsChange = (selectedItems: any[]) => {
-    const numberIndexedItems = selectedItems.filter((item) => !isNaN(item));
-    const stringItems = selectedItems.filter((item) => isNaN(item));
-    const mappedToStringIndexItems = numberIndexedItems.map(
-      (item) => items[item].name,
-    );
-
-    setSelectedSkills([...mappedToStringIndexItems, ...stringItems]);
-
     setSelectedItems(selectedItems);
   };
 
@@ -72,7 +60,7 @@ const SkillsForm = () => {
           marginTop: 20,
         }}
       >
-        {selectedSkills.map((item, i) => (
+        {selectedItems.map((item, i) => (
           <TouchableOpacity
             style={{
               paddingHorizontal: 16,
@@ -123,7 +111,7 @@ const SkillsForm = () => {
         <MultiSelect
           hideTags
           items={items}
-          uniqueKey="id"
+          uniqueKey="name"
           onSelectedItemsChange={onSelectedItemsChange}
           selectedItems={selectedItems}
           searchInputPlaceholderText="Select skills..."

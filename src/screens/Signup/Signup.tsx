@@ -9,16 +9,8 @@ import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button';
 import TextLink from '../../components/TextLink/TextLink';
 import { APP_SCREEN_LIST } from '../../constants';
-// import reportError from '../../utils/reportError';
-// import { err } from "react-native-svg/lib/typescript/xml";
 import useAppDispatch from '../../hooks/useAppDispatch';
 import useAppSelector from '../../hooks/useAppSelector';
-// import {
-//   ISessionState,
-//   // clearSignupStatus,
-//   // updatePhoneNumber,
-// } from '../../reducers/userProfileSession';
-// import { signupUserActionAction } from '../../actions/auth';
 import BackButton from '../../components/Navigation/BackButton/BackButton';
 import { initialSignupValues, signupValidator } from './validator';
 import Util from '../../utils';
@@ -26,7 +18,7 @@ import { clearSignUpError, signup } from '../../store/slice/signup';
 import TextInputElement from '../../components/Input/TextInput';
 // import PhoneNumberInput from '../../components/Input/PhoneNumberInput';
 import { navigate } from '../../utils/NavigateUtil';
-import { useNavigation } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import { clearNetworkError } from '../../reducers/errorHanlder';
 import { clearLoginError } from '../../store/slice/login';
 
@@ -39,6 +31,7 @@ const Signup = () => {
       setFieldError('phone', 'Country code is required');
       return;
     }
+    dispatch(clearSignUpError());
     dispatch(
       signup({
         email: values.email.trim(),
@@ -65,8 +58,11 @@ const Signup = () => {
   });
 
   useEffect(() => {
+    console.log(signupStateValues.isSignup);
     if (signupStateValues.isSignup) {
-      navigate(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN);
+      navigation.dispatch({
+        ...StackActions.replace(APP_SCREEN_LIST.OTP_VERIFICATION_SCREEN),
+      });
     }
     return () => {
       dispatch(clearSignUpError());
@@ -91,6 +87,7 @@ const Signup = () => {
   const clearState = () => {
     dispatch(clearNetworkError());
     dispatch(clearLoginError());
+    dispatch(clearSignUpError());
   };
 
   return (
