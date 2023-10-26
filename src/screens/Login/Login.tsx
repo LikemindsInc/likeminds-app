@@ -31,15 +31,14 @@ const Login = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NavigationProp<any>>();
   const session = useAppSelector(
-    (state: any) => state.sessionReducer,
+    (state) => state.sessionReducer,
   ) as ISessionState;
+  const signup = useAppSelector((state) => state.signupReducer);
 
   const setting = useAppSelector((state) => state.settingReducer);
   const errorReducer = useAppSelector((state) => state.errorReducer);
 
-  const { data, error, loading, isLogin } = useAppSelector(
-    (state) => state.loginReducer,
-  );
+  const { error } = useAppSelector((state) => state.loginReducer);
 
   const handleOnLogin = () => {
     dispatch(
@@ -63,7 +62,10 @@ const Login = () => {
     touched,
     handleBlur,
   } = useFormik({
-    initialValues: initialLoginValue,
+    initialValues: {
+      ...initialLoginValue,
+      email: initialLoginValue.email || signup?.data?.email,
+    },
     validationSchema: loginValidator,
     onSubmit: handleOnLogin,
   });
@@ -134,7 +136,8 @@ const Login = () => {
             placeholder="Email Address"
             autoCorrect={false}
             autoCapitalize={'none'}
-            value={values.email}
+            // defaultValue={values.email}
+            value={values.email || signup?.data?.email}
             onBlur={handleBlur('email')}
             keyboardType="email-address"
             onChangeText={handleChange('email')}
